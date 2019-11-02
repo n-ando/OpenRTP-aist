@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import jp.go.aist.rtm.rtcbuilder.IRTCBMessageConstants;
+import jp.go.aist.rtm.rtcbuilder.fsm.StateParam;
 import jp.go.aist.rtm.rtcbuilder.generator.GeneratedResult;
 import jp.go.aist.rtm.rtcbuilder.generator.param.RtcParam;
 import jp.go.aist.rtm.rtcbuilder.generator.param.idl.IdlFileParam;
@@ -124,48 +125,48 @@ public class JavaGenerateManager extends GenerateManager {
 		List<GeneratedResult> result = new ArrayList<GeneratedResult>();
 		RtcParam rtcParam = (RtcParam) contextMap.get("rtcParam");
 
-		GeneratedResult gr;
-		gr = generateCompSource(contextMap);
-		result.add(gr);
-		gr = generateRTCSource(contextMap);
-		result.add(gr);
-		gr = generateRTCImplSource(contextMap);
-		result.add(gr);
+		boolean isStaticFSM = rtcParam.isStaticFSM();
+		if(isStaticFSM) {
+			StateParam stateParam = rtcParam.getFsmParam();
+			stateParam.setEventParam(rtcParam);
+			contextMap.put("fsmParam", stateParam);
+			
+			result.add(generateFSMProtocolSource(contextMap));
+			result.add(generateFSMTopSource(stateParam, contextMap));
+			for(StateParam each : stateParam.getAllValidStateList()) {
+				contextMap.put("targetFsm", each);
+				result.add(generateFSMSource(each, contextMap));
+			}
+		}
+		
+		result.add(generateCompSource(contextMap));
+		result.add(generateRTCSource(contextMap));
+		result.add(generateRTCImplSource(contextMap));
 
-		gr = generateClassPath(contextMap);
-		result.add(gr);
-		gr = generateRunBat(contextMap);
-		result.add(gr);
-		gr = generateRunSh(contextMap);
-		result.add(gr);
-		gr = generateRunXML(contextMap);
-		result.add(gr);
+		result.add(generateClassPath(contextMap));
+		result.add(generateRunBat(contextMap));
+		result.add(generateRunSh(contextMap));
+		result.add(generateRunXML(contextMap));
 
-		gr = generateBuildXML(contextMap);
-		result.add(gr);
+		result.add(generateBuildXML(contextMap));
 
 		for (IdlFileParam idl : rtcParam.getProviderIdlPathes()) {
 			contextMap.put("idlFileParam", idl);
 			for (ServiceClassParam svc : idl.getServiceClassParams()) {
 				contextMap.put("serviceClassParam", svc);
-				gr = generateSVCSource(contextMap);
-				result.add(gr);
+				result.add(generateSVCSource(contextMap));
 			}
 		}
 		/////
-		gr = generateTestCompSource(contextMap);
-		result.add(gr);
-		gr = generateTestRTCSource(contextMap);
-		result.add(gr);
-		gr = generateTestRTCImplSource(contextMap);
-		result.add(gr);
+		result.add(generateTestCompSource(contextMap));
+		result.add(generateTestRTCSource(contextMap));
+		result.add(generateTestRTCImplSource(contextMap));
 		for (IdlFileParam idl : rtcParam.getConsumerIdlPathes()) {
 			if(idl.isDataPort()) continue;
 			contextMap.put("idlFileParam", idl);
 			for (ServiceClassParam svc : idl.getTestServiceClassParams()) {
 				contextMap.put("serviceClassParam", svc);
-				gr = generateTestSVCSource(contextMap);
-				result.add(gr);
+				result.add(generateTestSVCSource(contextMap));
 			}
 		}
 
@@ -293,7 +294,32 @@ public class JavaGenerateManager extends GenerateManager {
 		result.setNotBom(true);
 		return result;
 	}
+	/////
+	public GeneratedResult generateFSMProtocolSource(Map<String, Object> contextMap) {
+		RtcParam rtcParam = (RtcParam) contextMap.get("rtcParam");
+		String outfile = "src/" + rtcParam.getName() + "Protocol.java";
+		String infile = "java/fsm/Java_FSM_Protocol.java.vsl";
+		GeneratedResult result = generate(infile, outfile, contextMap);
+		result.setNotBom(true);
+		return result;
+	}
 
+	public GeneratedResult generateFSMTopSource(StateParam target, Map<String, Object> contextMap) {
+		String outfile = "src/" + target.getName() + ".java";
+		String infile = "java/fsm/Java_FSMTop.java.vsl";
+		GeneratedResult result = generate(infile, outfile, contextMap);
+		result.setNotBom(true);
+		return result;
+	}
+	
+	public GeneratedResult generateFSMSource(StateParam target, Map<String, Object> contextMap) {
+		String outfile = "src/" + target.getName() + ".java";
+		String infile = "java/fsm/Java_FSM.java.vsl";
+		GeneratedResult result = generate(infile, outfile, contextMap);
+		result.setNotBom(true);
+		return result;
+	}
+	
 	public GeneratedResult generate(String infile, String outfile,
 			Map<String, Object> contextMap) {
 		try {

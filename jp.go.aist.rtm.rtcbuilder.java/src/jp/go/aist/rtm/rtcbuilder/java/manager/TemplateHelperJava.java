@@ -1,6 +1,7 @@
 package jp.go.aist.rtm.rtcbuilder.java.manager;
 
 import jp.go.aist.rtm.rtcbuilder.IRtcBuilderConstants;
+import jp.go.aist.rtm.rtcbuilder.fsm.StateParam;
 import jp.go.aist.rtm.rtcbuilder.java.IRtcBuilderConstantsJava;
 import jp.go.aist.rtm.rtcbuilder.util.StringUtil;
 
@@ -67,5 +68,23 @@ public class TemplateHelperJava {
 		String defaultPath = System.getenv("RTM_ROOT");
 		if( defaultPath==null ) return false;
 		return true;
+	}
+	
+	public String getHistoryImport(StateParam param) {
+		if(param.getHistory()==2) {
+			return "import jp.go.aist.rtm.RTC.jfsm.DeepHistory;";
+		} else if(param.getHistory()==1) {
+			return "import jp.go.aist.rtm.RTC.jfsm.History;";
+		}
+		return "  ";
+	}
+	
+	public String getHistory(StateParam param) {
+		if(param.getHistory()==2) {
+			return "@DeepHistory";
+		} else if(param.getHistory()==1) {
+			return "@History";
+		}
+		return "  ";
 	}
 }

@@ -1,0 +1,41 @@
+${tmpltHelperJava.getHistoryImport(${targetFsm})}
+import jp.go.aist.rtm.RTC.jfsm.Event;
+import jp.go.aist.rtm.RTC.jfsm.State;
+
+#foreach($type in ${javaConv.getEachEventTypes(${targetFsm})})
+${javaConv.getDataportPackageName(${type})}
+#end
+
+/**
+ * 
+ */
+${tmpltHelperJava.getHistory(${targetFsm})}
+public class ${targetFsm.name} extends ${targetFsm.parentName} {
+
+#foreach($eachTrans in ${targetFsm.getTransList()})
+#if( ${eachTrans.event.length()} > 0 )
+#if( ${eachTrans.existEventParam()} )
+    @Override
+#if( ${eachTrans.existDataType()})
+    public void ${eachTrans.event}(${javaConv.getDataTypeName(${eachTrans.dataType})} data) {
+#else
+    public void ${eachTrans.event}() {
+#end
+        setState(new State(${eachTrans.target}.class));
+    }
+
+#end
+#end
+#end
+
+#if( ${targetFsm.hasEntry} )
+    @Override
+    public void onEntry() {
+    }
+#end
+#if( ${eachState.hasExit} )
+    @Override
+    public void onExit() {
+    }
+#end
+}
