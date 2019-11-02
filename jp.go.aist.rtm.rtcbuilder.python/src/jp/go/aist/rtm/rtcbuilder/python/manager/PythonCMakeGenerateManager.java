@@ -6,7 +6,6 @@ import static jp.go.aist.rtm.rtcbuilder.python.IRtcBuilderConstantsPython.LANG_P
 import static jp.go.aist.rtm.rtcbuilder.util.RTCUtil.form;
 
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -54,17 +53,21 @@ public class PythonCMakeGenerateManager extends CMakeGenerateManager {
 
 		RtcParam rtcParam = (RtcParam) contextMap.get("rtcParam");
 		
-		List<IdlFileParam> allIdlFileParams = new ArrayList<IdlFileParam>();
+		boolean isExist = false;
 		for(IdlFileParam target : rtcParam.getProviderIdlPathes()) {
 			if(RTCUtil.checkDefault(target.getIdlPath(), rtcParam.getParent().getDataTypeParams())) continue;
-			allIdlFileParams.add(target);
+			isExist = true;
+			break;
 		}
-		for(IdlFileParam target : rtcParam.getConsumerIdlPathes()) {
-			if(RTCUtil.checkDefault(target.getIdlPath(), rtcParam.getParent().getDataTypeParams())) continue;
-			allIdlFileParams.add(target);
+		if(isExist == false) {
+			for(IdlFileParam target : rtcParam.getConsumerIdlPathes()) {
+				if(RTCUtil.checkDefault(target.getIdlPath(), rtcParam.getParent().getDataTypeParams())) continue;
+				isExist = true;
+				break;
+			}
 		}
-		
-		if ( 0<allIdlFileParams.size() ) {
+
+		if(isExist) {
 			result.add(generatePostinstIin(contextMap));
 			result.add(generatePrermIn(contextMap));
 		}

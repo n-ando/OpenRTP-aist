@@ -97,8 +97,9 @@ public class ValidationUtil {
 							IWorkspaceRoot workspaceHandle = ResourcesPlugin.getWorkspace().getRoot();
 							IProject project = workspaceHandle.getProject(outputProject);
 							IFolder path = project.getFolder("idl");
+							String idlFile = dispFile.replace("idl" + System.getProperty("file.separator"), System.getProperty("file.separator"));
 							if(path!=null && path.exists()) {
-								ifparam.setIdlFile(path.getLocation().toOSString() + ifparam.getIdlDispFile());
+								ifparam.setIdlFile(path.getLocation().toOSString() + idlFile);
 							}
 						} catch (Exception ex) {
 						}
