@@ -6,6 +6,7 @@ import static jp.go.aist.rtm.rtcbuilder.python.IRtcBuilderConstantsPython.LANG_P
 import static jp.go.aist.rtm.rtcbuilder.util.RTCUtil.form;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -41,7 +42,26 @@ public class PythonCMakeGenerateManager extends CMakeGenerateManager {
 	@Override
 	public Map<String, Object> createContextMap(RtcParam rtcParam) {
 		Map<String, Object> map = super.createContextMap(rtcParam);
+		map.put("tmpltHelperPy", new TemplateHelperPy());
 		map.put("templatePython", TEMPLATE_PATH_PYTHON);
+		
+		List<IdlFileParam> allIdlFileParams = new ArrayList<IdlFileParam>();
+		for(IdlFileParam target : rtcParam.getProviderIdlPathes()) {
+			if(RTCUtil.checkDefault(target.getIdlPath(), rtcParam.getParent().getDataTypeParams())) continue;
+			allIdlFileParams.add(target);
+		}
+		for(IdlFileParam target : rtcParam.getConsumerIdlPathes()) {
+			if(RTCUtil.checkDefault(target.getIdlPath(), rtcParam.getParent().getDataTypeParams())) continue;
+			allIdlFileParams.add(target);
+		}
+		List<IdlFileParam> allIdlFileParamsForBuild = new ArrayList<IdlFileParam>();
+		allIdlFileParamsForBuild.addAll(allIdlFileParams);
+		for(IdlFileParam target : rtcParam.getIncludedIdlPathes()) {
+			if(RTCUtil.checkDefault(target.getIdlPath(), rtcParam.getParent().getDataTypeParams())) continue;
+			allIdlFileParamsForBuild.add(target);
+		}
+		map.put("allIdlFileParamBuild", allIdlFileParamsForBuild);
+		
 		return map;
 	}
 
@@ -70,8 +90,6 @@ public class PythonCMakeGenerateManager extends CMakeGenerateManager {
 		if(isExist) {
 			result.add(generatePostinstIin(contextMap));
 			result.add(generatePrermIn(contextMap));
-		}
-		if(0<rtcParam.getServicePorts().size()) {
 			result.add(generateCMakeWixPatchXmlIn(contextMap));
 		}
 

@@ -83,8 +83,21 @@ option(BUILD_DOCUMENTATION "Build the documentation" OFF)
 option(BUILD_TESTS "Build the tests" OFF)
 option(BUILD_IDL "Build and install idl" ON)
 
+#if( ${tmpltHelperPy.checkUserDefined(${rtcParam})} )
+file(GLOB IDL_FILES "${dol}{CMAKE_CURRENT_SOURCE_DIR}/idl/*.idl")
+
+if(WIN32)
+    set(SCRIPT_FILE ""
+                    idlcompile.bat delete.bat)
+else()
+    set(SCRIPT_FILE ""
+                    idlcompile.sh)
+endif()
+#end
+
 set(EXEC_FILES ""
                ${rtcParam.name}.py
+#if( ${tmpltHelperPy.checkUserDefined(${rtcParam})} )               ${dol}{SCRIPT_FILE}#end
 )
 
 set(OTHER_SRCS CMakeLists.txt
@@ -104,7 +117,7 @@ else()
    set(INSTALL_PREFIX "${dol}{OPENRTM_SHARE_PREFIX}/components/${dol}{PROJECT_TYPE}/${dol}{PROJECT_NAME}")
 endif()
 
-#if(${rtcParam.servicePorts.size()}>0)
+#if( ${tmpltHelperPy.checkUserDefined(${rtcParam})} )
 ${sharp} postinst, prerm settings
 if(UNIX)
 		configure_file(${dol}{CMAKE_CURRENT_SOURCE_DIR}/postinst.in
@@ -135,6 +148,13 @@ install(PROGRAMS ${dol}{EXEC_FILES} DESTINATION "${dol}{INSTALL_PREFIX}"
 install(FILES ${dol}{PROJECT_SOURCE_DIR}/RTC.xml DESTINATION ${dol}{INSTALL_PREFIX}
         COMPONENT component)
 
+#if( ${tmpltHelperPy.checkUserDefined(${rtcParam})} )
+if(IDL_FILES)
+    install(FILES ${IDL_FILES} DESTINATION ${dol}{INSTALL_PREFIX}/idl
+            COMPONENT component)
+endif(IDL_FILES)
+#end
+
 ${sharp} add uninstall target
 configure_file(
     "${dol}{CMAKE_CURRENT_SOURCE_DIR}/cmake/uninstall_target.cmake.in"
@@ -164,7 +184,7 @@ if(BUILD_IDL)
     add_subdirectory(idl)
 endif(BUILD_IDL)
 
-#if(${rtcParam.servicePorts.size()}>0)
+#if( ${tmpltHelperPy.checkUserDefined(${rtcParam})} )
 if(UNIX)
     set(CPACK_GENERATOR "${dol}{LINUX_PACKAGE_GENERATOR}")
     if(CPACK_DEBIAN_PACKAGE_ARCHITECTURE)
