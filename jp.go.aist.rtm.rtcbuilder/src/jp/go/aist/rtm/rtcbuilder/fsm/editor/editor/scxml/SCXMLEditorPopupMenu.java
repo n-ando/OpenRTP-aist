@@ -104,11 +104,13 @@ public class SCXMLEditorPopupMenu extends JPopupMenu {
 				boolean isParallelNode = ((SCXMLNode) (c.getValue())).isParallel();
 				boolean isFinalNode = ((SCXMLNode) (c.getValue())).isFinal();
 				boolean isClusterNode = ((SCXMLNode) (c.getValue())).isClusterNode();
+				boolean existInitial = existInitial(c);
+				
 				if (!inOutsourcedNode) {
 					// add node in case the cell under the pointer is a swimlane
 					boolean addNodeEnabled = graph.isSwimlane(c) && (editor.getCurrentFileIO() != null);
 					add(editor.bind(mxResources.get("addNode"), new AddAction(mousePt, c))).setEnabled(addNodeEnabled);
-					add(editor.bind(mxResources.get("addInitialNode"), new AddInitialAction(mousePt, c))).setEnabled(addNodeEnabled);
+					add(editor.bind(mxResources.get("addInitialNode"), new AddInitialAction(mousePt, c))).setEnabled(addNodeEnabled && existInitial==false);
 					add(editor.bind(mxResources.get("addFinalNode"), new AddFinalAction(mousePt, c))).setEnabled(addNodeEnabled);
 					/*
 					 * Add new, restricted node
@@ -210,5 +212,18 @@ public class SCXMLEditorPopupMenu extends JPopupMenu {
 		} else {
 			add(editor.bind(mxResources.get("editNodeEdge"), null)).setEnabled(false);
 		}
+	}
+	
+	private boolean existInitial(mxCell n) {
+		int nc = n.getChildCount();
+		for (int i = 0; i < nc; i++) {
+			mxCell c = (mxCell) n.getChildAt(i);
+			if (c.isVertex()) {
+				SCXMLNode value = (SCXMLNode) c.getValue();
+				if (value.isInitial())
+					return true;
+			}
+		}
+		return false;
 	}
 }
