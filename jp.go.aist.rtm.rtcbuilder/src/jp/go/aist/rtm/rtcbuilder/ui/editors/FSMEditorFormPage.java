@@ -620,6 +620,10 @@ public class FSMEditorFormPage extends AbstractEditorFormPage {
 						stateList.add(param.getName());
 					}
 				}
+				//
+				if(fsmParam.existInitialState()==false) {
+					result = Messages.getString("IMC.FSM_NOT_INITIAL");
+				}
 			}
 		}
 		return result;
