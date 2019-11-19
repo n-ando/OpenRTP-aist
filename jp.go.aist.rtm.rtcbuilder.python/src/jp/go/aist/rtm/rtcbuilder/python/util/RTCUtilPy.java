@@ -57,6 +57,14 @@ public class RTCUtilPy {
 						result.add(targetType);
 					}
 				}
+				for(ServiceClassParam targetTypes : target.getTestServiceClassParams()) {
+					targetType = targetTypes.getModule();
+					targetType = targetType.replace("::", "");
+					if(check.contains(targetType)==false) {
+						check.add(targetType);
+						result.add(targetType);
+					}
+				}
 			}
 		}
 		return result;
