@@ -72,12 +72,20 @@ public class EventParam {
 	public void setDoc_description(String doc_description) {
 		this.doc_description = doc_description;
 	}
+	public String getDoc_descriptionStr() {
+		if(doc_description==null) return "";
+		return doc_description;
+	}
 	
 	public String getDoc_type() {
 		return doc_type;
 	}
 	public void setDoc_type(String doc_type) {
 		this.doc_type = doc_type;
+	}
+	public String getDoc_typeStr() {
+		if(doc_type==null) return "";
+		return doc_type;
 	}
 	
 	public String getDoc_num() {
@@ -86,12 +94,20 @@ public class EventParam {
 	public void setDoc_num(String doc_num) {
 		this.doc_num = doc_num;
 	}
+	public String getDoc_numStr() {
+		if(doc_num==null) return "";
+		return doc_num;
+	}
 	
 	public String getDoc_semantics() {
 		return doc_semantics;
 	}
 	public void setDoc_semantics(String doc_semantics) {
 		this.doc_semantics = doc_semantics;
+	}
+	public String getDoc_semanticsStr() {
+		if(doc_semantics==null) return "";
+		return doc_semantics;
 	}
 	
 	public String getDoc_unit() {
@@ -100,12 +116,20 @@ public class EventParam {
 	public void setDoc_unit(String doc_unit) {
 		this.doc_unit = doc_unit;
 	}
+	public String getDoc_unitStr() {
+		if(doc_unit==null) return "";
+		return doc_unit;
+	}
 	
 	public String getDoc_operation() {
 		return doc_operation;
 	}
 	public void setDoc_operation(String doc_operation) {
 		this.doc_operation = doc_operation;
+	}
+	public String getDoc_operationStr() {
+		if(doc_operation==null) return "";
+		return doc_operation;
 	}
 	
 	public boolean checkSame(EventParam source) {
