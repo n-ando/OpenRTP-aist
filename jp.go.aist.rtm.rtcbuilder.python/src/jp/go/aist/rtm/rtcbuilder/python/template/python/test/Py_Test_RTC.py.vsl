@@ -38,7 +38,7 @@ import OpenRTM_aist
 
 # Import Service implementation class
 # <rtc-template block="service_impl">
-#foreach($providerIdlFile in ${rtcParam.providerIdlPathes})
+#foreach($providerIdlFile in ${rtcParam.consumerIdlPathes})
 from ${tmpltHelper.getFilenameNoExt(${providerIdlFile.idlFile})}_idl_example import *
 #end
 
