@@ -560,6 +560,7 @@ def RunTest():
     comp = manager.getComponent("${rtcParam.name}Test0")
     if comp is None:
         print('Component get failed.', file=sys.stderr)
+        return False
     return comp.runTest()
 
 def ${rtcParam.name}TestInit(manager):
