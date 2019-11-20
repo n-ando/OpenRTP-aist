@@ -156,8 +156,6 @@ public class PythonGenerateManager extends GenerateManager {
 		//////////
 		result.add(generatePythonTestSource(contextMap));
 		for (IdlFileParam idlFileParam : rtcParam.getConsumerIdlPathes()) {
-			if(idlFileParam.isDataPort()) continue;
-			if(RTCUtil.checkDefault(idlFileParam.getIdlPath(), rtcParam.getParent().getDataTypeParams())) continue;
 			contextMap.put("idlFileParam", idlFileParam);
 			result.add(generateTestSVCIDLExampleSource(contextMap));
 		}
@@ -227,6 +225,8 @@ public class PythonGenerateManager extends GenerateManager {
 	public GeneratedResult generateTestSVCIDLExampleSource(
 			Map<String, Object> contextMap) {
 		IdlFileParam idlParam = (IdlFileParam) contextMap.get("idlFileParam");
+		idlParam.getServiceClassParams().clear();
+		idlParam.getServiceClassParams().addAll(idlParam.getTestServiceClassParams());
 		String outfile = "test/" + idlParam.getIdlFileNoExt() + "_idl_example.py";
 		String infile = "python/Py_SVC_idl_example.py.vsl";
 		return generate(infile, outfile, contextMap);
