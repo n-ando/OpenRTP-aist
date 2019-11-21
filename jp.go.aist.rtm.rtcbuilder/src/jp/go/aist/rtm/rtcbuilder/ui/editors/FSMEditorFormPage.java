@@ -513,6 +513,15 @@ public class FSMEditorFormPage extends AbstractEditorFormPage {
 				fsmCompType = IRtcBuilderConstants.FSMTYTPE_STATIC;
 			}
 			rtcParam.setProperty(IRtcBuilderConstants.PROP_TYPE_FSMTYTPE, fsmCompType);
+			//
+			if(0<rtcParam.getEventports().size()) {
+				EventPortParam eport = rtcParam.getEventports().get(0);
+				eport.setName(portNameText.getText());
+				eport.setVarname(variableNameText.getText());
+				editor.updateEMFDataPorts(
+						editor.getRtcParam().getInports(), editor.getRtcParam().getOutports(),
+						editor.getRtcParam().getEventports(), editor.getRtcParam().getServicePorts());
+			}
 		}
 
 		editor.updateDirty();

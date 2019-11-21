@@ -414,7 +414,7 @@ ${sharp}${sharp}${sharp} EventPorts definition
 
 |  |  |
 ----|---- 
-| Port Name | ${rtcParam.commonPrefix}${rtcParam.dataPortPrefix}${rtcParam.getEventport().tmplVarName}In${rtcParam.dataPortSuffix}${rtcParam.commonSuffix} |
+| Port Name | ${rtcParam.getEventport().name} |
 | FSM Type | ${tmpltHelper.getFSMType(${rtcParam})} |
 
 ${sharp}${sharp}${sharp}${sharp} Node list
