@@ -102,7 +102,8 @@ public class PythonGenerateManager extends GenerateManager {
 		List<IdlFileParam> allFileParams = new ArrayList<IdlFileParam>();
 		allFileParams.addAll(rtcParam.getProviderIdlPathes());
 		allFileParams.addAll(rtcParam.getConsumerIdlPathes());
-		List<String> moduleList = RTCUtilPy.checkDefaultModuile(allFileParams, rtcParam.getParent().getDataTypeParams());
+		List<String> moduleList = RTCUtilPy.checkDefaultModuile(allFileParams, true, rtcParam.getParent().getDataTypeParams());
+		List<String> testModuleList = RTCUtilPy.checkDefaultModuile(allFileParams, false, rtcParam.getParent().getDataTypeParams());
 
 		Map<String, Object> contextMap = new HashMap<String, Object>();
 		contextMap.put("template", TEMPLATE_PATH);
@@ -114,6 +115,7 @@ public class PythonGenerateManager extends GenerateManager {
 		contextMap.put("idlPathes", rtcParam.getIdlPathes());
 		contextMap.put("allIdlFileParamBuild", allIdlFileParamsForBuild);
 		contextMap.put("defaultModule", moduleList);
+		contextMap.put("defaultTestModule", testModuleList);
 
 		return generateTemplateCode10(contextMap);
 	}

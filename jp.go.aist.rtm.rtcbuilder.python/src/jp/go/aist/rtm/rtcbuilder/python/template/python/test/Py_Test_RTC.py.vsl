@@ -25,7 +25,7 @@ sys.path.append(".")
 # Import RTM module
 import RTC
 import OpenRTM_aist
-#foreach($idlModule in ${defaultModule})import ${idlModule}
+#foreach($idlModule in ${defaultTestModule})import ${idlModule}
 #end
 
 #foreach($IdlFile in ${allIdlFileParam})#if(!${IdlFile.dataPort})import ${tmpltHelper.getFilenameNoExt(${IdlFile.IdlFile})}_idl
