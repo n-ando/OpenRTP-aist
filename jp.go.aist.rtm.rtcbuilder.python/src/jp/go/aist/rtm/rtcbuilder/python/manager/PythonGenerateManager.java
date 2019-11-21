@@ -102,7 +102,8 @@ public class PythonGenerateManager extends GenerateManager {
 		List<IdlFileParam> allFileParams = new ArrayList<IdlFileParam>();
 		allFileParams.addAll(rtcParam.getProviderIdlPathes());
 		allFileParams.addAll(rtcParam.getConsumerIdlPathes());
-		List<String> moduleList = RTCUtilPy.checkDefaultModuile(allFileParams, rtcParam.getParent().getDataTypeParams());
+		List<String> moduleList = RTCUtilPy.checkDefaultModuile(allFileParams, true, rtcParam.getParent().getDataTypeParams());
+		List<String> testModuleList = RTCUtilPy.checkDefaultModuile(allFileParams, false, rtcParam.getParent().getDataTypeParams());
 
 		Map<String, Object> contextMap = new HashMap<String, Object>();
 		contextMap.put("template", TEMPLATE_PATH);
@@ -114,6 +115,7 @@ public class PythonGenerateManager extends GenerateManager {
 		contextMap.put("idlPathes", rtcParam.getIdlPathes());
 		contextMap.put("allIdlFileParamBuild", allIdlFileParamsForBuild);
 		contextMap.put("defaultModule", moduleList);
+		contextMap.put("defaultTestModule", testModuleList);
 
 		return generateTemplateCode10(contextMap);
 	}
@@ -156,8 +158,6 @@ public class PythonGenerateManager extends GenerateManager {
 		//////////
 		result.add(generatePythonTestSource(contextMap));
 		for (IdlFileParam idlFileParam : rtcParam.getConsumerIdlPathes()) {
-			if(idlFileParam.isDataPort()) continue;
-			if(RTCUtil.checkDefault(idlFileParam.getIdlPath(), rtcParam.getParent().getDataTypeParams())) continue;
 			contextMap.put("idlFileParam", idlFileParam);
 			result.add(generateTestSVCIDLExampleSource(contextMap));
 		}
@@ -227,6 +227,8 @@ public class PythonGenerateManager extends GenerateManager {
 	public GeneratedResult generateTestSVCIDLExampleSource(
 			Map<String, Object> contextMap) {
 		IdlFileParam idlParam = (IdlFileParam) contextMap.get("idlFileParam");
+		idlParam.getServiceClassParams().clear();
+		idlParam.getServiceClassParams().addAll(idlParam.getTestServiceClassParams());
 		String outfile = "test/" + idlParam.getIdlFileNoExt() + "_idl_example.py";
 		String infile = "python/Py_SVC_idl_example.py.vsl";
 		return generate(infile, outfile, contextMap);
