@@ -491,7 +491,7 @@ public class TemplateHelper {
 			
 			builder.append("  <tr>").append(br);
 			builder.append("    <td>DataType</td>").append(br);
-			builder.append("    <td>").append(tranParam.getEventParam().getDataTypeStr()).append("</td>").append(br);
+			builder.append("    <td>").append(tranParam.getEventParam().getDataType()).append("</td>").append(br);
 			builder.append("    <td>").append(tranParam.getEventParam().getDoc_typeStr()).append("</td>").append(br);
 			builder.append("  </tr>").append(br);
 			
