@@ -409,6 +409,30 @@ ${sharp}${sharp}${sharp} Activity definition
 #end
 </table>
 
+#if( ${tmpltHelper.checkFSM(${rtcParam})} )
+${sharp}${sharp}${sharp} EventPorts definition
+
+|  |  |
+----|---- 
+| Port Name | ${rtcParam.getEventport().name} |
+| FSM Type | ${tmpltHelper.getFSMType(${rtcParam})} |
+
+${sharp}${sharp}${sharp}${sharp} Node list
+
+<table>
+  <tr>
+    <td>State Name</td>
+    <td>Event Name</td>
+    <td>Target State</td>
+  </tr>
+${tmpltHelper.getFSMNodeInfo(${rtcParam.fsmParam})}
+</table>
+
+${sharp}${sharp}${sharp}${sharp} Event list
+
+${tmpltHelper.getFSMEventInfo(${rtcParam.fsmParam})}
+
+#end
 ${sharp}${sharp}${sharp} InPorts definition
 
 #foreach($port in ${rtcParam.inports})
