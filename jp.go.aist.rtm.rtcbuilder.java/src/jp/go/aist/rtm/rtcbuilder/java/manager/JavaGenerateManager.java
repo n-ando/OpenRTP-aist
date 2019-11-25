@@ -235,6 +235,7 @@ public class JavaGenerateManager extends GenerateManager {
 		String infile = "java/run.sh.vsl";
 		GeneratedResult result = generate(infile, outfile, contextMap);
 		result.setNotBom(true);
+		result.setCode(result.getCode().replace("\r\n", "\n"));
 		return result;
 	}
 
