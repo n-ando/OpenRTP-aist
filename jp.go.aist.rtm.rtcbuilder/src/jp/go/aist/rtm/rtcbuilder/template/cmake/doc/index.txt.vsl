@@ -139,6 +139,17 @@ ${tmpltHelper.convFormatted(${port.name},15)} OutPort     ${tmpltHelper.convForm
 ${tmpltHelper.convFormatted(${serviceInterface.name},15)} ServicePort ${tmpltHelper.convFormatted(${serviceInterface.interfaceType},30)} ${serviceInterface.docDescription}
 #end#end#end#end
 =============== =========== ============================== =======
+#if( ${tmpltHelper.checkFSM(${rtcParam})} )
+
+State transition
+=====
+
+=============== =========== ==============================
+Name            Event Name  Target State                  
+=============== =========== ==============================
+${tmpltHelper.getFSMNodeInfo4Doc(${rtcParam.fsmParam})}
+=============== =========== ==============================
+#end
 
 Examples
 ========

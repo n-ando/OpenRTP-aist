@@ -131,6 +131,17 @@ ${tmpltHelper.convFormatted(${port.name},15)} OutPort     ${tmpltHelper.convForm
 ${tmpltHelper.convFormatted(${serviceInterface.name},15)} ServicePort ${tmpltHelper.convFormatted(${serviceInterface.interfaceType},30)} ${serviceInterface.docDescription}
 #end#end#end#end
 =============== =========== ============================== ====
+#if( ${tmpltHelper.checkFSM(${rtcParam})} )
+
+状態遷移
+=====
+
+=============== =========== ==============================
+状態名          イベント名  遷移先                   
+=============== =========== ==============================
+${tmpltHelper.getFSMNodeInfo4Doc(${rtcParam.fsmParam})}
+=============== =========== ==============================
+#end
 
 例
 ==
