@@ -17,7 +17,7 @@ public class ${fsmParam.name} extends StateDef implements ${rtcParam.name}Protoc
     
      @Override
     public void onInit() {
-        setState(new State(${tmpltHelper.getInitialState(${rtcParam})}).class));
+        setState(new State(${tmpltHelper.getInitialState(${rtcParam})}.class));
     }
 
     @Override
