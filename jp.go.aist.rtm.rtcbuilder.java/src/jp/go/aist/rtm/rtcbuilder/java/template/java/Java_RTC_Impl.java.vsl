@@ -34,6 +34,7 @@ import jp.go.aist.rtm.RTC.Manager;
 import jp.go.aist.rtm.RTC.jfsm.Event;
 import jp.go.aist.rtm.RTC.jfsm.Machine;
 import jp.go.aist.rtm.RTC.jfsm.machine.EventBase;
+import jp.go.aist.rtm.RTC.port.EventInPort;
 #end
 #if( ${rtcParam.inports.size()} > 0 )
 import jp.go.aist.rtm.RTC.port.InPort;
@@ -41,7 +42,7 @@ import jp.go.aist.rtm.RTC.port.InPort;
 #if( ${rtcParam.outports.size()} > 0 )
 import jp.go.aist.rtm.RTC.port.OutPort;
 #end
-#if( ${rtcParam.inports.size()} > 0 || ${rtcParam.outports.size()} > 0 )
+#if( ${rtcParam.inports.size()} > 0 || ${rtcParam.outports.size()} > 0 || ${tmpltHelper.checkFSM(${rtcParam})} )
 import jp.go.aist.rtm.RTC.util.DataRef;
 #end
 #if( ${rtcParam.originalConsumerIdls.size()} > 0 )
