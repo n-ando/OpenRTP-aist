@@ -80,10 +80,7 @@ public class PythonGenerateManager extends GenerateManager {
 			allIdlFileParams.add(target);
 		}
 		List<IdlFileParam> allIdlFileParamsForBuild = new ArrayList<IdlFileParam>();
-		for(IdlFileParam target : allIdlFileParams) {
-			if(RTCUtil.checkDefault(target.getIdlPath(), rtcParam.getParent().getDataTypeParams())) continue;
-			allIdlFileParamsForBuild.add(target);
-		}
+		allIdlFileParamsForBuild.addAll(allIdlFileParams);
 		for(IdlFileParam target : rtcParam.getIncludedIdlPathes()) {
 			if(RTCUtil.checkDefault(target.getIdlPath(), rtcParam.getParent().getDataTypeParams())) continue;
 			allIdlFileParamsForBuild.add(target);
