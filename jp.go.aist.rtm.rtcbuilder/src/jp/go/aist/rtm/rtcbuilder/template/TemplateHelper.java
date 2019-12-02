@@ -43,7 +43,6 @@ import jp.go.aist.rtm.rtcbuilder.generator.param.PropertyParam;
 import jp.go.aist.rtm.rtcbuilder.generator.param.RtcParam;
 import jp.go.aist.rtm.rtcbuilder.generator.param.ServicePortParam;
 import jp.go.aist.rtm.rtcbuilder.generator.param.idl.IdlFileParam;
-import jp.go.aist.rtm.rtcbuilder.nl.Messages;
 import jp.go.aist.rtm.rtcbuilder.util.RTCUtil;
 
 /**
@@ -516,38 +515,6 @@ public class TemplateHelper {
 			builder.append(br);
 		}
 		
-		return builder.toString();
-	}
-		
-	public String getFSMNodeInfo4Doc(StateParam param) {
-		String br = System.getProperty("line.separator");		
-		StringBuilder builder = new StringBuilder();
-		
-		for(StateParam state : param.getAllStateList()) {
-			if(state.isInitial()) {
-				builder.append(TemplateHelper.convFormatted(state.getName(),15)).append(" ");
-				builder.append("Initial State").append(br);
-			} else if(state.isFinal()) {
-				builder.append(TemplateHelper.convFormatted(state.getName(),15)).append(" ");
-				builder.append("Final State").append(br);
-			} else {
-				List<TransitionParam> transList = state.getTransList();
-				if(transList.size()==0) {
-					builder.append(state.getName()).append(br);
-				} else {
-					builder.append(TemplateHelper.convFormatted(state.getName(),15)).append(" ");
-					builder.append(TemplateHelper.convFormatted(transList.get(0).getEventStr(),11)).append(" ");
-					builder.append(TemplateHelper.convFormatted(transList.get(0).getTargetStr(), 30)).append(br);
-					if( 1<state.getTransList().size() ) {
-						for(int index=1; index<state.getTransList().size(); index++) {
-							builder.append(TemplateHelper.convFormatted("",15)).append(" ");
-							builder.append(TemplateHelper.convFormatted(transList.get(index).getEventStr(),11)).append(" ");
-							builder.append(TemplateHelper.convFormatted(transList.get(index).getTargetStr(), 30)).append(br);
-						}
-					}
-				}
-			}
-		}
 		return builder.toString();
 	}
 }
