@@ -1,7 +1,11 @@
 package jp.go.aist.rtm.rtcbuilder.java.manager;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import jp.go.aist.rtm.rtcbuilder.IRtcBuilderConstants;
 import jp.go.aist.rtm.rtcbuilder.fsm.StateParam;
+import jp.go.aist.rtm.rtcbuilder.fsm.TransitionParam;
 import jp.go.aist.rtm.rtcbuilder.java.IRtcBuilderConstantsJava;
 import jp.go.aist.rtm.rtcbuilder.util.StringUtil;
 
@@ -86,5 +90,19 @@ public class TemplateHelperJava {
 			return "@History";
 		}
 		return "  ";
+	}
+	
+	public List<String> getInEventList(StateParam parent, StateParam param) {
+		List<String> result = new ArrayList<String>();
+		
+		for(TransitionParam trans : parent.getAllTransList()) {
+			if(trans.getTarget().equals(param.getName())) {
+				if(trans.getEvent()!=null && 0<trans.getEvent().length()) {
+					result.add(trans.getEvent());
+				}
+			}
+		}
+		
+		return result;
 	}
 }

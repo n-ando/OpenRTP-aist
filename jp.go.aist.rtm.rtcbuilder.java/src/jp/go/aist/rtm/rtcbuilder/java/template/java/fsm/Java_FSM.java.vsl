@@ -11,7 +11,6 @@ ${javaConv.getDataportPackageName(${type})}
  */
 ${tmpltHelperJava.getHistory(${targetFsm})}
 public class ${targetFsm.name} extends ${targetFsm.parentName} {
-
 #foreach($eachTrans in ${targetFsm.getTransList()})
 #if( ${eachTrans.event.length()} > 0 )
 #if( ${eachTrans.existEventParam()} )
@@ -27,15 +26,22 @@ public class ${targetFsm.name} extends ${targetFsm.parentName} {
 #end
 #end
 #end
+//    @Override
+//    public void onInit() {
+//    }
 
-#if( ${targetFsm.hasEntry} )
-    @Override
-    public void onEntry() {
-    }
-#end
-#if( ${eachState.hasExit} )
-    @Override
-    public void onExit() {
-    }
+#if( !${targetFsm.hasEntry} )//#else  #end    @Override
+#if( !${targetFsm.hasEntry} )//#else  #end    public void onEntry() {
+#if( !${targetFsm.hasEntry} )//#else  #end    }
+
+#if( !${eachState.hasExit} )//#else  #end    @Override
+#if( !${eachState.hasExit} )//#else  #end    public void onExit() {
+#if( !${eachState.hasExit} )//#else  #end    }
+
+#foreach($eachEvent in ${tmpltHelperJava.getInEventList(${fsmParam}, ${targetFsm})})
+//    @Override
+//    public void ${eachEvent}() {
+//    }
+
 #end
 }
