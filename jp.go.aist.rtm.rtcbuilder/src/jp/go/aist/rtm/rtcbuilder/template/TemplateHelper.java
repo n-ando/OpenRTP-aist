@@ -43,7 +43,6 @@ import jp.go.aist.rtm.rtcbuilder.generator.param.PropertyParam;
 import jp.go.aist.rtm.rtcbuilder.generator.param.RtcParam;
 import jp.go.aist.rtm.rtcbuilder.generator.param.ServicePortParam;
 import jp.go.aist.rtm.rtcbuilder.generator.param.idl.IdlFileParam;
-import jp.go.aist.rtm.rtcbuilder.nl.Messages;
 import jp.go.aist.rtm.rtcbuilder.util.RTCUtil;
 
 /**
@@ -518,5 +517,4 @@ public class TemplateHelper {
 		
 		return builder.toString();
 	}
-		
 }
