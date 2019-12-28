@@ -480,8 +480,10 @@ public abstract class AbstractEditorFormPage extends FormPage {
 		}
 		String[] defaultTypeList = new String[0];
 		List<String> dataTypes = new ArrayList<String>();
-		if( IDLParamConverter.extractTypeDef(sourceContents, dataTypes)==false ) {
-			MessageDialog.openWarning(RtcBuilderPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow().getShell(), "IDL Parse", IMessageConstants.IDL_PARSE_EROOR);
+		StringBuilder builder = new StringBuilder();
+		if( IDLParamConverter.extractTypeDef(sourceContents, dataTypes, builder)==false ) {
+			MessageDialog.openWarning(RtcBuilderPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow().getShell(),
+					"IDL Parse", IMessageConstants.IDL_PARSE_EROOR + System.lineSeparator() + builder.toString());
 		}
 		defaultTypeList = new String[dataTypes.size()];
 		defaultTypeList = dataTypes.toArray(defaultTypeList);

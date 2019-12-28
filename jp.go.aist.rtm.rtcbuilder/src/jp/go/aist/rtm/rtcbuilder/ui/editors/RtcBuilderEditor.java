@@ -266,6 +266,7 @@ public class RtcBuilderEditor extends FormEditor implements IActionFilter {
 			fsmFormPage = new FSMEditorFormPage(this);
 			defaultPages[2] = fsmFormPage;
 			dataPortFormPage = new DataPortEditorFormPage(this);
+			dataPortFormPage.setDefaultTypeList(fsmFormPage.getDefaultTypeList());
 			defaultPages[3] = dataPortFormPage;
 			servicePortFormPage = new ServicePortEditorFormPage(this);
 			defaultPages[4] = servicePortFormPage;

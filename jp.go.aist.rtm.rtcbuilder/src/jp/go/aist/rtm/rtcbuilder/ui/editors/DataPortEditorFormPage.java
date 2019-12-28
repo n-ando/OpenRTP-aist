@@ -90,6 +90,9 @@ public class DataPortEditorFormPage extends AbstractEditorFormPage {
 	private List<DataParam> typeList = new ArrayList<DataParam>();
 	private List<DataParam> currentList = new ArrayList<DataParam>();
 
+	public void setDefaultTypeList(String[] defaultTypeList) {
+		this.defaultTypeList = defaultTypeList;
+	}
 	/**
 	 * コンストラクタ
 	 *
@@ -100,7 +103,11 @@ public class DataPortEditorFormPage extends AbstractEditorFormPage {
 		super(editor, "id", Messages.getString("IMC.DATAPORT_SECTION"));
 		//
 		preSelection = null;
-		updateDefaultValue();
+		
+		IPreferenceStore store = RtcBuilderPlugin.getDefault().getPreferenceStore();
+		defaultPortName = ComponentPreferenceManager.getInstance().getDataPort_Name();
+		defaultPortType = store.getString(ComponentPreferenceManager.Generate_DataPort_Type);
+		defaultPortVarName = store.getString(ComponentPreferenceManager.Generate_DataPort_VarName);
 	}
 
 	public void updateDefaultValue() {

@@ -91,6 +91,10 @@ public class FSMEditorFormPage extends AbstractEditorFormPage {
 	
 	private EventParam selectParam;
 	private String[] defaultTypeList;
+	
+	public String[] getDefaultTypeList() {
+		return defaultTypeList;
+	}
 	//
 	/**
 	 * コンストラクタ
