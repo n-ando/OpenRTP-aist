@@ -760,7 +760,7 @@
 		point="org.eclipse.ui.menus">
 		<menuContribution
 			allPopups="false"
-			locationURI="toolbar:org.eclipse.ui.main.toolbar?after=jp.go.aist.rtm.systemeditor.ui.actionSet">
+			locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
 			<toolbar
 				id="rtse.menus.toolbar.ec"
 				label="EC">
