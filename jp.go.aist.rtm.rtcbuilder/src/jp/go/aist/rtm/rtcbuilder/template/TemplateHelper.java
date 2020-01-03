@@ -413,6 +413,7 @@ public class TemplateHelper {
 		EventPortParam evPort = param.getEventport();
 		if(evPort!=null) {
 			for(EventParam event : evPort.getEvents() ) {
+				if(event.getName()==null || event.getName().length()==0) continue;
 				if(0<builder.length()) builder.append(",");
 				
 				builder.append("${PROJECT_NAME}0.event");
@@ -450,14 +451,14 @@ public class TemplateHelper {
 				} else {
 					builder.append("  <tr>").append(br);
 					builder.append("    <td rowspan=\"").append(transList.size()).append("\">").append(state.getName()).append("</td>").append(br);
-					builder.append("    <td>").append(transList.get(0).getEventStr()).append("</td>").append(br);
-					builder.append("    <td>").append(transList.get(0).getTargetStr()).append("</td>").append(br);
+					builder.append("    <td>").append(transList.get(0).getEvent()).append("</td>").append(br);
+					builder.append("    <td>").append(transList.get(0).getTarget()).append("</td>").append(br);
 					builder.append("  </tr>").append(br);
 					if( 1<state.getTransList().size() ) {
 						for(int index=1; index<state.getTransList().size(); index++) {
 							builder.append("  <tr>").append(br);
-							builder.append("    <td>").append(transList.get(index).getEventStr()).append("</td>").append(br);
-							builder.append("    <td>").append(transList.get(index).getTargetStr()).append("</td>").append(br);
+							builder.append("    <td>").append(transList.get(index).getEvent()).append("</td>").append(br);
+							builder.append("    <td>").append(transList.get(index).getTarget()).append("</td>").append(br);
 							builder.append("  </tr>").append(br);
 						}
 					}
@@ -475,7 +476,7 @@ public class TemplateHelper {
 			if(tranParam.getEventParam()==null) continue;
 			builder.append("##### ").append(tranParam.getEventParam().getName()).append(br);
 			builder.append(br);
-			builder.append(tranParam.getEventParam().getDoc_descriptionStr()).append(br);
+			builder.append(tranParam.getEventParam().getDoc_description()).append(br);
 			builder.append(br);
 			builder.append("<table>").append(br);
 			builder.append("  <tr>").append(br);
@@ -491,27 +492,27 @@ public class TemplateHelper {
 			builder.append("  <tr>").append(br);
 			builder.append("    <td>DataType</td>").append(br);
 			builder.append("    <td>").append(tranParam.getEventParam().getDataType()).append("</td>").append(br);
-			builder.append("    <td>").append(tranParam.getEventParam().getDoc_typeStr()).append("</td>").append(br);
+			builder.append("    <td>").append(tranParam.getEventParam().getDoc_type()).append("</td>").append(br);
 			builder.append("  </tr>").append(br);
 			
 			builder.append("  <tr>").append(br);
 			builder.append("    <td>Number of Data</td>").append(br);
-			builder.append("    <td colspan=\"2\">").append(tranParam.getEventParam().getDoc_numStr()).append("</td>").append(br);
+			builder.append("    <td colspan=\"2\">").append(tranParam.getEventParam().getDoc_num()).append("</td>").append(br);
 			builder.append("  </tr>").append(br);
 			
 			builder.append("  <tr>").append(br);
 			builder.append("    <td>Unit</td>").append(br);
-			builder.append("    <td colspan=\"2\">").append(tranParam.getEventParam().getDoc_unitStr()).append("</td>").append(br);
+			builder.append("    <td colspan=\"2\">").append(tranParam.getEventParam().getDoc_unit()).append("</td>").append(br);
 			builder.append("  </tr>").append(br);
 			
 			builder.append("  <tr>").append(br);
 			builder.append("    <td>Operational frecency Period</td>").append(br);
-			builder.append("    <td colspan=\"2\">").append(tranParam.getEventParam().getDoc_operationStr()).append("</td>").append(br);
+			builder.append("    <td colspan=\"2\">").append(tranParam.getEventParam().getDoc_operation()).append("</td>").append(br);
 			builder.append("  </tr>").append(br);
 			
 			builder.append("</table>").append(br);
 			builder.append(br);
-			builder.append(tranParam.getEventParam().getDoc_semanticsStr()).append(br);
+			builder.append(tranParam.getEventParam().getDoc_semantics()).append(br);
 			builder.append(br);
 		}
 		
