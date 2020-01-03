@@ -100,7 +100,6 @@ public class JavaCMakeGenerateManager extends CMakeGenerateManager {
 	public GeneratedResult generateIncModuleCMakeLists(Map<String, Object> contextMap) {
 		return new GeneratedResult();
 	}
-
 	@Override
 	public GeneratedResult generateDocIndex(Map<String, Object> contextMap) {
 		return new GeneratedResult();

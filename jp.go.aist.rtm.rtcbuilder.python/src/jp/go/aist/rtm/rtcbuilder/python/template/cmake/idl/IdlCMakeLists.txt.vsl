@@ -29,7 +29,3 @@ if(WIN32)
             COMPONENT component)
   endif()
 endif()
-
-
-install(FILES ${dol}{IDL_FILES} DESTINATION idl
-        COMPONENT component)

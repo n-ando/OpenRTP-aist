@@ -23,6 +23,10 @@ public class TransitionParam {
 	public void setEvent(String event) {
 		this.event = event;
 	}
+	public String getEventStr() {
+		if(event==null) return "";
+		return event;
+	}
 	
 	public String getCondition() {
 		return condition;
@@ -43,6 +47,10 @@ public class TransitionParam {
 	}
 	public void setTarget(String target) {
 		this.target = target;
+	}
+	public String getTargetStr() {
+		if(target==null) return "";
+		return target;
 	}
 
 	public EventParam getEventParam() {

@@ -1,5 +1,9 @@
 package jp.go.aist.rtm.rtcbuilder.manager;
 
+import static jp.go.aist.rtm.rtcbuilder.IRtcBuilderConstants.LANG_CPP;
+import static jp.go.aist.rtm.rtcbuilder.IRtcBuilderConstants.LANG_CPP_ARG;
+import static jp.go.aist.rtm.rtcbuilder.util.RTCUtil.form;
+
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,9 +16,6 @@ import jp.go.aist.rtm.rtcbuilder.generator.GeneratedResult;
 import jp.go.aist.rtm.rtcbuilder.generator.param.RtcParam;
 import jp.go.aist.rtm.rtcbuilder.template.TemplateHelper;
 import jp.go.aist.rtm.rtcbuilder.template.TemplateUtil;
-
-import static jp.go.aist.rtm.rtcbuilder.IRtcBuilderConstants.*;
-import static jp.go.aist.rtm.rtcbuilder.util.RTCUtil.*;
 
 public class CMakeGenerateManager extends GenerateManager {
 
@@ -106,10 +107,6 @@ public class CMakeGenerateManager extends GenerateManager {
 		result.add(generateDocCMakeLists(contextMap));
 		result.add(generateDocConfPy(contextMap));
 		result.add(generateDoxyfile(contextMap));
-
-		//doc/content
-		result.add(generateDocIndex(contextMap));
-		result.add(generateDocIndexJ(contextMap));
 
 		//idl
 		result.add(generateIdlCMakeLists(contextMap));
@@ -232,19 +229,6 @@ public class CMakeGenerateManager extends GenerateManager {
 	public GeneratedResult generateDoxyfile(Map<String, Object> contextMap) {
 		String outfile = "doc/doxyfile.in";
 		String infile = "cmake/doc/Doxyfile.in.vsl";
-		return generate(infile, outfile, contextMap);
-	}
-
-	// 1.0系 (CMake/doc/content)
-	public GeneratedResult generateDocIndex(Map<String, Object> contextMap) {
-		String outfile = "doc/content/index.txt";
-		String infile = "cmake/doc/index.txt.vsl";
-		return generate(infile, outfile, contextMap);
-	}
-
-	public GeneratedResult generateDocIndexJ(Map<String, Object> contextMap) {
-		String outfile = "doc/content/index_j.txt";
-		String infile = "cmake/doc/index_j.txt.vsl";
 		return generate(infile, outfile, contextMap);
 	}
 

@@ -30,6 +30,7 @@ import static jp.go.aist.rtm.rtcbuilder.IRtcBuilderConstants.DOC_UNIT_PREFIX;
 import static jp.go.aist.rtm.rtcbuilder.util.StringUtil.splitString;
 
 import java.io.File;
+import java.util.List;
 
 import jp.go.aist.rtm.rtcbuilder.IRtcBuilderConstants;
 import jp.go.aist.rtm.rtcbuilder.fsm.EventParam;
@@ -354,6 +355,19 @@ public class TemplateHelper {
 		return false;
 	}
 	
+	public String getFSMType(RtcParam param) {
+		PropertyParam fsmType = param.getProperty(IRtcBuilderConstants.PROP_TYPE_FSMTYTPE);
+		if(fsmType!=null) {
+			String strType = fsmType.getValue();
+			if(strType.equals(IRtcBuilderConstants.FSMTYTPE_STATIC)) {
+				return "StaticFSM";
+			} else if(strType.equals(IRtcBuilderConstants.FSMTYTPE_DYNAMIC)) {
+				return "DynamicFSM";
+			}
+		}
+		return "";
+	}
+	
 	public String getTopFSMName(RtcParam param) {
 		StateParam state = param.getFsmParam();
 		if(state==null) return "";
@@ -405,6 +419,100 @@ public class TemplateHelper {
 				builder.append("?port=${PROJECT_NAME}Test0.").append(event.getName());
 				builder.append("&fsm_event_name=").append(event.getName());
 			}
+		}
+		
+		return builder.toString();
+	}
+	
+	public String getFSMNodeInfo(StateParam param) {
+		String br = System.getProperty("line.separator");		
+		StringBuilder builder = new StringBuilder();
+		
+		for(StateParam state : param.getAllStateList()) {
+			if(state.isInitial()) {
+				builder.append("  <tr>").append(br);
+				builder.append("    <td>").append(state.getName()).append("</td>").append(br);
+				builder.append("    <td colspan=\"2\">Initial State</td>").append(br);
+				builder.append("  </tr>").append(br);
+			} else if(state.isFinal()) {
+				builder.append("  <tr>").append(br);
+				builder.append("    <td>").append(state.getName()).append("</td>").append(br);
+				builder.append("    <td colspan=\"2\">Final State</td>").append(br);
+				builder.append("  </tr>").append(br);
+			} else {
+				List<TransitionParam> transList = state.getTransList();
+				if(transList.size()==0) {
+					builder.append("  <tr>").append(br);
+					builder.append("    <td rowspan=\"").append(transList.size()).append("\">").append(state.getName()).append("</td>").append(br);
+					builder.append("    <td></td>").append(br);
+					builder.append("    <td></td>").append(br);
+					builder.append("  </tr>").append(br);
+				} else {
+					builder.append("  <tr>").append(br);
+					builder.append("    <td rowspan=\"").append(transList.size()).append("\">").append(state.getName()).append("</td>").append(br);
+					builder.append("    <td>").append(transList.get(0).getEventStr()).append("</td>").append(br);
+					builder.append("    <td>").append(transList.get(0).getTargetStr()).append("</td>").append(br);
+					builder.append("  </tr>").append(br);
+					if( 1<state.getTransList().size() ) {
+						for(int index=1; index<state.getTransList().size(); index++) {
+							builder.append("  <tr>").append(br);
+							builder.append("    <td>").append(transList.get(index).getEventStr()).append("</td>").append(br);
+							builder.append("    <td>").append(transList.get(index).getTargetStr()).append("</td>").append(br);
+							builder.append("  </tr>").append(br);
+						}
+					}
+				}
+			}
+		}
+		return builder.toString();
+	}
+
+	public String getFSMEventInfo(StateParam param) {
+		String br = System.getProperty("line.separator");		
+		StringBuilder builder = new StringBuilder();
+		
+		for(TransitionParam tranParam : param.getAllTransList()) {
+			if(tranParam.getEventParam()==null) continue;
+			builder.append("##### ").append(tranParam.getEventParam().getName()).append(br);
+			builder.append(br);
+			builder.append(tranParam.getEventParam().getDoc_descriptionStr()).append(br);
+			builder.append(br);
+			builder.append("<table>").append(br);
+			builder.append("  <tr>").append(br);
+			builder.append("    <td>Source State</td>").append(br);
+			builder.append("    <td colspan=\"2\">").append(tranParam.getEventParam().getSource()).append("</td>").append(br);
+			builder.append("  </tr>").append(br);
+			
+			builder.append("  <tr>").append(br);
+			builder.append("    <td>Target State</td>").append(br);
+			builder.append("    <td colspan=\"2\">").append(tranParam.getEventParam().getTarget()).append("</td>").append(br);
+			builder.append("  </tr>").append(br);
+			
+			builder.append("  <tr>").append(br);
+			builder.append("    <td>DataType</td>").append(br);
+			builder.append("    <td>").append(tranParam.getEventParam().getDataType()).append("</td>").append(br);
+			builder.append("    <td>").append(tranParam.getEventParam().getDoc_typeStr()).append("</td>").append(br);
+			builder.append("  </tr>").append(br);
+			
+			builder.append("  <tr>").append(br);
+			builder.append("    <td>Number of Data</td>").append(br);
+			builder.append("    <td colspan=\"2\">").append(tranParam.getEventParam().getDoc_numStr()).append("</td>").append(br);
+			builder.append("  </tr>").append(br);
+			
+			builder.append("  <tr>").append(br);
+			builder.append("    <td>Unit</td>").append(br);
+			builder.append("    <td colspan=\"2\">").append(tranParam.getEventParam().getDoc_unitStr()).append("</td>").append(br);
+			builder.append("  </tr>").append(br);
+			
+			builder.append("  <tr>").append(br);
+			builder.append("    <td>Operational frecency Period</td>").append(br);
+			builder.append("    <td colspan=\"2\">").append(tranParam.getEventParam().getDoc_operationStr()).append("</td>").append(br);
+			builder.append("  </tr>").append(br);
+			
+			builder.append("</table>").append(br);
+			builder.append(br);
+			builder.append(tranParam.getEventParam().getDoc_semanticsStr()).append(br);
+			builder.append(br);
 		}
 		
 		return builder.toString();

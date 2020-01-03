@@ -317,7 +317,6 @@ public class Generator {
 			configNames.add(config.getName());
 		}
 		/////FSM
-		//TODO 国際化
 		PropertyParam fsm = rtcParam.getProperty(IRtcBuilderConstants.PROP_TYPE_FSM);
 		if(fsm!=null) {
 			if(Boolean.valueOf(fsm.getValue())) {
