@@ -10,7 +10,6 @@ import jp.go.aist.rtm.rtcbuilder.generator.GeneratedResult;
 import junit.framework.TestCase;
 
 public class TestBase extends TestCase {
-//	protected String rootPath = "C:\\Tech-Arts\\Eclipse\\jp.go.aist.rtm.rtcbuilder\\";
 	protected String rootPath;
 	protected String expPath;
 	protected String expContent;

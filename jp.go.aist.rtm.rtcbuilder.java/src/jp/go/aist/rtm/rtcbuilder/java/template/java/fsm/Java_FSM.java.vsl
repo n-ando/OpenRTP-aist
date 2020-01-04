@@ -34,9 +34,9 @@ public class ${targetFsm.name} extends ${targetFsm.parentName} {
 #if( !${targetFsm.hasEntry} )//#else  #end    public void onEntry() {
 #if( !${targetFsm.hasEntry} )//#else  #end    }
 
-#if( !${eachState.hasExit} )//#else  #end    @Override
-#if( !${eachState.hasExit} )//#else  #end    public void onExit() {
-#if( !${eachState.hasExit} )//#else  #end    }
+#if( !${targetFsm.hasExit} )//#else  #end    @Override
+#if( !${targetFsm.hasExit} )//#else  #end    public void onExit() {
+#if( !${targetFsm.hasExit} )//#else  #end    }
 
 #foreach($eachEvent in ${tmpltHelperJava.getInEventList(${fsmParam}, ${targetFsm})})
 //    @Override
