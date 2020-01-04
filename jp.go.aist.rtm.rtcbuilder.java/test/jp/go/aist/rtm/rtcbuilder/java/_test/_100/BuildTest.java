@@ -95,7 +95,7 @@ public class BuildTest extends TestBase {
 		checkCode(result, resourceDir, "src/foo.java");
 		checkCode(result, resourceDir, "src/fooImpl.java");
 		checkCode(result, resourceDir, "src/MyServiceSVC_impl.java");
-		checkCode(result, resourceDir, "foo.sh");
+		checkCode(result, resourceDir, "foo.sh", "\n");
 		checkCode(result, resourceDir, "foo.bat");
 		//
 		checkCode(result, resourceDir, "build_foo.xml");
@@ -157,7 +157,7 @@ public class BuildTest extends TestBase {
 		checkCode(result, resourceDir, "src/foo.java");
 		checkCode(result, resourceDir, "src/fooImpl.java");
 		checkCode(result, resourceDir, "src/MyServiceSVC_impl.java");
-		checkCode(result, resourceDir, "foo.sh");
+		checkCode(result, resourceDir, "foo.sh", "\n");
 		checkCode(result, resourceDir, "foo.bat");
 		//
 //		checkCode(result, resourceDir, "build_foo.xml");
