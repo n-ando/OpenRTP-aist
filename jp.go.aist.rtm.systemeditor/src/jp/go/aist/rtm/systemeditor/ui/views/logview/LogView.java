@@ -9,12 +9,16 @@ import java.util.List;
 import java.util.Map;
 
 import jp.go.aist.rtm.systemeditor.RTSystemEditorPlugin;
+import jp.go.aist.rtm.systemeditor.ui.util.LoggerHandler;
+import jp.go.aist.rtm.systemeditor.ui.views.configurationview.configurationwrapper.ConfigurationSetConfigurationWrapper;
+import jp.go.aist.rtm.systemeditor.ui.views.configurationview.configurationwrapper.NamedValueConfigurationWrapper;
 import jp.go.aist.rtm.toolscommon.model.component.Component;
 import jp.go.aist.rtm.toolscommon.model.component.CorbaComponent;
 import jp.go.aist.rtm.toolscommon.model.component.SystemDiagram;
 import jp.go.aist.rtm.toolscommon.model.component.SystemDiagramKind;
 import jp.go.aist.rtm.toolscommon.model.component.util.RTCLogStore;
 import jp.go.aist.rtm.toolscommon.util.AdapterUtil;
+import sun.rmi.log.LogHandler;
 
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellEditor;
@@ -37,13 +41,18 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.part.ViewPart;
@@ -83,6 +92,9 @@ public class LogView extends ViewPart {
 	LogViewerFilter filter;
 
 	SimpleDateFormat df;
+	
+	private LoggerHandler handler;
+	private Text txtLog;
 
 	public LogView() {
 		this.df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -96,27 +108,99 @@ public class LogView extends ViewPart {
 	public void createPartControl(Composite parent) {
 		GridLayout gl;
 		GridData gd;
-
+		
 		gl = new GridLayout();
-		gl.numColumns = 3;
+		gl.marginWidth = 0;
+		gl.marginHeight = 0;
+		gl.numColumns = 5;
 		parent.setLayout(gl);
 
-		SashForm sashForm = new SashForm(parent, SWT.HORIZONTAL);
+		Label portNo = new Label(parent, SWT.NONE);
 		gd = new GridData();
-		gd.horizontalAlignment = SWT.FILL;
-		gd.verticalAlignment = SWT.FILL;
+		gd.horizontalSpan = 0;
+		gd.verticalSpan = 0;
+		portNo.setLayoutData(gd);
+		portNo.setText("PortNo:");
+
+		Text txtPort = new Text(parent, SWT.BORDER);
+		gd = new GridData();
+		gd.horizontalSpan = 0;
+		gd.verticalSpan = 0;
+		gd.widthHint = 100;
+		txtPort.setLayoutData(gd);
+		txtPort.setText("24224");
+		
+		Button btnStart = new Button(parent, SWT.NONE);
+		gd = new GridData();
+		gd.horizontalSpan = 0;
+		gd.verticalSpan = 0;
+		gd.widthHint = 50;
+		btnStart.setLayoutData(gd);
+		btnStart.setText("Start");
+		btnStart.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				String strPort = txtPort.getText();
+				int portNo = Integer.parseInt(strPort);
+				handler = new LoggerHandler();
+				handler.startServer(portNo, txtLog);
+			}
+		});
+
+		Button btnStop = new Button(parent, SWT.NONE);
+		gd = new GridData();
+		gd.horizontalSpan = 0;
+		gd.verticalSpan = 0;
+		gd.widthHint = 50;
+		btnStop.setLayoutData(gd);
+		btnStop.setText("Stop");
+		btnStop.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				if(handler==null) return;
+				handler.stopServer();
+			}
+		});
+		
+		Label lblDummy = new Label(parent, SWT.NONE);
+		gd = new GridData();
+		gd.grabExcessHorizontalSpace = true;
+		lblDummy.setLayoutData(gd);
+		/////
+
+		txtLog = new Text(parent, SWT.MULTI|SWT.BORDER|SWT.H_SCROLL|SWT.V_SCROLL);
+		gd = new GridData();
+		gd.horizontalSpan = 5;
+		gd.verticalSpan = 0;
+		gd.horizontalAlignment = GridData.FILL;
+		gd.verticalAlignment = GridData.FILL;
 		gd.grabExcessHorizontalSpace = true;
 		gd.grabExcessVerticalSpace = true;
-		gd.horizontalSpan = 2;
-		sashForm.setLayoutData(gd);
-
-		createRTCListPart(sashForm);
-
-		createRTCLogPart(sashForm);
-
-		sashForm.setWeights(new int[] { 20, 80 });
-
-		setSiteSelection();
+		txtLog.setLayoutData(gd);
+		
+//		GridLayout gl;
+//		GridData gd;
+//
+//		gl = new GridLayout();
+//		gl.numColumns = 3;
+//		parent.setLayout(gl);
+//
+//		SashForm sashForm = new SashForm(parent, SWT.HORIZONTAL);
+//		gd = new GridData();
+//		gd.horizontalAlignment = SWT.FILL;
+//		gd.verticalAlignment = SWT.FILL;
+//		gd.grabExcessHorizontalSpace = true;
+//		gd.grabExcessVerticalSpace = true;
+//		gd.horizontalSpan = 2;
+//		sashForm.setLayoutData(gd);
+//
+//		createRTCListPart(sashForm);
+//
+//		createRTCLogPart(sashForm);
+//
+//		sashForm.setWeights(new int[] { 20, 80 });
+//
+//		setSiteSelection();
 	}
 
 	Composite createRTCListPart(SashForm sash) {

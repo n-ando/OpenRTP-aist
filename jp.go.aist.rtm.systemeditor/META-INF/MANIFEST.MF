@@ -14,8 +14,12 @@ Require-Bundle: org.eclipse.gef;visibility:=reexport,
  jp.go.aist.rtm.repositoryView,
  org.eclipse.core.expressions
 Bundle-ActivationPolicy: lazy
-Bundle-ClassPath: .
-Export-Package: jp.go.aist.rtm.systemeditor,
+Bundle-ClassPath: .,
+ lib/influent.jar,
+ lib/org.msgpack.jar,
+ lib/slf4j-api-1.7.13.jar
+Export-Package: influent,
+ jp.go.aist.rtm.systemeditor,
  jp.go.aist.rtm.systemeditor._debug,
  jp.go.aist.rtm.systemeditor._test,
  jp.go.aist.rtm.systemeditor.adapterfactory,
