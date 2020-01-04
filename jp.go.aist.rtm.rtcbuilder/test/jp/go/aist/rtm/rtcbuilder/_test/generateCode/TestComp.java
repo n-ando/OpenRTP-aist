@@ -100,8 +100,6 @@ public class TestComp extends TestBase {
 		checkCode(result, resourceDir, "doc/CMakeLists.txt");
 		checkCode(result, resourceDir, "doc/conf.py.in");
 		checkCode(result, resourceDir, "doc/doxyfile.in");
-		checkCode(result, resourceDir, "doc/content/index.txt");
-		checkCode(result, resourceDir, "doc/content/index_j.txt");
 		
 		checkCode(result, resourceDir, "idl/CMakeLists.txt");
 		
@@ -177,8 +175,6 @@ public class TestComp extends TestBase {
 		checkCode(result, resourceDir, "doc/CMakeLists.txt");
 		checkCode(result, resourceDir, "doc/conf.py.in");
 		checkCode(result, resourceDir, "doc/doxyfile.in");
-		checkCode(result, resourceDir, "doc/content/index.txt");
-		checkCode(result, resourceDir, "doc/content/index_j.txt");
 		
 		checkCode(result, resourceDir, "idl/CMakeLists.txt");
 		

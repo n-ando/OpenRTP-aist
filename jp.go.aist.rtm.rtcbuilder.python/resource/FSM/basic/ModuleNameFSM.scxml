@@ -1,0 +1,12 @@
+<scxml initial="InitialState" name="Top" version="1.0" xmlns="http://www.w3.org/2005/07/scxml"><!--   node-size-and-position x=0 y=0 w=854 h=400  -->
+ <state id="InitialState"><!--   node-size-and-position x=90 y=150 w=75 h=75  -->
+  <transition id="21" target="State01"></transition>
+ </state>
+ <state id="State01"><!--   node-size-and-position x=280 y=150 w=75 h=75  -->
+  <transition id="22" target="State02"></transition>
+ </state>
+ <state id="State02"><!--   node-size-and-position x=470 y=150 w=75 h=75  -->
+  <transition id="23" target="FinalState"></transition>
+ </state>
+ <final id="FinalState"><!--   node-size-and-position x=650 y=160 w=75 h=75  --></final>
+</scxml>

@@ -125,4 +125,17 @@ public class StateParam {
 			each.searchEventParam(rtcParam);
 		}
 	}
+	
+	public boolean existInitialState() {
+		boolean result = false;
+		if(stateList==null || stateList.size()==0) return true;
+		
+		for(StateParam state : stateList) {
+			if(state.existInitialState()==false) return false;
+			if(state.isInitial) {
+				result = true;
+			}
+		}
+		return result;
+	}
 }

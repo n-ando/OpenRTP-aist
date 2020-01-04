@@ -19,6 +19,13 @@ public class EventParam {
 		this.condition = "";
 		this.source = "";
 		this.target = "";
+		//
+		doc_description = "";
+		doc_type = "";
+		doc_num = "";
+		doc_semantics = "";
+		doc_unit = "";
+		doc_operation = "";
 	}
 	
 	public String getName() {
@@ -70,6 +77,7 @@ public class EventParam {
 		return doc_description;
 	}
 	public void setDoc_description(String doc_description) {
+		if(doc_description==null) doc_description = "";
 		this.doc_description = doc_description;
 	}
 	
@@ -77,6 +85,7 @@ public class EventParam {
 		return doc_type;
 	}
 	public void setDoc_type(String doc_type) {
+		if(doc_type==null) doc_type = "";
 		this.doc_type = doc_type;
 	}
 	
@@ -84,6 +93,7 @@ public class EventParam {
 		return doc_num;
 	}
 	public void setDoc_num(String doc_num) {
+		if(doc_num==null) doc_num = "";
 		this.doc_num = doc_num;
 	}
 	
@@ -91,6 +101,7 @@ public class EventParam {
 		return doc_semantics;
 	}
 	public void setDoc_semantics(String doc_semantics) {
+		if(doc_semantics==null) doc_semantics = "";
 		this.doc_semantics = doc_semantics;
 	}
 	
@@ -98,6 +109,7 @@ public class EventParam {
 		return doc_unit;
 	}
 	public void setDoc_unit(String doc_unit) {
+		if(doc_unit==null) doc_unit = "";
 		this.doc_unit = doc_unit;
 	}
 	
@@ -105,6 +117,7 @@ public class EventParam {
 		return doc_operation;
 	}
 	public void setDoc_operation(String doc_operation) {
+		if(doc_operation==null) doc_operation = "";
 		this.doc_operation = doc_operation;
 	}
 	

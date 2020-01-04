@@ -16,7 +16,7 @@ public class TestBase extends TestCase {
 	protected String expContent;
 	protected int index;
 	protected String[] ignore_row_phrases = {"--service-idl=", "--consumer-idl"};
-	protected final int default_file_num = 30;
+	protected final int default_file_num = 28;
 	protected final int service_file_num = 7;
 
 	public TestBase () {
@@ -98,6 +98,7 @@ public class TestBase extends TestCase {
 		expPath = resourceDir + fileName;
 		expContent = readFile(expPath);
 		expContent = replaceRootPath(expContent);
+		expContent = expContent.replace("\uFEFF", "");
 		assertEquals(expContent,
 				getGeneratedString(result.get(index).getCode()));
 	}

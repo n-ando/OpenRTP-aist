@@ -23,8 +23,10 @@ import time
 sys.path.append(".")
 
 # Import RTM module
-import OpenRTM_aist
 import RTC
+import OpenRTM_aist
+#foreach($idlModule in ${defaultTestModule})import ${idlModule}
+#end
 
 #foreach($IdlFile in ${allIdlFileParam})#if(!${IdlFile.dataPort})import ${tmpltHelper.getFilenameNoExt(${IdlFile.IdlFile})}_idl
 #end
@@ -36,7 +38,7 @@ import RTC
 
 # Import Service implementation class
 # <rtc-template block="service_impl">
-#foreach($providerIdlFile in ${rtcParam.providerIdlPathes})
+#foreach($providerIdlFile in ${rtcParam.consumerIdlPathes})
 from ${tmpltHelper.getFilenameNoExt(${providerIdlFile.idlFile})}_idl_example import *
 #end
 
@@ -560,6 +562,7 @@ def RunTest():
     comp = manager.getComponent("${rtcParam.name}Test0")
     if comp is None:
         print('Component get failed.', file=sys.stderr)
+        return False
     return comp.runTest()
 
 def ${rtcParam.name}TestInit(manager):

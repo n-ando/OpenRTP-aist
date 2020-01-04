@@ -21,6 +21,7 @@ public class TransitionParam {
 		return event;
 	}
 	public void setEvent(String event) {
+		if(event==null) event = "";
 		this.event = event;
 	}
 	
@@ -28,6 +29,7 @@ public class TransitionParam {
 		return condition;
 	}
 	public void setCondition(String condition) {
+		if(condition==null) condition = "";
 		this.condition = condition;
 	}
 	
@@ -35,6 +37,7 @@ public class TransitionParam {
 		return source;
 	}
 	public void setSource(String source) {
+		if(source==null) source = "";
 		this.source = source;
 	}
 	
@@ -42,6 +45,7 @@ public class TransitionParam {
 		return target;
 	}
 	public void setTarget(String target) {
+		if(target==null) target = "";
 		this.target = target;
 	}
 

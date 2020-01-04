@@ -101,23 +101,6 @@ public class JavaCMakeGenerateManager extends CMakeGenerateManager {
 		return new GeneratedResult();
 	}
 
-	@Override
-	public GeneratedResult generateDocIndex(Map<String, Object> contextMap) {
-		return new GeneratedResult();
-	}
-	@Override
-	public GeneratedResult generateDocIndexJ(Map<String, Object> contextMap) {
-		return new GeneratedResult();
-	}
-
-	public GeneratedResult generateTestIncludeCMakeLists(Map<String, Object> contextMap) {
-		return null;
-	}
-	
-	public GeneratedResult generateTestIncModuleCMakeLists(Map<String, Object> contextMap) {
-		return null;
-	}
-
 	// 1.0系 (CMake/cpack_resources)
 	public GeneratedResult generateJava(String infile, String outfile,
 			Map<String, Object> contextMap) {

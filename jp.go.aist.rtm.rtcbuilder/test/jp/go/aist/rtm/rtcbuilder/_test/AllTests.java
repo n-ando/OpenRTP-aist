@@ -14,6 +14,7 @@ import jp.go.aist.rtm.rtcbuilder._test.generateCode.ContentTest;
 import jp.go.aist.rtm.rtcbuilder._test.generateCode.DataPortIDLTest;
 import jp.go.aist.rtm.rtcbuilder._test.generateCode.DocLongTest;
 import jp.go.aist.rtm.rtcbuilder._test.generateCode.ExCxtTest;
+import jp.go.aist.rtm.rtcbuilder._test.generateCode.FSMTest;
 import jp.go.aist.rtm.rtcbuilder._test.generateCode.IDLInheritTest;
 import jp.go.aist.rtm.rtcbuilder._test.generateCode.IDLModuleTest;
 import jp.go.aist.rtm.rtcbuilder._test.generateCode.IDLPathTest;
@@ -94,6 +95,8 @@ public class AllTests {
 		suite.addTestSuite(IDLStructTest.class);
 		suite.addTestSuite(ManipTest.class);
 		suite.addTestSuite(ContentTest.class);
+		//
+		suite.addTestSuite(FSMTest.class);
 		//
 		suite.addTestSuite(TemplateHelperTest.class);
 		//
