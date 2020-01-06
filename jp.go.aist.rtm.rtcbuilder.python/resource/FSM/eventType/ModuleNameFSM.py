@@ -21,23 +21,23 @@ class Top(StaticFSM.Link):
         
     """
     """
-    def Event01-02(self, data):
+    def Event01_02(self, data):
         pass
 
     """
     """
-    def Event02-Final(self, data):
+    def Event02_Final(self, data):
         pass
 
 
   
 @StaticFSM.FSM_SUBSTATE(Top)
 class State01(StaticFSM.Link):
-    def Event01-02(self, data):
+    def Event01_02(self, data):
         self.set_state(StaticFSM.State(State02))
   
 @StaticFSM.FSM_SUBSTATE(Top)
 class State02(StaticFSM.Link):
-    def Event02-Final(self, data):
+    def Event02_Final(self, data):
         self.set_state(StaticFSM.State(FinalState))
 

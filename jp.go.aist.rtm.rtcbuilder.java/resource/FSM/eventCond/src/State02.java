@@ -9,7 +9,7 @@ import jp.go.aist.rtm.RTC.jfsm.State;
   
 public class State02 extends Top {
     @Override
-    public void Event02-Final() {
+    public void Event02_Final() {
         setState(new State(FinalState.class));
     }
 
@@ -26,7 +26,7 @@ public class State02 extends Top {
 //    }
 
 //    @Override
-//    public void Event01-02() {
+//    public void Event01_02() {
 //    }
 
 }

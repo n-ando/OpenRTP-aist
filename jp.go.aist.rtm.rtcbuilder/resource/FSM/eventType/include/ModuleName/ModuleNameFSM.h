@@ -34,11 +34,11 @@ namespace ModuleNameFsm {
     // Machine's event protocol
     /*!
      */
-    virtual void Event01-02(RTC::TimedLong data) {}
+    virtual void Event01_02(RTC::TimedLong data) {}
     
     /*!
      */
-    virtual void Event02-Final(RTC::TimedString data) {}
+    virtual void Event02_Final(RTC::TimedString data) {}
     
   
    private:
@@ -52,7 +52,7 @@ namespace ModuleNameFsm {
   
 
     // Event handler
-    void Event01-02(RTC::TimedLong data) override;
+    void Event01_02(RTC::TimedLong data) override;
 
     private:
       // RTC::ReturnCode_t onInit() override;
@@ -63,7 +63,7 @@ namespace ModuleNameFsm {
   
 
     // Event handler
-    void Event02-Final(RTC::TimedString data) override;
+    void Event02_Final(RTC::TimedString data) override;
 
     private:
       // RTC::ReturnCode_t onInit() override;

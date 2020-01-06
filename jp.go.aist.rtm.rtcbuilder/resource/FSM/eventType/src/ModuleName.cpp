@@ -76,8 +76,8 @@ RTC::ReturnCode_t ModuleName::onInitialize()
   // <rtc-template block="bind_config">
   // </rtc-template>
   // <rtc-template block="bind_event">
-  m_FSMEventVarIn.bindEvent("Event01-02", &ModuleNameFsm::Top::Event01-02);
-  m_FSMEventVarIn.bindEvent("Event02-Final", &ModuleNameFsm::Top::Event02-Final);
+  m_FSMEventVarIn.bindEvent("Event01_02", &ModuleNameFsm::Top::Event01_02);
+  m_FSMEventVarIn.bindEvent("Event02_Final", &ModuleNameFsm::Top::Event02_Final);
   // </rtc-template>
 
   

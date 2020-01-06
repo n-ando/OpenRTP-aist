@@ -27,7 +27,7 @@ class Top(StaticFSM.Link):
     - Unit: Unit01-02
      - Operation Cycle: Period01-02
     """
-    def Event01-02(self, data):
+    def Event01_02(self, data):
         pass
 
     """
@@ -38,7 +38,7 @@ class Top(StaticFSM.Link):
     - Unit: Unit02-Final
      - Operation Cycle: Period02-Final
     """
-    def Event02-Final(self, data):
+    def Event02_Final(self, data):
         pass
 
 
@@ -51,7 +51,7 @@ class State01(StaticFSM.Link):
     def onExit(self):
         return RTC.RTC_OK
 
-    def Event01-02(self, data):
+    def Event01_02(self, data):
         self.set_state(StaticFSM.State(State02))
   
 @StaticFSM.FSM_SUBSTATE(Top)
@@ -62,6 +62,6 @@ class State02(StaticFSM.Link):
     def onExit(self):
         return RTC.RTC_OK
 
-    def Event02-Final(self, data):
+    def Event02_Final(self, data):
         self.set_state(StaticFSM.State(FinalState))
 

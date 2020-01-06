@@ -10,7 +10,7 @@ import RTC.TimedString;
   
 public class State02 extends Top {
     @Override
-    public void Event02-Final(TimedString data) {
+    public void Event02_Final(TimedString data) {
         setState(new State(FinalState.class));
     }
 
@@ -27,7 +27,7 @@ public class State02 extends Top {
       }
 
 //    @Override
-//    public void Event01-02() {
+//    public void Event01_02() {
 //    }
 
 }

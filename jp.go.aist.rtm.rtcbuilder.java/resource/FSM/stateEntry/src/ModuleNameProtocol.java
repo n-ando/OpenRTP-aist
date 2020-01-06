@@ -5,9 +5,9 @@ import RTC.TimedString;
  */
 public interface ModuleNameProtocol {
 
-    void Event01-02(TimedLong data);
+    void Event01_02(TimedLong data);
 
-    void Event02-Final(TimedString data);
+    void Event02_Final(TimedString data);
 
 }
 

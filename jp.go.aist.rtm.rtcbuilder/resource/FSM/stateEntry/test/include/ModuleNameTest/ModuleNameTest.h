@@ -224,11 +224,11 @@ class ModuleNameTest
 
   // DataOutPort declaration
   // <rtc-template block="outport_declare">
-    RTC::TimedLong m_Event01-02;
-    RTC::OutPort<RTC::TimedLong> m_Event01-02Out;
+    RTC::TimedLong m_Event01_02;
+    RTC::OutPort<RTC::TimedLong> m_Event01_02Out;
     
-    RTC::TimedString m_Event02-Final;
-    RTC::OutPort<RTC::TimedString> m_Event02-FinalOut;
+    RTC::TimedString m_Event02_Final;
+    RTC::OutPort<RTC::TimedString> m_Event02_FinalOut;
     
   
   // </rtc-template>

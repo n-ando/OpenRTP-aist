@@ -28,11 +28,11 @@ public class Top extends StateDef implements ModuleNameProtocol {
     }
     
     @Override
-    public void Event01-02(TimedLong data) {
+    public void Event01_02(TimedLong data) {
     }
 
     @Override
-    public void Event02-Final(TimedString data) {
+    public void Event02_Final(TimedString data) {
     }
 
 }

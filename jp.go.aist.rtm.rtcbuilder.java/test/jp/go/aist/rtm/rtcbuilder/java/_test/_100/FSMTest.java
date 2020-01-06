@@ -41,6 +41,7 @@ public class FSMTest extends TestBase {
 
 	private void checkGeneratedCode(List<GeneratedResult> result, String resourceDir) {
 		checkCode(result, resourceDir, "README.md");
+		checkCode(result, resourceDir, "build_ModuleName.xml");
 		
 		checkCode(result, resourceDir, "src/ModuleName.java");
 		checkCode(result, resourceDir, "src/ModuleNameComp.java");
@@ -48,6 +49,7 @@ public class FSMTest extends TestBase {
 		checkCode(result, resourceDir, "src/ModuleNameProtocol.java");
 		checkCode(result, resourceDir, "src/State01.java");
 		checkCode(result, resourceDir, "src/State02.java");
+		checkCode(result, resourceDir, "src/FinalState.java");
 		checkCode(result, resourceDir, "src/Top.java");
 		
 		checkCode(result, resourceDir, "test/src/CMakeLists.txt");
@@ -65,6 +67,30 @@ public class FSMTest extends TestBase {
 		checkGeneratedCode(result, resourceDir);
 	}
 	
+	public void testStateName() throws Exception {
+		String rtcProfile = rootPath + "resource/FSM/stateName/RTC.xml";
+		String fsmProfile = rootPath + "resource/FSM/stateName/ModuleNameFSM.scxml";
+		String resourceDir = rootPath + "/resource/FSM/stateName/";
+		
+		List<GeneratedResult> result = generateCode(rtcProfile, fsmProfile);
+		
+		checkCode(result, resourceDir, "README.md");
+		checkCode(result, resourceDir, "build_ModuleName.xml");
+		
+		checkCode(result, resourceDir, "src/ModuleName.java");
+		checkCode(result, resourceDir, "src/ModuleNameComp.java");
+		checkCode(result, resourceDir, "src/ModuleNameImpl.java");
+		checkCode(result, resourceDir, "src/ModuleNameProtocol.java");
+		checkCode(result, resourceDir, "src/State_01.java");
+		checkCode(result, resourceDir, "src/State_02.java");
+		checkCode(result, resourceDir, "src/FinalState.java");
+		checkCode(result, resourceDir, "src/Top.java");
+		
+		checkCode(result, resourceDir, "test/src/CMakeLists.txt");
+		checkCode(result, resourceDir, "test/src/ModuleNameTest.java");
+		checkCode(result, resourceDir, "test/src/ModuleNameTestComp.java");
+		checkCode(result, resourceDir, "test/src/ModuleNameTestImpl.java");
+	}
 //	public void testPortName() throws Exception {
 //		String rtcProfile = rootPath + "resource/FSM/portName/RTC.xml";
 //		String fsmProfile = rootPath + "resource/FSM/portName/ModuleNameFSM.scxml";

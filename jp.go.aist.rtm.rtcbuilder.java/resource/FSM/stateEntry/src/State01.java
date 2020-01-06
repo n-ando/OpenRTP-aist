@@ -10,7 +10,7 @@ import RTC.TimedLong;
   
 public class State01 extends Top {
     @Override
-    public void Event01-02(TimedLong data) {
+    public void Event01_02(TimedLong data) {
         setState(new State(State02.class));
     }
 

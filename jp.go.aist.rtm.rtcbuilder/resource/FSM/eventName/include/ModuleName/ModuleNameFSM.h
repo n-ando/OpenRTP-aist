@@ -34,11 +34,11 @@ namespace ModuleNameFsm {
     // Machine's event protocol
     /*!
      */
-    virtual void Event01-02() {}
+    virtual void Event01_02() {}
     
     /*!
      */
-    virtual void Event02-Final() {}
+    virtual void Event02_Final() {}
     
   
    private:
@@ -52,7 +52,7 @@ namespace ModuleNameFsm {
   
 
     // Event handler
-    void Event01-02() override;
+    void Event01_02() override;
 
     private:
       // RTC::ReturnCode_t onInit() override;
@@ -63,7 +63,7 @@ namespace ModuleNameFsm {
   
 
     // Event handler
-    void Event02-Final() override;
+    void Event02_Final() override;
 
     private:
       // RTC::ReturnCode_t onInit() override;

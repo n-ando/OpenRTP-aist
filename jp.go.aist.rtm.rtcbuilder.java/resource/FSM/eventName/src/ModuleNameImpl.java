@@ -54,8 +54,8 @@ public class ModuleNameImpl extends DataFlowComponentBase {
         // </rtc-template>
         addInPort("event1", m_eventIn);
         
-        m_eventIn.bindEvent("Event01-02", "Event01-02");
-        m_eventIn.bindEvent("Event02-Final", "Event02-Final");
+        m_eventIn.bindEvent("Event01_02", "Event01_02");
+        m_eventIn.bindEvent("Event02_Final", "Event02_Final");
 
         return super.onInitialize();
     }
