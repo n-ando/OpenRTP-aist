@@ -133,7 +133,8 @@ public class JavaGenerateManager extends GenerateManager {
 			
 			result.add(generateFSMProtocolSource(contextMap));
 			result.add(generateFSMTopSource(stateParam, contextMap));
-			for(StateParam each : stateParam.getAllValidStateList()) {
+			for(StateParam each : stateParam.getAllStateList()) {
+				if(each.isInitial()) continue;
 				contextMap.put("targetFsm", each);
 				result.add(generateFSMSource(each, contextMap));
 			}

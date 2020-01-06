@@ -355,6 +355,14 @@ public class TemplateHelper {
 		return false;
 	}
 	
+	public boolean existFSMEvent(StateParam source) {
+		if(source==null) return false;
+		for(TransitionParam each : source.getAllTransList()) {
+			if(0< each.getEvent().trim().length()) return true;
+		}
+		return false;
+	}
+	
 	public String getFSMType(RtcParam param) {
 		PropertyParam fsmType = param.getProperty(IRtcBuilderConstants.PROP_TYPE_FSMTYTPE);
 		if(fsmType!=null) {

@@ -44,7 +44,7 @@ public class StateParam {
 	}
 	
 	public String getName() {
-		return name;
+		return name.replace("-", "_");
 	}
 	public void setName(String name) {
 		this.name = name;

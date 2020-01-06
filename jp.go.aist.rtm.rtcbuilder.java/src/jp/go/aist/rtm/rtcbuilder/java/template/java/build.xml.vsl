@@ -11,6 +11,7 @@
 	<property name="source" value="src" />
 	<property name="dest" value="bin" />
 	<property name="doc" value="doc" />
+	<property name="testsource" value="test/src" />
 	<property environment="env" />
 
 	<target name="mkdir">
@@ -68,6 +69,13 @@
 #end
 			</classpath>
 		</javac>
+		<javac includeantruntime="false" srcdir="${testsource}" destdir="${dest}">
+			<classpath>
+				<fileset dir="${env.RTM_JAVA_ROOT}/jar">
+					<include name="*.jar"/>
+				</fileset>
+                        </classpath>
+                </javac>
 	</target>
 	<target name="generatedoc" depends="compile">
 		<javadoc 

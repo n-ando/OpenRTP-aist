@@ -65,6 +65,14 @@ import RTC.ReturnCode_t;
 #if(${serviceInterface.index}==0)
 #if(${tmpltHelper.isModule(${serviceInterface.interfaceType})})import ${tmpltHelper.convFormat(${serviceInterface.interfaceType})};
 #end#end#end#end#end#end
+#if( ${tmpltHelper.existFSMEvent(${fsmParam})})
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import jp.go.aist.rtm.RTC.port.OutPort;
+import jp.go.aist.rtm.RTC.util.DataRef;
+import RTC.TimedLong;
+#end
 
 /*!
  * @class ${rtcParam.name}TestImpl
@@ -93,7 +101,7 @@ public class ${rtcParam.name}TestImpl extends DataFlowComponentBase {
    * @brief constructor
    * @param manager Maneger Object
    */
-	public ${rtcParam.name}TestImpl(Manager manager) {  
+    public ${rtcParam.name}TestImpl(Manager manager) {  
         super(manager);
         // <rtc-template block="initializer">
 #foreach($port in ${rtcParam.outports})  
@@ -112,6 +120,17 @@ public class ${rtcParam.name}TestImpl extends DataFlowComponentBase {
 #if(${servicePort.servicePortInterfaces.size()}>0)
         m_${servicePort.name}Port = new CorbaPort("${servicePort.name}");
 #end#end#end
+#if( ${tmpltHelper.checkFSM(${rtcParam})})
+#foreach($eachTrans in ${fsmParam.getAllTransList()})
+#if( ${eachTrans.event.length()} > 0 )
+        m_${eachTrans.event}_val = new ${javaConv.getDataTypeName(${eachTrans.dataType})}();
+        initializeParam(m_${eachTrans.event}_val);
+        m_${eachTrans.event} = DataRef<${javaConv.getDataTypeName(${eachTrans.dataType})}>(m_${eachTrans.event});
+        m_${eachTrans.event}Out = new OutPort<${javaConv.getDataTypeName(${eachTrans.dataType})}>("${eachTrans.event}", m_${eachTrans.event});
+    
+#end
+#end
+#end
         // </rtc-template>
 
     }
@@ -122,7 +141,6 @@ public class ${rtcParam.name}TestImpl extends DataFlowComponentBase {
 #end
      *
      * The initialize action (on CREATED->ALIVE transition)
-     * formaer rtc_init_entry() 
      *
      * @return RTC::ReturnCode_t
      * 
@@ -185,6 +203,17 @@ public class ${rtcParam.name}TestImpl extends DataFlowComponentBase {
 #if(${servicePort.servicePortInterfaces.size()}>0)
         addPort(m_${servicePort.name}Port);
 #end#end#end
+#if( ${tmpltHelper.existFSMEvent(${fsmParam})})
+        try {
+#foreach($eachTrans in ${fsmParam.getAllTransList()})
+#if( ${eachTrans.event.length()} > 0 )
+            addOutPort("${eachTrans.event}", m_${eachTrans.event}Out);
+#end
+#end
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+#end
         // </rtc-template>
 #foreach($configParam in ${rtcParam.configParams})  
         bindParameter("${configParam.name}", m_${configParam.tmplVarName}, "${configParam.defaultVal}");
@@ -208,7 +237,6 @@ public class ${rtcParam.name}TestImpl extends DataFlowComponentBase {
 #end
      *
      * The finalize action (on ALIVE->END transition)
-     * formaer rtc_exiting_entry()
      *
      * @return RTC::ReturnCode_t
      * 
@@ -230,7 +258,6 @@ public class ${rtcParam.name}TestImpl extends DataFlowComponentBase {
 #end
      *
      * The startup action when ExecutionContext startup
-     * former rtc_starting_entry()
      *
      * @param ec_id target ExecutionContext Id
      *
@@ -254,7 +281,6 @@ public class ${rtcParam.name}TestImpl extends DataFlowComponentBase {
 #end
      *
      * The shutdown action when ExecutionContext stop
-     * former rtc_stopping_entry()
      *
      * @param ec_id target ExecutionContext Id
      *
@@ -278,7 +304,6 @@ public class ${rtcParam.name}TestImpl extends DataFlowComponentBase {
 #end
      *
      * The activated action (Active state entry action)
-     * former rtc_active_entry()
      *
      * @param ec_id target ExecutionContext Id
      *
@@ -302,7 +327,6 @@ public class ${rtcParam.name}TestImpl extends DataFlowComponentBase {
 #end
      *
      * The deactivated action (Active state exit action)
-     * former rtc_active_exit()
      *
      * @param ec_id target ExecutionContext Id
      *
@@ -326,7 +350,6 @@ public class ${rtcParam.name}TestImpl extends DataFlowComponentBase {
 #end
      *
      * The execution action that is invoked periodically
-     * former rtc_active_do()
      *
      * @param ec_id target ExecutionContext Id
      *
@@ -338,19 +361,51 @@ public class ${rtcParam.name}TestImpl extends DataFlowComponentBase {
 #end
      * 
      */
-#if(${rtcParam.IsNotImplemented(9)})//#end    @Override
-#if(${rtcParam.IsNotImplemented(9)})//#end    protected ReturnCode_t onExecute(int ec_id) {
+#if(${rtcParam.IsNotImplemented(9)} && !${tmpltHelper.existFSMEvent(${fsmParam})})//#end    @Override
+#if(${rtcParam.IsNotImplemented(9)} && !${tmpltHelper.existFSMEvent(${fsmParam})})//#end    protected ReturnCode_t onExecute(int ec_id) {
 #if(${tmpltHelper.checkDetailContent(9,${rtcParam})})${rtcParam.getDetailContent(9)}
 #end
-#if(${rtcParam.IsNotImplemented(9)})//#end        return super.onExecute(ec_id);
-#if(${rtcParam.IsNotImplemented(9)})//#end    }
+#if( ${tmpltHelper.existFSMEvent(${fsmParam})})
+        System.out.println("Please select action!!");
+        System.out.println("Commands: ");
+#foreach($eachTrans in ${fsmParam.getAllTransList()})
+#if( ${eachTrans.event.length()} > 0 )
+        System.out.println("  ${fsmParam.getAllTransList().indexOf(${eachTrans})}   : ${eachTrans.event}");
+#end
+#end
+        System.out.print(">> ");
+
+        BufferedReader buff = new BufferedReader(new InputStreamReader( System.in ));
+        try {
+            String cmd = buff.readLine();
+            if(cmd == null) {
+                return super.onExecute(ec_id);
+            }
+            cmd = cmd.trim();
+
+            System.out.print("[command]: "+cmd);
+            System.out.println("");
+#foreach($eachTrans in ${fsmParam.getAllTransList()})
+#if( ${eachTrans.event.length()} > 0 )
+            if(cmd.equals("${fsmParam.getAllTransList().indexOf(${eachTrans})}")){
+                m_${eachTrans.event}_val.data = 0;
+                m_${eachTrans.event}Out.write();
+            }
+#end
+#end
+        }
+        catch (Exception ex) {
+            System.out.println("Input Error!");
+        }
+#end
+#if(${rtcParam.IsNotImplemented(9)} && !${tmpltHelper.existFSMEvent(${fsmParam})})//#end        return super.onExecute(ec_id);
+#if(${rtcParam.IsNotImplemented(9)} && !${tmpltHelper.existFSMEvent(${fsmParam})})//#end    }
 
     /***
 #if(${rtcParam.getDocActionOverView(6).length()}>0)     * ${tmpltHelperJava.convertDescDocJava(${rtcParam.getDocActionOverView(6)})}
 #end
      *
      * The aborting action when main logic error occurred.
-     * former rtc_aborting_entry()
      *
      * @param ec_id target ExecutionContext Id
      *
@@ -374,7 +429,6 @@ public class ${rtcParam.name}TestImpl extends DataFlowComponentBase {
 #end
      *
      * The error action in ERROR state
-     * former rtc_error_do()
      *
      * @param ec_id target ExecutionContext Id
      *
@@ -398,7 +452,6 @@ public class ${rtcParam.name}TestImpl extends DataFlowComponentBase {
 #end
      *
      * The reset action that is invoked resetting
-     * This is same but different the former rtc_init_entry()
      *
      * @param ec_id target ExecutionContext Id
      *
@@ -422,7 +475,6 @@ public class ${rtcParam.name}TestImpl extends DataFlowComponentBase {
 #end
      *
      * The state update action that is invoked after onExecute() action
-     * no corresponding operation exists in OpenRTm-aist-0.2.0
      *
      * @param ec_id target ExecutionContext Id
      *
@@ -446,7 +498,6 @@ public class ${rtcParam.name}TestImpl extends DataFlowComponentBase {
 #end
      *
      * The action that is invoked when execution context's rate is changed
-     * no corresponding operation exists in OpenRTm-aist-0.2.0
      *
      * @param ec_id target ExecutionContext Id
      *
@@ -643,56 +694,56 @@ public class ${rtcParam.name}TestImpl extends DataFlowComponentBase {
 #if(${tmpltHelper.checkContents(${rtcParam.privateOpeSource})})${rtcParam.privateOpeSource}
 #end
 
-#if( ${rtcParam.inports.size()} > 0 || ${rtcParam.outports.size()} > 0 )
-  private void initializeParam(Object target) {
-      Class<?> targetClass = target.getClass();
-      ClassLoader loader = target.getClass().getClassLoader();
-      //
-      Field[] fields = targetClass.getFields();
-      for(Field field : fields) {
-          if(field.getType().isPrimitive()) continue;
+#if( ${rtcParam.inports.size()} > 0 || ${rtcParam.outports.size()} > 0 || ${tmpltHelper.existFSMEvent(${fsmParam})} )
+    private void initializeParam(Object target) {
+        Class<?> targetClass = target.getClass();
+        ClassLoader loader = target.getClass().getClassLoader();
+        //
+        Field[] fields = targetClass.getFields();
+        for(Field field : fields) {
+            if(field.getType().isPrimitive()) continue;
 
-          try {
-              if(field.getType().isArray()) {
-                  Object arrayValue = null;
-                  Class<?> clazz = null;
-                  if(field.getType().getComponentType().isPrimitive()) {
-                      clazz = field.getType().getComponentType();
-                  } else {
-                      clazz = loader.loadClass(field.getType().getComponentType().getName());
-                  }
-                  arrayValue = Array.newInstance(clazz, 0);
-                  field.set(target, arrayValue);
+            try {
+                if(field.getType().isArray()) {
+                    Object arrayValue = null;
+                    Class<?> clazz = null;
+                    if(field.getType().getComponentType().isPrimitive()) {
+                        clazz = field.getType().getComponentType();
+                    } else {
+                        clazz = loader.loadClass(field.getType().getComponentType().getName());
+                    }
+                    arrayValue = Array.newInstance(clazz, 0);
+                    field.set(target, arrayValue);
 
-              } else {
-                  Constructor<?>[] constList = field.getType().getConstructors();
-                  if(constList.length==0) {
-                      Method[] methodList = field.getType().getMethods();
-                      for(Method method : methodList) {
-                          if(method.getName().equals("from_int")==false) continue;
-                          Object objFld = method.invoke(target, new Object[]{ new Integer(0) });
-                          field.set(target, objFld);
-                          break;
-                      }
+                } else {
+                    Constructor<?>[] constList = field.getType().getConstructors();
+                    if(constList.length==0) {
+                        Method[] methodList = field.getType().getMethods();
+                        for(Method method : methodList) {
+                            if(method.getName().equals("from_int")==false) continue;
+                            Object objFld = method.invoke(target, new Object[]{ new Integer(0) });
+                            field.set(target, objFld);
+                            break;
+                        }
 
-                  } else {
-                      Class<?> classFld = Class.forName(field.getType().getName(), true, loader);
-                      Object objFld = classFld.newInstance();
-                      initializeParam(objFld);
-                      field.set(target, objFld);
-                  }
-              }
-          } catch (ClassNotFoundException e) {
-              e.printStackTrace();
-          } catch (InstantiationException e) {
-              e.printStackTrace();
-          } catch (IllegalAccessException e) {
-              e.printStackTrace();
-          } catch (IllegalArgumentException e) {
-              e.printStackTrace();
-          } catch (InvocationTargetException e) {
-              e.printStackTrace();
-          }
+                    } else {
+                        Class<?> classFld = Class.forName(field.getType().getName(), true, loader);
+                        Object objFld = classFld.newInstance();
+                        initializeParam(objFld);
+                        field.set(target, objFld);
+                    }
+                }
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (IllegalArgumentException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            }
         }
     }
 #end
