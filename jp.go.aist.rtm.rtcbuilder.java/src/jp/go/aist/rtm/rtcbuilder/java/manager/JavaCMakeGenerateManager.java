@@ -100,7 +100,7 @@ public class JavaCMakeGenerateManager extends CMakeGenerateManager {
 	public GeneratedResult generateIncModuleCMakeLists(Map<String, Object> contextMap) {
 		return new GeneratedResult();
 	}
-
+	
 	@Override
 	public GeneratedResult generateTestIncludeCMakeLists(Map<String, Object> contextMap) {
 		return new GeneratedResult();
