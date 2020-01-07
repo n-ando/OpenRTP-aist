@@ -71,6 +71,12 @@ import RTC.ReturnCode_t;
 #if(${serviceInterface.index}==1)
 #if(${tmpltHelper.isModule(${serviceInterface.interfaceType})})import ${tmpltHelper.convFormat(${serviceInterface.interfaceType})};
 #end#end#end#end#end#end
+#if( ${tmpltHelper.existFSMEvent(${fsmParam})})
+import jp.go.aist.rtm.RTC.port.ConnectorListener;
+import jp.go.aist.rtm.RTC.port.ConnectorListenerType;
+import jp.go.aist.rtm.RTC.connectorListener.ReturnCode;
+import jp.go.aist.rtm.RTC.port.ConnectorBase;
+#end
 
 /**
  * ${rtcParam.name}Impl

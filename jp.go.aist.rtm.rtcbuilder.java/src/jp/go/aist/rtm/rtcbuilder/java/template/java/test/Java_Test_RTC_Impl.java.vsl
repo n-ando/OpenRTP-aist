@@ -66,6 +66,13 @@ import RTC.ReturnCode_t;
 #if(${tmpltHelper.isModule(${serviceInterface.interfaceType})})import ${tmpltHelper.convFormat(${serviceInterface.interfaceType})};
 #end#end#end#end#end#end
 #if( ${tmpltHelper.existFSMEvent(${fsmParam})})
+
+import java.lang.reflect.Array;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -125,7 +132,7 @@ public class ${rtcParam.name}TestImpl extends DataFlowComponentBase {
 #if( ${eachTrans.event.length()} > 0 )
         m_${eachTrans.event}_val = new ${javaConv.getDataTypeName(${eachTrans.dataType})}();
         initializeParam(m_${eachTrans.event}_val);
-        m_${eachTrans.event} = DataRef<${javaConv.getDataTypeName(${eachTrans.dataType})}>(m_${eachTrans.event});
+        m_${eachTrans.event} = new DataRef<${javaConv.getDataTypeName(${eachTrans.dataType})}>(m_${eachTrans.event});
         m_${eachTrans.event}Out = new OutPort<${javaConv.getDataTypeName(${eachTrans.dataType})}>("${eachTrans.event}", m_${eachTrans.event});
     
 #end
