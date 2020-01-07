@@ -9,6 +9,11 @@
 import jp.go.aist.rtm.RTC.DataFlowComponentBase;
 import jp.go.aist.rtm.RTC.Manager;
 import RTC.ReturnCode_t;
+import java.lang.reflect.Array;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -30,12 +35,12 @@ public class ModuleNameTestImpl extends DataFlowComponentBase {
         // <rtc-template block="initializer">
         m_Event01_02_val = new TimedLong();
         initializeParam(m_Event01_02_val);
-        m_Event01_02 = DataRef<TimedLong>(m_Event01_02);
+        m_Event01_02 = new DataRef<TimedLong>(m_Event01_02);
         m_Event01_02Out = new OutPort<TimedLong>("Event01_02", m_Event01_02);
     
         m_Event02_Final_val = new TimedString();
         initializeParam(m_Event02_Final_val);
-        m_Event02_Final = DataRef<TimedString>(m_Event02_Final);
+        m_Event02_Final = new DataRef<TimedString>(m_Event02_Final);
         m_Event02_FinalOut = new OutPort<TimedString>("Event02_Final", m_Event02_Final);
     
         // </rtc-template>

@@ -16,6 +16,10 @@ import jp.go.aist.rtm.RTC.jfsm.machine.EventBase;
 import jp.go.aist.rtm.RTC.port.EventInPort;
 import jp.go.aist.rtm.RTC.util.DataRef;
 import RTC.ReturnCode_t;
+import jp.go.aist.rtm.RTC.port.ConnectorListener;
+import jp.go.aist.rtm.RTC.port.ConnectorListenerType;
+import jp.go.aist.rtm.RTC.connectorListener.ReturnCode;
+import jp.go.aist.rtm.RTC.port.ConnectorBase;
 
 /**
  * ModuleNameImpl
