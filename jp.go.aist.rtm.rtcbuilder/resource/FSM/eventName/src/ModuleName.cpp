@@ -36,7 +36,7 @@ ModuleName::ModuleName(RTC::Manager* manager)
     // <rtc-template block="initializer">
   : RTC::DataFlowComponentBase(manager),
     m_fsm(this),
-    m_FSMEventIn("event", m_fsm)
+    m_FSMEventVarIn("event", m_fsm)
 
     // </rtc-template>
 {
