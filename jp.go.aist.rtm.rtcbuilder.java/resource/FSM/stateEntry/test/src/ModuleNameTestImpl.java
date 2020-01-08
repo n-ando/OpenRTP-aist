@@ -20,6 +20,7 @@ import java.io.InputStreamReader;
 import jp.go.aist.rtm.RTC.port.OutPort;
 import jp.go.aist.rtm.RTC.util.DataRef;
 import RTC.TimedLong;
+import RTC.TimedString;
 /*!
  * @class ModuleNameTestImpl
  * @brief ModuleDescription
@@ -165,7 +166,7 @@ public class ModuleNameTestImpl extends DataFlowComponentBase {
                 m_Event01_02Out.write();
             }
             else if(cmd.equals("2")){
-                m_Event02_Final_val.data = 0;
+                m_Event02_Final_val.data = "0";
                 m_Event02_FinalOut.write();
             }
         }
