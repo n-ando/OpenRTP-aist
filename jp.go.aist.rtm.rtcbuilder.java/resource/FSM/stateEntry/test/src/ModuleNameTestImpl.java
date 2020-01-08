@@ -35,12 +35,12 @@ public class ModuleNameTestImpl extends DataFlowComponentBase {
         // <rtc-template block="initializer">
         m_Event01_02_val = new TimedLong();
         initializeParam(m_Event01_02_val);
-        m_Event01_02 = new DataRef<TimedLong>(m_Event01_02);
+        m_Event01_02 = new DataRef<TimedLong>(m_Event01_02_val);
         m_Event01_02Out = new OutPort<TimedLong>("Event01_02", m_Event01_02);
     
         m_Event02_Final_val = new TimedString();
         initializeParam(m_Event02_Final_val);
-        m_Event02_Final = new DataRef<TimedString>(m_Event02_Final);
+        m_Event02_Final = new DataRef<TimedString>(m_Event02_Final_val);
         m_Event02_FinalOut = new OutPort<TimedString>("Event02_Final", m_Event02_Final);
     
         // </rtc-template>
@@ -164,7 +164,7 @@ public class ModuleNameTestImpl extends DataFlowComponentBase {
                 m_Event01_02_val.data = 0;
                 m_Event01_02Out.write();
             }
-            if(cmd.equals("2")){
+            else if(cmd.equals("2")){
                 m_Event02_Final_val.data = 0;
                 m_Event02_FinalOut.write();
             }

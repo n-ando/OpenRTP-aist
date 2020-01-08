@@ -20,7 +20,8 @@ import jp.go.aist.rtm.RTC.port.ConnectorListener;
 import jp.go.aist.rtm.RTC.port.ConnectorListenerType;
 import jp.go.aist.rtm.RTC.connectorListener.ReturnCode;
 import jp.go.aist.rtm.RTC.port.ConnectorBase;
-
+import RTC.TimedLong;
+import RTC.TimedString;
 /**
  * ModuleNameImpl
  * <p>
