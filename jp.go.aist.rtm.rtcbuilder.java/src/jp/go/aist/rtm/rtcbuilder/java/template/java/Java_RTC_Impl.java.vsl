@@ -77,6 +77,11 @@ import jp.go.aist.rtm.RTC.port.ConnectorListenerType;
 import jp.go.aist.rtm.RTC.connectorListener.ReturnCode;
 import jp.go.aist.rtm.RTC.port.ConnectorBase;
 #end
+#if( ${tmpltHelper.existFSMEvent(${fsmParam})})
+#foreach($dataType in ${tmpltHelperJava.getEventDataTypes(${fsmParam})})
+${dataType}
+#end
+#end
 
 /**
  * ${rtcParam.name}Impl

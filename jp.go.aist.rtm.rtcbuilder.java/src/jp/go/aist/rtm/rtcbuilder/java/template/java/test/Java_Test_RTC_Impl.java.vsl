@@ -132,7 +132,7 @@ public class ${rtcParam.name}TestImpl extends DataFlowComponentBase {
 #if( ${eachTrans.event.length()} > 0 )
         m_${eachTrans.event}_val = new ${javaConv.getDataTypeName(${eachTrans.dataType})}();
         initializeParam(m_${eachTrans.event}_val);
-        m_${eachTrans.event} = new DataRef<${javaConv.getDataTypeName(${eachTrans.dataType})}>(m_${eachTrans.event});
+        m_${eachTrans.event} = new DataRef<${javaConv.getDataTypeName(${eachTrans.dataType})}>(m_${eachTrans.event}_val);
         m_${eachTrans.event}Out = new OutPort<${javaConv.getDataTypeName(${eachTrans.dataType})}>("${eachTrans.event}", m_${eachTrans.event});
     
 #end
@@ -394,7 +394,7 @@ public class ${rtcParam.name}TestImpl extends DataFlowComponentBase {
             System.out.println("");
 #foreach($eachTrans in ${fsmParam.getAllTransList()})
 #if( ${eachTrans.event.length()} > 0 )
-            if(cmd.equals("${fsmParam.getAllTransList().indexOf(${eachTrans})}")){
+           #if( 1 < ${fsmParam.getAllTransList().indexOf(${eachTrans})}) else#end if(cmd.equals("${fsmParam.getAllTransList().indexOf(${eachTrans})}")){
                 m_${eachTrans.event}_val.data = 0;
                 m_${eachTrans.event}Out.write();
             }

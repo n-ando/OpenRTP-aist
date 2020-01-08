@@ -105,4 +105,17 @@ public class TemplateHelperJava {
 		
 		return result;
 	}
+	public List<String> getEventDataTypes(StateParam parent) {
+		List<String> result = new ArrayList<String>();
+		JavaConverter converter = new JavaConverter();
+		
+		for(TransitionParam trans : parent.getAllTransList()) {
+			if(trans.existDataType()==false) continue;
+			String dataType = converter.getDataportPackageName(trans.getDataType());
+			if(result.contains(dataType)) continue;
+			result.add(dataType);
+		}
+		
+		return result;
+	}
 }
