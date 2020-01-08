@@ -78,7 +78,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import jp.go.aist.rtm.RTC.port.OutPort;
 import jp.go.aist.rtm.RTC.util.DataRef;
-import RTC.TimedLong;
+#foreach($dataType in ${tmpltHelperJava.getEventDataTypes4Test(${fsmParam})})
+${dataType}
+#end
 #end
 
 /*!
@@ -395,7 +397,7 @@ public class ${rtcParam.name}TestImpl extends DataFlowComponentBase {
 #foreach($eachTrans in ${fsmParam.getAllTransList()})
 #if( ${eachTrans.event.length()} > 0 )
            #if( 1 < ${fsmParam.getAllTransList().indexOf(${eachTrans})}) else#end if(cmd.equals("${fsmParam.getAllTransList().indexOf(${eachTrans})}")){
-                m_${eachTrans.event}_val.data = 0;
+                m_${eachTrans.event}_val.data = ${tmpltHelperJava.getInitialValue(${eachTrans})};
                 m_${eachTrans.event}Out.write();
             }
 #end

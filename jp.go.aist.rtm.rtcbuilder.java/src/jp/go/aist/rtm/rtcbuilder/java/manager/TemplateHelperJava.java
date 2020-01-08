@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jp.go.aist.rtm.rtcbuilder.IRtcBuilderConstants;
+import jp.go.aist.rtm.rtcbuilder.fsm.EventParam;
 import jp.go.aist.rtm.rtcbuilder.fsm.StateParam;
 import jp.go.aist.rtm.rtcbuilder.fsm.TransitionParam;
 import jp.go.aist.rtm.rtcbuilder.java.IRtcBuilderConstantsJava;
@@ -105,15 +106,37 @@ public class TemplateHelperJava {
 		
 		return result;
 	}
-	public List<String> getEventDataTypes(StateParam parent) {
-		List<String> result = new ArrayList<String>();
+	
+	public List<String> getEventDataTypes(StateParam param) {
 		JavaConverter converter = new JavaConverter();
+		List<String> result = new ArrayList<String>();
 		
-		for(TransitionParam trans : parent.getAllTransList()) {
+		for(TransitionParam trans : param.getAllTransList()) {
 			if(trans.existDataType()==false) continue;
 			String dataType = converter.getDataportPackageName(trans.getDataType());
 			if(result.contains(dataType)) continue;
 			result.add(dataType);
+		}
+		
+		return result;
+	}
+	
+	public List<String> getEventDataTypes4Test(StateParam param) {
+		List<String> result = getEventDataTypes(param);
+		if(result.contains("import RTC.TimedLong;")==false) {
+			result.add("import RTC.TimedLong;");
+		}
+		return result;
+	}
+	
+	public String getInitialValue(TransitionParam trans) {
+		String result = "0";
+		
+		EventParam param = trans.getEventParam();
+		if(param!=null) {
+			if(param.getDataType().contains("String")) {
+				result = "\"0\"";
+			}
 		}
 		
 		return result;
