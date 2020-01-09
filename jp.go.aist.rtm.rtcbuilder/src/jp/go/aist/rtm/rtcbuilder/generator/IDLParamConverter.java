@@ -239,7 +239,7 @@ public class IDLParamConverter {
 		return builder.toString();
 	}
 
-	public static boolean extractTypeDef(List<DataTypeParam> sources, List<String> result) {
+	public static boolean extractTypeDef(List<DataTypeParam> sources, List<String> result, StringBuilder builder) {
 		boolean ret = true;
 		for( Iterator<DataTypeParam> iter = sources.iterator(); iter.hasNext(); ) {
 			DataTypeParam targetParam = iter.next();
@@ -250,6 +250,8 @@ public class IDLParamConverter {
 			try {
 				spec = parser.specification();
 			} catch (ParseException e) {
+				builder.append("Target File : ").append(targetParam.getDispPath()).append(System.lineSeparator());
+				builder.append(e.getMessage()).append(System.lineSeparator());
 				ret = false;
 				continue;
 			}
