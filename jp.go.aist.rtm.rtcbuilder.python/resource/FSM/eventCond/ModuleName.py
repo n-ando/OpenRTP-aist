@@ -94,8 +94,8 @@ class ModuleName(OpenRTM_aist.DataFlowComponentBase):
         self._fsm = StaticFSM.Machine(ModuleNameFSM.Top, self)
         self._eventIn = EventPort.EventInPort("event", self._fsm)
         self.addInPort("event", self._eventIn)
-        self._eventIn.bindEvent0("Event01-02", ModuleNameFSM.Top.Event01-02)
-        self._eventIn.bindEvent0("Event02-Final", ModuleNameFSM.Top.Event02-Final)
+        self._eventIn.bindEvent0("Event01_02", ModuleNameFSM.Top.Event01_02)
+        self._eventIn.bindEvent0("Event02_Final", ModuleNameFSM.Top.Event02_Final)
 		
         return RTC.RTC_OK
 	

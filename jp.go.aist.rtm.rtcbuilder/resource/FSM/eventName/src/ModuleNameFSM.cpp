@@ -30,7 +30,7 @@ RTC::ReturnCode_t Top::onExit() {
 // }
 
 
-void State01::Event01-02() {
+void State01::Event01_02() {
   setState<State02>();
 }
 
@@ -42,7 +42,7 @@ void State01::Event01-02() {
 // }
 
 
-void State02::Event02-Final() {
+void State02::Event02_Final() {
   setState<FinalState>();
 }
 

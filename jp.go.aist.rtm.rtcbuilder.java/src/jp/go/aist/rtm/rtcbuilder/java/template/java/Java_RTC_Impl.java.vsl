@@ -30,13 +30,19 @@ ${javaConv.getDataportPackageName(${type})}
 #end
 import jp.go.aist.rtm.RTC.DataFlowComponentBase;
 import jp.go.aist.rtm.RTC.Manager;
+#if( ${tmpltHelper.checkFSM(${rtcParam})} )
+import jp.go.aist.rtm.RTC.jfsm.Event;
+import jp.go.aist.rtm.RTC.jfsm.Machine;
+import jp.go.aist.rtm.RTC.jfsm.machine.EventBase;
+import jp.go.aist.rtm.RTC.port.EventInPort;
+#end
 #if( ${rtcParam.inports.size()} > 0 )
 import jp.go.aist.rtm.RTC.port.InPort;
 #end
 #if( ${rtcParam.outports.size()} > 0 )
 import jp.go.aist.rtm.RTC.port.OutPort;
 #end
-#if( ${rtcParam.inports.size()} > 0 || ${rtcParam.outports.size()} > 0 )
+#if( ${rtcParam.inports.size()} > 0 || ${rtcParam.outports.size()} > 0 || ${tmpltHelper.checkFSM(${rtcParam})} )
 import jp.go.aist.rtm.RTC.util.DataRef;
 #end
 #if( ${rtcParam.originalConsumerIdls.size()} > 0 )
@@ -65,6 +71,17 @@ import RTC.ReturnCode_t;
 #if(${serviceInterface.index}==1)
 #if(${tmpltHelper.isModule(${serviceInterface.interfaceType})})import ${tmpltHelper.convFormat(${serviceInterface.interfaceType})};
 #end#end#end#end#end#end
+#if( ${tmpltHelper.existFSMEvent(${fsmParam})})
+import jp.go.aist.rtm.RTC.port.ConnectorListener;
+import jp.go.aist.rtm.RTC.port.ConnectorListenerType;
+import jp.go.aist.rtm.RTC.connectorListener.ReturnCode;
+import jp.go.aist.rtm.RTC.port.ConnectorBase;
+#end
+#if( ${tmpltHelper.existFSMEvent(${fsmParam})})
+#foreach($dataType in ${tmpltHelperJava.getEventDataTypes(${fsmParam})})
+${dataType}
+#end
+#end
 
 /**
  * ${rtcParam.name}Impl
@@ -114,6 +131,11 @@ public class ${rtcParam.name}Impl extends DataFlowComponentBase {
 #if(${servicePort.servicePortInterfaces.size()}>0)
         m_${servicePort.name}Port = new CorbaPort("${servicePort.name}");
 #end#end#end
+#if( ${tmpltHelper.checkFSM(${rtcParam})} )
+        m_fsm = new Machine<>(${tmpltHelper.getTopFSMName(${rtcParam})}.class, ${rtcParam.name}Protocol.class, null);
+        m_event = new DataRef<Machine<${tmpltHelper.getTopFSMName(${rtcParam})}, ${rtcParam.name}Protocol>>(m_fsm);
+        m_eventIn = new EventInPort<Machine<${tmpltHelper.getTopFSMName(${rtcParam})}, ${rtcParam.name}Protocol>>("event",m_event);
+#end
         // </rtc-template>
 
     }
@@ -192,6 +214,22 @@ public class ${rtcParam.name}Impl extends DataFlowComponentBase {
 #end
 #if(${tmpltHelper.checkDetailContent(0,${rtcParam})})${rtcParam.getDetailContent(0)}
 #end
+#if( ${tmpltHelper.checkFSM(${rtcParam})} )
+        addInPort("event1", m_eventIn);
+        
+#foreach($eachTrans in ${fsmParam.getAllTransList()})
+#if( ${eachTrans.event.length()} > 0 )
+#if( ${eachTrans.existEventParam()} )
+#if( ${eachTrans.existDataType()} )
+        m_eventIn.bindEvent("${eachTrans.event}", "${eachTrans.event}", new ${javaConv.getDataTypeName(${eachTrans.dataType})}() );
+#else
+        m_eventIn.bindEvent("${eachTrans.event}", "${eachTrans.event}");
+#end
+#end
+#end
+#end
+#end
+
         return super.onInitialize();
     }
 #else
@@ -504,6 +542,13 @@ public class ${rtcParam.name}Impl extends DataFlowComponentBase {
     protected InPort<${javaConv.getDataTypeName(${port.type})}> m_${port.name}In;
 
 #end
+#if( ${tmpltHelper.checkFSM(${rtcParam})} )
+    protected Machine<${tmpltHelper.getTopFSMName(${rtcParam})}, ${rtcParam.name}Protocol> m_fsm;
+    protected DataRef<Machine<${tmpltHelper.getTopFSMName(${rtcParam})}, ${rtcParam.name}Protocol>> m_event;
+    /*!
+     */
+    protected EventInPort<Machine<${tmpltHelper.getTopFSMName(${rtcParam})}, ${rtcParam.name}Protocol>> m_eventIn;
+#end
     
     // </rtc-template>
 
@@ -644,7 +689,7 @@ public class ${rtcParam.name}Impl extends DataFlowComponentBase {
                     if(field.getType().getComponentType().isPrimitive()) {
                         clazz = field.getType().getComponentType();
                     } else {
-                            clazz = loader.loadClass(field.getType().getComponentType().getName());
+                        clazz = loader.loadClass(field.getType().getComponentType().getName());
                     }
                     arrayValue = Array.newInstance(clazz, 0);
                     field.set(target, arrayValue);

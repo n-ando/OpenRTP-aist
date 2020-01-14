@@ -54,4 +54,4 @@ add_dependencies(${PROJECT_NAME}Test ${PROJECT_NAME})
 target_link_libraries(${PROJECT_NAME}Test ${OPENRTM_LIBRARIES} ${PROJECT_NAME})
 set_property(TARGET ${PROJECT_NAME}Test PROPERTY CXX_STANDARD 11)
 
-add_test(NAME ${PROJECT_NAME}_test COMMAND $<TARGET_FILE:${PROJECT_NAME}Test> -o "manager.components.precreate:${PROJECT_NAME}" -o "manager.components.preconnect:${PROJECT_NAME}0.event?port=${PROJECT_NAME}Test0.Event01-02&fsm_event_name=Event01-02,${PROJECT_NAME}0.event?port=${PROJECT_NAME}Test0.Event02-Final&fsm_event_name=Event02-Final" -o "manager.components.preactivation:${PROJECT_NAME}0,${PROJECT_NAME}Test0" WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
+add_test(NAME ${PROJECT_NAME}_test COMMAND $<TARGET_FILE:${PROJECT_NAME}Test> -o "manager.components.precreate:${PROJECT_NAME}" -o "manager.components.preconnect:${PROJECT_NAME}0.event?port=${PROJECT_NAME}Test0.Event01_02&fsm_event_name=Event01_02,${PROJECT_NAME}0.event?port=${PROJECT_NAME}Test0.Event02_Final&fsm_event_name=Event02_Final" -o "manager.components.preactivation:${PROJECT_NAME}0,${PROJECT_NAME}Test0" WORKING_DIRECTORY ${CMAKE_BINARY_DIR})

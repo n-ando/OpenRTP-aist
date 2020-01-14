@@ -36,8 +36,8 @@ ModuleNameTest::ModuleNameTest(RTC::Manager* manager)
     // <rtc-template block="initializer">
   : RTC::DataFlowComponentBase(manager)
 ,
-    m_Event01-02Out("Event01-02", m_Event01-02),
-    m_Event02-FinalOut("Event02-Final", m_Event02-Final)
+    m_Event01_02Out("Event01_02", m_Event01_02),
+    m_Event02_FinalOut("Event02_Final", m_Event02_Final)
     // </rtc-template>
 {
 }
@@ -58,8 +58,8 @@ RTC::ReturnCode_t ModuleNameTest::onInitialize()
   // Set InPort buffers
   
   // Set OutPort buffer
-  addOutPort("Event01-02", m_Event01-02Out);
-  addOutPort("Event02-Final", m_Event02-FinalOut);
+  addOutPort("Event01_02", m_Event01_02Out);
+  addOutPort("Event02_Final", m_Event02_FinalOut);
   
   // Set service provider to Ports
   

@@ -64,15 +64,15 @@ class ModuleNameTest(OpenRTM_aist.DataFlowComponentBase):
 
         
 
-        self._d_Event01-02 = OpenRTM_aist.instantiateDataType(RTC.TimedLong)
+        self._d_Event01_02 = OpenRTM_aist.instantiateDataType(RTC.TimedLong)
         """
         """
-        self._Event01-02Out = OpenRTM_aist.OutPort("Event01-02", self._d_Event01-02)
+        self._Event01_02Out = OpenRTM_aist.OutPort("Event01_02", self._d_Event01_02)
 
-        self._d_Event02-Final = OpenRTM_aist.instantiateDataType(RTC.TimedString)
+        self._d_Event02_Final = OpenRTM_aist.instantiateDataType(RTC.TimedString)
         """
         """
-        self._Event02-FinalOut = OpenRTM_aist.OutPort("Event02-Final", self._d_Event02-Final)
+        self._Event02_FinalOut = OpenRTM_aist.OutPort("Event02_Final", self._d_Event02_Final)
 
 
         # initialize of configuration-data.
@@ -95,8 +95,8 @@ class ModuleNameTest(OpenRTM_aist.DataFlowComponentBase):
         # Set InPort buffers
         
         # Set OutPort buffers
-        self.addOutPort("Event01-02", self._Event01-02Out)
-        self.addOutPort("Event02-Final", self._Event02-FinalOut)
+        self.addOutPort("Event01_02", self._Event01_02Out)
+        self.addOutPort("Event02_Final", self._Event02_FinalOut)
         
         # Set service provider to Ports
         

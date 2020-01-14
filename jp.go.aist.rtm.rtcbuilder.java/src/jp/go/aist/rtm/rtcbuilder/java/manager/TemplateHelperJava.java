@@ -1,6 +1,12 @@
 package jp.go.aist.rtm.rtcbuilder.java.manager;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import jp.go.aist.rtm.rtcbuilder.IRtcBuilderConstants;
+import jp.go.aist.rtm.rtcbuilder.fsm.EventParam;
+import jp.go.aist.rtm.rtcbuilder.fsm.StateParam;
+import jp.go.aist.rtm.rtcbuilder.fsm.TransitionParam;
 import jp.go.aist.rtm.rtcbuilder.java.IRtcBuilderConstantsJava;
 import jp.go.aist.rtm.rtcbuilder.util.StringUtil;
 
@@ -67,5 +73,72 @@ public class TemplateHelperJava {
 		String defaultPath = System.getenv("RTM_ROOT");
 		if( defaultPath==null ) return false;
 		return true;
+	}
+	
+	public String getHistoryImport(StateParam param) {
+		if(param.getHistory()==2) {
+			return "import jp.go.aist.rtm.RTC.jfsm.DeepHistory;";
+		} else if(param.getHistory()==1) {
+			return "import jp.go.aist.rtm.RTC.jfsm.History;";
+		}
+		return "  ";
+	}
+	
+	public String getHistory(StateParam param) {
+		if(param.getHistory()==2) {
+			return "@DeepHistory";
+		} else if(param.getHistory()==1) {
+			return "@History";
+		}
+		return "  ";
+	}
+	
+	public List<String> getInEventList(StateParam parent, StateParam param) {
+		List<String> result = new ArrayList<String>();
+		
+		for(TransitionParam trans : parent.getAllTransList()) {
+			if(trans.getTarget().equals(param.getName())) {
+				if(trans.getEvent()!=null && 0<trans.getEvent().length()) {
+					result.add(trans.getEvent());
+				}
+			}
+		}
+		
+		return result;
+	}
+	
+	public List<String> getEventDataTypes(StateParam param) {
+		JavaConverter converter = new JavaConverter();
+		List<String> result = new ArrayList<String>();
+		
+		for(TransitionParam trans : param.getAllTransList()) {
+			if(trans.existDataType()==false) continue;
+			String dataType = converter.getDataportPackageName(trans.getDataType());
+			if(result.contains(dataType)) continue;
+			result.add(dataType);
+		}
+		
+		return result;
+	}
+	
+	public List<String> getEventDataTypes4Test(StateParam param) {
+		List<String> result = getEventDataTypes(param);
+		if(result.contains("import RTC.TimedLong;")==false) {
+			result.add("import RTC.TimedLong;");
+		}
+		return result;
+	}
+	
+	public String getInitialValue(TransitionParam trans) {
+		String result = "0";
+		
+		EventParam param = trans.getEventParam();
+		if(param!=null) {
+			if(param.getDataType().contains("String")) {
+				result = "\"0\"";
+			}
+		}
+		
+		return result;
 	}
 }

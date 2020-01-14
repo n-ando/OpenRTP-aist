@@ -313,7 +313,7 @@ public class fooImpl extends DataFlowComponentBase {
                     if(field.getType().getComponentType().isPrimitive()) {
                         clazz = field.getType().getComponentType();
                     } else {
-                            clazz = loader.loadClass(field.getType().getComponentType().getName());
+                        clazz = loader.loadClass(field.getType().getComponentType().getName());
                     }
                     arrayValue = Array.newInstance(clazz, 0);
                     field.set(target, arrayValue);

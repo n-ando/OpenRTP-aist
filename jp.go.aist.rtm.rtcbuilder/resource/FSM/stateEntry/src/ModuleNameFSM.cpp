@@ -36,7 +36,7 @@ RTC::ReturnCode_t State01::onExit() {
   return RTC::RTC_OK;
 }
 
-void State01::Event01-02(RTC::TimedLong data) {
+void State01::Event01_02(RTC::TimedLong data) {
   setState<State02>();
 }
 
@@ -54,7 +54,7 @@ RTC::ReturnCode_t State02::onExit() {
   return RTC::RTC_OK;
 }
 
-void State02::Event02-Final(RTC::TimedString data) {
+void State02::Event02_Final(RTC::TimedString data) {
   setState<FinalState>();
 }
 

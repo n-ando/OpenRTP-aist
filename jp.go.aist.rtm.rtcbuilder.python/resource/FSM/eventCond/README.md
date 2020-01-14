@@ -116,12 +116,12 @@ ModuleDescription
   </tr>
   <tr>
     <td rowspan="1">State01</td>
-    <td>Event01-02</td>
+    <td>Event01_02</td>
     <td>State02</td>
   </tr>
   <tr>
     <td rowspan="1">State02</td>
-    <td>Event02-Final</td>
+    <td>Event02_Final</td>
     <td>FinalState</td>
   </tr>
   <tr>
@@ -167,7 +167,7 @@ ModuleDescription
 
 
 
-##### Event01-02
+##### Event01_02
 
 
 
@@ -201,7 +201,7 @@ ModuleDescription
 
 
 
-##### Event02-Final
+##### Event02_Final
 
 
 
