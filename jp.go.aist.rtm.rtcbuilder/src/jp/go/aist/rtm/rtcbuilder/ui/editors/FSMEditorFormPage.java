@@ -664,44 +664,51 @@ public class FSMEditorFormPage extends AbstractEditorFormPage {
 		public void notifyContents(String contents, List<EventParam> eventList) {
     		editor.updateDirty();
 			ScXMLHandler handler = new ScXMLHandler();
-			StateParam rootState = handler.parseSCXMLStr(contents);
-			if(rootState!=null) {
-				rtcParam.setFsmParam(rootState);
-				rtcParam.setFsmContents(contents);
-				
-				List<EventParam> newEventList = new ArrayList<EventParam>();
-				List<TransitionParam> transList = rootState.getAllTransList();
-				for(TransitionParam trans : transList) {
-					StateParam source = rootState.getStateParam(trans.getSource());
-					StateParam target = rootState.getStateParam(trans.getTarget());
-					if(source.isInitial() || target.isInitial()) continue;
-					
-					EventParam newParam = new EventParam();
-					newParam.setName(trans.getEvent());
-					newParam.setCondition(trans.getCondition());
-					newParam.setSource(trans.getSource());
-					newParam.setTarget(trans.getTarget());
-					for(EventParam event : eventList) {
-						if(newParam.checkSame(event)) {
-							newParam.replaceContents(event);
-							break;
-						}
-					}
-					newEventList.add(newParam);
-				}
-				rtcParam.getEventports().get(0).getEvents().clear();
-				rtcParam.getEventports().get(0).getEvents().addAll(newEventList);
-				editor.updateDirty();
-				PlatformUI.getWorkbench().getDisplay().asyncExec(new Runnable() {
-					public void run() {
-						editBtn.setEnabled(true);
-						if(eventTableViewer.getInput()==null) {
-							eventTableViewer.setInput(rtcParam.getEventports().get(0).getEvents());
-						}
-						eventTableViewer.refresh();
-					}
-				});
+			if(contents==null || contents.length()==0) {
+				scxmlEditor = null;
+				return;
 			}
+			StateParam rootState = handler.parseSCXMLStr(contents);
+			if(rootState==null) {
+				scxmlEditor = null;
+				return;
+			}
+			
+			rtcParam.setFsmParam(rootState);
+			rtcParam.setFsmContents(contents);
+			
+			List<EventParam> newEventList = new ArrayList<EventParam>();
+			List<TransitionParam> transList = rootState.getAllTransList();
+			for(TransitionParam trans : transList) {
+				StateParam source = rootState.getStateParam(trans.getSource());
+				StateParam target = rootState.getStateParam(trans.getTarget());
+				if(source.isInitial() || target.isInitial()) continue;
+				
+				EventParam newParam = new EventParam();
+				newParam.setName(trans.getEvent());
+				newParam.setCondition(trans.getCondition());
+				newParam.setSource(trans.getSource());
+				newParam.setTarget(trans.getTarget());
+				for(EventParam event : eventList) {
+					if(newParam.checkSame(event)) {
+						newParam.replaceContents(event);
+						break;
+					}
+				}
+				newEventList.add(newParam);
+			}
+			rtcParam.getEventports().get(0).getEvents().clear();
+			rtcParam.getEventports().get(0).getEvents().addAll(newEventList);
+			editor.updateDirty();
+			PlatformUI.getWorkbench().getDisplay().asyncExec(new Runnable() {
+				public void run() {
+					editBtn.setEnabled(true);
+					if(eventTableViewer.getInput()==null) {
+						eventTableViewer.setInput(rtcParam.getEventports().get(0).getEvents());
+					}
+					eventTableViewer.refresh();
+				}
+			});
 			scxmlEditor = null;
 		}
 	}
