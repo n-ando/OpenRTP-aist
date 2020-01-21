@@ -33,7 +33,7 @@ public class EventParam {
 	}
 	public void setName(String name) {
 		if(name==null) this.name = "";
-		else this.name = name.replace("-", "_");
+		else this.name = name;
 	}
 	
 	public String getDataType() {
@@ -58,7 +58,7 @@ public class EventParam {
 	}
 
 	public String getSource() {
-		return source.replace("-", "_");
+		return source;
 	}
 	public void setSource(String source) {
 		if(source==null) this.source = "";
@@ -66,7 +66,7 @@ public class EventParam {
 	}
 
 	public String getTarget() {
-		return target.replace("-", "_");
+		return target;
 	}
 	public void setTarget(String target) {
 		if(target==null) this.target = "";
@@ -124,8 +124,8 @@ public class EventParam {
 	public boolean checkSame(EventParam source) {
 		if(this.name.equals(source.name)
 				&& this.condition.equals(source.condition)
-				&& this.source.replace("-", "_").equals(source.source)
-				&& this.target.replace("-", "_").equals(source.target) ) {
+				&& this.source.equals(source.source)
+				&& this.target.equals(source.target) ) {
 			return true;
 		}
 		return false;

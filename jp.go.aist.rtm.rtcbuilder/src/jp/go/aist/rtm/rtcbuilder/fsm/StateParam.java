@@ -44,7 +44,7 @@ public class StateParam {
 	}
 	
 	public String getName() {
-		return name.replace("-", "_");
+		return name;
 	}
 	public void setName(String name) {
 		this.name = name;
@@ -99,7 +99,7 @@ public class StateParam {
 	public List<StateParam> getAllValidStateList() {
 		List<StateParam> result = new ArrayList<StateParam>();
 		for(StateParam each : allStateList) {
-			if(each.isInitial() || each.isFinal()) continue;
+			if(each.isInitial()) continue;
 			result.add(each);
 		}
 		return result;
