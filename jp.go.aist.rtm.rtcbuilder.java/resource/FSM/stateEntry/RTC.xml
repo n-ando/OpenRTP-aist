@@ -21,10 +21,10 @@
         <rtc:OnModeChanged xsi:type="rtcDoc:action_status_doc" rtc:implemented="false"/>
     </rtc:Actions>
     <rtc:DataPorts xsi:type="rtcExt:dataport_ext" rtcExt:position="LEFT" rtcExt:variableName="FSMEventVar" rtc:type="Any" rtc:name="FSMEventPort" rtc:portType="EventPort">
-        <rtc:Event xsi:type="rtcDoc:event_doc" rtc:type="RTC::TimedLong" rtc:target="State02" rtc:source="State01" rtc:condition="Cond01" rtc:name="Event01-02">
+        <rtc:Event xsi:type="rtcDoc:event_doc" rtc:type="RTC::TimedLong" rtc:target="State02" rtc:source="State01" rtc:condition="Cond01" rtc:name="Event01_02">
             <rtcDoc:Doc rtcDoc:operation="Period01-02" rtcDoc:unit="Unit01-02" rtcDoc:semantics="Detail01-02" rtcDoc:number="Num01-02" rtcDoc:type="Type01-02" rtcDoc:description="Abst01-02"/>
         </rtc:Event>
-        <rtc:Event xsi:type="rtcDoc:event_doc" rtc:type="RTC::TimedString" rtc:target="FinalState" rtc:source="State02" rtc:condition="Cond02" rtc:name="Event02-Final">
+        <rtc:Event xsi:type="rtcDoc:event_doc" rtc:type="RTC::TimedString" rtc:target="FinalState" rtc:source="State02" rtc:condition="Cond02" rtc:name="Event02_Final">
             <rtcDoc:Doc rtcDoc:operation="Period02-Final" rtcDoc:unit="Unit02-Final" rtcDoc:semantics="Detail02-Final" rtcDoc:number="Num02-Final" rtcDoc:type="Type02-Final" rtcDoc:description="Abst02-Final"/>
         </rtc:Event>
         <rtc:Event xsi:type="rtcDoc:event_doc" rtc:type="" rtc:target="State01" rtc:source="InitialState" rtc:condition="" rtc:name="">

@@ -85,6 +85,16 @@ namespace ModuleNameFsm {
        RTC::ReturnCode_t onExit() override;
   };
 
+  FSM_SUBSTATE(FinalState, Top) {
+    FSM_STATE(FinalState);
+  
+
+    // Event handler
+
+    private:
+      // RTC::ReturnCode_t onInit() override;
+  };
+
 
 } //end namespace 'ModuleNameFSM'
 

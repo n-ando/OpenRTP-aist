@@ -1,23 +1,10 @@
 # ModuleName
-
 ## Overview
-
 ModuleDescription
-
 ## Description
-
-
-
 ### Input and Output
-
-
-
 ### Algorithm etc
-
-
-
 ### Basic Information
-
 |  |  |
 ----|---- 
 | Module Name | ModuleName |
@@ -29,9 +16,7 @@ ModuleDescription
 | Act. Type | PERIODIC |
 | Kind | DataFlowComponent |
 | MAX Inst. | 1 |
-
 ### Activity definition
-
 <table>
   <tr>
     <td rowspan="4">on_initialize</td>
@@ -94,16 +79,12 @@ ModuleDescription
     <td colspan="2"></td>
   </tr>
 </table>
-
 ### EventPorts definition
-
 |  |  |
 ----|---- 
 | Port Name | FSMEvent |
 | FSM Type | StaticFSM |
-
 #### Node list
-
 <table>
   <tr>
     <td>State Name</td>
@@ -128,15 +109,9 @@ ModuleDescription
     <td>FinalState</td>
     <td colspan="2">Final State</td>
   </tr>
-
 </table>
-
 #### Event list
-
 ##### 
-
-
-
 <table>
   <tr>
     <td>Source State</td>
@@ -164,13 +139,7 @@ ModuleDescription
     <td colspan="2"></td>
   </tr>
 </table>
-
-
-
 ##### 
-
-
-
 <table>
   <tr>
     <td>Source State</td>
@@ -198,13 +167,7 @@ ModuleDescription
     <td colspan="2"></td>
   </tr>
 </table>
-
-
-
 ##### 
-
-
-
 <table>
   <tr>
     <td>Source State</td>
@@ -232,47 +195,17 @@ ModuleDescription
     <td colspan="2"></td>
   </tr>
 </table>
-
-
-
-
-
 ### InPorts definition
-
-
 ### OutPorts definition
-
-
 ### Service Port definition
-
-
 ### Configuration definition
-
-
 ## Demo
-
 ## Requirement
-
 ## Setup
-
 ### Windows
-
 ### Ubuntu
-
 ## Usage
-
 ## Running the tests
-
 ## LICENCE
-
-
-
-
 ## References
-
-
-
-
 ## Author
-
-

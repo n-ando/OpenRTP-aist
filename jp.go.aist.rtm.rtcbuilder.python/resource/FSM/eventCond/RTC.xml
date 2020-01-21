@@ -24,10 +24,10 @@
         <rtc:Event xsi:type="rtcDoc:event_doc" rtc:type="" rtc:target="State01" rtc:source="InitialState" rtc:condition="" rtc:name="">
             <rtcDoc:Doc rtcDoc:operation="" rtcDoc:unit="" rtcDoc:semantics="" rtcDoc:number="" rtcDoc:type="" rtcDoc:description=""/>
         </rtc:Event>
-        <rtc:Event xsi:type="rtcDoc:event_doc" rtc:type="" rtc:target="State02" rtc:source="State01" rtc:condition="Cond01" rtc:name="Event01-02">
+        <rtc:Event xsi:type="rtcDoc:event_doc" rtc:type="" rtc:target="State02" rtc:source="State01" rtc:condition="Cond01" rtc:name="Event01_02">
             <rtcDoc:Doc rtcDoc:operation="" rtcDoc:unit="" rtcDoc:semantics="" rtcDoc:number="" rtcDoc:type="" rtcDoc:description=""/>
         </rtc:Event>
-        <rtc:Event xsi:type="rtcDoc:event_doc" rtc:type="" rtc:target="FinalState" rtc:source="State02" rtc:condition="Cond02" rtc:name="Event02-Final">
+        <rtc:Event xsi:type="rtcDoc:event_doc" rtc:type="" rtc:target="FinalState" rtc:source="State02" rtc:condition="Cond02" rtc:name="Event02_Final">
             <rtcDoc:Doc rtcDoc:operation="" rtcDoc:unit="" rtcDoc:semantics="" rtcDoc:number="" rtcDoc:type="" rtcDoc:description=""/>
         </rtc:Event>
     </rtc:DataPorts>
