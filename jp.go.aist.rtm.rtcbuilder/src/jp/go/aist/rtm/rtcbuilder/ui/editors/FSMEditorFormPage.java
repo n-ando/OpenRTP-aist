@@ -9,6 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
@@ -626,6 +627,16 @@ public class FSMEditorFormPage extends AbstractEditorFormPage {
 				List<String> stateList = new ArrayList<String>();
 				stateList.add(fsmParam.getName());
 				for(StateParam param : fsmParam.getAllStateList() ) {
+					if(StringUtil.checkProhibitedChar(param.getName())==false) {
+						result = Messages.getString("IMC.FSM_STATE_NAME_PROHIBITED") + param.getName();
+						break;
+					}
+					if(param.isInitial()) {
+						if(1<param.getTransList().size()) {
+							result = Messages.getString("IMC.FSM_INITIAL_MULTI");
+							break;
+						}
+					}
 					if(stateList.contains(param.getName())) {
 						result = Messages.getString("IMC.STATE_DUPL1") + param.getName() + Messages.getString("IMC.STATE_DUPL2");
 						break;
@@ -634,8 +645,37 @@ public class FSMEditorFormPage extends AbstractEditorFormPage {
 					}
 				}
 				//
-				if(fsmParam.existInitialState()==false) {
-					result = Messages.getString("IMC.FSM_NOT_INITIAL");
+				if(result != null) {
+					if(fsmParam.existInitialState()==false) {
+						result = Messages.getString("IMC.FSM_NOT_INITIAL");
+					}
+				}
+				//
+				if(result != null) {
+					for(TransitionParam param : fsmParam.getAllTransList()) {
+						if(StringUtil.checkProhibitedChar(param.getEvent())==false) {
+							result = Messages.getString("IMC.FSM_EVENT_NAME_PROHIBITED") + param.getEvent();
+							break;
+						}
+						//
+						String targetName = param.getTarget();
+						Optional<StateParam> targetState = 
+								fsmParam.getAllStateList().stream()
+								    .filter(v -> v.getName().equals(targetName)).findFirst();
+						if(targetState.get().isInitial()) {
+							result = Messages.getString("IMC.FSM_INITIAL_IN");
+							break;
+						}
+						//
+						String sourceName = param.getTarget();
+						Optional<StateParam> sourceState = 
+								fsmParam.getAllStateList().stream()
+								    .filter(v -> v.getName().equals(sourceName)).findFirst();
+						if(sourceState.get().isFinal()) {
+							result = Messages.getString("IMC.FSM_INITIAL_IN");
+							break;
+						}
+					}
 				}
 			}
 		}
