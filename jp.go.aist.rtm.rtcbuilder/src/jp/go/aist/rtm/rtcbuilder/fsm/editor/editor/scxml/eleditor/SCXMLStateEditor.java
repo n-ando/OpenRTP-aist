@@ -19,6 +19,8 @@ import com.mxgraph.model.mxCell;
 
 import jp.go.aist.rtm.rtcbuilder.fsm.editor.SCXMLGraphEditor;
 import jp.go.aist.rtm.rtcbuilder.fsm.editor.editor.fileimportexport.SCXMLNode;
+import jp.go.aist.rtm.rtcbuilder.nl.Messages;
+import jp.go.aist.rtm.rtcbuilder.util.StringUtil;
 
 public class SCXMLStateEditor extends SCXMLEditorRoot {
 	private static final long serialVersionUID = -1937899100474024531L;
@@ -91,15 +93,12 @@ public class SCXMLStateEditor extends SCXMLEditorRoot {
 	}
 	
 	protected boolean performOK() {
-		if(txtName.getText()==null || txtName.getText().length()==0) {
+		String strName = txtName.getText();
+		if(strName==null || strName.length()==0) {
 			JOptionPane.showMessageDialog(this,
-					"Status name has not been entered.",
+					Messages.getString("IMC.FSM_STATE_NAME_EMPTY"),
 					"Validation Error", 
 					JOptionPane.ERROR_MESSAGE);
-//			MessageBox msg = new MessageBox(shell,SWT.ICON_ERROR | SWT.OK);
-//			msg.setMessage("Status name has not been entered.");
-//			msg.getParent().setActive();
-//			msg.open();
 			if (isRoot) {
 				txtName.setText(node.getName());
 			} else {
@@ -109,8 +108,15 @@ public class SCXMLStateEditor extends SCXMLEditorRoot {
 			txtName.selectAll();
 			return false;
 		}
+		if(StringUtil.checkProhibitedChar(strName)==false) {
+			JOptionPane.showMessageDialog(this,
+					Messages.getString("IMC.FSM_STATE_NAME_PROHIBITED"),
+					"Validation Error", 
+					JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
 		
-		node.setID(txtName.getText());
+		node.setID(strName);
 		if(chkEntry.isSelected()) {
 			node.setOnEntry(STR_ON);	
 		} else {

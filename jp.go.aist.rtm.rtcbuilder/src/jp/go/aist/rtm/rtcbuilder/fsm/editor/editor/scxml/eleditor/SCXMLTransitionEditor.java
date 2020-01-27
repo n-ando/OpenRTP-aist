@@ -10,6 +10,7 @@ import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
@@ -21,6 +22,7 @@ import jp.go.aist.rtm.rtcbuilder.fsm.EventParam;
 import jp.go.aist.rtm.rtcbuilder.fsm.editor.SCXMLGraphEditor;
 import jp.go.aist.rtm.rtcbuilder.fsm.editor.editor.fileimportexport.SCXMLEdge;
 import jp.go.aist.rtm.rtcbuilder.nl.Messages;
+import jp.go.aist.rtm.rtcbuilder.util.StringUtil;
 
 public class SCXMLTransitionEditor extends SCXMLEditorRoot {
 
@@ -171,6 +173,15 @@ public class SCXMLTransitionEditor extends SCXMLEditorRoot {
 	}
 	
 	protected boolean performOK() {
+		String strName = txtEvent.getText();
+		if(StringUtil.checkProhibitedChar(strName)==false) {
+			JOptionPane.showMessageDialog(this,
+					Messages.getString("IMC.FSM_EVENT_NAME_PROHIBITED"),
+					"Validation Error", 
+					JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
+		
 		edge.setEvent(txtEvent.getText());
 		edge.setCondition(txtCondition.getText());
 		//
