@@ -52,4 +52,7 @@ class State01(StaticFSM.Link):
 class State02(StaticFSM.Link):
     def Event02_Final(self, data):
         self.set_state(StaticFSM.State(FinalState))
+  
+@StaticFSM.FSM_SUBSTATE(Top)
+class FinalState(StaticFSM.Link):
 

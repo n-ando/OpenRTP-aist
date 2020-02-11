@@ -26,4 +26,7 @@ class State01(StaticFSM.Link):
   
 @StaticFSM.FSM_SUBSTATE(Top)
 class State02(StaticFSM.Link):
+  
+@StaticFSM.FSM_SUBSTATE(Top)
+class FinalState(StaticFSM.Link):
 

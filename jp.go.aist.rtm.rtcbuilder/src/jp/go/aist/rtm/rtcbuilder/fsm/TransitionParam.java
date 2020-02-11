@@ -22,7 +22,7 @@ public class TransitionParam {
 	}
 	public void setEvent(String event) {
 		if(event==null) event = "";
-		this.event = event.replace("-", "_");
+		this.event = event;
 	}
 	
 	public String getCondition() {
@@ -34,7 +34,7 @@ public class TransitionParam {
 	}
 	
 	public String getSource() {
-		return source.replace("-", "_");
+		return source;
 	}
 	public void setSource(String source) {
 		if(source==null) source = "";
@@ -42,7 +42,7 @@ public class TransitionParam {
 	}
 	
 	public String getTarget() {
-		return target.replace("-", "_");
+		return target;
 	}
 	public void setTarget(String target) {
 		if(target==null) target = "";
@@ -79,10 +79,10 @@ public class TransitionParam {
 		if(transCondition == null) transCondition = "";
 		String transSource = this.source;
 		if(transSource == null) transSource = "";
-		else transSource = transSource.replace("-", "_");
+		else transSource = transSource;
 		String transTarget = this.target;
 		if(transTarget == null) transTarget = "";
-		else transTarget = transTarget.replace("-", "_");
+		else transTarget = transTarget;
 
 		EventPortParam eventPort = rtcParam.getEventport();
 		if(eventPort==null) return;

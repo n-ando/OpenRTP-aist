@@ -47,4 +47,12 @@ void State02::Event02_Final() {
 }
 
 
+//============================================================
+// State FinalState
+// RTC::ReturnCode_t FinalState::onInit() {
+//   return RTC::RTC_OK;
+// }
+
+
+
 } //end namespace 'ModuleNameFSM'

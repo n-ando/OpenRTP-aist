@@ -21,13 +21,13 @@
         <rtc:OnModeChanged xsi:type="rtcDoc:action_status_doc" rtc:implemented="false"/>
     </rtc:Actions>
     <rtc:DataPorts xsi:type="rtcExt:dataport_ext" rtcExt:position="LEFT" rtcExt:variableName="FSMEvent" rtc:type="Any" rtc:name="FSMEvent" rtc:portType="EventPort">
-        <rtc:Event xsi:type="rtcDoc:event_doc" rtc:type="" rtc:target="State-02" rtc:source="State-01" rtc:condition="" rtc:name="">
+        <rtc:Event xsi:type="rtcDoc:event_doc" rtc:type="" rtc:target="State_02" rtc:source="State_01" rtc:condition="" rtc:name="">
             <rtcDoc:Doc rtcDoc:operation="" rtcDoc:unit="" rtcDoc:semantics="" rtcDoc:number="" rtcDoc:type="" rtcDoc:description=""/>
         </rtc:Event>
-        <rtc:Event xsi:type="rtcDoc:event_doc" rtc:type="" rtc:target="FinalState" rtc:source="State-02" rtc:condition="" rtc:name="">
+        <rtc:Event xsi:type="rtcDoc:event_doc" rtc:type="" rtc:target="FinalState" rtc:source="State_02" rtc:condition="" rtc:name="">
             <rtcDoc:Doc rtcDoc:operation="" rtcDoc:unit="" rtcDoc:semantics="" rtcDoc:number="" rtcDoc:type="" rtcDoc:description=""/>
         </rtc:Event>
-        <rtc:Event xsi:type="rtcDoc:event_doc" rtc:type="" rtc:target="State-01" rtc:source="InitialState" rtc:condition="" rtc:name="">
+        <rtc:Event xsi:type="rtcDoc:event_doc" rtc:type="" rtc:target="State_01" rtc:source="InitialState" rtc:condition="" rtc:name="">
             <rtcDoc:Doc rtcDoc:operation="" rtcDoc:unit="" rtcDoc:semantics="" rtcDoc:number="" rtcDoc:type="" rtcDoc:description=""/>
         </rtc:Event>
     </rtc:DataPorts>
