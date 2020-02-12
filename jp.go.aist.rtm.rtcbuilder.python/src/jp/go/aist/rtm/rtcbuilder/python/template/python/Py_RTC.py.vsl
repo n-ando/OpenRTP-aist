@@ -298,9 +298,10 @@ class ${rtcParam.name}(OpenRTM_aist.DataFlowComponentBase):
 #if(${tmpltHelper.checkDetailContent(0,${rtcParam})})        ${rtcParam.getDetailContent(0)}
 #end
 #if( ${tmpltHelper.checkFSM(${rtcParam})} )
+        # Set FSM Ports
         self._fsm = StaticFSM.Machine(${rtcParam.name}FSM.${tmpltHelper.getTopFSMName(${rtcParam})}, self)
-        self._eventIn = EventPort.EventInPort("event", self._fsm)
-        self.addInPort("event", self._eventIn)
+        self._${rtcParam.getEventport().tmplVarName}In = EventPort.EventInPort("${rtcParam.getEventport().name}", self._fsm)
+        self.addInPort("${rtcParam.getEventport().name}", self._${rtcParam.getEventport().tmplVarName}In)
 #foreach($eachTrans in ${fsmParam.getAllTransList()})
 #if( ${eachTrans.event.length()} > 0 )
 #if( ${eachTrans.existDataType()})

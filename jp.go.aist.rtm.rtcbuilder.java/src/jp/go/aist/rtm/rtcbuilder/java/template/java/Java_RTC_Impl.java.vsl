@@ -133,8 +133,8 @@ public class ${rtcParam.name}Impl extends DataFlowComponentBase {
 #end#end#end
 #if( ${tmpltHelper.checkFSM(${rtcParam})} )
         m_fsm = new Machine<>(${tmpltHelper.getTopFSMName(${rtcParam})}.class, ${rtcParam.name}Protocol.class, null);
-        m_event = new DataRef<Machine<${tmpltHelper.getTopFSMName(${rtcParam})}, ${rtcParam.name}Protocol>>(m_fsm);
-        m_eventIn = new EventInPort<Machine<${tmpltHelper.getTopFSMName(${rtcParam})}, ${rtcParam.name}Protocol>>("event",m_event);
+        m_${rtcParam.getEventport().tmplVarName} = new DataRef<Machine<${tmpltHelper.getTopFSMName(${rtcParam})}, ${rtcParam.name}Protocol>>(m_fsm);
+        m_${rtcParam.getEventport().name}In = new EventInPort<Machine<${tmpltHelper.getTopFSMName(${rtcParam})}, ${rtcParam.name}Protocol>>("${rtcParam.getEventport().name}", m_${rtcParam.getEventport().tmplVarName});
 #end
         // </rtc-template>
 
@@ -215,7 +215,7 @@ public class ${rtcParam.name}Impl extends DataFlowComponentBase {
 #if(${tmpltHelper.checkDetailContent(0,${rtcParam})})${rtcParam.getDetailContent(0)}
 #end
 #if( ${tmpltHelper.checkFSM(${rtcParam})} )
-        addInPort("event1", m_eventIn);
+        addInPort("${rtcParam.getEventport().name}", m_${rtcParam.getEventport().name}In);
         
 #foreach($eachTrans in ${fsmParam.getAllTransList()})
 #if( ${eachTrans.event.length()} > 0 )
@@ -544,10 +544,10 @@ public class ${rtcParam.name}Impl extends DataFlowComponentBase {
 #end
 #if( ${tmpltHelper.checkFSM(${rtcParam})} )
     protected Machine<${tmpltHelper.getTopFSMName(${rtcParam})}, ${rtcParam.name}Protocol> m_fsm;
-    protected DataRef<Machine<${tmpltHelper.getTopFSMName(${rtcParam})}, ${rtcParam.name}Protocol>> m_event;
+    protected DataRef<Machine<${tmpltHelper.getTopFSMName(${rtcParam})}, ${rtcParam.name}Protocol>> m_${rtcParam.getEventport().tmplVarName};
     /*!
      */
-    protected EventInPort<Machine<${tmpltHelper.getTopFSMName(${rtcParam})}, ${rtcParam.name}Protocol>> m_eventIn;
+    protected EventInPort<Machine<${tmpltHelper.getTopFSMName(${rtcParam})}, ${rtcParam.name}Protocol>> m_${rtcParam.getEventport().name}In;
 #end
     
     // </rtc-template>
