@@ -221,9 +221,9 @@ public class ${rtcParam.name}Impl extends DataFlowComponentBase {
 #if( ${eachTrans.event.length()} > 0 )
 #if( ${eachTrans.existEventParam()} )
 #if( ${eachTrans.existDataType()} )
-        m_eventIn.bindEvent("${eachTrans.event}", "${eachTrans.event}", new ${javaConv.getDataTypeName(${eachTrans.dataType})}() );
+        m_${rtcParam.getEventport().name}In.bindEvent("${eachTrans.event}", "${eachTrans.event}", new ${javaConv.getDataTypeName(${eachTrans.dataType})}() );
 #else
-        m_eventIn.bindEvent("${eachTrans.event}", "${eachTrans.event}");
+        m_${rtcParam.getEventport().name}In.bindEvent("${eachTrans.event}", "${eachTrans.event}");
 #end
 #end
 #end
