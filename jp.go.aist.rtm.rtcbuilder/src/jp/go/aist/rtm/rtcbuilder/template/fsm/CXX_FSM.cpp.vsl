@@ -26,9 +26,9 @@ RTC::ReturnCode_t ${fsmParam.name}::onExit() {
 #foreach($eachState in ${fsmParam.getAllValidStateList()})
 //============================================================
 // State ${eachState.name}
-// RTC::ReturnCode_t ${eachState.name}::onInit() {
-//   return RTC::RTC_OK;
-// }
+RTC::ReturnCode_t ${eachState.name}::onInit() {
+  return RTC::RTC_OK;
+}
 
 #if( ${eachState.hasEntry} )
 RTC::ReturnCode_t ${eachState.name}::onEntry() {

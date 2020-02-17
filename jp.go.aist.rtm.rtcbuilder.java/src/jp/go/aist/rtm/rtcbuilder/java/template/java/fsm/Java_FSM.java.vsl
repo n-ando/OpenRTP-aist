@@ -26,17 +26,20 @@ public class ${targetFsm.name} extends ${targetFsm.parentName} {
 #end
 #end
 #end
-//    @Override
-//    public void onInit() {
-//    }
+    // The onInit method provides a special kind of entry action.
+    // On state transition, onEntry functions are called at the target state and its superstate.
+    // But an onInit function is called only at the target state.
+    @Override
+    public void onInit() {
+    }
 
-#if( !${targetFsm.hasEntry} )//#else  #end    @Override
-#if( !${targetFsm.hasEntry} )//#else  #end    public void onEntry() {
-#if( !${targetFsm.hasEntry} )//#else  #end    }
+#if( !${targetFsm.hasEntry} )//#else#end    @Override
+#if( !${targetFsm.hasEntry} )//#else#end    public void onEntry() {
+#if( !${targetFsm.hasEntry} )//#else#end    }
 
-#if( !${targetFsm.hasExit} )//#else  #end    @Override
-#if( !${targetFsm.hasExit} )//#else  #end    public void onExit() {
-#if( !${targetFsm.hasExit} )//#else  #end    }
+#if( !${targetFsm.hasExit} )//#else#end    @Override
+#if( !${targetFsm.hasExit} )//#else#end    public void onExit() {
+#if( !${targetFsm.hasExit} )//#else#end    }
 
 #foreach($eachEvent in ${tmpltHelperJava.getInEventList(${fsmParam}, ${targetFsm})})
 //    @Override
