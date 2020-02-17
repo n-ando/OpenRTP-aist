@@ -55,7 +55,10 @@ namespace ModuleNameFsm {
     void Event01_02(RTC::TimedLong data) override;
 
     private:
-      // RTC::ReturnCode_t onInit() override;
+      // The onInit method provides a special kind of entry action.
+      // On state transition, onEntry functions are called at the target state and its superstate.
+      // But an onInit function is called only at the target state.
+      RTC::ReturnCode_t onInit() override;
   };
 
   FSM_SUBSTATE(State02, Top) {
@@ -66,7 +69,10 @@ namespace ModuleNameFsm {
     void Event02_Final(RTC::TimedString data) override;
 
     private:
-      // RTC::ReturnCode_t onInit() override;
+      // The onInit method provides a special kind of entry action.
+      // On state transition, onEntry functions are called at the target state and its superstate.
+      // But an onInit function is called only at the target state.
+      RTC::ReturnCode_t onInit() override;
   };
 
   FSM_SUBSTATE(FinalState, Top) {
@@ -76,7 +82,10 @@ namespace ModuleNameFsm {
     // Event handler
 
     private:
-      // RTC::ReturnCode_t onInit() override;
+      // The onInit method provides a special kind of entry action.
+      // On state transition, onEntry functions are called at the target state and its superstate.
+      // But an onInit function is called only at the target state.
+      RTC::ReturnCode_t onInit() override;
   };
 
 
