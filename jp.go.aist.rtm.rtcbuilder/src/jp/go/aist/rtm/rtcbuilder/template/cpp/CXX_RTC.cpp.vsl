@@ -69,7 +69,7 @@ ${rtcParam.name}::${rtcParam.name}(RTC::Manager* manager)
 #if( ${tmpltHelper.checkFSM(${rtcParam})} )
 ,
     m_fsm(this),
-    ${rtcParam.commonPrefix}${rtcParam.dataPortPrefix}${rtcParam.getEventport().tmplVarName}In${rtcParam.dataPortSuffix}${rtcParam.commonSuffix}("event", m_fsm)
+    ${rtcParam.commonPrefix}${rtcParam.dataPortPrefix}${rtcParam.getEventport().tmplVarName}In${rtcParam.dataPortSuffix}${rtcParam.commonSuffix}("${rtcParam.getEventport().name}", m_fsm)
 #end
 
     // </rtc-template>
@@ -112,7 +112,7 @@ ${sharp}endif
 
 #if( ${tmpltHelper.checkFSM(${rtcParam})} )
   // Set EventPort buffer
-  addInPort("event", ${rtcParam.commonPrefix}${rtcParam.eventPortPrefix}${rtcParam.getEventport().tmplVarName}In${rtcParam.eventPortSuffix}${rtcParam.commonSuffix});
+  addInPort("${rtcParam.getEventport().name}", ${rtcParam.commonPrefix}${rtcParam.eventPortPrefix}${rtcParam.getEventport().tmplVarName}In${rtcParam.eventPortSuffix}${rtcParam.commonSuffix});
 #end
   
   // Set service provider to Ports

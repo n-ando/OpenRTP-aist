@@ -298,15 +298,16 @@ class ${rtcParam.name}(OpenRTM_aist.DataFlowComponentBase):
 #if(${tmpltHelper.checkDetailContent(0,${rtcParam})})        ${rtcParam.getDetailContent(0)}
 #end
 #if( ${tmpltHelper.checkFSM(${rtcParam})} )
+        # Set FSM Ports
         self._fsm = StaticFSM.Machine(${rtcParam.name}FSM.${tmpltHelper.getTopFSMName(${rtcParam})}, self)
-        self._eventIn = EventPort.EventInPort("event", self._fsm)
-        self.addInPort("event", self._eventIn)
+        self._${rtcParam.getEventport().tmplVarName}In = EventPort.EventInPort("${rtcParam.getEventport().name}", self._fsm)
+        self.addInPort("${rtcParam.getEventport().name}", self._${rtcParam.getEventport().tmplVarName}In)
 #foreach($eachTrans in ${fsmParam.getAllTransList()})
 #if( ${eachTrans.event.length()} > 0 )
 #if( ${eachTrans.existDataType()})
-        self._eventIn.bindEvent1("${eachTrans.event}", ${rtcParam.name}FSM.${tmpltHelper.getTopFSMName(${rtcParam})}.${eachTrans.event}, OpenRTM_aist.instantiateDataType(${pyConv.convFullName(${eachTrans.dataType})}))
+        self._${rtcParam.getEventport().tmplVarName}In.bindEvent1("${eachTrans.event}", ${rtcParam.name}FSM.${tmpltHelper.getTopFSMName(${rtcParam})}.${eachTrans.event}, OpenRTM_aist.instantiateDataType(${pyConv.convFullName(${eachTrans.dataType})}))
 #else
-        self._eventIn.bindEvent0("${eachTrans.event}", ${rtcParam.name}FSM.${tmpltHelper.getTopFSMName(${rtcParam})}.${eachTrans.event})
+        self._${rtcParam.getEventport().tmplVarName}In.bindEvent0("${eachTrans.event}", ${rtcParam.name}FSM.${tmpltHelper.getTopFSMName(${rtcParam})}.${eachTrans.event})
 #end
 #end
 #end

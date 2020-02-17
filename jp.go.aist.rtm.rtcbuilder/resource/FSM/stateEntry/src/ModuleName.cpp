@@ -36,7 +36,7 @@ ModuleName::ModuleName(RTC::Manager* manager)
     // <rtc-template block="initializer">
   : RTC::DataFlowComponentBase(manager),
     m_fsm(this),
-    m_FSMEventVarIn("event", m_fsm)
+    m_FSMEventVarIn("FSMEventPort", m_fsm)
 
     // </rtc-template>
 {
@@ -63,7 +63,7 @@ RTC::ReturnCode_t ModuleName::onInitialize()
   // Set OutPort buffer
 
   // Set EventPort buffer
-  addInPort("event", m_FSMEventVarIn);
+  addInPort("FSMEventPort", m_FSMEventVarIn);
   
   // Set service provider to Ports
   

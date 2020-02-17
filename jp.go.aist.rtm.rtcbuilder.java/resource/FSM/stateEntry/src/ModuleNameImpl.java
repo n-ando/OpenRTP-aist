@@ -38,8 +38,8 @@ public class ModuleNameImpl extends DataFlowComponentBase {
         super(manager);
         // <rtc-template block="initializer">
         m_fsm = new Machine<>(Top.class, ModuleNameProtocol.class, null);
-        m_event = new DataRef<Machine<Top, ModuleNameProtocol>>(m_fsm);
-        m_eventIn = new EventInPort<Machine<Top, ModuleNameProtocol>>("event",m_event);
+        m_FSMEventVar = new DataRef<Machine<Top, ModuleNameProtocol>>(m_fsm);
+        m_FSMEventPortIn = new EventInPort<Machine<Top, ModuleNameProtocol>>("FSMEventPort", m_FSMEventVar);
         // </rtc-template>
 
     }
@@ -57,10 +57,10 @@ public class ModuleNameImpl extends DataFlowComponentBase {
         // Registration: InPort/OutPort/Service
         // <rtc-template block="registration">
         // </rtc-template>
-        addInPort("event1", m_eventIn);
+        addInPort("FSMEventPort", m_FSMEventPortIn);
         
-        m_eventIn.bindEvent("Event01_02", "Event01_02", new TimedLong() );
-        m_eventIn.bindEvent("Event02_Final", "Event02_Final", new TimedString() );
+        m_FSMEventPortIn.bindEvent("Event01_02", "Event01_02", new TimedLong() );
+        m_FSMEventPortIn.bindEvent("Event02_Final", "Event02_Final", new TimedString() );
 
         return super.onInitialize();
     }
@@ -236,10 +236,10 @@ public class ModuleNameImpl extends DataFlowComponentBase {
     // DataInPort declaration
     // <rtc-template block="inport_declare">
     protected Machine<Top, ModuleNameProtocol> m_fsm;
-    protected DataRef<Machine<Top, ModuleNameProtocol>> m_event;
+    protected DataRef<Machine<Top, ModuleNameProtocol>> m_FSMEventVar;
     /*!
      */
-    protected EventInPort<Machine<Top, ModuleNameProtocol>> m_eventIn;
+    protected EventInPort<Machine<Top, ModuleNameProtocol>> m_FSMEventPortIn;
     
     // </rtc-template>
 

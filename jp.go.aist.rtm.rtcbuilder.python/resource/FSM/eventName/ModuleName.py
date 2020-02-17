@@ -91,11 +91,12 @@ class ModuleName(OpenRTM_aist.DataFlowComponentBase):
         # Set service consumers to Ports
 		
         # Set CORBA Service Ports
+        # Set FSM Ports
         self._fsm = StaticFSM.Machine(ModuleNameFSM.Top, self)
-        self._eventIn = EventPort.EventInPort("event", self._fsm)
-        self.addInPort("event", self._eventIn)
-        self._eventIn.bindEvent0("Event01_02", ModuleNameFSM.Top.Event01_02)
-        self._eventIn.bindEvent0("Event02_Final", ModuleNameFSM.Top.Event02_Final)
+        self._FSMEventVarIn = EventPort.EventInPort("FSMEventPort", self._fsm)
+        self.addInPort("FSMEventPort", self._FSMEventVarIn)
+        self._FSMEventVarIn.bindEvent0("Event01_02", ModuleNameFSM.Top.Event01_02)
+        self._FSMEventVarIn.bindEvent0("Event02_Final", ModuleNameFSM.Top.Event02_Final)
 		
         return RTC.RTC_OK
 	
