@@ -102,7 +102,7 @@ public class SystemDiagramEditor extends AbstractSystemDiagramEditor {
 	protected IEditorInput load(IEditorInput input, final IEditorSite site,
 			final RestoreOption restore) throws PartInitException {
 
-		IEditorInput targetInput = getTargetInput(input, "System Diagram");
+		IEditorInput targetInput = getTargetInput(input, "System Editor");
 
 		if (getSystemDiagram() != null) {
 			getSystemDiagram().setSynchronizeInterval(0);
