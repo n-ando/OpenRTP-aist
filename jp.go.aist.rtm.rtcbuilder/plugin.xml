@@ -36,7 +36,7 @@
         point="org.eclipse.ui.actionSets">
      <actionSet
            id="jp.go.aist.rtm.rtcbuilder.ui.actionSet"
-           label="RTC Builder Actions">
+           label="RTCBuilder Actions">
 			<action
 				id="jp.go.aist.rtm.rtcbuilder.ui.action.NewRtcBuilderEditorAction" 
 				label="%NewRtcBuilderEditorActionLabel"
