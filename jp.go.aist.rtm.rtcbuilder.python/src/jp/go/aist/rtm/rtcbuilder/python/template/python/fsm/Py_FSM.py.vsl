@@ -63,7 +63,7 @@ class ${eachState.name}(StaticFSM.Link):
     ${sharp} On state transition, onEntry functions are called at the target state and its superstate.
     ${sharp} But an onInit function is called only at the target state.
     def onInit(self):
-        pass
+        return RTC.RTC_OK
 
 #if( ${eachState.hasEntry} )
     def onEntry(self):
