@@ -59,6 +59,12 @@ class ${fsmParam.name}(StaticFSM.Link):
 ${tmpltHelperPy.getHistory(${eachState})}
 @StaticFSM.FSM_SUBSTATE(${eachState.parentName})
 class ${eachState.name}(StaticFSM.Link):
+    ${sharp} The onInit method provides a special kind of entry action.
+    ${sharp} On state transition, onEntry functions are called at the target state and its superstate.
+    ${sharp} But an onInit function is called only at the target state.
+    def onInit(self):
+        return RTC.RTC_OK
+
 #if( ${eachState.hasEntry} )
     def onEntry(self):
         return RTC.RTC_OK

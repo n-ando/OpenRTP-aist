@@ -25,9 +25,9 @@ RTC::ReturnCode_t Top::onExit() {
 
 //============================================================
 // State State01
-// RTC::ReturnCode_t State01::onInit() {
-//   return RTC::RTC_OK;
-// }
+RTC::ReturnCode_t State01::onInit() {
+  return RTC::RTC_OK;
+}
 
 
 void State01::Event01_02(RTC::TimedLong data) {
@@ -37,9 +37,9 @@ void State01::Event01_02(RTC::TimedLong data) {
 
 //============================================================
 // State State02
-// RTC::ReturnCode_t State02::onInit() {
-//   return RTC::RTC_OK;
-// }
+RTC::ReturnCode_t State02::onInit() {
+  return RTC::RTC_OK;
+}
 
 
 void State02::Event02_Final(RTC::TimedString data) {
@@ -49,9 +49,9 @@ void State02::Event02_Final(RTC::TimedString data) {
 
 //============================================================
 // State FinalState
-// RTC::ReturnCode_t FinalState::onInit() {
-//   return RTC::RTC_OK;
-// }
+RTC::ReturnCode_t FinalState::onInit() {
+  return RTC::RTC_OK;
+}
 
 
 

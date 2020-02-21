@@ -76,10 +76,13 @@ ${tmpltHelper.getHistory(${eachState})}
 #end
 
     private:
-      // RTC::ReturnCode_t onInit() override;
-#if( ${eachState.hasEntry} )       RTC::ReturnCode_t onEntry() override;
+      // The onInit method provides a special kind of entry action.
+      // On state transition, onEntry functions are called at the target state and its superstate.
+      // But an onInit function is called only at the target state.
+      RTC::ReturnCode_t onInit() override;
+#if( ${eachState.hasEntry} )      RTC::ReturnCode_t onEntry() override;
 #end
-#if( ${eachState.hasExit} )       RTC::ReturnCode_t onExit() override;
+#if( ${eachState.hasExit} )      RTC::ReturnCode_t onExit() override;
 #end
   };
 

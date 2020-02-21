@@ -25,25 +25,25 @@ RTC::ReturnCode_t Top::onExit() {
 
 //============================================================
 // State State01
-// RTC::ReturnCode_t State01::onInit() {
-//   return RTC::RTC_OK;
-// }
+RTC::ReturnCode_t State01::onInit() {
+  return RTC::RTC_OK;
+}
 
 
 
 //============================================================
 // State State02
-// RTC::ReturnCode_t State02::onInit() {
-//   return RTC::RTC_OK;
-// }
+RTC::ReturnCode_t State02::onInit() {
+  return RTC::RTC_OK;
+}
 
 
 
 //============================================================
 // State FinalState
-// RTC::ReturnCode_t FinalState::onInit() {
-//   return RTC::RTC_OK;
-// }
+RTC::ReturnCode_t FinalState::onInit() {
+  return RTC::RTC_OK;
+}
 
 
 
