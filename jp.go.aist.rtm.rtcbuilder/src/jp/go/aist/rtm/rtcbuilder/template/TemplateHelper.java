@@ -396,6 +396,21 @@ public class TemplateHelper {
 		return startNode;
 	}
 	
+	public String checkTransition(StateParam state) {
+		TransitionParam targetTans = null;
+		for(TransitionParam trans : state.getTransList()) {
+			if(trans.getEvent().trim().length()==0) {
+				targetTans = trans;
+			}
+		}
+		if(targetTans!=null) {
+			StringBuilder builder = new StringBuilder();
+			builder.append("  setState<").append(targetTans.getTarget()).append(">();");
+			return builder.toString();
+		}
+		return "";
+	}
+	
 	public String getConnectorString(RtcParam param) {
 		StringBuilder builder = new StringBuilder();
 		

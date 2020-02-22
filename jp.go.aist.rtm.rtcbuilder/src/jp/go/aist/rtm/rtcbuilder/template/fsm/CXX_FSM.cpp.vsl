@@ -27,6 +27,7 @@ RTC::ReturnCode_t ${fsmParam.name}::onExit() {
 //============================================================
 // State ${eachState.name}
 RTC::ReturnCode_t ${eachState.name}::onInit() {
+${tmpltHelper.checkTransition(${eachState})}
   return RTC::RTC_OK;
 }
 
