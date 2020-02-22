@@ -49,6 +49,7 @@ class State01(StaticFSM.Link):
     # On state transition, onEntry functions are called at the target state and its superstate.
     # But an onInit function is called only at the target state.
     def onInit(self):
+        
         return RTC.RTC_OK
 
     def onEntry(self):
@@ -66,6 +67,7 @@ class State02(StaticFSM.Link):
     # On state transition, onEntry functions are called at the target state and its superstate.
     # But an onInit function is called only at the target state.
     def onInit(self):
+        
         return RTC.RTC_OK
 
     def onEntry(self):
@@ -83,5 +85,6 @@ class FinalState(StaticFSM.Link):
     # On state transition, onEntry functions are called at the target state and its superstate.
     # But an onInit function is called only at the target state.
     def onInit(self):
+        
         return RTC.RTC_OK
 

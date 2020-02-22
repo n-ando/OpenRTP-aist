@@ -13,6 +13,7 @@ public class State_02 extends Top {
     // But an onInit function is called only at the target state.
     @Override
     public void onInit() {
+        setState(new State(FinalState.class));
     }
 
 //    @Override
