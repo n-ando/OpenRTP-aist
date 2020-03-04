@@ -17,7 +17,11 @@ Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .,
  lib/influent.jar,
  lib/org.msgpack.jar,
- lib/slf4j-api-1.7.13.jar
+ lib/slf4j-api-1.7.13.jar,
+ lib/jackson-annotations-2.10.2.jar,
+ lib/jackson-core-2.10.2.jar,
+ lib/jackson-databind-2.10.2.jar,
+ lib/commons-csv-1.8.jar
 Export-Package: influent,
  jp.go.aist.rtm.systemeditor,
  jp.go.aist.rtm.systemeditor._debug,

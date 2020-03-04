@@ -1,5 +1,6 @@
 package jp.go.aist.rtm.systemeditor.ui.util;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -8,6 +9,8 @@ import java.util.concurrent.Executors;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.ui.PlatformUI;
 import org.msgpack.value.Value;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import influent.EventEntry;
 import influent.forward.ForwardCallback;
@@ -23,7 +26,7 @@ public class LoggerHandler {
 	  stream -> {
 //		  String tag = stream.getTag().getName();
 		  for (EventEntry entry : stream.getEntries()) {
-			  String strRaw = entry.getTime().toString() + " " + entry.getRecord().toJson();
+//			  String strRaw = entry.getTime().toString() + " " + entry.getRecord().toJson();
 //		      long time = entry.getTime().toEpochMilli();
 //		      String json = entry.getRecord().toJson();
 //			  System.out.println();
@@ -33,22 +36,32 @@ public class LoggerHandler {
 		      Value[] val = entry.getRecord().getKeyValueArray();
 		      for(Value each : val) {
 		    	  if(each.toString().equals("log")) continue;
+		    	  String entireData = each.toString();
+		    	  int startPos = entireData.indexOf("{");
+		    	  int endPos = entireData.lastIndexOf("}");
+		    	  String rawData = entireData.substring(startPos, endPos + 1);
+		    	  ObjectMapper mapper = new ObjectMapper();
+		          try {
+		        	  LogParam info = mapper.readValue(rawData, LogParam.class);
+				      PlatformUI.getWorkbench().getDisplay().asyncExec(new Runnable() {
+							public void run() {
+								logList.add(info);
+								logTable.refresh();
+							}
+						});
+		          } catch (IOException e) {
+		              e.printStackTrace();
+		          }		    	  
 //				  System.out.println("logContents:" + each.toString());
-			      PlatformUI.getWorkbench().getDisplay().asyncExec(new Runnable() {
-						public void run() {
-							logList.add(new LogParam(each.toString(), strRaw));
-							logTable.refresh();
-						}
-					});
 		      }
 		    }				  
 	  },
 	  Executors.newFixedThreadPool(1)
 	);
 	
-	public void startServer(int portNo, List<LogParam> logList, TableViewer logTable) {
+	public void startServer(int portNo, TableViewer logTable) {
 		this.logTable = logTable;
-		this.logList = logList;
+		this.logList = (List<LogParam>)logTable.getInput();
 		logServer = new ForwardServer
 				  .Builder(callback)
 				  .localAddress(portNo)
