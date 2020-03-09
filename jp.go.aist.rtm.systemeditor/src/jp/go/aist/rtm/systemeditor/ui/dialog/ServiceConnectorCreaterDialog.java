@@ -75,7 +75,7 @@ public class ServiceConnectorCreaterDialog extends ConnectorDialogBase {
 	static final String MSG_UNMATCH_INTERFACE_TYPE = getString("ServiceConnectorCreaterDialog.13");
 	static final String MSG_UNMATCH_INTERFACE_INSTANCE = getString("ServiceConnectorCreaterDialog.14");
 
-	static final String LABEL_ENTER_PROFILE = getString("ServiceConnectorCreaterDialog.1");
+	static final String LABEL_ENTER_PROFILE = getString("ConnectorCreaterDialogBase.1");
 
 	static final String LABEL_BUTTON_ADD = getString("Common.button.add");
 	static final String LABEL_BUTTON_DELETE = getString("Common.button.delete");
@@ -510,7 +510,7 @@ public class ServiceConnectorCreaterDialog extends ConnectorDialogBase {
 	@Override
 	protected void configureShell(Shell shell) {
 		super.configureShell(shell);
-		shell.setText("Port Profile");
+		shell.setText("Connector Profile");
 	}
 
 	@SuppressWarnings("unchecked")
