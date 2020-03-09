@@ -41,7 +41,7 @@ public class NewWizard extends Wizard implements INewWizard, IExecutableExtensio
 
 	public NewWizard() {
 		super();
-		setWindowTitle("RT-Component Builder Project");
+		setWindowTitle("RTCBuilder Project");
 	}
 
 	public boolean performFinish() {
