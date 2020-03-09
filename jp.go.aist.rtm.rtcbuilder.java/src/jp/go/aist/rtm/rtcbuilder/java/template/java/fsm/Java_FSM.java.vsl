@@ -31,6 +31,7 @@ public class ${targetFsm.name} extends ${targetFsm.parentName} {
     // But an onInit function is called only at the target state.
     @Override
     public void onInit() {
+    ${tmpltHelperJava.checkTransition(${targetFsm})}
     }
 
 #if( !${targetFsm.hasEntry} )//#else#end    @Override

@@ -141,4 +141,19 @@ public class TemplateHelperJava {
 		
 		return result;
 	}
+	
+	public String checkTransition(StateParam state) {
+		TransitionParam targetTans = null;
+		for(TransitionParam trans : state.getTransList()) {
+			if(trans.getEvent().trim().length()==0) {
+				targetTans = trans;
+			}
+		}
+		if(targetTans!=null) {
+			StringBuilder builder = new StringBuilder();
+			builder.append("    setState(new State(").append(targetTans.getTarget()).append(".class));");
+			return builder.toString();
+		}
+		return "";
+	}
 }

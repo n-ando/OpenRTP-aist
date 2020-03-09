@@ -5,6 +5,7 @@ import java.util.List;
 
 import jp.go.aist.rtm.rtcbuilder.IRtcBuilderConstants;
 import jp.go.aist.rtm.rtcbuilder.fsm.StateParam;
+import jp.go.aist.rtm.rtcbuilder.fsm.TransitionParam;
 import jp.go.aist.rtm.rtcbuilder.generator.param.RtcParam;
 import jp.go.aist.rtm.rtcbuilder.generator.param.idl.IdlFileParam;
 import jp.go.aist.rtm.rtcbuilder.python.IRtcBuilderConstantsPython;
@@ -155,5 +156,20 @@ public class TemplateHelperPy {
 			return "@StaticFSM.history";
 		}
 		return "  ";
+	}
+	
+	public String checkTransition(StateParam state) {
+		TransitionParam targetTans = null;
+		for(TransitionParam trans : state.getTransList()) {
+			if(trans.getEvent().trim().length()==0) {
+				targetTans = trans;
+			}
+		}
+		if(targetTans!=null) {
+			StringBuilder builder = new StringBuilder();
+			builder.append("self.set_state(StaticFSM.State(").append(targetTans.getTarget()).append("))");
+			return builder.toString();
+		}
+		return "";
 	}
 }
