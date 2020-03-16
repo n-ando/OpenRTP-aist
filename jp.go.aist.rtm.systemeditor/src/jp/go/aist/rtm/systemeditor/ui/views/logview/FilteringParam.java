@@ -1,6 +1,7 @@
 package jp.go.aist.rtm.systemeditor.ui.views.logview;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import jp.go.aist.rtm.systemeditor.nl.Messages;
@@ -21,15 +22,20 @@ public class FilteringParam {
 	private List<FilteringParam> childParams = new ArrayList<FilteringParam>();
 	
 	private List<String> levelList = new ArrayList<String>();
+	
 	private boolean isFrom;
-	private String fromDate;
-	private String fromTime;
+	private Calendar fromCal;
 	private boolean isTo;
-	private String toDate;
-	private String toTime;
+	private Calendar toCal;
+	
 	private String managerCond;
+	private boolean regexpManager;	
+	
 	private String identifierCond;
+	private boolean regexpIdentifier;
+	
 	private String messageCond;
+	private boolean regexpMessage;	
 	
 	public FilteringParam(FilteringKind kind, FilteringParam parent) {
 		this.kind = kind;
@@ -58,7 +64,7 @@ public class FilteringParam {
 	public List<String> getLevelList() {
 		return levelList;
 	}
-
+	/////
 	public boolean isFrom() {
 		return isFrom;
 	}
@@ -66,18 +72,11 @@ public class FilteringParam {
 		this.isFrom = isFrom;
 	}
 
-	public String getFromDate() {
-		return fromDate;
+	public Calendar getFromCal() {
+		return fromCal;
 	}
-	public void setFromDate(String fromDate) {
-		this.fromDate = fromDate;
-	}
-
-	public String getFromTime() {
-		return fromTime;
-	}
-	public void setFromTime(String fromTime) {
-		this.fromTime = fromTime;
+	public void setFromCal(Calendar fromCal) {
+		this.fromCal = fromCal;
 	}
 
 	public boolean isTo() {
@@ -87,18 +86,11 @@ public class FilteringParam {
 		this.isTo = isTo;
 	}
 
-	public String getToDate() {
-		return toDate;
+	public Calendar getToCal() {
+		return toCal;
 	}
-	public void setToDate(String toDate) {
-		this.toDate = toDate;
-	}
-
-	public String getToTime() {
-		return toTime;
-	}
-	public void setToTime(String toTime) {
-		this.toTime = toTime;
+	public void setToCal(Calendar toCal) {
+		this.toCal = toCal;
 	}
 	//////////
 	public String getManagerCond() {
@@ -107,6 +99,12 @@ public class FilteringParam {
 	public void setManagerCond(String managerCond) {
 		this.managerCond = managerCond;
 	}
+	public boolean isRegexpManager() {
+		return regexpManager;
+	}
+	public void setRegexpManager(boolean regexpManager) {
+		this.regexpManager = regexpManager;
+	}
 
 	public String getIdentifierCond() {
 		return identifierCond;
@@ -114,12 +112,24 @@ public class FilteringParam {
 	public void setIdentifierCond(String identifierCond) {
 		this.identifierCond = identifierCond;
 	}
+	public boolean isRegexpIdentifier() {
+		return regexpIdentifier;
+	}
+	public void setRegexpIdentifier(boolean regexpIdentifier) {
+		this.regexpIdentifier = regexpIdentifier;
+	}
 
 	public String getMessageCond() {
 		return messageCond;
 	}
 	public void setMessageCond(String messageCond) {
 		this.messageCond = messageCond;
+	}
+	public boolean isRegexpMessage() {
+		return regexpMessage;
+	}
+	public void setRegexpMessage(boolean regexpMessage) {
+		this.regexpMessage = regexpMessage;
 	}
 	
 
@@ -148,10 +158,22 @@ public class FilteringParam {
 			builder.append(Messages.getString("LogView.columnTime"));
 			builder.append("=");
 			if(isFrom) {
+				String fromDate = String.format("%04d",fromCal.get(Calendar.YEAR)) + "/"
+									+ String.format("%02d", fromCal.get(Calendar.MONTH)) + "/"
+									+ String.format("%02d",fromCal.get(Calendar.DATE));
+				String fromTime = String.format("%02d",fromCal.get(Calendar.HOUR)) + ":"
+						+ String.format("%02d",fromCal.get(Calendar.MINUTE)) + ":"
+						+ String.format("%02d",fromCal.get(Calendar.SECOND));
 				builder.append("From:").append(fromDate).append(" ").append(fromTime);
 			}
 			if(isTo) {
 				builder.append(" - ");
+				String toDate = String.format("%04d",toCal.get(Calendar.YEAR)) + "/"
+								+ String.format("%02d", toCal.get(Calendar.MONTH)) + "/"
+								+ String.format("%02d",toCal.get(Calendar.DATE));
+				String toTime = String.format("%02d",toCal.get(Calendar.HOUR)) + ":"
+								+ String.format("%02d",toCal.get(Calendar.MINUTE)) + ":"
+								+ String.format("%02d",toCal.get(Calendar.SECOND));
 				builder.append("To:").append(toDate).append(" ").append(toTime);
 			}
 			return builder.toString();
@@ -161,6 +183,11 @@ public class FilteringParam {
 			builder.append(Messages.getString("LogView.columnManager"));
 			builder.append("=");
 			builder.append(managerCond);
+			if(regexpManager) {
+				builder.append(" (");
+				builder.append(Messages.getString("LogView.regexp"));
+				builder.append(")");
+			}
 			return builder.toString();
 		}
 		case IDENTIFIER: {
@@ -168,6 +195,11 @@ public class FilteringParam {
 			builder.append(Messages.getString("LogView.columnID"));
 			builder.append("=");
 			builder.append(identifierCond);
+			if(regexpIdentifier) {
+				builder.append(" (");
+				builder.append(Messages.getString("LogView.regexp"));
+				builder.append(")");
+			}
 			return builder.toString();
 		}
 		case MESSAGE: {
@@ -175,6 +207,11 @@ public class FilteringParam {
 			builder.append(Messages.getString("LogView.columnMessage"));
 			builder.append("=");
 			builder.append(messageCond);
+			if(regexpMessage) {
+				builder.append(" (");
+				builder.append(Messages.getString("LogView.regexp"));
+				builder.append(")");
+			}
 			return builder.toString();
 		}
 		default:

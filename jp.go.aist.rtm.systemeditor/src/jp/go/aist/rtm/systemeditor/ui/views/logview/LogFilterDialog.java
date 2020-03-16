@@ -1,5 +1,7 @@
 package jp.go.aist.rtm.systemeditor.ui.views.logview;
 
+import java.util.List;
+
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
@@ -22,10 +24,13 @@ import jp.go.aist.rtm.systemeditor.nl.Messages;
 import jp.go.aist.rtm.systemeditor.ui.views.logview.FilteringParam.FilteringKind;
 
 public class LogFilterDialog extends Dialog {
-	private FilteringParam rootParam;
+	private FilteringParam rootParam = null;
 
 	public FilteringParam getRootParam() {
 		return rootParam;
+	}
+	public void setRootParam(FilteringParam rootParam) {
+		this.rootParam = rootParam;
 	}
 
 	public LogFilterDialog(Shell parentShell) {
@@ -49,20 +54,40 @@ public class LogFilterDialog extends Dialog {
 		conditionTree.setLayoutData(gd);
 		
 		TreeItem root = new TreeItem(conditionTree, SWT.NULL);
-	    FilteringParam rootParam = new FilteringParam(FilteringKind.ROOT, null);
-	    root.setData(rootParam);
-	    root.setText(rootParam.toString());
-	    
-		TreeItem andElem = new TreeItem(root, SWT.NULL);
-	    FilteringParam andParam = new FilteringParam(FilteringKind.AND, rootParam);
-	    andElem.setData(andParam);
-	    andElem.setText(andParam.toString());
+		if(rootParam==null) {
+			rootParam = new FilteringParam(FilteringKind.ROOT, null);
+		    root.setData(rootParam);
+		    root.setText(rootParam.toString());
+		    
+			TreeItem andElem = new TreeItem(root, SWT.NULL);
+			FilteringParam andParam = new FilteringParam(FilteringKind.AND, rootParam);
+		    andElem.setData(andParam);
+		    andElem.setText(andParam.toString());
+		    rootParam.getChildParams().add(andParam);
+		} else {
+		    root.setData(rootParam);
+		    root.setText(rootParam.toString());
+		    buildTree(rootParam, root);
+		}
 	    
 	    root.setExpanded(true);
-
 		buildMenu(conditionTree);		
 		
 		return mainComposite;
+	}
+	
+	private void buildTree(FilteringParam targetParam, TreeItem targetItem) {
+		List<FilteringParam> elems = targetParam.getChildParams();
+		for(FilteringParam eachElem : elems) {
+			TreeItem treeElem = new TreeItem(targetItem, SWT.NULL);
+		    treeElem.setData(eachElem);
+		    treeElem.setText(eachElem.toString());
+		    targetItem.setExpanded(true);
+		    
+			if(0<eachElem.getChildParams().size()) {
+				buildTree(eachElem, treeElem);
+			}
+		}
 	}
 
 	private void buildMenu(Tree conditionTree) {
@@ -83,12 +108,18 @@ public class LogFilterDialog extends Dialog {
 	            if(targetParam.getKind()!=FilteringKind.ROOT && targetParam.getKind()!=FilteringKind.AND && targetParam.getKind()!=FilteringKind.OR) {
 		            buildEditMenu(menu, targetItem, targetParam);
 	            }
+	            if(targetParam.getKind()==FilteringKind.ROOT) {
+	            	if(targetParam.getChildParams().size()==0) {
+			            buildAndMenu(menu, targetItem, targetParam);
+			            buildOrMenu(menu, targetItem, targetParam);
+	            	}
+	            }
 	            if(targetParam.getKind()==FilteringKind.AND || targetParam.getKind()==FilteringKind.OR) {
 	        		new MenuItem(menu, SWT.SEPARATOR);
 		            buildAndMenu(menu, targetItem, targetParam);
 		            buildOrMenu(menu, targetItem, targetParam);
 	        		new MenuItem(menu, SWT.SEPARATOR);
-		            
+	        		
 		            boolean existLevel = false;
 		            for(FilteringParam child : targetParam.getChildParams()) {
 		            	if(child.getKind()==FilteringKind.LEVEL) {
@@ -163,9 +194,9 @@ public class LogFilterDialog extends Dialog {
 	}
 	
 	private void buildEditMenu(final Menu menu, TreeItem targetItem, FilteringParam targetParam) {
-		MenuItem deleteItem = new MenuItem(menu, SWT.PUSH);
-		deleteItem.setText(Messages.getString("LogView.menuEdit"));
-		deleteItem.addSelectionListener(new SelectionListener() {
+		MenuItem menuItem = new MenuItem(menu, SWT.PUSH);
+		menuItem.setText(Messages.getString("LogView.menuEdit"));
+		menuItem.addSelectionListener(new SelectionListener() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				if(targetParam.kind==FilteringKind.LEVEL) {

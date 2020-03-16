@@ -29,8 +29,6 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
-import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -55,7 +53,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jp.go.aist.rtm.systemeditor.nl.Messages;
-import jp.go.aist.rtm.systemeditor.ui.dialog.DeploymentSettingDialog;
 import jp.go.aist.rtm.systemeditor.ui.util.LoggerHandler;
 import jp.go.aist.rtm.toolscommon.model.component.SystemDiagram;
 import jp.go.aist.rtm.toolscommon.model.component.SystemDiagramKind;
@@ -66,12 +63,15 @@ public class LogView extends ViewPart {
 
 	private TableViewer rtclogTableViewer;
 	private Table rtclogTable;
+	private Button btnFilter ;
 
 	private SystemDiagram targetDiagram;
 
 	private LogViewerFilter filter;
 	private LogLabelProvider provider;
 	private List<LogParam> logList = new ArrayList<LogParam>();
+	
+	private FilteringParam filteringParam = null;
 
 	public LogView() {
 	}
@@ -107,7 +107,7 @@ public class LogView extends ViewPart {
 		gl = new GridLayout();
 		gl.marginWidth = 0;
 		gl.marginHeight = 0;
-		gl.numColumns = 10;
+		gl.numColumns = 11;
 		composite.setLayout(gl);
 		
 		Label portNo = new Label(composite, SWT.NONE);
@@ -149,8 +149,21 @@ public class LogView extends ViewPart {
 		gd = new GridData();
 		gd.grabExcessHorizontalSpace = true;
 		lblDummuy01.setLayoutData(gd);
+		
+		Button chkFilter = new Button(composite, SWT.CHECK);
+		chkFilter.setText(Messages.getString("LogView.chkFilter"));
+		chkFilter.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				btnFilter.setEnabled(chkFilter.getSelection());
+				rtclogTableViewer.resetFilters();
+				if(chkFilter.getSelection()) {
+					rtclogTableViewer.addFilter(filter);
+				}
+			}
+		});
 
-		Button btnFilter = new Button(composite, SWT.NONE);
+		btnFilter = new Button(composite, SWT.NONE);
 		gd = new GridData();
 		gd.widthHint = 80;
 		btnFilter.setLayoutData(gd);
@@ -159,12 +172,18 @@ public class LogView extends ViewPart {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				LogFilterDialog dialog = new LogFilterDialog(getSite().getShell());
+				dialog.setRootParam(filteringParam);
 				int open = dialog.open();
 				if (open != IDialogConstants.OK_ID) {
 					return;
 				}
+				filteringParam = dialog.getRootParam();
+				filter.setCondition(filteringParam);
+				rtclogTableViewer.resetFilters();
+				rtclogTableViewer.addFilter(filter);
 			}
 		});
+		btnFilter.setEnabled(false);
 		
 		Label lblDummuy02 = new Label(composite, SWT.NONE);
 		gd = new GridData();
@@ -367,28 +386,6 @@ public class LogView extends ViewPart {
 
 	@Override
 	public void setFocus() {
-	}
-
-	/** ログ一覧表示のViewerFilter */
-	public class LogViewerFilter extends ViewerFilter {
-		List<String> words = new ArrayList<String>();
-		private boolean isRaw;
-		
-		public void setRaw(boolean isRaw) {
-			this.isRaw = isRaw;
-		}
-
-		@Override
-		public boolean select(Viewer viewer, Object parentElement, Object element) {
-			if(words.size()==0) return true;
-			
-			LogParam entry = (LogParam) element;
-			String target = entry.getMessage();
-			for(String word : words) {
-				if(target.contains(word)==false) return false;
-			}
-			return true;
-		}
 	}
 
 	/** ログ一覧表示のLabelProvider */

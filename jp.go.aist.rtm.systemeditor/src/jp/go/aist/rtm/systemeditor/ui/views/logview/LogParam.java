@@ -1,5 +1,8 @@
 package jp.go.aist.rtm.systemeditor.ui.views.logview;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
@@ -34,6 +37,8 @@ public class LogParam {
 	@JsonProperty("message")
 	private String message;
 	
+	private Calendar cal;
+	
 	@JsonIgnore
 	private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 	
@@ -44,8 +49,20 @@ public class LogParam {
 	@JsonProperty("time")
 	public void setTime(String time) {
 		this.time = time;
+		//
+		this.cal = Calendar.getInstance();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss,SSS");
+        try{
+        	this.cal.setTime(sdf.parse(this.time));
+//        	String str1 = sdf.format(this.cal.getTime());
+//        	System.out.println(str1);
+        } catch(ParseException ex) {
+        }
 	}
 	
+	public Calendar getCal() {
+		return cal;
+	}
 	@JsonProperty("name")
 	public String getName() {
 		return name;

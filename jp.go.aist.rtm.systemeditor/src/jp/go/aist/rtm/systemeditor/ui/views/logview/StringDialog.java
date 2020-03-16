@@ -5,6 +5,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
@@ -19,6 +20,7 @@ public class StringDialog extends Dialog {
 	private FilteringKind kind;
 	
 	private Text txtCond;
+	private Button chkRegExp;
 	
 	public void setTargetParam(FilteringParam targetParam) {
 		this.targetParam = targetParam;
@@ -40,7 +42,7 @@ public class StringDialog extends Dialog {
 		mainComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
 		
 		String strName = "";
-		switch(kind) {
+		switch(this.kind) {
 		case MANAGER:
 			strName = Messages.getString("LogView.columnManager");
 			break;
@@ -50,10 +52,12 @@ public class StringDialog extends Dialog {
 		case MESSAGE:
 			strName = Messages.getString("LogView.columnMessage");
 			break;
+		default:
+			break;
 		}
 		
 		Group compGroup = new Group(mainComposite, SWT.NONE);
-		compGroup.setLayout(new GridLayout(1, false));
+		compGroup.setLayout(new GridLayout(2, false));
 		compGroup.setText(strName);
 		GridData gd = new GridData();
 		gd.horizontalAlignment = SWT.FILL;
@@ -65,23 +69,33 @@ public class StringDialog extends Dialog {
 		gd.horizontalAlignment = SWT.FILL;
 		gd.grabExcessHorizontalSpace = true;
 		txtCond.setLayoutData(gd);
+		
+		chkRegExp = new Button(compGroup, SWT.CHECK);
+		chkRegExp.setText(Messages.getString("LogView.regexp"));
+		
 		switch(kind) {
 		case MANAGER:
 			if(targetParam.getManagerCond()!=null) {
 				txtCond.setText(targetParam.getManagerCond());
 			}
+			chkRegExp.setSelection(targetParam.isRegexpManager());
 			break;
 		case IDENTIFIER:
 			if(targetParam.getIdentifierCond()!=null) {
 				txtCond.setText(targetParam.getIdentifierCond());
 			}
+			chkRegExp.setSelection(targetParam.isRegexpIdentifier());
 			break;
 		case MESSAGE:
 			if(targetParam.getMessageCond()!=null) {
 				txtCond.setText(targetParam.getMessageCond());
 			}
+			chkRegExp.setSelection(targetParam.isRegexpMessage());
+			break;
+		default:
 			break;
 		}
+		
 		return mainComposite;
 	}
 
@@ -99,12 +113,17 @@ public class StringDialog extends Dialog {
 		switch(kind) {
 		case MANAGER:
 			targetParam.setManagerCond(txtCond.getText());
+			targetParam.setRegexpManager(chkRegExp.getSelection());
 			break;
 		case IDENTIFIER:
 			targetParam.setIdentifierCond(txtCond.getText());
+			targetParam.setRegexpIdentifier(chkRegExp.getSelection());
 			break;
 		case MESSAGE:
 			targetParam.setMessageCond(txtCond.getText());
+			targetParam.setRegexpMessage(chkRegExp.getSelection());
+			break;
+		default:
 			break;
 		}
 		super.okPressed();

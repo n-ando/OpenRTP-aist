@@ -85,39 +85,27 @@ public class TimeRangeDialog extends Dialog {
 		/////
 		chkFrom.setSelection(targetParam.isFrom());
 		if(chkFrom.getSelection()) {
-			String strFromData = targetParam.getFromDate();
-			String[] eachFD = strFromData.split("/");
-			if(eachFD.length==3) {
-				dtFromDate.setDate(Integer.parseInt(eachFD[0]),
-						Integer.parseInt(eachFD[1]),
-						Integer.parseInt(eachFD[2]));
-			}
-			
-			String strFromTime = targetParam.getFromTime();
-			String[] eachFT = strFromTime.split(":");
-			if(eachFT.length==3) {
-				dtFromTime.setTime(Integer.parseInt(eachFT[0]),
-						Integer.parseInt(eachFT[1]),
-						Integer.parseInt(eachFT[2]));
+			Calendar fromCal = targetParam.getFromCal();
+			if(fromCal!=null) {
+				dtFromDate.setDate(fromCal.get(Calendar.YEAR),
+									fromCal.get(Calendar.MONTH),
+									fromCal.get(Calendar.DATE));
+				dtFromTime.setTime(fromCal.get(Calendar.HOUR),
+									fromCal.get(Calendar.MINUTE),
+									fromCal.get(Calendar.SECOND));
 			}
 		}
 		
 		chkTo.setSelection(targetParam.isTo());
 		if(chkTo.getSelection()) {
-			String strToData = targetParam.getToDate();
-			String[] eachTD = strToData.split("/");
-			if(eachTD.length==3) {
-				dtToDate.setDate(Integer.parseInt(eachTD[0]),
-						Integer.parseInt(eachTD[1]),
-						Integer.parseInt(eachTD[2]));
-			}
-			
-			String strToTime = targetParam.getToTime();
-			String[] eachTT = strToTime.split(":");
-			if(eachTT.length==3) {
-				dtToTime.setTime(Integer.parseInt(eachTT[0]),
-						Integer.parseInt(eachTT[1]),
-						Integer.parseInt(eachTT[2]));
+			Calendar toCal = targetParam.getToCal();
+			if(toCal!=null) {
+				dtToDate.setDate(toCal.get(Calendar.YEAR),
+								toCal.get(Calendar.MONTH),
+								toCal.get(Calendar.DATE));
+				dtToTime.setTime(toCal.get(Calendar.HOUR),
+								toCal.get(Calendar.MINUTE),
+								toCal.get(Calendar.SECOND));
 			}
 		}
 
@@ -136,13 +124,13 @@ public class TimeRangeDialog extends Dialog {
 	@Override
 	protected void okPressed() {
 		targetParam.setFrom(chkFrom.getSelection());
+		Calendar cldFrom = Calendar.getInstance();
+		cldFrom.set(dtFromDate.getYear(), dtFromDate.getMonth(), dtFromDate.getDay(),
+				dtFromTime.getHours(), dtFromTime.getMinutes(), dtFromTime.getSeconds());
+		Calendar cldTo = Calendar.getInstance();
+		cldTo.set(dtToDate.getYear(), dtToDate.getMonth(), dtToDate.getDay(),
+				dtToTime.getHours(), dtToTime.getMinutes(), dtToTime.getSeconds());
 		if(chkFrom.getSelection() && chkTo.getSelection()) {
-			Calendar cldFrom = Calendar.getInstance();
-			cldFrom.set(dtFromDate.getYear(), dtFromDate.getMonth(), dtFromDate.getDay(),
-							dtFromTime.getHours(), dtFromTime.getMinutes(), dtFromTime.getSeconds());
-			Calendar cldTo = Calendar.getInstance();
-			cldTo.set(dtToDate.getYear(), dtToDate.getMonth(), dtToDate.getDay(),
-							dtToTime.getHours(), dtToTime.getMinutes(), dtToTime.getSeconds());
 			int diff = cldFrom.compareTo(cldTo);
 			if(0<diff) {
 				MessageDialog.openWarning(getShell(),
@@ -153,30 +141,16 @@ public class TimeRangeDialog extends Dialog {
 		}
 		
 		if(chkFrom.getSelection()) {
-			targetParam.setFromDate(
-					String.format("%04d",dtFromDate.getYear()) + "/"
-							+ String.format("%02d", dtFromDate.getMonth()) + "/"
-							+ String.format("%02d",dtFromDate.getDay()));
-			targetParam.setFromTime(
-					String.format("%02d",dtFromTime.getHours()) + ":"
-							+ String.format("%02d",dtFromTime.getMinutes()) + ":"
-							+ String.format("%02d",dtFromTime.getSeconds()));
+			targetParam.setFromCal(cldFrom);
 		} else {
-			targetParam.setFromDate("");
-			targetParam.setFromTime("");
+			targetParam.setFromCal(null);
 		}
 		
 		targetParam.setTo(chkTo.getSelection());
 		if(chkTo.getSelection()) {
-			targetParam.setToDate(String.format("%04d",dtToDate.getYear()) + "/"
-						+ String.format("%02d",dtToDate.getMonth()) + "/"
-						+ String.format("%02d",dtToDate.getDay()));
-			targetParam.setToTime(String.format("%02d",dtToTime.getHours()) + ":"
-						+ String.format("%02d",dtToTime.getMinutes()) + ":"
-						+ String.format("%02d",dtToTime.getSeconds()));
+			targetParam.setToCal(cldTo);
 		} else {
-			targetParam.setFromDate("");
-			targetParam.setFromTime("");
+			targetParam.setToCal(null);
 		}
 		
 		super.okPressed();
