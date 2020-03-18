@@ -26,22 +26,18 @@ public class LoggerHandler {
 	  stream -> {
     	  ObjectMapper mapper = new ObjectMapper();
 		  for (EventEntry entry : stream.getEntries()) {
-		      Value[] val = entry.getRecord().getKeyValueArray();
-		      for(Value each : val) {
-		    	  if(each.toString().equals("record") == false) continue;
-		    	  String rawData = each.toString();
-		          try {
-		        	  LogParam info = mapper.readValue(rawData, LogParam.class);
-				      PlatformUI.getWorkbench().getDisplay().asyncExec(new Runnable() {
-							public void run() {
-								logList.add(info);
-								logTable.refresh();
-							}
-						});
-		          } catch (IOException e) {
-		              e.printStackTrace();
-		          }		    	  
-		      }
+			  String rawData = entry.getRecord().toString();
+	          try {
+	        	  LogParam info = mapper.readValue(rawData, LogParam.class);
+			      PlatformUI.getWorkbench().getDisplay().asyncExec(new Runnable() {
+						public void run() {
+							logList.add(info);
+							logTable.refresh();
+						}
+					});
+	          } catch (IOException e) {
+	              e.printStackTrace();
+	          }		    	  
 		    }				  
 	  },
 	  Executors.newFixedThreadPool(1)
