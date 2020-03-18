@@ -85,110 +85,30 @@ public class LogView extends ViewPart {
 		GridLayout gl = new GridLayout();
 		gl.marginWidth = 0;
 		gl.marginHeight = 0;
-		gl.numColumns = 1;
+		gl.numColumns = 2;
 		parent.setLayout(gl);
 		
 		createControlPart(parent);
 		createRTCLogPart(parent);
+		createButtonPart(parent);
 		setSiteSelection();
 	}
 
-	private void createControlPart(Composite parent) {
+	private void createButtonPart(Composite parent) {
 		GridLayout gl;
 		GridData gd;
 		
 		Composite composite = new Composite(parent, SWT.FILL);
 		gd = new GridData();
 		gd.horizontalAlignment = SWT.FILL;
-		gd.grabExcessHorizontalSpace = true;
 		gd.horizontalSpan = 1;
 		composite.setLayoutData(gd);
 		
 		gl = new GridLayout();
 		gl.marginWidth = 0;
 		gl.marginHeight = 0;
-		gl.numColumns = 11;
+		gl.numColumns = 1;
 		composite.setLayout(gl);
-		
-		Label portNo = new Label(composite, SWT.NONE);
-		portNo.setText(Messages.getString("LogView.PortNo"));
-
-		Text txtPort = new Text(composite, SWT.BORDER);
-		gd = new GridData();
-		gd.widthHint = 100;
-		txtPort.setLayoutData(gd);
-		txtPort.setText("24224");
-		
-		Button btnStart = new Button(composite, SWT.TOGGLE);
-		gd = new GridData();
-		gd.widthHint = 80;
-		btnStart.setLayoutData(gd);
-		btnStart.setText(Messages.getString("LogView.btnStart"));
-		btnStart.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				if(btnStart.getSelection()) {
-					String strPort = txtPort.getText();
-					int portNo = Integer.parseInt(strPort);
-					handler = new LoggerHandler();
-					handler.startServer(portNo, rtclogTableViewer);
-					btnStart.setText(Messages.getString("LogView.btnStop"));
-				} else {
-					if(handler!=null) {
-						try {
-							handler.stopServer();
-						} catch (Exception ex) {
-						}
-					}
-					btnStart.setText(Messages.getString("LogView.btnStart"));
-				}
-			}
-		});
-		
-		Label lblDummuy01 = new Label(composite, SWT.NONE);
-		gd = new GridData();
-		gd.grabExcessHorizontalSpace = true;
-		lblDummuy01.setLayoutData(gd);
-		
-		Button chkFilter = new Button(composite, SWT.CHECK);
-		chkFilter.setText(Messages.getString("LogView.chkFilter"));
-		chkFilter.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				btnFilter.setEnabled(chkFilter.getSelection());
-				rtclogTableViewer.resetFilters();
-				if(chkFilter.getSelection()) {
-					rtclogTableViewer.addFilter(filter);
-				}
-			}
-		});
-
-		btnFilter = new Button(composite, SWT.NONE);
-		gd = new GridData();
-		gd.widthHint = 80;
-		btnFilter.setLayoutData(gd);
-		btnFilter.setText(Messages.getString("LogView.btnFilter"));
-		btnFilter.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				LogFilterDialog dialog = new LogFilterDialog(getSite().getShell());
-				dialog.setRootParam(filteringParam);
-				int open = dialog.open();
-				if (open != IDialogConstants.OK_ID) {
-					return;
-				}
-				filteringParam = dialog.getRootParam();
-				filter.setCondition(filteringParam);
-				rtclogTableViewer.resetFilters();
-				rtclogTableViewer.addFilter(filter);
-			}
-		});
-		btnFilter.setEnabled(false);
-		
-		Label lblDummuy02 = new Label(composite, SWT.NONE);
-		gd = new GridData();
-		gd.grabExcessHorizontalSpace = true;
-		lblDummuy02.setLayoutData(gd);
 		
 		Button btnClear = new Button(composite, SWT.NONE);
 		gd = new GridData();
@@ -310,6 +230,104 @@ public class LogView extends ViewPart {
 			}
 		});
 	}
+	
+	private void createControlPart(Composite parent) {
+		GridLayout gl;
+		GridData gd;
+		
+		Composite composite = new Composite(parent, SWT.FILL);
+		gd = new GridData();
+		gd.horizontalAlignment = SWT.FILL;
+		gd.grabExcessHorizontalSpace = true;
+		gd.horizontalSpan = 2;
+		composite.setLayoutData(gd);
+		
+		gl = new GridLayout();
+		gl.marginWidth = 0;
+		gl.marginHeight = 0;
+		gl.numColumns = 7;
+		composite.setLayout(gl);
+		
+		Label portNo = new Label(composite, SWT.NONE);
+		portNo.setText(Messages.getString("LogView.PortNo"));
+
+		Text txtPort = new Text(composite, SWT.BORDER);
+		gd = new GridData();
+		gd.widthHint = 100;
+		txtPort.setLayoutData(gd);
+		txtPort.setText("24224");
+		
+		Button btnStart = new Button(composite, SWT.TOGGLE);
+		gd = new GridData();
+		gd.widthHint = 80;
+		btnStart.setLayoutData(gd);
+		btnStart.setText(Messages.getString("LogView.btnStart"));
+		btnStart.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				if(btnStart.getSelection()) {
+					String strPort = txtPort.getText();
+					int portNo = Integer.parseInt(strPort);
+					handler = new LoggerHandler();
+					handler.startServer(portNo, rtclogTableViewer);
+					btnStart.setText(Messages.getString("LogView.btnStop"));
+				} else {
+					if(handler!=null) {
+						try {
+							handler.stopServer();
+						} catch (Exception ex) {
+						}
+					}
+					btnStart.setText(Messages.getString("LogView.btnStart"));
+				}
+			}
+		});
+		
+		Label lblDummuy01 = new Label(composite, SWT.NONE);
+		gd = new GridData();
+		gd.widthHint = 100;
+		lblDummuy01.setLayoutData(gd);
+		
+		Button chkFilter = new Button(composite, SWT.CHECK);
+		chkFilter.setText(Messages.getString("LogView.chkFilter"));
+		chkFilter.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				btnFilter.setEnabled(chkFilter.getSelection());
+				rtclogTableViewer.resetFilters();
+				if(chkFilter.getSelection()) {
+					rtclogTableViewer.addFilter(filter);
+				}
+			}
+		});
+
+		btnFilter = new Button(composite, SWT.NONE);
+		gd = new GridData();
+		gd.widthHint = 80;
+		btnFilter.setLayoutData(gd);
+		btnFilter.setText(Messages.getString("LogView.btnFilter"));
+		btnFilter.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				LogFilterDialog dialog = new LogFilterDialog(getSite().getShell());
+				dialog.setRootParam(filteringParam);
+				int open = dialog.open();
+				if (open != IDialogConstants.OK_ID) {
+					return;
+				}
+				filteringParam = dialog.getRootParam();
+				filter.setCondition(filteringParam);
+				rtclogTableViewer.resetFilters();
+				rtclogTableViewer.addFilter(filter);
+			}
+		});
+		btnFilter.setEnabled(false);
+		
+		Label lblDummuy02 = new Label(composite, SWT.NONE);
+		gd = new GridData();
+		gd.grabExcessHorizontalSpace = true;
+		lblDummuy02.setLayoutData(gd);
+	}
 
 	Composite createRTCLogPart(Composite parent) {
 		GridLayout gl;
@@ -321,7 +339,7 @@ public class LogView extends ViewPart {
 		gd.horizontalAlignment = SWT.FILL;
 		gd.grabExcessVerticalSpace = true;
 		gd.grabExcessHorizontalSpace = true;
-		gd.horizontalSpan = 5;
+		gd.horizontalSpan = 1;
 		composite.setLayoutData(gd);
 		
 		gl = new GridLayout();

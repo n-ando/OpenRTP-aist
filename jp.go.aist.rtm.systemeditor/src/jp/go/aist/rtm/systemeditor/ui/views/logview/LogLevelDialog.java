@@ -20,7 +20,6 @@ public class LogLevelDialog extends Dialog {
 	private Button chkError;
 	private Button chkWarn;
 	private Button chkInfo;
-	private Button chkNormal;
 	private Button chkDebug;
 	private Button chkTrace;
 	private Button chkVerbose;
@@ -53,7 +52,6 @@ public class LogLevelDialog extends Dialog {
 		chkError = createCheckBox(compGroup, "ERROR");
 		chkWarn = createCheckBox(compGroup, "WARN");
 		chkInfo = createCheckBox(compGroup, "INFO");
-		chkNormal = createCheckBox(compGroup, "NORMAL");
 		chkDebug = createCheckBox(compGroup, "DEBUG");
 		chkTrace = createCheckBox(compGroup, "TRACE");
 		chkVerbose = createCheckBox(compGroup, "VERBOSE");
@@ -82,7 +80,7 @@ public class LogLevelDialog extends Dialog {
 	}
 	
 	protected Point getInitialSize() {
-		return new Point(650, 130);
+		return new Point(600, 130);
 	}
 	@Override
 	protected void okPressed() {
@@ -99,9 +97,6 @@ public class LogLevelDialog extends Dialog {
 		}
 		if(chkInfo.getSelection()) {
 			targetParam.getLevelList().add("INFO");
-		}
-		if(chkNormal.getSelection()) {
-			targetParam.getLevelList().add("NORMAL");
 		}
 		if(chkDebug.getSelection()) {
 			targetParam.getLevelList().add("DEBUG");
