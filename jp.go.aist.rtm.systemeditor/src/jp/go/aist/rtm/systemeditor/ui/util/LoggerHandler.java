@@ -26,27 +26,10 @@ public class LoggerHandler {
 	  stream -> {
     	  ObjectMapper mapper = new ObjectMapper();
 		  for (EventEntry entry : stream.getEntries()) {
-//			  String json = entry.getRecord().toJson();
-//	          try {
-//	        	  LogParam info = mapper.readValue(json, LogParam.class);
-//			      PlatformUI.getWorkbench().getDisplay().asyncExec(new Runnable() {
-//						public void run() {
-//							logList.add(info);
-//							logTable.refresh();
-//						}
-//					});
-//	          } catch (IOException e) {
-//	              e.printStackTrace();
-//	          }		    	  
-			  
 		      Value[] val = entry.getRecord().getKeyValueArray();
 		      for(Value each : val) {
-		    	  if(each.toString().equals("log")) continue;
-		    	  String entireData = each.toString();
-		    	  int startPos = entireData.indexOf("{");
-		    	  int endPos = entireData.lastIndexOf("}");
-		    	  String rawData = entireData.substring(startPos, endPos + 1);
-//		    	  ObjectMapper mapper = new ObjectMapper();
+		    	  if(each.toString().equals("record") == false) continue;
+		    	  String rawData = each.toString();
 		          try {
 		        	  LogParam info = mapper.readValue(rawData, LogParam.class);
 				      PlatformUI.getWorkbench().getDisplay().asyncExec(new Runnable() {
