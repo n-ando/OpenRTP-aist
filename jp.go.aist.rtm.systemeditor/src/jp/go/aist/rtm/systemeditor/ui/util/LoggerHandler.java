@@ -24,14 +24,20 @@ public class LoggerHandler {
 	
 	ForwardCallback callback = ForwardCallback.ofSyncConsumer(
 	  stream -> {
-//		  String tag = stream.getTag().getName();
+    	  ObjectMapper mapper = new ObjectMapper();
 		  for (EventEntry entry : stream.getEntries()) {
-//			  String strRaw = entry.getTime().toString() + " " + entry.getRecord().toJson();
-//		      long time = entry.getTime().toEpochMilli();
-//		      String json = entry.getRecord().toJson();
-//			  System.out.println();
-//			  System.out.println("time:" + time);
-//			  System.out.println("json:" + json);
+//			  String json = entry.getRecord().toJson();
+//	          try {
+//	        	  LogParam info = mapper.readValue(json, LogParam.class);
+//			      PlatformUI.getWorkbench().getDisplay().asyncExec(new Runnable() {
+//						public void run() {
+//							logList.add(info);
+//							logTable.refresh();
+//						}
+//					});
+//	          } catch (IOException e) {
+//	              e.printStackTrace();
+//	          }		    	  
 			  
 		      Value[] val = entry.getRecord().getKeyValueArray();
 		      for(Value each : val) {
@@ -40,7 +46,7 @@ public class LoggerHandler {
 		    	  int startPos = entireData.indexOf("{");
 		    	  int endPos = entireData.lastIndexOf("}");
 		    	  String rawData = entireData.substring(startPos, endPos + 1);
-		    	  ObjectMapper mapper = new ObjectMapper();
+//		    	  ObjectMapper mapper = new ObjectMapper();
 		          try {
 		        	  LogParam info = mapper.readValue(rawData, LogParam.class);
 				      PlatformUI.getWorkbench().getDisplay().asyncExec(new Runnable() {
@@ -52,7 +58,6 @@ public class LoggerHandler {
 		          } catch (IOException e) {
 		              e.printStackTrace();
 		          }		    	  
-//				  System.out.println("logContents:" + each.toString());
 		      }
 		    }				  
 	  },
