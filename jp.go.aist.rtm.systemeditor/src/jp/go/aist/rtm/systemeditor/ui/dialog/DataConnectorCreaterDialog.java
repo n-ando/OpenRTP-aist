@@ -135,7 +135,7 @@ public class DataConnectorCreaterDialog extends ConnectorDialogBase {
 		mainComposite.setLayoutData(gd);
 
 		Label label = createLabel(mainComposite, Messages
-				.getString("DataConnectorCreaterDialog.1"));
+				.getString("ConnectorCreaterDialogBase.1"));
 		GridData labelLayloutData = new GridData(
 				GridData.HORIZONTAL_ALIGN_BEGINNING);
 		label.setLayoutData(labelLayloutData);
