@@ -1,9 +1,23 @@
 package jp.go.aist.rtm.systemeditor.ui.views.logview;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVPrinter;
+import org.apache.commons.csv.CSVRecord;
+import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -15,7 +29,6 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
-import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -26,13 +39,20 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.part.ViewPart;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import jp.go.aist.rtm.systemeditor.nl.Messages;
 import jp.go.aist.rtm.systemeditor.ui.util.LoggerHandler;
 import jp.go.aist.rtm.toolscommon.model.component.SystemDiagram;
 import jp.go.aist.rtm.toolscommon.model.component.SystemDiagramKind;
@@ -43,14 +63,15 @@ public class LogView extends ViewPart {
 
 	private TableViewer rtclogTableViewer;
 	private Table rtclogTable;
-	private Button btnRaw;
-	private Text txtSearch;
+	private Button btnFilter ;
 
 	private SystemDiagram targetDiagram;
 
 	private LogViewerFilter filter;
 	private LogLabelProvider provider;
 	private List<LogParam> logList = new ArrayList<LogParam>();
+	
+	private FilteringParam filteringParam = null;
 
 	public LogView() {
 	}
@@ -64,14 +85,152 @@ public class LogView extends ViewPart {
 		GridLayout gl = new GridLayout();
 		gl.marginWidth = 0;
 		gl.marginHeight = 0;
-		gl.numColumns = 1;
+		gl.numColumns = 2;
 		parent.setLayout(gl);
 		
 		createControlPart(parent);
 		createRTCLogPart(parent);
+		createButtonPart(parent);
 		setSiteSelection();
 	}
 
+	private void createButtonPart(Composite parent) {
+		GridLayout gl;
+		GridData gd;
+		
+		Composite composite = new Composite(parent, SWT.FILL);
+		gd = new GridData();
+		gd.horizontalAlignment = SWT.FILL;
+		gd.horizontalSpan = 1;
+		composite.setLayoutData(gd);
+		
+		gl = new GridLayout();
+		gl.marginWidth = 0;
+		gl.marginHeight = 0;
+		gl.numColumns = 1;
+		composite.setLayout(gl);
+		
+		Button btnClear = new Button(composite, SWT.NONE);
+		gd = new GridData();
+		gd.widthHint = 80;
+		btnClear.setLayoutData(gd);
+		btnClear.setText(Messages.getString("LogView.btnClear"));
+		btnClear.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				logList.clear();
+				rtclogTableViewer.refresh();
+			}
+		});
+		
+		Label lblDummuy03 = new Label(composite, SWT.NONE);
+		gd = new GridData();
+		gd.grabExcessHorizontalSpace = true;
+		lblDummuy03.setLayoutData(gd);
+		
+		Button btnLoad = new Button(composite, SWT.NONE);
+		gd = new GridData();
+		gd.widthHint = 80;
+		btnLoad.setLayoutData(gd);
+		btnLoad.setText(Messages.getString("LogView.btnLoad"));
+		btnLoad.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				String[] ext = {"*.json", "*.csv", "*.*"};
+				FileDialog loadDialog = new FileDialog(getSite().getShell(), SWT.OPEN);
+				loadDialog.setFilterExtensions(ext);
+				String loadFile = loadDialog.open();
+				if(loadFile==null) return;
+				
+				logList.clear();
+				if(loadFile.endsWith("csv")) {
+					try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(new File(loadFile))))) {
+			            CSVParser parse = CSVFormat.EXCEL.parse(br);
+			            List<CSVRecord> recordList = parse.getRecords();
+			            for (CSVRecord record : recordList) {
+			            	LogParam info = new LogParam();
+							logList.add(info);
+			            	if(record.isSet(0)) info.setTime(record.get(0));
+			            	if(record.isSet(1)) info.setLevel(record.get(1));
+			            	if(record.isSet(2)) info.setManager(record.get(2));
+			            	if(record.isSet(3)) info.setName(record.get(3));
+			            	if(record.isSet(4)) info.setMessage(record.get(4));
+			            }
+			        } catch (UnsupportedEncodingException e1) {
+			        } catch (FileNotFoundException e2) {
+			        } catch (IOException e3) {
+			        }					
+				} else {
+					ObjectMapper mapper = new ObjectMapper();
+					try {
+						File file = new File(loadFile);
+						BufferedReader br = new BufferedReader(new FileReader(file));
+						String str;
+						while((str = br.readLine()) != null){
+							LogParam info = mapper.readValue(str, LogParam.class);
+							logList.add(info);
+						}
+					  	br.close();
+					}catch(FileNotFoundException e1){
+					}catch(IOException e2){
+					}
+				}
+				rtclogTableViewer.refresh();
+			}
+		});
+		
+		Button btnSave = new Button(composite, SWT.NONE);
+		gd = new GridData();
+		gd.widthHint = 80;
+		btnSave.setLayoutData(gd);
+		btnSave.setText(Messages.getString("LogView.btnSave"));
+		btnSave.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				String[] ext = {"*.json", "*.csv", "*.*"};
+				FileDialog saveDialog = new FileDialog(getSite().getShell(), SWT.SAVE);
+				saveDialog.setFilterExtensions(ext);
+				String saveFile = saveDialog.open();
+				if(saveFile==null) return;
+				
+				if(saveFile.endsWith("csv")) {
+					try (CSVPrinter printer = new CSVPrinter(new FileWriter(saveFile), CSVFormat.EXCEL)) {
+						for(int index=0; index<rtclogTable.getItemCount(); index++) {
+							TableItem item = rtclogTable.getItem(index);
+							LogParam param = (LogParam)item.getData();
+							printer.printRecord(param.getTime(), param.getLevel(), param.getManager(), param.getName(), param.getMessage());
+						}
+					} catch (IOException ex) {
+					    ex.printStackTrace();
+					}					
+				} else {
+					StringBuilder builder = new StringBuilder();
+					ObjectMapper mapper = new ObjectMapper();
+					for(int index=0; index<rtclogTable.getItemCount(); index++) {
+						TableItem item = rtclogTable.getItem(index);
+						LogParam param = (LogParam)item.getData();
+						 try {
+							String strLog = mapper.writeValueAsString(param);
+							builder.append(strLog).append(System.lineSeparator());
+						} catch (JsonProcessingException e1) {
+						}
+					}
+					try{
+						File file = new File(saveFile);
+						FileWriter filewriter = new FileWriter(file);
+						filewriter.write(builder.toString());
+						filewriter.close();
+					} catch (IOException ex) {
+					}
+				}
+				//
+				MessageDialog.openInformation(getSite().getShell(),
+						Messages.getString("LogView.btnSave"),
+						Messages.getString("LogView.msgSave"));
+			}
+		});
+	}
+	
 	private void createControlPart(Composite parent) {
 		GridLayout gl;
 		GridData gd;
@@ -80,17 +239,17 @@ public class LogView extends ViewPart {
 		gd = new GridData();
 		gd.horizontalAlignment = SWT.FILL;
 		gd.grabExcessHorizontalSpace = true;
-		gd.horizontalSpan = 1;
+		gd.horizontalSpan = 2;
 		composite.setLayoutData(gd);
 		
 		gl = new GridLayout();
 		gl.marginWidth = 0;
 		gl.marginHeight = 0;
-		gl.numColumns = 6;
+		gl.numColumns = 7;
 		composite.setLayout(gl);
 		
 		Label portNo = new Label(composite, SWT.NONE);
-		portNo.setText("PortNo:");
+		portNo.setText(Messages.getString("LogView.PortNo"));
 
 		Text txtPort = new Text(composite, SWT.BORDER);
 		gd = new GridData();
@@ -100,9 +259,9 @@ public class LogView extends ViewPart {
 		
 		Button btnStart = new Button(composite, SWT.TOGGLE);
 		gd = new GridData();
-		gd.widthHint = 50;
+		gd.widthHint = 80;
 		btnStart.setLayoutData(gd);
-		btnStart.setText("Start");
+		btnStart.setText(Messages.getString("LogView.btnStart"));
 		btnStart.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -110,8 +269,8 @@ public class LogView extends ViewPart {
 					String strPort = txtPort.getText();
 					int portNo = Integer.parseInt(strPort);
 					handler = new LoggerHandler();
-					handler.startServer(portNo, logList, rtclogTableViewer);
-					btnStart.setText("Stop");
+					handler.startServer(portNo, rtclogTableViewer);
+					btnStart.setText(Messages.getString("LogView.btnStop"));
 				} else {
 					if(handler!=null) {
 						try {
@@ -119,46 +278,55 @@ public class LogView extends ViewPart {
 						} catch (Exception ex) {
 						}
 					}
-					btnStart.setText("Start");
+					btnStart.setText(Messages.getString("LogView.btnStart"));
+				}
+			}
+		});
+		
+		Label lblDummuy01 = new Label(composite, SWT.NONE);
+		gd = new GridData();
+		gd.widthHint = 100;
+		lblDummuy01.setLayoutData(gd);
+		
+		Button chkFilter = new Button(composite, SWT.CHECK);
+		chkFilter.setText(Messages.getString("LogView.chkFilter"));
+		chkFilter.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				btnFilter.setEnabled(chkFilter.getSelection());
+				rtclogTableViewer.resetFilters();
+				if(chkFilter.getSelection()) {
+					rtclogTableViewer.addFilter(filter);
 				}
 			}
 		});
 
-		btnRaw = new Button(composite, SWT.CHECK);
-		btnRaw.setText("Raw Data");
-		btnRaw.addSelectionListener(new SelectionAdapter() {
+		btnFilter = new Button(composite, SWT.NONE);
+		gd = new GridData();
+		gd.widthHint = 80;
+		btnFilter.setLayoutData(gd);
+		btnFilter.setText(Messages.getString("LogView.btnFilter"));
+		btnFilter.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				provider.setRaw(btnRaw.getSelection());
-				filter.setRaw(btnRaw.getSelection());
-				rtclogTableViewer.refresh();
-			}
-		});
-		
-		txtSearch = new Text(composite, SWT.BORDER);
-		gd = new GridData();
-		gd.horizontalAlignment = SWT.FILL;
-		gd.grabExcessHorizontalSpace  = true;
-		txtSearch.setLayoutData(gd);
-		
-		Button btnSearch = new Button(composite, SWT.NONE);
-		gd = new GridData();
-		gd.widthHint = 50;
-		btnSearch.setLayoutData(gd);
-		btnSearch.setText("Search");
-		btnSearch.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				String strSearch = txtSearch.getText();
-				if(strSearch.trim().length()==0) {
-					filter.words = new ArrayList<String>();
-				} else {
-					String[] words = strSearch.split(" ");
-					filter.words = Arrays.asList(words);
+				LogFilterDialog dialog = new LogFilterDialog(getSite().getShell());
+				dialog.setRootParam(filteringParam);
+				int open = dialog.open();
+				if (open != IDialogConstants.OK_ID) {
+					return;
 				}
-				rtclogTableViewer.refresh();
+				filteringParam = dialog.getRootParam();
+				filter.setCondition(filteringParam);
+				rtclogTableViewer.resetFilters();
+				rtclogTableViewer.addFilter(filter);
 			}
 		});
+		btnFilter.setEnabled(false);
+		
+		Label lblDummuy02 = new Label(composite, SWT.NONE);
+		gd = new GridData();
+		gd.grabExcessHorizontalSpace = true;
+		lblDummuy02.setLayoutData(gd);
 	}
 
 	Composite createRTCLogPart(Composite parent) {
@@ -171,7 +339,7 @@ public class LogView extends ViewPart {
 		gd.horizontalAlignment = SWT.FILL;
 		gd.grabExcessVerticalSpace = true;
 		gd.grabExcessHorizontalSpace = true;
-		gd.horizontalSpan = 5;
+		gd.horizontalSpan = 1;
 		composite.setLayoutData(gd);
 		
 		gl = new GridLayout();
@@ -199,19 +367,33 @@ public class LogView extends ViewPart {
 		rtclogTable.setLayoutData(gd);
 		rtclogTable.setHeaderVisible(true);
 
-		createColumn(rtclogTableViewer, "message", 700);
+		createColumn(rtclogTableViewer, Messages.getString("LogView.columnTime"), 120, true);
+		createColumn(rtclogTableViewer, Messages.getString("LogView.columnLevel"), 100, true);
+		createColumn(rtclogTableViewer, Messages.getString("LogView.columnManager"), 120, false);
+		createColumn(rtclogTableViewer, Messages.getString("LogView.columnID"), 120, false);
+		createColumn(rtclogTableViewer, Messages.getString("LogView.columnMessage"), 250, false);
 		
 		provider = new LogLabelProvider();
 		rtclogTableViewer.setLabelProvider(provider);
-
+		rtclogTableViewer.setComparator(new LogSorter(rtclogTableViewer));
+		
 		return composite;
 	}
 
-	TableViewerColumn createColumn(TableViewer viewer, String title, int width) {
+	TableViewerColumn createColumn(TableViewer viewer, String title, int width, boolean canSort) {
 		TableViewerColumn col;
 		col = new TableViewerColumn(viewer, SWT.NONE);
 		col.getColumn().setText(title);
 		col.getColumn().setWidth(width);
+		if(canSort) {
+			col.getColumn().addSelectionListener(new SelectionAdapter() {
+				public void widgetSelected(SelectionEvent e) {
+					LogSorter sorter = (LogSorter) viewer.getComparator();
+					TableColumn selectedColumn = (TableColumn) e.widget;
+					sorter.setColumn(selectedColumn);
+				}
+			});
+		}
 		return col;
 	}
 
@@ -224,38 +406,9 @@ public class LogView extends ViewPart {
 	public void setFocus() {
 	}
 
-	/** ログ一覧表示のViewerFilter */
-	public class LogViewerFilter extends ViewerFilter {
-		List<String> words = new ArrayList<String>();
-		private boolean isRaw;
-		
-		public void setRaw(boolean isRaw) {
-			this.isRaw = isRaw;
-		}
-
-		@Override
-		public boolean select(Viewer viewer, Object parentElement, Object element) {
-			if(words.size()==0) return true;
-			
-			LogParam entry = (LogParam) element;
-			String target = entry.getMessage();
-			if(isRaw) target = entry.getRaw_message();
-			for(String word : words) {
-				if(target.contains(word)==false) return false;
-			}
-			return true;
-		}
-	}
-
 	/** ログ一覧表示のLabelProvider */
 	public class LogLabelProvider extends LabelProvider implements
 			ITableLabelProvider, ITableColorProvider {
-		private boolean isRaw;
-		
-		public void setRaw(boolean isRaw) {
-			this.isRaw = isRaw;
-		}
-
 		@Override
 		public Image getColumnImage(Object element, int columnIndex) {
 			return null;
@@ -264,9 +417,16 @@ public class LogView extends ViewPart {
 		@Override
 		public String getColumnText(Object element, int columnIndex) {
 			LogParam entry = (LogParam) element;
-			if(isRaw) {
-				return entry.getRaw_message();
-			} else {
+			switch(columnIndex) {
+			case 0:
+				return entry.getTime();
+			case 1:
+				return entry.getLevel().toString();
+			case 2:
+				return entry.getManager();
+			case 3:
+				return entry.getName();
+			default:
 				return entry.getMessage();
 			}
 		}
@@ -281,7 +441,7 @@ public class LogView extends ViewPart {
 			return null;
 		}
 	}
-
+	
 	ISelectionListener selectionListener = new ISelectionListener() {
 		@Override
 		public void selectionChanged(IWorkbenchPart part, ISelection selection) {
