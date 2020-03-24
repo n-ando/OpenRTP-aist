@@ -179,7 +179,7 @@ public class ProfileInformationDialog extends Dialog {
 		checkButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				FileDialog dialog = new FileDialog(getShell());
+				FileDialog dialog = new FileDialog(getShell(), SWT.SAVE);
 				dialog.setFilterExtensions(new String[] { "*.xml" }); //$NON-NLS-1$
 				if (txtPathLocal.getText().length() > 0)
 					dialog.setFileName(txtPathLocal.getText());
