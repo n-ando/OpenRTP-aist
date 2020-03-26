@@ -29,8 +29,6 @@ import org.eclipse.ui.views.properties.IPropertySource;
  * <!-- begin-user-doc -->
  * An implementation of the model object '<em><b>Context Handler</b></em>'.
  * <!-- end-user-doc -->
- * <p>
- * </p>
  *
  * @generated
  */

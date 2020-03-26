@@ -1,5 +1,6 @@
 package jp.go.aist.rtm.systemeditor.ui.dialog;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -11,6 +12,7 @@ import jp.go.aist.rtm.toolscommon.model.component.ConnectorProfile;
 import jp.go.aist.rtm.toolscommon.model.component.InPort;
 import jp.go.aist.rtm.toolscommon.model.component.OutPort;
 import jp.go.aist.rtm.toolscommon.util.ConnectorUtil;
+import jp.go.aist.rtm.toolscommon.util.SDOUtil;
 
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IMessageProvider;
@@ -67,6 +69,11 @@ public class DataConnectorCreaterDialog extends ConnectorDialogBase {
 
 	Composite detailComposite;
 	Point defaultDialogSize;
+	
+	private Combo serializerTypeCombo;
+	private Combo outPortCombo;
+	private Combo inPortCombo;
+	
 	private ConnectorProfile connectorProfile;
 	private ConnectorProfile dialogResult;
 	private OutPort outport;
@@ -425,7 +432,46 @@ public class DataConnectorCreaterDialog extends ConnectorDialogBase {
 		detailComposite.setLayout(gl);
 		detailComposite.setLayoutData(gd);
 		detailComposite.setVisible(false);
-
+		
+		// Serializer Type Policy
+		Composite serializerComposite = new Composite(detailComposite, SWT.NONE);
+		gl = new GridLayout(4, false);
+		gd = new GridData(GridData.FILL_BOTH);
+		gd.horizontalSpan = 2;
+		serializerComposite.setLayout(gl);
+		serializerComposite.setLayoutData(gd);
+		
+		createLabel(serializerComposite, "Serializer Type :");
+		int style = SWT.DROP_DOWN | SWT.READ_ONLY;
+		serializerTypeCombo = new Combo(serializerComposite, style);
+		gd = new GridData();
+		gd.horizontalSpan = 3;
+		serializerTypeCombo.setLayoutData(gd);
+		
+		createLabel(serializerComposite, "OutPort Serializer :");
+		outPortCombo = new Combo(serializerComposite, style);
+		gd = new GridData(GridData.FILL_BOTH);
+		gd.grabExcessHorizontalSpace = true;
+		outPortCombo.setLayoutData(gd);
+		outPortCombo.addModifyListener(new ModifyListener() {
+			public void modifyText(ModifyEvent e) {
+				connectorProfile.setOutportSerializerType(outPortCombo.getText());
+				notifyModified();
+			}
+		});
+		
+		createLabel(serializerComposite, "InPort Serializer :");
+		inPortCombo = new Combo(serializerComposite, style);
+		gd = new GridData(GridData.FILL_BOTH);
+		gd.grabExcessHorizontalSpace = true;
+		inPortCombo.setLayoutData(gd);
+		inPortCombo.addModifyListener(new ModifyListener() {
+			public void modifyText(ModifyEvent e) {
+				connectorProfile.setInportSerializerType(inPortCombo.getText());
+				notifyModified();
+			}
+		});
+		/////
 		ob = new BufferPackage();
 		createBufferComposite(detailComposite, "Buffer (Outport)", ob);
 
@@ -661,7 +707,7 @@ public class DataConnectorCreaterDialog extends ConnectorDialogBase {
 		value = loadCombo(pushPolicyCombo, types, connectorProfile
 				.getPushPolicy(), isAllowAny);
 		connectorProfile.setPushPolicy(value);
-
+		
 		loadDetailData();
 	}
 
@@ -685,6 +731,52 @@ public class DataConnectorCreaterDialog extends ConnectorDialogBase {
 		} else {
 			fullTypes = Arrays.asList(preference.getBufferFullPolicies());
 			emptyTypes = Arrays.asList(preference.getBufferEmptyPolicies());
+		}
+		
+		String outportSer = outport.getProperty("dataport.serializer_type");
+		List<String> outSerList = SDOUtil.getValueList(outportSer);
+		String inportSer = inport.getProperty("dataport.serializer_type");
+		List<String> inSerList = SDOUtil.getValueList(inportSer);
+		
+		if(serializerTypeCombo != null) {
+			List<String> typeList = new ArrayList<String>();
+			typeList.add("corba");
+			
+			List<String> outTypeList = new ArrayList<String>();
+			for(String serType : outSerList) {
+				if(serType == null) continue;
+				if(serType.contains(":")  == false) continue;
+				String[] types = serType.split(":");
+				if( types.length < 1 ) continue;
+				if(outTypeList.contains(types[0].trim())==false) {
+					outTypeList.add(types[0].trim());
+				}
+			}
+			for(String serType : inSerList) {
+				if(serType == null) continue;
+				if(serType.contains(":")  == false) continue;
+				String[] types = serType.split(":");
+				if( types.length < 1 ) continue;
+				if(outTypeList.contains(types[0].trim())) {
+					if(typeList.contains(types[0].trim())==false) {
+						typeList.add(types[0].trim());
+					}
+				}
+			}
+			for(String serType : typeList) {
+				serializerTypeCombo.add(serType);
+			}
+			serializerTypeCombo.select(0);
+		}
+		if(outPortCombo != null) {
+			value = loadCombo(outPortCombo, outSerList, connectorProfile
+					.getOutportSerializerType(), false);
+			connectorProfile.setOutportSerializerType(value);
+		}
+		if(inPortCombo != null) {
+			value = loadCombo(inPortCombo, inSerList, connectorProfile
+					.getInportSerializerType(), false);
+			connectorProfile.setInportSerializerType(value);
 		}
 
 		if (ob != null && ob.enable) {
@@ -789,6 +881,7 @@ public class DataConnectorCreaterDialog extends ConnectorDialogBase {
 	protected void configureShell(Shell shell) {
 		super.configureShell(shell);
 		shell.setText("Connector Profile"); //$NON-NLS-1$
+		this.setHelpAvailable(false);
 	}
 
 	@SuppressWarnings("unchecked")

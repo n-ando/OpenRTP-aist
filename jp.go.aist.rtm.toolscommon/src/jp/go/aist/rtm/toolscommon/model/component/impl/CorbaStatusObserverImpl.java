@@ -47,8 +47,6 @@ import jp.go.aist.rtm.toolscommon.model.component.util.ICorbaPortEventObserver;
  * <!-- begin-user-doc -->
  * An implementation of the model object '<em><b>Corba Status Observer</b></em>'.
  * <!-- end-user-doc -->
- * <p>
- * </p>
  *
  * @generated
  */

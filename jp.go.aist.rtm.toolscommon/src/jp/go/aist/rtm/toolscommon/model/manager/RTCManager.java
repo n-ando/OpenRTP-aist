@@ -24,6 +24,7 @@ import RTM.ModuleProfile;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link jp.go.aist.rtm.toolscommon.model.manager.RTCManager#getManagerProfile <em>Manager Profile</em>}</li>
  *   <li>{@link jp.go.aist.rtm.toolscommon.model.manager.RTCManager#getInstanceNameL <em>Instance Name L</em>}</li>
@@ -37,7 +38,6 @@ import RTM.ModuleProfile;
  *   <li>{@link jp.go.aist.rtm.toolscommon.model.manager.RTCManager#getSlaveManagers <em>Slave Managers</em>}</li>
  *   <li>{@link jp.go.aist.rtm.toolscommon.model.manager.RTCManager#getConfiguratoins <em>Configuratoins</em>}</li>
  * </ul>
- * </p>
  *
  * @see jp.go.aist.rtm.toolscommon.model.manager.ManagerPackage#getRTCManager()
  * @model

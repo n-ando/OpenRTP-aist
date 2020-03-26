@@ -31,13 +31,13 @@ import org.eclipse.ui.views.properties.IPropertySource;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link jp.go.aist.rtm.toolscommon.model.component.impl.PortConnectorImpl#getConnectorProfile <em>Connector Profile</em>}</li>
  *   <li>{@link jp.go.aist.rtm.toolscommon.model.component.impl.PortConnectorImpl#getRoutingConstraint <em>Routing Constraint</em>}</li>
  *   <li>{@link jp.go.aist.rtm.toolscommon.model.component.impl.PortConnectorImpl#getSource <em>Source</em>}</li>
  *   <li>{@link jp.go.aist.rtm.toolscommon.model.component.impl.PortConnectorImpl#getTarget <em>Target</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

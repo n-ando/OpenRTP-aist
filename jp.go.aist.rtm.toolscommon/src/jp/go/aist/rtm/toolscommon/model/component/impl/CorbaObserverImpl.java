@@ -36,11 +36,11 @@ import _SDOPackage.ServiceProfile;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link jp.go.aist.rtm.toolscommon.model.component.impl.CorbaObserverImpl#getServiceProfile <em>Service Profile</em>}</li>
  *   <li>{@link jp.go.aist.rtm.toolscommon.model.component.impl.CorbaObserverImpl#getServant <em>Servant</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

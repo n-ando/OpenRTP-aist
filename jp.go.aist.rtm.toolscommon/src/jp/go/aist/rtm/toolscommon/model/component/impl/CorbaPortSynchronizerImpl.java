@@ -45,11 +45,11 @@ import _SDOPackage.NameValue;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link jp.go.aist.rtm.toolscommon.model.component.impl.CorbaPortSynchronizerImpl#getOriginalPortString <em>Original Port String</em>}</li>
  *   <li>{@link jp.go.aist.rtm.toolscommon.model.component.impl.CorbaPortSynchronizerImpl#getRTCPortProfile <em>RTC Port Profile</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

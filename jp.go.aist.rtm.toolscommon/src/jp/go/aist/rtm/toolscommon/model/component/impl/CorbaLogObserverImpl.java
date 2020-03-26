@@ -23,8 +23,6 @@ import static jp.go.aist.rtm.toolscommon.util.RTMixin.*;
  * <!-- begin-user-doc -->
  * An implementation of the model object '<em><b>Corba Log Observer</b></em>'.
  * <!-- end-user-doc -->
- * <p>
- * </p>
  *
  * @generated
  */

@@ -49,6 +49,7 @@ import org.slf4j.LoggerFactory;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link jp.go.aist.rtm.toolscommon.model.component.impl.ComponentImpl#getConfigurationSets <em>Configuration Sets</em>}</li>
  *   <li>{@link jp.go.aist.rtm.toolscommon.model.component.impl.ComponentImpl#getActiveConfigurationSet <em>Active Configuration Set</em>}</li>
@@ -82,7 +83,6 @@ import org.slf4j.LoggerFactory;
  *   <li>{@link jp.go.aist.rtm.toolscommon.model.component.impl.ComponentImpl#getInitialize <em>Initialize</em>}</li>
  *   <li>{@link jp.go.aist.rtm.toolscommon.model.component.impl.ComponentImpl#getFinalize <em>Finalize</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

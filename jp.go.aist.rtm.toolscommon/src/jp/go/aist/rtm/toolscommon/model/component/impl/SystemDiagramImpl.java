@@ -49,6 +49,7 @@ import org.slf4j.LoggerFactory;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link jp.go.aist.rtm.toolscommon.model.component.impl.SystemDiagramImpl#getComponents <em>Components</em>}</li>
  *   <li>{@link jp.go.aist.rtm.toolscommon.model.component.impl.SystemDiagramImpl#getKind <em>Kind</em>}</li>
@@ -59,7 +60,6 @@ import org.slf4j.LoggerFactory;
  *   <li>{@link jp.go.aist.rtm.toolscommon.model.component.impl.SystemDiagramImpl#getParentSystemDiagram <em>Parent System Diagram</em>}</li>
  *   <li>{@link jp.go.aist.rtm.toolscommon.model.component.impl.SystemDiagramImpl#getCompositeComponent <em>Composite Component</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

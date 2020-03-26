@@ -20,8 +20,6 @@ import org.eclipse.ui.views.properties.IPropertySource;
 /**
  * <!-- begin-user-doc --> An implementation of the model object '<em><b>Out Port</b></em>'.
  * <!-- end-user-doc -->
- * <p>
- * </p>
  *
  * @generated
  */

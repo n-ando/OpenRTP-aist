@@ -48,12 +48,14 @@ public interface ConnectorProfile extends WrapperObject, IPropertyMap{
 		static final String OUTPORT_WRITE_TIMEOUT = "dataport.outport.buffer.write.timeout";
 		static final String OUTPORT_EMPTY_POLICY = "dataport.outport.buffer.read.empty_policy";
 		static final String OUTPORT_READ_TIMEOUT = "dataport.outport.buffer.read.timeout";
+		static final String OUTPORT_SERIALIZER_TYPE = "dataport.out.marshaling_type";
 		//
 		static final String INPORT_BUFF_LENGTH = "dataport.inport.buffer.length";
 		static final String INPORT_FULL_POLICY = "dataport.inport.buffer.write.full_policy";
 		static final String INPORT_WRITE_TIMEOUT = "dataport.inport.buffer.write.timeout";
 		static final String INPORT_EMPTY_POLICY = "dataport.inport.buffer.read.empty_policy";
 		static final String INPORT_READ_TIMEOUT = "dataport.inport.buffer.read.timeout";
+		static final String INPORT_SERIALIZER_TYPE = "dataport.in.marshaling_type";
 	}
 
 	/**
@@ -347,6 +349,32 @@ public interface ConnectorProfile extends WrapperObject, IPropertyMap{
 	void setTargetString(String value);
 
 	/**
+	 * Returns the value of the '<em><b>Outport Serializer Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Outport Serializer Type</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Outport Serializer Type</em>' attribute.
+	 * @see #setOutportSerializerType(String)
+	 * @see jp.go.aist.rtm.toolscommon.model.component.ComponentPackage#getConnectorProfile_OutportSerializerType()
+	 * @model
+	 * @generated
+	 */
+	String getOutportSerializerType();
+
+	/**
+	 * Sets the value of the '{@link jp.go.aist.rtm.toolscommon.model.component.ConnectorProfile#getOutportSerializerType <em>Outport Serializer Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Outport Serializer Type</em>' attribute.
+	 * @see #getOutportSerializerType()
+	 * @generated
+	 */
+	void setOutportSerializerType(String value);
+
+	/**
 	 * Returns the value of the '<em><b>Outport Buffer Length</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
@@ -605,6 +633,32 @@ public interface ConnectorProfile extends WrapperObject, IPropertyMap{
 	 * @generated
 	 */
 	void setInportBufferReadTimeout(Double value);
+
+	/**
+	 * Returns the value of the '<em><b>Inport Serializer Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Inport Serializer Type</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Inport Serializer Type</em>' attribute.
+	 * @see #setInportSerializerType(String)
+	 * @see jp.go.aist.rtm.toolscommon.model.component.ComponentPackage#getConnectorProfile_InportSerializerType()
+	 * @model
+	 * @generated
+	 */
+	String getInportSerializerType();
+
+	/**
+	 * Sets the value of the '{@link jp.go.aist.rtm.toolscommon.model.component.ConnectorProfile#getInportSerializerType <em>Inport Serializer Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Inport Serializer Type</em>' attribute.
+	 * @see #getInportSerializerType()
+	 * @generated
+	 */
+	void setInportSerializerType(String value);
 
 	/**
 	 * Returns the value of the '<em><b>Timestamp Policy</b></em>' attribute.
