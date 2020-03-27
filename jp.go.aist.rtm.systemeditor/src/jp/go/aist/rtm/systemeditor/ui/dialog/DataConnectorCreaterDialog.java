@@ -733,12 +733,22 @@ public class DataConnectorCreaterDialog extends ConnectorDialogBase {
 			emptyTypes = Arrays.asList(preference.getBufferEmptyPolicies());
 		}
 		
-		String outportSer = outport.getProperty("dataport.serializer_type");
-		List<String> outSerList = SDOUtil.getValueList(outportSer);
-		String inportSer = inport.getProperty("dataport.serializer_type");
-		List<String> inSerList = SDOUtil.getValueList(inportSer);
-		
 		if(serializerTypeCombo != null) {
+			List<String> outSerList = new ArrayList<String>();
+			List<String> inSerList = new ArrayList<String>();
+			if(outport!=null) {
+				String outportSer = outport.getProperty("dataport.serializer_type");
+				if(outportSer!=null) {
+					outSerList = SDOUtil.getValueList(outportSer);
+				}
+			}
+			if(inport!=null) {
+				String inportSer = inport.getProperty("dataport.serializer_type");
+				if(inportSer!=null) {
+					inSerList = SDOUtil.getValueList(inportSer);
+				}
+			}
+			
 			List<String> typeList = new ArrayList<String>();
 			typeList.add("corba");
 			
@@ -767,16 +777,17 @@ public class DataConnectorCreaterDialog extends ConnectorDialogBase {
 				serializerTypeCombo.add(serType);
 			}
 			serializerTypeCombo.select(0);
-		}
-		if(outPortCombo != null) {
-			value = loadCombo(outPortCombo, outSerList, connectorProfile
-					.getOutportSerializerType(), false);
-			connectorProfile.setOutportSerializerType(value);
-		}
-		if(inPortCombo != null) {
-			value = loadCombo(inPortCombo, inSerList, connectorProfile
-					.getInportSerializerType(), false);
-			connectorProfile.setInportSerializerType(value);
+			
+			if(outPortCombo != null) {
+				value = loadCombo(outPortCombo, outSerList, connectorProfile
+						.getOutportSerializerType(), false);
+				connectorProfile.setOutportSerializerType(value);
+			}
+			if(inPortCombo != null) {
+				value = loadCombo(inPortCombo, inSerList, connectorProfile
+						.getInportSerializerType(), false);
+				connectorProfile.setInportSerializerType(value);
+			}
 		}
 
 		if (ob != null && ob.enable) {
