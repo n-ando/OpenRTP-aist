@@ -16,12 +16,14 @@ import jp.go.aist.rtm.toolscommon.util.SDOUtil;
 
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IMessageProvider;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -447,12 +449,35 @@ public class DataConnectorCreaterDialog extends ConnectorDialogBase {
 		gd = new GridData();
 		gd.horizontalSpan = 3;
 		serializerTypeCombo.setLayoutData(gd);
+		serializerTypeCombo.addSelectionListener(new SelectionListener() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				if(0<serializerTypeCombo.getText().trim().length()) {
+					outPortCombo.setText(serializerTypeCombo.getText());
+					inPortCombo.setText(serializerTypeCombo.getText());
+				}
+			}
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+			}
+		});
 		
 		createLabel(serializerComposite, "OutPort Serializer :");
 		outPortCombo = new Combo(serializerComposite, style);
 		gd = new GridData(GridData.FILL_BOTH);
 		gd.grabExcessHorizontalSpace = true;
 		outPortCombo.setLayoutData(gd);
+		outPortCombo.addSelectionListener(new SelectionListener() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				connectorProfile.setOutportSerializerType(outPortCombo.getText());
+				notifyModified();
+				serializerTypeCombo.setText("");
+			}
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+			}
+		});
 		outPortCombo.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
 				connectorProfile.setOutportSerializerType(outPortCombo.getText());
@@ -465,6 +490,17 @@ public class DataConnectorCreaterDialog extends ConnectorDialogBase {
 		gd = new GridData(GridData.FILL_BOTH);
 		gd.grabExcessHorizontalSpace = true;
 		inPortCombo.setLayoutData(gd);
+		inPortCombo.addSelectionListener(new SelectionListener() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				connectorProfile.setInportSerializerType(inPortCombo.getText());
+				notifyModified();
+				serializerTypeCombo.setText("");
+			}
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+			}
+		});
 		inPortCombo.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
 				connectorProfile.setInportSerializerType(inPortCombo.getText());
@@ -736,21 +772,26 @@ public class DataConnectorCreaterDialog extends ConnectorDialogBase {
 		if(serializerTypeCombo != null) {
 			List<String> outSerList = new ArrayList<String>();
 			List<String> inSerList = new ArrayList<String>();
+			outSerList.add("");
+			inSerList.add("");
 			if(outport!=null) {
-				String outportSer = outport.getProperty("dataport.serializer_type");
+				String outportSer = outport.getProperty("dataport.marshaling_types");
 				if(outportSer!=null) {
 					outSerList = SDOUtil.getValueList(outportSer);
 				}
 			}
 			if(inport!=null) {
-				String inportSer = inport.getProperty("dataport.serializer_type");
+				String inportSer = inport.getProperty("dataport.marshaling_types");
 				if(inportSer!=null) {
 					inSerList = SDOUtil.getValueList(inportSer);
 				}
 			}
 			
 			List<String> typeList = new ArrayList<String>();
-			typeList.add("corba");
+			typeList.add("");
+			typeList.add("cdr");
+			outSerList.add("cdr");
+			inSerList.add("cdr");
 			
 			List<String> outTypeList = new ArrayList<String>();
 			for(String serType : outSerList) {
@@ -770,6 +811,8 @@ public class DataConnectorCreaterDialog extends ConnectorDialogBase {
 				if(outTypeList.contains(types[0].trim())) {
 					if(typeList.contains(types[0].trim())==false) {
 						typeList.add(types[0].trim());
+						outSerList.add(types[0].trim());
+						inSerList.add(types[0].trim());
 					}
 				}
 			}

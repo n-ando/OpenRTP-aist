@@ -48,14 +48,14 @@ public interface ConnectorProfile extends WrapperObject, IPropertyMap{
 		static final String OUTPORT_WRITE_TIMEOUT = "dataport.outport.buffer.write.timeout";
 		static final String OUTPORT_EMPTY_POLICY = "dataport.outport.buffer.read.empty_policy";
 		static final String OUTPORT_READ_TIMEOUT = "dataport.outport.buffer.read.timeout";
-		static final String OUTPORT_SERIALIZER_TYPE = "dataport.out.marshaling_type";
+		static final String OUTPORT_SERIALIZER_TYPE = "dataport.outport.marshaling_type";
 		//
 		static final String INPORT_BUFF_LENGTH = "dataport.inport.buffer.length";
 		static final String INPORT_FULL_POLICY = "dataport.inport.buffer.write.full_policy";
 		static final String INPORT_WRITE_TIMEOUT = "dataport.inport.buffer.write.timeout";
 		static final String INPORT_EMPTY_POLICY = "dataport.inport.buffer.read.empty_policy";
 		static final String INPORT_READ_TIMEOUT = "dataport.inport.buffer.read.timeout";
-		static final String INPORT_SERIALIZER_TYPE = "dataport.in.marshaling_type";
+		static final String INPORT_SERIALIZER_TYPE = "dataport.inport.marshaling_type";
 	}
 
 	/**
