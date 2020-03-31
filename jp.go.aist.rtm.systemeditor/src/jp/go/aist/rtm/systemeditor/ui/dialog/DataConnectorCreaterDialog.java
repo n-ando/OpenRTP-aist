@@ -788,10 +788,6 @@ public class DataConnectorCreaterDialog extends ConnectorDialogBase {
 			}
 			
 			List<String> typeList = new ArrayList<String>();
-			typeList.add("");
-			typeList.add("cdr");
-			outSerList.add("cdr");
-			inSerList.add("cdr");
 			
 			List<String> outTypeList = new ArrayList<String>();
 			for(String serType : outSerList) {
@@ -816,6 +812,7 @@ public class DataConnectorCreaterDialog extends ConnectorDialogBase {
 					}
 				}
 			}
+			typeList.add("");
 			for(String serType : typeList) {
 				serializerTypeCombo.add(serType);
 			}
@@ -830,6 +827,15 @@ public class DataConnectorCreaterDialog extends ConnectorDialogBase {
 				value = loadCombo(inPortCombo, inSerList, connectorProfile
 						.getInportSerializerType(), false);
 				connectorProfile.setInportSerializerType(value);
+			}
+			if(0<=serializerTypeCombo.indexOf("cdr")) {
+				serializerTypeCombo.setText("cdr");
+				outPortCombo.setText("cdr");
+				inPortCombo.setText("cdr");
+			} else {
+				serializerTypeCombo.select(0);
+				outPortCombo.select(0);
+				inPortCombo.select(0);
 			}
 		}
 
