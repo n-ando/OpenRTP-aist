@@ -816,7 +816,6 @@ public class DataConnectorCreaterDialog extends ConnectorDialogBase {
 			for(String serType : typeList) {
 				serializerTypeCombo.add(serType);
 			}
-			serializerTypeCombo.select(0);
 			
 			if(outPortCombo != null) {
 				value = loadCombo(outPortCombo, outSerList, connectorProfile
