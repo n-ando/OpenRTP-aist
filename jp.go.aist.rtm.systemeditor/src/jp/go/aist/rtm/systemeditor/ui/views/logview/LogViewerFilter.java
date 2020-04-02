@@ -65,6 +65,7 @@ public class LogViewerFilter extends ViewerFilter {
 	
 	private boolean checkOrCondition(FilteringParam target, LogParam logParam) {
 		List<FilteringParam> elems = target.getChildParams();
+		if(elems.size()==0) return true;
 		for(FilteringParam elem : elems) {
 			if(elem.getKind()==FilteringKind.AND) {
 				if(checkAndCondition(elem, logParam)) return true;
