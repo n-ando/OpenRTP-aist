@@ -511,6 +511,7 @@ public class ServiceConnectorCreaterDialog extends ConnectorDialogBase {
 	protected void configureShell(Shell shell) {
 		super.configureShell(shell);
 		shell.setText("Connector Profile");
+		this.setHelpAvailable(false);
 	}
 
 	@SuppressWarnings("unchecked")

@@ -23,6 +23,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link jp.go.aist.rtm.toolscommon.model.component.impl.ConnectorProfileImpl#getDataflowType <em>Dataflow Type</em>}</li>
  *   <li>{@link jp.go.aist.rtm.toolscommon.model.component.impl.ConnectorProfileImpl#getSubscriptionType <em>Subscription Type</em>}</li>
@@ -51,8 +52,9 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  *   <li>{@link jp.go.aist.rtm.toolscommon.model.component.impl.ConnectorProfileImpl#getInportBufferReadTimeout <em>Inport Buffer Read Timeout</em>}</li>
  *   <li>{@link jp.go.aist.rtm.toolscommon.model.component.impl.ConnectorProfileImpl#getTimestampPolicy <em>Timestamp Policy</em>}</li>
  *   <li>{@link jp.go.aist.rtm.toolscommon.model.component.impl.ConnectorProfileImpl#isIsReverse <em>Is Reverse</em>}</li>
+ *   <li>{@link jp.go.aist.rtm.toolscommon.model.component.impl.ConnectorProfileImpl#getOutportSerializerType <em>Outport Serializer Type</em>}</li>
+ *   <li>{@link jp.go.aist.rtm.toolscommon.model.component.impl.ConnectorProfileImpl#getInportSerializerType <em>Inport Serializer Type</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */
@@ -547,6 +549,46 @@ public class ConnectorProfileImpl extends WrapperObjectImpl implements
 	 */
 	protected boolean isReverse = IS_REVERSE_EDEFAULT;
 
+	/**
+	 * The default value of the '{@link #getOutportSerializerType() <em>Outport Serializer Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getOutportSerializerType()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String OUTPORT_SERIALIZER_TYPE_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getOutportSerializerType() <em>Outport Serializer Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getOutportSerializerType()
+	 * @generated
+	 * @ordered
+	 */
+	protected String outportSerializerType = OUTPORT_SERIALIZER_TYPE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getInportSerializerType() <em>Inport Serializer Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getInportSerializerType()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String INPORT_SERIALIZER_TYPE_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getInportSerializerType() <em>Inport Serializer Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getInportSerializerType()
+	 * @generated
+	 * @ordered
+	 */
+	protected String inportSerializerType = INPORT_SERIALIZER_TYPE_EDEFAULT;
+
 	IPropertyMap properties;
 
 	/**
@@ -851,6 +893,27 @@ public class ConnectorProfileImpl extends WrapperObjectImpl implements
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public String getOutportSerializerType() {
+		return outportSerializerType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setOutportSerializerType(String newOutportSerializerType) {
+		String oldOutportSerializerType = outportSerializerType;
+		outportSerializerType = newOutportSerializerType;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ComponentPackage.CONNECTOR_PROFILE__OUTPORT_SERIALIZER_TYPE, oldOutportSerializerType, outportSerializerType));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public Integer getOutportBufferLength() {
 		return outportBufferLength;
 	}
@@ -1061,6 +1124,27 @@ public class ConnectorProfileImpl extends WrapperObjectImpl implements
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public String getInportSerializerType() {
+		return inportSerializerType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setInportSerializerType(String newInportSerializerType) {
+		String oldInportSerializerType = inportSerializerType;
+		inportSerializerType = newInportSerializerType;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ComponentPackage.CONNECTOR_PROFILE__INPORT_SERIALIZER_TYPE, oldInportSerializerType, inportSerializerType));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public String getTimestampPolicy() {
 		return timestampPolicy;
 	}
@@ -1205,6 +1289,10 @@ public class ConnectorProfileImpl extends WrapperObjectImpl implements
 				return getTimestampPolicy();
 			case ComponentPackage.CONNECTOR_PROFILE__IS_REVERSE:
 				return isIsReverse();
+			case ComponentPackage.CONNECTOR_PROFILE__OUTPORT_SERIALIZER_TYPE:
+				return getOutportSerializerType();
+			case ComponentPackage.CONNECTOR_PROFILE__INPORT_SERIALIZER_TYPE:
+				return getInportSerializerType();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -1285,6 +1373,12 @@ public class ConnectorProfileImpl extends WrapperObjectImpl implements
 				return;
 			case ComponentPackage.CONNECTOR_PROFILE__IS_REVERSE:
 				setIsReverse((Boolean)newValue);
+				return;
+			case ComponentPackage.CONNECTOR_PROFILE__OUTPORT_SERIALIZER_TYPE:
+				setOutportSerializerType((String)newValue);
+				return;
+			case ComponentPackage.CONNECTOR_PROFILE__INPORT_SERIALIZER_TYPE:
+				setInportSerializerType((String)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -1367,6 +1461,12 @@ public class ConnectorProfileImpl extends WrapperObjectImpl implements
 			case ComponentPackage.CONNECTOR_PROFILE__IS_REVERSE:
 				setIsReverse(IS_REVERSE_EDEFAULT);
 				return;
+			case ComponentPackage.CONNECTOR_PROFILE__OUTPORT_SERIALIZER_TYPE:
+				setOutportSerializerType(OUTPORT_SERIALIZER_TYPE_EDEFAULT);
+				return;
+			case ComponentPackage.CONNECTOR_PROFILE__INPORT_SERIALIZER_TYPE:
+				setInportSerializerType(INPORT_SERIALIZER_TYPE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -1433,6 +1533,10 @@ public class ConnectorProfileImpl extends WrapperObjectImpl implements
 				return TIMESTAMP_POLICY_EDEFAULT == null ? timestampPolicy != null : !TIMESTAMP_POLICY_EDEFAULT.equals(timestampPolicy);
 			case ComponentPackage.CONNECTOR_PROFILE__IS_REVERSE:
 				return isReverse != IS_REVERSE_EDEFAULT;
+			case ComponentPackage.CONNECTOR_PROFILE__OUTPORT_SERIALIZER_TYPE:
+				return OUTPORT_SERIALIZER_TYPE_EDEFAULT == null ? outportSerializerType != null : !OUTPORT_SERIALIZER_TYPE_EDEFAULT.equals(outportSerializerType);
+			case ComponentPackage.CONNECTOR_PROFILE__INPORT_SERIALIZER_TYPE:
+				return INPORT_SERIALIZER_TYPE_EDEFAULT == null ? inportSerializerType != null : !INPORT_SERIALIZER_TYPE_EDEFAULT.equals(inportSerializerType);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -1492,6 +1596,10 @@ public class ConnectorProfileImpl extends WrapperObjectImpl implements
 		result.append(timestampPolicy);
 		result.append(", isReverse: ");
 		result.append(isReverse);
+		result.append(", outportSerializerType: ");
+		result.append(outportSerializerType);
+		result.append(", inportSerializerType: ");
+		result.append(inportSerializerType);
 		result.append(')');
 		return result.toString();
 	}

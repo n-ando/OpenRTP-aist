@@ -8,6 +8,7 @@ package jp.go.aist.rtm.toolscommon.model.core.util;
 
 import java.util.List;
 
+import jp.go.aist.rtm.toolscommon.model.core.*;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;

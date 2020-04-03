@@ -15,10 +15,10 @@ import java.util.List;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link jp.go.aist.rtm.toolscommon.model.component.PortSynchronizer#getOriginalPortString <em>Original Port String</em>}</li>
  * </ul>
- * </p>
  *
  * @see jp.go.aist.rtm.toolscommon.model.component.ComponentPackage#getPortSynchronizer()
  * @model

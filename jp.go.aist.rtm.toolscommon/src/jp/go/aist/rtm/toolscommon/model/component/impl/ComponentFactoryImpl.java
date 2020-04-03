@@ -32,6 +32,7 @@ import _SDOPackage.ConfigurationHelper;
 import _SDOPackage.Organization;
 import _SDOPackage.ServiceProfile;
 import jp.go.aist.rtm.toolscommon.corba.CorbaUtil;
+import jp.go.aist.rtm.toolscommon.model.component.*;
 import jp.go.aist.rtm.toolscommon.model.component.ComponentFactory;
 import jp.go.aist.rtm.toolscommon.model.component.ComponentPackage;
 import jp.go.aist.rtm.toolscommon.model.component.ComponentSpecification;

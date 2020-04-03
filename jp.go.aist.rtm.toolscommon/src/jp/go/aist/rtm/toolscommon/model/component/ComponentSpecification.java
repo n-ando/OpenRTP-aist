@@ -15,12 +15,12 @@ package jp.go.aist.rtm.toolscommon.model.component;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link jp.go.aist.rtm.toolscommon.model.component.ComponentSpecification#getAliasName <em>Alias Name</em>}</li>
  *   <li>{@link jp.go.aist.rtm.toolscommon.model.component.ComponentSpecification#isSpecUnLoad <em>Spec Un Load</em>}</li>
  *   <li>{@link jp.go.aist.rtm.toolscommon.model.component.ComponentSpecification#getRtcType <em>Rtc Type</em>}</li>
  * </ul>
- * </p>
  *
  * @see jp.go.aist.rtm.toolscommon.model.component.ComponentPackage#getComponentSpecification()
  * @model

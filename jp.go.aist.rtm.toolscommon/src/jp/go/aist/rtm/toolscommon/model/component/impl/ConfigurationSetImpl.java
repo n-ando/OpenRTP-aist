@@ -29,11 +29,11 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link jp.go.aist.rtm.toolscommon.model.component.impl.ConfigurationSetImpl#getId <em>Id</em>}</li>
  *   <li>{@link jp.go.aist.rtm.toolscommon.model.component.impl.ConfigurationSetImpl#getConfigurationData <em>Configuration Data</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

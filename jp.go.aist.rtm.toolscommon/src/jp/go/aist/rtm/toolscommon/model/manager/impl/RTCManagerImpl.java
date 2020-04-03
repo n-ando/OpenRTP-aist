@@ -16,6 +16,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
+import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,6 +48,7 @@ import jp.go.aist.rtm.toolscommon.util.SDOUtil;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link jp.go.aist.rtm.toolscommon.model.manager.impl.RTCManagerImpl#getManagerProfile <em>Manager Profile</em>}</li>
  *   <li>{@link jp.go.aist.rtm.toolscommon.model.manager.impl.RTCManagerImpl#getInstanceNameL <em>Instance Name L</em>}</li>
@@ -60,7 +62,6 @@ import jp.go.aist.rtm.toolscommon.util.SDOUtil;
  *   <li>{@link jp.go.aist.rtm.toolscommon.model.manager.impl.RTCManagerImpl#getSlaveManagers <em>Slave Managers</em>}</li>
  *   <li>{@link jp.go.aist.rtm.toolscommon.model.manager.impl.RTCManagerImpl#getConfiguratoins <em>Configuratoins</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

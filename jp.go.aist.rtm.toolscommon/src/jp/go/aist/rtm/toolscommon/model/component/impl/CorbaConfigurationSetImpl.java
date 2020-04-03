@@ -31,10 +31,10 @@ import _SDOPackage.ConfigurationSet;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link jp.go.aist.rtm.toolscommon.model.component.impl.CorbaConfigurationSetImpl#getSDOConfigurationSet <em>SDO Configuration Set</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

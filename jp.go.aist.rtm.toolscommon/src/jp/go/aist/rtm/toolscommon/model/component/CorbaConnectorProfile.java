@@ -14,10 +14,10 @@ package jp.go.aist.rtm.toolscommon.model.component;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link jp.go.aist.rtm.toolscommon.model.component.CorbaConnectorProfile#getRtcConnectorProfile <em>Rtc Connector Profile</em>}</li>
  * </ul>
- * </p>
  *
  * @see jp.go.aist.rtm.toolscommon.model.component.ComponentPackage#getCorbaConnectorProfile()
  * @model
