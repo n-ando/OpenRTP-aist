@@ -1,12 +1,14 @@
 package jp.go.aist.rtm.toolscommon.util;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
 import jp.go.aist.rtm.toolscommon.model.component.InPort;
 import jp.go.aist.rtm.toolscommon.model.component.OutPort;
+import jp.go.aist.rtm.toolscommon.model.component.Port;
 import jp.go.aist.rtm.toolscommon.model.component.impl.PortImpl;
 
 /**
@@ -113,8 +115,59 @@ public class ConnectorUtil {
 		//
 		List<String> result = getAllowList(sourceTypes, targetTypes,
 				dataTypeComparer);
+		if(result.isEmpty()) {
+			List<String> sourceSerializers = getSerializerList(source);			
+			List<String> targetSerializers = getSerializerList(target);
+			for(String srcSer : sourceSerializers) {
+				String[] srcElems = srcSer.split(":");
+				for(String trgSer : targetSerializers) {
+					String[] trgElems = trgSer.split(":");
+					if( 2 <= srcElems.length && 2 <= trgElems.length) {
+						if(srcElems[0].equals(trgElems[0]) && srcElems[1].equals(trgElems[1])) {
+							if(result.contains(srcElems[1])==false) {
+								result.add(srcElems[1]);
+							}
+						}
+					} else if(srcElems.length == 1 &&  3 <= trgElems.length) {
+						if(srcElems[0].equals(trgElems[0])) {
+							for(String srcType : sourceTypes) {
+								String[] srcTypeElem = srcType.split(":");
+								if(srcTypeElem[1].equals(trgElems[1])) {
+									if(result.contains(trgElems[1])==false) {
+										result.add(trgElems[1]);
+									}
+								}
+							}
+						}
+					} else if(trgElems.length == 1 &&  3 <= srcElems.length) {
+						if(srcElems[0].equals(trgElems[0])) {
+							for(String trgType : targetTypes) {
+								String[] trgTypeElem = trgType.split(":");
+								if(trgTypeElem[1].equals(srcElems[1])) {
+									if(result.contains(srcElems[1])==false) {
+										result.add(srcElems[1]);
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
 		result = sortTypes(result);
 		return result;
+	}
+	
+	private static List<String> getSerializerList(Port target) {
+		List<String> result = new ArrayList<String>();
+		String serializers = target.getProperty("dataport.marshaling_types");
+		if(serializers!=null && 0<serializers.length()) {
+			String[] serArray = serializers.split(",");
+			result = Arrays.asList(serArray);
+			result.sort( (a, b) -> a.length() == b.length() ? a.compareTo(b) : b.length() - a.length());
+		}
+		return result;
+		
 	}
 
 	/**

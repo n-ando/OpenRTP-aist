@@ -772,6 +772,7 @@ public class DataConnectorCreaterDialog extends ConnectorDialogBase {
 		if(serializerTypeCombo != null) {
 			List<String> outSerList = new ArrayList<String>();
 			List<String> inSerList = new ArrayList<String>();
+			List<String> inSerTempList = new ArrayList<String>();
 			outSerList.add("");
 			inSerList.add("");
 			if(outport!=null) {
@@ -808,9 +809,12 @@ public class DataConnectorCreaterDialog extends ConnectorDialogBase {
 					if(typeList.contains(types[0].trim())==false) {
 						typeList.add(types[0].trim());
 						outSerList.add(types[0].trim());
-						inSerList.add(types[0].trim());
+						inSerTempList.add(types[0].trim());
 					}
 				}
+			}
+			if( 0 < inSerTempList.size() ) {
+				inSerList.addAll(inSerTempList);
 			}
 			typeList.add("");
 			for(String serType : typeList) {
@@ -1110,6 +1114,44 @@ public class DataConnectorCreaterDialog extends ConnectorDialogBase {
 			if (!isDouble) {
 				setMessage(MSG_ERROR_INPORT_READ_TIMEOUT_NOT_NUMERIC,
 						IMessageProvider.ERROR);
+			}
+			/////
+			if(serializerTypeCombo.getText().equals("cdr")==false) {
+				String outSer = outPortCombo.getText();
+				String inSer = inPortCombo.getText();
+				
+				String[] srcElems = outSer.split(":");
+				String[] trgElems = inSer.split(":");
+				boolean isCoonectable = false;
+				if( 2 <= srcElems.length && 2 <= trgElems.length) {
+					if(srcElems[0].equals(trgElems[0]) && srcElems[1].equals(trgElems[1])) {
+						isCoonectable = true;
+					}
+				} else if(srcElems.length == 1 &&  3 <= trgElems.length) {
+					if(srcElems[0].equals(trgElems[0])) {
+						for(String srcType : dataTypeCombo.getItems()) {
+							String[] srcTypeElem = srcType.split(":");
+							if(srcTypeElem[1].equals(trgElems[1])) {
+								isCoonectable = true;
+								break;
+							}
+						}
+					}
+				} else if(trgElems.length == 1 &&  3 <= srcElems.length) {
+					if(srcElems[0].equals(trgElems[0])) {
+						for(String trgType : dataTypeCombo.getItems()) {
+							String[] trgTypeElem = trgType.split(":");
+							if(trgTypeElem[1].equals(srcElems[1])) {
+								isCoonectable = true;
+								break;
+							}
+						}
+					}
+				}
+				if(isCoonectable==false) {
+					setMessage(Messages.getString("DataConnectorCreaterDialog.ErrSer"),
+							IMessageProvider.ERROR);
+				}
 			}
 		}
 
