@@ -1,6 +1,10 @@
 package jp.go.aist.rtm.systemeditor.ui.views.logview;
 
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
+
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
@@ -110,6 +114,17 @@ public class StringDialog extends Dialog {
 	}
 	@Override
 	protected void okPressed() {
+		if(chkRegExp.getSelection()) {
+			String regEx = txtCond.getText();
+			try {
+			Pattern p = Pattern.compile(regEx);
+			} catch(PatternSyntaxException ex) {
+				MessageDialog.openWarning(getParentShell(),
+						Messages.getString("LogView.regexp"),
+						Messages.getString("LogView.regexpWarning") + System.lineSeparator() + ex.getMessage());
+				return;
+			}
+		}
 		switch(kind) {
 		case MANAGER:
 			targetParam.setManagerCond(txtCond.getText());
