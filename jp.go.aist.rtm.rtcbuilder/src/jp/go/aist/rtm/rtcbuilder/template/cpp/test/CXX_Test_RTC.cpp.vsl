@@ -11,7 +11,7 @@ ${sharp}include "${rtcParam.name}Test.h"
 
 // Module specification
 // <rtc-template block="module_spec">
-static const char* ${rtcParam.name.toLowerCase()}_spec[] =
+static const char* const ${rtcParam.name.toLowerCase()}_spec[] =
   {
     "implementation_id", "${rtcParam.name}Test",
     "type_name",         "${rtcParam.name}Test",
