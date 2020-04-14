@@ -94,6 +94,24 @@ public class ConnectorUtil {
 	}
 
 	static List<String> emptyList = new ArrayList<String>();
+	
+	public static class SerializerInfo {
+		public String dataType;
+		public String outPortSerializer;
+		public String inPortSerializer;
+		
+		public String toString() {
+			String result = "";
+			
+			if(inPortSerializer==null || inPortSerializer.length()==0) {
+				result = outPortSerializer;
+			} else {
+				result = outPortSerializer + " - " + inPortSerializer;
+			}
+			return result;
+		}
+	}
+	static List<SerializerInfo> emptySerList = new ArrayList<SerializerInfo>();
 
 	/**
 	 * 使用可能なデータ型のリストを返す
@@ -102,51 +120,91 @@ public class ConnectorUtil {
 	 * @param target
 	 * @return
 	 */
-	public static List<String> getAllowDataTypes(OutPort source, InPort target) {
+	public static List<SerializerInfo> getAllowDataTypes(OutPort source, InPort target) {
+		List<SerializerInfo> result = new ArrayList<SerializerInfo>();
+		
 		if (source == null && target == null) {
-			return emptyList;
+			return emptySerList;
 		} else if (source != null && target == null) {
-			return source.getDataTypes();
+			List<String> sourceTypes = source.getDataTypes();
+			for(String each : sourceTypes) {
+				SerializerInfo info = new SerializerInfo();
+				info.dataType = each;
+				info.outPortSerializer = each;
+				info.inPortSerializer = "";
+				result.add(info);
+			}
+			return result;
 		} else if (source == null && target != null) {
-			return target.getDataTypes();
+			List<String> targetTypes = target.getDataTypes();
+			for(String each : targetTypes) {
+				SerializerInfo info = new SerializerInfo();
+				info.dataType = each;
+				info.outPortSerializer = each;
+				info.inPortSerializer = "";
+				result.add(info);
+			}
+			return result;
 		}
 		List<String> sourceTypes = source.getDataTypes();
 		List<String> targetTypes = target.getDataTypes();
 		//
-		List<String> result = getAllowList(sourceTypes, targetTypes,
+		List<String> resultCheck = getAllowList(sourceTypes, targetTypes,
 				dataTypeComparer);
-		if(result.isEmpty()) {
-			List<String> sourceSerializers = getSerializerList(source);			
-			List<String> targetSerializers = getSerializerList(target);
-			for(String srcSer : sourceSerializers) {
-				String[] srcElems = srcSer.split(":");
-				for(String trgSer : targetSerializers) {
-					String[] trgElems = trgSer.split(":");
-					if( 2 <= srcElems.length && 2 <= trgElems.length) {
-						if(srcElems[0].equals(trgElems[0]) && srcElems[1].equals(trgElems[1])) {
-							if(result.contains(srcElems[1])==false) {
-								result.add(srcElems[1]);
-							}
+		if(resultCheck.isEmpty()==false) {
+			resultCheck = sortTypes(resultCheck);
+			for(String each : resultCheck) {
+				SerializerInfo info = new SerializerInfo();
+				info.dataType = each;
+				info.outPortSerializer = each;
+				info.inPortSerializer = "";
+				result.add(info);
+			}
+			return result;
+		}
+		///
+		List<String> sourceSerializers = getSerializerList(source);			
+		List<String> targetSerializers = getSerializerList(target);
+		for(String srcSer : sourceSerializers) {
+			String[] srcElems = srcSer.split(":");
+			for(String trgSer : targetSerializers) {
+				String[] trgElems = trgSer.split(":");
+				if( 2 <= srcElems.length && 2 <= trgElems.length) {
+					if(srcElems[0].equals(trgElems[0]) && srcElems[1].equals(trgElems[1])) {
+						if(result.contains(srcElems[1])==false) {
+							SerializerInfo info = new SerializerInfo();
+							info.dataType = srcElems[1];
+							info.outPortSerializer = srcSer;
+							info.inPortSerializer = trgSer;
+							result.add(info);
 						}
-					} else if(srcElems.length == 1 &&  3 <= trgElems.length) {
-						if(srcElems[0].equals(trgElems[0])) {
-							for(String srcType : sourceTypes) {
-								String[] srcTypeElem = srcType.split(":");
-								if(srcTypeElem[1].equals(trgElems[1])) {
-									if(result.contains(trgElems[1])==false) {
-										result.add(trgElems[1]);
-									}
+					}
+				} else if(srcElems.length == 1 &&  3 <= trgElems.length) {
+					if(srcElems[0].equals(trgElems[0])) {
+						for(String srcType : sourceTypes) {
+							String[] srcTypeElem = srcType.split(":");
+							if(srcTypeElem[1].equals(trgElems[1])) {
+								if(result.contains(trgElems[1])==false) {
+									SerializerInfo info = new SerializerInfo();
+									info.dataType = trgElems[1];
+									info.outPortSerializer = srcSer;
+									info.inPortSerializer = trgSer;
+									result.add(info);
 								}
 							}
 						}
-					} else if(trgElems.length == 1 &&  3 <= srcElems.length) {
-						if(srcElems[0].equals(trgElems[0])) {
-							for(String trgType : targetTypes) {
-								String[] trgTypeElem = trgType.split(":");
-								if(trgTypeElem[1].equals(srcElems[1])) {
-									if(result.contains(srcElems[1])==false) {
-										result.add(srcElems[1]);
-									}
+					}
+				} else if(trgElems.length == 1 &&  3 <= srcElems.length) {
+					if(srcElems[0].equals(trgElems[0])) {
+						for(String trgType : targetTypes) {
+							String[] trgTypeElem = trgType.split(":");
+							if(trgTypeElem[1].equals(srcElems[1])) {
+								if(result.contains(srcElems[1])==false) {
+									SerializerInfo info = new SerializerInfo();
+									info.dataType = srcElems[1];
+									info.outPortSerializer = srcSer;
+									info.inPortSerializer = trgSer;
+									result.add(info);
 								}
 							}
 						}
@@ -154,7 +212,6 @@ public class ConnectorUtil {
 				}
 			}
 		}
-		result = sortTypes(result);
 		return result;
 	}
 	
