@@ -11,7 +11,7 @@
 
 // Module specification
 // <rtc-template block="module_spec">
-static const char* markerposition_spec[] =
+static const char* const markerposition_spec[] =
   {
     "implementation_id", "MarkerPosition",
     "type_name",         "MarkerPosition",

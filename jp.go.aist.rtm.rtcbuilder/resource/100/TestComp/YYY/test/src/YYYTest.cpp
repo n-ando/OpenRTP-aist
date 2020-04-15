@@ -11,7 +11,7 @@
 
 // Module specification
 // <rtc-template block="module_spec">
-static const char* yyy_spec[] =
+static const char* const yyy_spec[] =
   {
     "implementation_id", "YYYTest",
     "type_name",         "YYYTest",
