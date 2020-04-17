@@ -677,8 +677,10 @@ public class DataConnectorCreaterDialog extends ConnectorDialogBase {
 		}
 		serializerTypeCombo.select(selected);
 		connectorProfile.setDataType(serTypes.get(selected).dataType);
-		connectorProfile.setInportSerializerType(serTypes.get(selected).inPortSerializer);
-		connectorProfile.setOutportSerializerType(serTypes.get(selected).outPortSerializer);
+		if( 0<serTypes.get(selected).inPortSerializer.length()) {
+			connectorProfile.setInportSerializerType(serTypes.get(selected).inPortSerializer);
+			connectorProfile.setOutportSerializerType(serTypes.get(selected).outPortSerializer);
+		}
 		serializerTypeCombo.setData(serTypes);
 
 		SystemEditorPreferenceManager preference = SystemEditorPreferenceManager
