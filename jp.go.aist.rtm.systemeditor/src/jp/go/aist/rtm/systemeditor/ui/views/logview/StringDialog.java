@@ -36,6 +36,7 @@ public class StringDialog extends Dialog {
 
 	public StringDialog(Shell parentShell) {
 		super(parentShell);
+		setShellStyle(getShellStyle() | SWT.CENTER | SWT.RESIZE);
 	}
 	@Override
 	protected Control createDialogArea(Composite parent) {
@@ -110,7 +111,7 @@ public class StringDialog extends Dialog {
 	}
 	
 	protected Point getInitialSize() {
-		return new Point(500, 130);
+		return new Point(500, 150);
 	}
 	@Override
 	protected void okPressed() {

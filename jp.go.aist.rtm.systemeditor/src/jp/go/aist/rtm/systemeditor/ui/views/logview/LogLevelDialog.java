@@ -31,6 +31,7 @@ public class LogLevelDialog extends Dialog {
 	
 	public LogLevelDialog(Shell parentShell) {
 		super(parentShell);
+		setShellStyle(getShellStyle() | SWT.CENTER | SWT.RESIZE);
 	}
 	@Override
 	protected Control createDialogArea(Composite parent) {
@@ -80,7 +81,7 @@ public class LogLevelDialog extends Dialog {
 	}
 	
 	protected Point getInitialSize() {
-		return new Point(600, 130);
+		return new Point(600, 150);
 	}
 	@Override
 	protected void okPressed() {
