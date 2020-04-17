@@ -96,6 +96,7 @@ public class ConnectorUtil {
 	static List<String> emptyList = new ArrayList<String>();
 	
 	public static class SerializerInfo {
+		public boolean useSerializer;
 		public String dataType;
 		public String outPortSerializer;
 		public String inPortSerializer;
@@ -103,10 +104,10 @@ public class ConnectorUtil {
 		public String toString() {
 			String result = "";
 			
-			if(inPortSerializer==null || inPortSerializer.length()==0) {
-				result = outPortSerializer;
-			} else {
+			if(useSerializer) {
 				result = outPortSerializer + " - " + inPortSerializer;
+			} else {
+				result = "cdr - cdr";
 			}
 			return result;
 		}
@@ -129,8 +130,9 @@ public class ConnectorUtil {
 			List<String> sourceTypes = source.getDataTypes();
 			for(String each : sourceTypes) {
 				SerializerInfo info = new SerializerInfo();
+				info.useSerializer = false;
 				info.dataType = each;
-				info.outPortSerializer = each;
+				info.outPortSerializer = "";
 				info.inPortSerializer = "";
 				result.add(info);
 			}
@@ -139,8 +141,9 @@ public class ConnectorUtil {
 			List<String> targetTypes = target.getDataTypes();
 			for(String each : targetTypes) {
 				SerializerInfo info = new SerializerInfo();
+				info.useSerializer = false;
 				info.dataType = each;
-				info.outPortSerializer = each;
+				info.outPortSerializer = "";
 				info.inPortSerializer = "";
 				result.add(info);
 			}
@@ -155,12 +158,12 @@ public class ConnectorUtil {
 			resultCheck = sortTypes(resultCheck);
 			for(String each : resultCheck) {
 				SerializerInfo info = new SerializerInfo();
+				info.useSerializer = false;
 				info.dataType = each;
-				info.outPortSerializer = each;
+				info.outPortSerializer = "";
 				info.inPortSerializer = "";
 				result.add(info);
 			}
-			return result;
 		}
 		///
 		List<String> sourceSerializers = getSerializerList(source);			
@@ -173,6 +176,7 @@ public class ConnectorUtil {
 					if(srcElems[0].equals(trgElems[0]) && srcElems[1].equals(trgElems[1])) {
 						if(result.contains(srcElems[1])==false) {
 							SerializerInfo info = new SerializerInfo();
+							info.useSerializer = true;
 							info.dataType = srcElems[1];
 							info.outPortSerializer = srcSer;
 							info.inPortSerializer = trgSer;
@@ -186,6 +190,7 @@ public class ConnectorUtil {
 							if(srcTypeElem[1].equals(trgElems[1])) {
 								if(result.contains(trgElems[1])==false) {
 									SerializerInfo info = new SerializerInfo();
+									info.useSerializer = true;
 									info.dataType = trgElems[1];
 									info.outPortSerializer = srcSer;
 									info.inPortSerializer = trgSer;
@@ -201,6 +206,7 @@ public class ConnectorUtil {
 							if(trgTypeElem[1].equals(srcElems[1])) {
 								if(result.contains(srcElems[1])==false) {
 									SerializerInfo info = new SerializerInfo();
+									info.useSerializer = true;
 									info.dataType = srcElems[1];
 									info.outPortSerializer = srcSer;
 									info.inPortSerializer = trgSer;
