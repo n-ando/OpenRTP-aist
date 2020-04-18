@@ -101,6 +101,20 @@ public class ConnectorUtil {
 		public String outPortSerializer;
 		public String inPortSerializer;
 		
+		public SerializerInfo(String dataType) {
+			this.useSerializer = false;
+			this.dataType = dataType;
+			this.outPortSerializer = "";
+			this.inPortSerializer = "";
+		}
+		
+		public SerializerInfo(String dataType, String outPortSerializer, String inPortSerializer) {
+			this.useSerializer = true;
+			this.dataType = dataType;
+			this.outPortSerializer = outPortSerializer;
+			this.inPortSerializer = inPortSerializer;
+		}
+		
 		public String toString() {
 			String result = "";
 			
@@ -129,23 +143,13 @@ public class ConnectorUtil {
 		} else if (source != null && target == null) {
 			List<String> sourceTypes = source.getDataTypes();
 			for(String each : sourceTypes) {
-				SerializerInfo info = new SerializerInfo();
-				info.useSerializer = false;
-				info.dataType = each;
-				info.outPortSerializer = "";
-				info.inPortSerializer = "";
-				result.add(info);
+				result.add(new SerializerInfo(each));
 			}
 			return result;
 		} else if (source == null && target != null) {
 			List<String> targetTypes = target.getDataTypes();
 			for(String each : targetTypes) {
-				SerializerInfo info = new SerializerInfo();
-				info.useSerializer = false;
-				info.dataType = each;
-				info.outPortSerializer = "";
-				info.inPortSerializer = "";
-				result.add(info);
+				result.add(new SerializerInfo(each));
 			}
 			return result;
 		}
@@ -157,45 +161,30 @@ public class ConnectorUtil {
 		if(resultCheck.isEmpty()==false) {
 			resultCheck = sortTypes(resultCheck);
 			for(String each : resultCheck) {
-				SerializerInfo info = new SerializerInfo();
-				info.useSerializer = false;
-				info.dataType = each;
-				info.outPortSerializer = "";
-				info.inPortSerializer = "";
-				result.add(info);
+				result.add(new SerializerInfo(each));
 			}
 		}
 		///
-		List<String> sourceSerializers = getSerializerList(source);			
+		List<String> sourceSerializers = getSerializerList(source);
 		List<String> targetSerializers = getSerializerList(target);
+		
+		if(sourceSerializers.isEmpty()) sourceSerializers.add("cdr");
+		if(targetSerializers.isEmpty()) targetSerializers.add("cdr");
+		
 		for(String srcSer : sourceSerializers) {
 			String[] srcElems = srcSer.split(":");
 			for(String trgSer : targetSerializers) {
 				String[] trgElems = trgSer.split(":");
 				if( 2 <= srcElems.length && 2 <= trgElems.length) {
 					if(srcElems[0].equals(trgElems[0]) && srcElems[1].equals(trgElems[1])) {
-						if(result.contains(srcElems[1])==false) {
-							SerializerInfo info = new SerializerInfo();
-							info.useSerializer = true;
-							info.dataType = srcElems[1];
-							info.outPortSerializer = srcSer;
-							info.inPortSerializer = trgSer;
-							result.add(info);
-						}
+						result.add(new SerializerInfo(srcElems[1], srcSer, trgSer));
 					}
 				} else if(srcElems.length == 1 &&  3 <= trgElems.length) {
 					if(srcElems[0].equals(trgElems[0])) {
 						for(String srcType : sourceTypes) {
 							String[] srcTypeElem = srcType.split(":");
 							if(srcTypeElem[1].equals(trgElems[1])) {
-								if(result.contains(trgElems[1])==false) {
-									SerializerInfo info = new SerializerInfo();
-									info.useSerializer = true;
-									info.dataType = trgElems[1];
-									info.outPortSerializer = srcSer;
-									info.inPortSerializer = trgSer;
-									result.add(info);
-								}
+								result.add(new SerializerInfo(trgElems[1], srcSer, trgSer));
 							}
 						}
 					}
@@ -204,14 +193,7 @@ public class ConnectorUtil {
 						for(String trgType : targetTypes) {
 							String[] trgTypeElem = trgType.split(":");
 							if(trgTypeElem[1].equals(srcElems[1])) {
-								if(result.contains(srcElems[1])==false) {
-									SerializerInfo info = new SerializerInfo();
-									info.useSerializer = true;
-									info.dataType = srcElems[1];
-									info.outPortSerializer = srcSer;
-									info.inPortSerializer = trgSer;
-									result.add(info);
-								}
+								result.add(new SerializerInfo(srcElems[1], srcSer, trgSer));
 							}
 						}
 					}

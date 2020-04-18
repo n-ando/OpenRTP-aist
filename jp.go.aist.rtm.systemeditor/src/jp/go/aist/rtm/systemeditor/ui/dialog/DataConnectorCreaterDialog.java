@@ -261,12 +261,13 @@ public class DataConnectorCreaterDialog extends ConnectorDialogBase {
 			}
 		});
 		serializerTypeCombo.addSelectionListener(new SelectionListener() {
+			@SuppressWarnings("unchecked")
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				int selected = serializerTypeCombo.getSelectionIndex();
 				List<SerializerInfo> serTypes = (List<SerializerInfo>)serializerTypeCombo.getData();
 				connectorProfile.setDataType(serTypes.get(selected).dataType);
-				if( 0<serTypes.get(selected).inPortSerializer.length() ) {
+				if( serTypes.get(selected).useSerializer ) {
 					connectorProfile.setInportSerializerType(serTypes.get(selected).inPortSerializer);
 					connectorProfile.setOutportSerializerType(serTypes.get(selected).outPortSerializer);
 				}
@@ -677,7 +678,7 @@ public class DataConnectorCreaterDialog extends ConnectorDialogBase {
 		}
 		serializerTypeCombo.select(selected);
 		connectorProfile.setDataType(serTypes.get(selected).dataType);
-		if( 0<serTypes.get(selected).inPortSerializer.length()) {
+		if( serTypes.get(selected).useSerializer ) {
 			connectorProfile.setInportSerializerType(serTypes.get(selected).inPortSerializer);
 			connectorProfile.setOutportSerializerType(serTypes.get(selected).outPortSerializer);
 		}
