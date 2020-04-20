@@ -33,6 +33,7 @@ public class TimeRangeDialog extends Dialog {
 	
 	public TimeRangeDialog(Shell parentShell) {
 		super(parentShell);
+		setShellStyle(getShellStyle() | SWT.CENTER | SWT.RESIZE);
 	}
 	
 	@Override
@@ -119,7 +120,7 @@ public class TimeRangeDialog extends Dialog {
 	}
 	
 	protected Point getInitialSize() {
-		return new Point(250, 170);
+		return new Point(270, 190);
 	}
 	@Override
 	protected void okPressed() {
