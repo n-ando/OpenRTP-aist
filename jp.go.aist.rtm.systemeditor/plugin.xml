@@ -229,18 +229,6 @@
 			id="jp.go.aist.rtm.systemeditor.ui.objectContribution.Component"
 			objectClass="jp.go.aist.rtm.systemeditor.ui.editor.editpart.ComponentEditPart">
 			<action
-				class="jp.go.aist.rtm.systemeditor.ui.action.StartLoggingActionDelegate"
-				id="jp.go.aist.rtm.systemeditor.ui.action.StartLoggingAction"
-				label="%StartLogging.label"
-				enablesFor="1"
-				menubarPath="additions">
-			</action>
-		</objectContribution>
-		<objectContribution
-			adaptable="true"
-			id="jp.go.aist.rtm.systemeditor.ui.objectContribution.Component"
-			objectClass="jp.go.aist.rtm.systemeditor.ui.editor.editpart.ComponentEditPart">
-			<action
 				class="jp.go.aist.rtm.systemeditor.ui.action.MonitorPortActionDelegate"
 				id="jp.go.aist.rtm.systemeditor.ui.action.MonitorPortActionDelegate.Stop"
 				label="%MonitorPort_Stop">
