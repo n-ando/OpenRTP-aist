@@ -16,7 +16,7 @@ public class ModelElementWorkbenchAdapter implements IWorkbenchAdapter {
 	}
 
 	public ImageDescriptor getImageDescriptor(Object o) {
-		return ToolsCommonPlugin.getImageDescriptor("icons/Question.gif");
+		return ToolsCommonPlugin.getImageDescriptor("icons/Question.png");
 	}
 
 	public String getLabel(Object o) {
