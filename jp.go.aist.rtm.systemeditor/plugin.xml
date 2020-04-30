@@ -806,14 +806,14 @@
 					commandId="rtse.command.allcomponent.AllStart"
 					id="rtse.menus.toolbar.allcomponent.AllStart"
 					label="%All_Start"
-					icon="icons/AllStart.gif"
+					icon="icons/AllStart.png"
 					style="push">
 				</command>
 				<command
 					commandId="rtse.command.allcomponent.AllStop"
 					id="rtse.menus.toolbar.allcomponent.AllStop"
 					label="%All_Stop"
-					icon="icons/AllStop.gif"
+					icon="icons/AllStop.png"
 					style="push">
 				</command>
 				<command
@@ -983,7 +983,7 @@
 			</command>
 			<command
 				commandId="rtse.command.allcomponent.AllStart"
-				icon="icons/AllStart.gif"
+				icon="icons/AllStart.png"
 				id="rtse.menus.popup.systemeditor.allrtc.AllStart"
 				label="%All_Start"
 				style="push">
@@ -994,7 +994,7 @@
 			</command>
 			<command
 				commandId="rtse.command.allcomponent.AllStop"
-				icon="icons/AllStop.gif"
+				icon="icons/AllStop.png"
 				id="rtse.menus.popup.systemeditor.allrtc.AllStop"
 				label="%All_Stop"
 				style="push">
