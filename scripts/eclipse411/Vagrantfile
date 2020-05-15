@@ -1,0 +1,113 @@
+# -*- mode: ruby -*-
+# -*- coding: utf-8 -*-
+# vi: set ft=ruby :
+
+#--------------------------------
+VM_NAME = "eclipse411"
+BOX_IMAGE = "ubuntu/bionic64"
+DISK_SIZE = "10GB"
+MEMORY = 4096
+CPU_CORES = 2
+
+# port forwarding
+SSH_PORT = 21845
+#--------------------------------
+# vm settings
+# 1) ssh port forwarding
+# 2) add tmpfs
+# 3) use riken mirror
+# 5) libssl installs non-interactively
+# 6) scp password authentication
+# 7) install tool_packages for OpenRTM-aist core developer
+# 8) install openjdk-8-jdk
+#--------------------------------
+
+Vagrant.configure("2") do |config|
+
+  config.vm.define VM_NAME do |node|
+    node.vm.hostname = VM_NAME
+    node.vm.box = BOX_IMAGE
+    node.disksize.size = DISK_SIZE
+    node.vm.network :forwarded_port, id: "ssh", guest: 22, host: SSH_PORT
+    node.vm.provider "virtualbox" do |v|
+      v.name = VM_NAME
+      v.memory = MEMORY
+      v.cpus = CPU_CORES
+      v.customize ["modifyvm", :id, "--ioapic", "on"]
+    end
+
+    node.vm.provision "shell" ,inline: <<-SHELL
+      # add tmpfs
+      echo 'tmpfs /tmp tmpfs rw,nodev,nosuid,size=512M 0 0' >> /etc/fstab
+      # use riken mirror
+      sed -i -e 's%archive.ubuntu.com/ubuntu%ftp.riken.go.jp/Linux/ubuntu/%g' /etc/apt/sources.list
+      apt update
+
+      # libssl installs non-interactively
+      UCF_FORCE_CONFOLD=1 \
+      DEBIAN_FRONTEND=noninteractive \
+      apt -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" -qq -y install libssl1.1
+      apt -y upgrade
+
+      # time zone
+      timedatectl set-timezone Asia/Tokyo
+
+      # for password authentication with scp
+      sed -ie 's/^PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
+      systemctl restart sshd
+
+      # install tool_packages for OpenRTM-aist core developer
+      apt -y install wget ant zip
+      wget https://raw.githubusercontent.com/OpenRTM/OpenRTM-aist/master/scripts/pkg_install_ubuntu.sh -O pkg_install_ubuntu.sh
+      sh pkg_install_ubuntu.sh -l c++ -l python -c --yes
+
+      # openrtp depends on java8
+      add-apt-repository ppa:openjdk-r/ppa -y
+      apt update
+      apt -y install openjdk-8-jdk
+      JAVA8=`update-alternatives --list java | grep java-8`
+      update-alternatives --set java ${JAVA8}
+    SHELL
+
+    node.vm.provision "shell", privileged: false, inline: <<-SHELL
+      # Eclipse SDK, RCP Download
+      DEST_DIR=${HOME}/public_html/pub/eclipse/packages
+#      SDK_URL="http://ftp.jaist.ac.jp/pub/eclipse/eclipse/downloads/drops4/R-4.11-201903070500"
+      SDK_URL="https://archive.eclipse.org/eclipse/downloads/drops4/R-4.11-201903070500/"
+      mkdir -p ${DEST_DIR}
+      wget -P ${DEST_DIR} ${SDK_URL}/eclipse-SDK-4.11-linux-gtk-x86_64.tar.gz
+      wget -P ${DEST_DIR} ${SDK_URL}/eclipse-SDK-4.11-macosx-cocoa-x86_64.tar.gz
+      wget -P ${DEST_DIR} ${SDK_URL}/eclipse-SDK-4.11-win32-x86_64.zip
+
+      RCP_URL="http://ftp.jaist.ac.jp/pub/eclipse/technology/epp/downloads/release/2019-03/R"
+      wget -P ${DEST_DIR} ${RCP_URL}/eclipse-rcp-2019-03-R-linux-gtk-x86_64.tar.gz
+
+      LANG_PACK_URL="http://ftp.jaist.ac.jp/pub/eclipse/technology/babel/babel_language_packs/R0.16.1/2018-12"
+      wget -P ${DEST_DIR} ${LANG_PACK_URL}/BabelLanguagePack-eclipse-ja_4.10.0.v20190126060001.zip
+
+      # deploy Eclipse --- $HOME/eclipse
+      cp ${DEST_DIR}/eclipse-SDK-4.11-linux-gtk-x86_64.tar.gz .
+      tar zxvf eclipse-SDK-4.11-linux-gtk-x86_64.tar.gz
+
+      # deploy Eclipse --- $HOME/eclipse_env
+      ENV_DIR=${HOME}/eclipse_env
+      mkdir ${ENV_DIR}
+      cp ${DEST_DIR}/eclipse-rcp-2019-03-R-linux-gtk-x86_64.tar.gz ${ENV_DIR}/
+      tar zxvf ${ENV_DIR}/eclipse-rcp-2019-03-R-linux-gtk-x86_64.tar.gz -C ${ENV_DIR}/
+
+      # get scripts
+      wget https://raw.githubusercontent.com/OpenRTM/OpenRTP-aist/master/mirror_site
+      wget https://raw.githubusercontent.com/OpenRTM/OpenRTP-aist/master/install_plugins
+
+      # download software site repository
+      ECLIPSE_SOFT_REPO=https://download.eclipse.org/releases/2019-03
+      MIRROR_DIR=${HOME}/public_html/pub/eclipse/projects/2019-03
+      export ECLIPSE_HOME=${HOME}/eclipse_envs/eclipse
+      bash mirror_site ${ECLIPSE_SOFT_REPO} ${MIRROR_DIR}
+
+      # install Eclipse plugins
+      export REPOSITORY="file:///${MIRROR_DIR},${ECLIPSE_SOFT_REPO}"
+      sh install_plugins ${HOME}/eclipse
+    SHELL
+  end
+end
