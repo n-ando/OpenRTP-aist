@@ -718,8 +718,11 @@ public class DataConnectorCreaterDialog extends ConnectorDialogBase {
 			types = Arrays.asList(preference.getSubscriptionTypes());
 			isAllowAny = false;
 		}
-		value = loadCombo(subscriptionTypeCombo, types, connectorProfile
-				.getSubscriptionType(), isAllowAny);
+		String defaultVal = connectorProfile.getSubscriptionType();
+		if(defaultVal==null || defaultVal.length()==0) {
+			defaultVal = "flush";
+		}
+		value = loadCombo(subscriptionTypeCombo, types, defaultVal, isAllowAny);
 		connectorProfile.setSubscriptionType(value);
 		//
 		if (!isOffline()) {
