@@ -983,7 +983,7 @@ public class ConfigurationDialog extends TitleAreaDialog {
 				// ステップから制約範囲内の値に換算
 				int step = valueSlider.getSelection();
 				String value = wd.getCondition().getValueByStep(step, wd,
-						valueSliderText.getText(), wd.getSliderStep());
+						valueSliderText.getText(), wd.getSliderStepStr());
 				if (wd.getCondition().validate(value)) {
 					wd.setValue(value);
 				}

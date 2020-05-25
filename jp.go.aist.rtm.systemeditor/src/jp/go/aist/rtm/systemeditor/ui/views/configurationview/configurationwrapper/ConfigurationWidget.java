@@ -22,6 +22,7 @@ public class ConfigurationWidget {
 	private boolean valueModified = false;
 
 	double sliderStep = 1.0;
+	String sliderStepStr = "";
 	double spinStep = 0.0;
 
 	/**
@@ -136,8 +137,8 @@ public class ConfigurationWidget {
 
 	void setSliderStep(String type) {
 		try {
-			String step = type.substring(SLIDER.length() + 1);
-			sliderStep = Double.parseDouble(step);
+			this.sliderStepStr = type.substring(SLIDER.length() + 1);
+			sliderStep = Double.parseDouble(this.sliderStepStr);
 			if (sliderStep <= 0.0) {
 				sliderStep = 1.0;
 			}
@@ -250,6 +251,10 @@ public class ConfigurationWidget {
 		return this.sliderStep;
 	}
 
+	public String getSliderStepStr() {
+		return this.sliderStepStr;
+	}
+	
 	public int getSpinIncrement() {
 		double step = 1.0;
 		if (hasCondition() && condition.getDigits() > 0) {
@@ -264,6 +269,7 @@ public class ConfigurationWidget {
 		ConfigurationWidget result = new ConfigurationWidget(this.type,
 				(this.condition != null) ? this.condition.clone() : null);
 		result.sliderStep = sliderStep;
+		result.sliderStepStr = sliderStepStr;
 		result.spinStep = spinStep;
 		return result;
 	}

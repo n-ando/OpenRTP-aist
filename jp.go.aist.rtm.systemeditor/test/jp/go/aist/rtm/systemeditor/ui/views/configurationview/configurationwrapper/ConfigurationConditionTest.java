@@ -583,39 +583,39 @@ public class ConfigurationConditionTest extends TestCase {
 		// 整数
 		actual = ConfigurationCondition.parseX("-10<x<10");
 		wd = new ConfigurationWidget("slider.1", actual);
-		assertEquals("-1", actual.getValueByStep(9, wd, "0", 1));
-		assertEquals("-10", actual.getValueByStep(-1, wd, "1", 1)); // 範囲外
-		assertEquals("10", actual.getValueByStep(21, wd, "2", 1)); // 範囲外
+		assertEquals("-1", actual.getValueByStep(9, wd, "0", "1"));
+		assertEquals("-10", actual.getValueByStep(-1, wd, "1", "1")); // 範囲外
+		assertEquals("10", actual.getValueByStep(21, wd, "2", "1")); // 範囲外
 		// 小数
 		actual = ConfigurationCondition.parseX("-0.5<x<0.5");
 		wd = new ConfigurationWidget("slider.0.05", actual);
-		assertEquals("-0.3", actual.getValueByStep(4, wd, "3", 0.05));
-		assertEquals("-0.5", actual.getValueByStep(-1, wd, "4", 0.05)); // 範囲外
-		assertEquals("0.5", actual.getValueByStep(21, wd, "5", 0.05)); // 範囲外
+		assertEquals("-0.3", actual.getValueByStep(4, wd, "3", "0.05"));
+		assertEquals("-0.5", actual.getValueByStep(-1, wd, "4", "0.05")); // 範囲外
+		assertEquals("0.5", actual.getValueByStep(21, wd, "5", "0.05")); // 範囲外
 		actual = ConfigurationCondition.parseX("-10.0<x<10.0");
 		wd = new ConfigurationWidget("slider.1", actual);
-		assertEquals("9.0", actual.getValueByStep(19, wd, "6", 1));
+		assertEquals("9.0", actual.getValueByStep(19, wd, "6", "1"));
 	}
 
 	public void testGetValueByStep2() throws Exception {
 		ConfigurationCondition actual = ConfigurationCondition
 				.parseX("0.0<x<10.0");
 		ConfigurationWidget wd = new ConfigurationWidget("slider.0.1", actual);
-		assertEquals("0.0", actual.getValueByStep(0, wd, "7", 0.1));
-		assertEquals("0.1", actual.getValueByStep(1, wd, "8", 0.1));
-		assertEquals("0.2", actual.getValueByStep(2, wd, "9", 0.1));
-		assertEquals("0.3", actual.getValueByStep(3, wd, "10", 0.1));
+		assertEquals("0.0", actual.getValueByStep(0, wd, "7", "0.1"));
+		assertEquals("0.1", actual.getValueByStep(1, wd, "8", "0.1"));
+		assertEquals("0.2", actual.getValueByStep(2, wd, "9", "0.1"));
+		assertEquals("0.3", actual.getValueByStep(3, wd, "10", "0.1"));
 		assertEquals(3, actual.getStepByValue("0.3", wd));
-		assertEquals("0.4", actual.getValueByStep(4, wd, "11", 0.1));
+		assertEquals("0.4", actual.getValueByStep(4, wd, "11", "0.1"));
 		assertEquals(4, actual.getStepByValue("0.4", wd));
-		assertEquals("0.7", actual.getValueByStep(7, wd, "12", 0.1));
+		assertEquals("0.7", actual.getValueByStep(7, wd, "12", "0.1"));
 	}
 
 	public void testGetValueByStep3() throws Exception {
 		ConfigurationCondition actual = ConfigurationCondition.parseX("0<x<10");
 		ConfigurationWidget wd = new ConfigurationWidget("slider.0.1", actual);
-		assertEquals("1", actual.getValueByStep(1, wd, "0", 0.1));
-		assertEquals("0", actual.getValueByStep(9, wd, "1", 0.1));
+		assertEquals("1", actual.getValueByStep(1, wd, "0", "0.1"));
+		assertEquals("0", actual.getValueByStep(9, wd, "1", "0.1"));
 	}
 
 	public void testAdjustMinMaxValue() throws Exception {
