@@ -124,6 +124,9 @@ public class RtcProfile {
      *     
      */
     public ConfigurationSet getConfigurationSet() {
+        if (configurationSet == null) {
+        	configurationSet = new ConfigurationSet();
+        }
         return configurationSet;
     }
 
