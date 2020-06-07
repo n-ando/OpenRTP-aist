@@ -49,8 +49,6 @@ public class TimeoutWrapper {
 			return ret;
 		} catch (TimeoutException e) {
 			// タイムアウト発生
-			MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
-					Messages.getString("TimeoutWrapper.0"), Messages.getString("TimeoutWrapper.1"));
 			return null;
 		} catch (InterruptedException | ExecutionException e) {
 			LOGGER.error("Fail to get future", e);
