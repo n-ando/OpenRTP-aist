@@ -10,7 +10,7 @@
       <view
             category="OpenRTP"
             class="jp.go.aist.rtm.repositoryView.ui.views.RepositoryView"
-            icon="icon/repositories.gif"
+            icon="icon/repositories.png"
             id="jp.go.aist.rtm.repositoryView.view"
             name="%RepositoryView"/>
    </extension>
@@ -23,7 +23,7 @@
          <action
                class="jp.go.aist.rtm.repositoryView.ui.action.ViewActionUpLoad"
                definitionId="jp.go.aist.rtm.repositoryView.UpLoadCommand"
-               icon="icon/export.gif"
+               icon="icon/export.png"
                id="jp.go.aist.rtm.repositoryView.UploadAction"
                label="%Upload"
                menubarPath="servers"
@@ -36,7 +36,7 @@
          <action
                class="jp.go.aist.rtm.repositoryView.ui.action.ViewActionDelete"
                definitionId="jp.go.aist.rtm.repositoryView.DeleteCommand"
-               icon="icon/delete.gif"
+               icon="icon/delete.png"
                id="jp.go.aist.rtm.repositoryView.DeleteAction"
                label="%Delete"
                menubarPath="additions"
@@ -47,19 +47,19 @@
             targetID="jp.go.aist.rtm.repositoryView.view">
          <action
                class="jp.go.aist.rtm.repositoryView.ui.action.ViewActionLoadDirecroty"
-               icon="icon/importdir_wiz.gif"
+               icon="icon/importdir_wiz.png"
                id="jp.go.aist.rtm.repositoryView.LoadDirAction"
                label="%Load_Dir"
                menubarPath="locals"/>
          <action
                class="jp.go.aist.rtm.repositoryView.ui.action.ViewActionLoadFile"
-               icon="icon/file_with_arrow.gif"
+               icon="icon/file_with_arrow.png"
                id="jp.go.aist.rtm.repositoryView.LoadFileAction"
                label="%Load_File"
                menubarPath="locals"/>
 <!--         <action
                class="jp.go.aist.rtm.repositoryView.ui.action.ConnectRTRepositoryAction"
-               icon="icon/Connect.gif"
+               icon="icon/Connect.png"
                id="jp.go.aist.rtm.repositoryView.ConnectRTRepositoryAction"
                label="%Connect_RT_Repository"
                menubarPath="servers"/>-->
@@ -71,7 +71,7 @@
          <action
                class="jp.go.aist.rtm.repositoryView.ui.action.ViewActionRepositoryDelete"
                definitionId="jp.go.aist.rtm.repositoryView.RepositoryDeleteCommand"
-               icon="icon/delete_repository2.gif"
+               icon="icon/delete_repository2.png"
                id="jp.go.aist.rtm.repositoryView.RepositoryDeleteAction"
                label="%Delete_from_Repository"
                menubarPath="additions"
@@ -85,7 +85,7 @@
             targetID="jp.go.aist.rtm.repositoryView.view">
 <!--         <action
                class="jp.go.aist.rtm.repositoryView.ui.action.ConnectRTRepositoryAction"
-               icon="icon/Connect.gif"
+               icon="icon/Connect.png"
                id="jp.go.aist.rtm.repositoryView.ui.action.ConnectRTRepositoryAction"
                label="%Connect_RT_Repository"
                menubarPath="additions"
@@ -94,7 +94,7 @@
                tooltip="%Connect_RT_Repository"/>-->
          <action
                class="jp.go.aist.rtm.repositoryView.ui.action.ViewActionLoadFile"
-               icon="icon/file_with_arrow.gif"
+               icon="icon/file_with_arrow.png"
                id="jp.go.aist.rtm.repositoryView.LoadFileAction"
                label="%Load_File"
                menubarPath="additions"
@@ -103,7 +103,7 @@
                tooltip="%Load_RTC_Profile_from_File"/>
          <action
                class="jp.go.aist.rtm.repositoryView.ui.action.ViewActionLoadDirecroty"
-               icon="icon/importdir_wiz.gif"
+               icon="icon/importdir_wiz.png"
                id="jp.go.aist.rtm.repositoryView.LoadDirectoryAction"
                label="%Load_Dir"
                menubarPath="additions"

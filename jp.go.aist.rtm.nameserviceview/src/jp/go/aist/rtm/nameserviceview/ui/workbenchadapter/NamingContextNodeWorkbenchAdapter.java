@@ -17,7 +17,7 @@ public class NamingContextNodeWorkbenchAdapter extends
 
 	@Override
 	public ImageDescriptor getImageDescriptor(Object o) {
-		return NameServiceViewPlugin.getImageDescriptor("icons/Folder.gif");
+		return NameServiceViewPlugin.getImageDescriptor("icons/Folder.png");
 	}
 
 	@Override
