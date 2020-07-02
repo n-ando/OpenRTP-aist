@@ -10,32 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import jp.go.aist.rtm.systemeditor.manager.ComponentIconStore;
-import jp.go.aist.rtm.systemeditor.manager.SystemEditorPreferenceManager;
-import jp.go.aist.rtm.systemeditor.ui.action.OpenCompositeComponentAction;
-import jp.go.aist.rtm.systemeditor.ui.editor.AbstractSystemDiagramEditor;
-import jp.go.aist.rtm.systemeditor.ui.editor.SystemDiagramStore;
-import jp.go.aist.rtm.systemeditor.ui.editor.editpart.direct.NameCellEditorLocator;
-import jp.go.aist.rtm.systemeditor.ui.editor.editpart.direct.NameDirectEditManager;
-import jp.go.aist.rtm.systemeditor.ui.editor.editpolicy.ChangeDirectionEditPolicy;
-import jp.go.aist.rtm.systemeditor.ui.editor.editpolicy.ComponentComponentEditPolicy;
-import jp.go.aist.rtm.systemeditor.ui.editor.editpolicy.EditPolicyConstraint;
-import jp.go.aist.rtm.systemeditor.ui.editor.editpolicy.NameDirectEditPolicy;
-import jp.go.aist.rtm.systemeditor.ui.editor.figure.ComponentLayout;
-import jp.go.aist.rtm.systemeditor.ui.editor.figure.PortFigure;
-import jp.go.aist.rtm.systemeditor.ui.handler.ChangeDirectionCommandHandler;
-import jp.go.aist.rtm.systemeditor.ui.util.ComponentUtil;
-import jp.go.aist.rtm.systemeditor.ui.util.Draw2dUtil;
-import jp.go.aist.rtm.toolscommon.model.component.Component;
-import jp.go.aist.rtm.toolscommon.model.component.ComponentPackage;
-import jp.go.aist.rtm.toolscommon.model.component.ComponentSpecification;
-import jp.go.aist.rtm.toolscommon.model.component.CorbaComponent;
-import jp.go.aist.rtm.toolscommon.model.component.ExecutionContext;
-import jp.go.aist.rtm.toolscommon.model.component.SystemDiagram;
-import jp.go.aist.rtm.toolscommon.model.component.SystemDiagramKind;
-import jp.go.aist.rtm.toolscommon.model.component.util.ICorbaPortEventObserver;
-import jp.go.aist.rtm.toolscommon.model.core.CorePackage;
-
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.Graphics;
@@ -57,9 +31,38 @@ import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import jp.go.aist.rtm.systemeditor.manager.ComponentIconStore;
+import jp.go.aist.rtm.systemeditor.manager.SystemEditorPreferenceManager;
+import jp.go.aist.rtm.systemeditor.ui.action.OpenCompositeComponentAction;
+import jp.go.aist.rtm.systemeditor.ui.editor.AbstractSystemDiagramEditor;
+import jp.go.aist.rtm.systemeditor.ui.editor.SystemDiagramStore;
+import jp.go.aist.rtm.systemeditor.ui.editor.editpart.direct.NameCellEditorLocator;
+import jp.go.aist.rtm.systemeditor.ui.editor.editpart.direct.NameDirectEditManager;
+import jp.go.aist.rtm.systemeditor.ui.editor.editpolicy.ChangeDirectionEditPolicy;
+import jp.go.aist.rtm.systemeditor.ui.editor.editpolicy.ComponentComponentEditPolicy;
+import jp.go.aist.rtm.systemeditor.ui.editor.editpolicy.EditPolicyConstraint;
+import jp.go.aist.rtm.systemeditor.ui.editor.editpolicy.NameDirectEditPolicy;
+import jp.go.aist.rtm.systemeditor.ui.editor.figure.ComponentLayout;
+import jp.go.aist.rtm.systemeditor.ui.editor.figure.PortFigure;
+import jp.go.aist.rtm.systemeditor.ui.handler.ChangeDirectionCommandHandler;
+import jp.go.aist.rtm.systemeditor.ui.util.ComponentActionDelegate;
+import jp.go.aist.rtm.systemeditor.ui.util.ComponentUtil;
+import jp.go.aist.rtm.systemeditor.ui.util.Draw2dUtil;
+import jp.go.aist.rtm.toolscommon.model.component.Component;
+import jp.go.aist.rtm.toolscommon.model.component.ComponentPackage;
+import jp.go.aist.rtm.toolscommon.model.component.ComponentSpecification;
+import jp.go.aist.rtm.toolscommon.model.component.CorbaComponent;
+import jp.go.aist.rtm.toolscommon.model.component.ExecutionContext;
+import jp.go.aist.rtm.toolscommon.model.component.SystemDiagram;
+import jp.go.aist.rtm.toolscommon.model.component.SystemDiagramKind;
+import jp.go.aist.rtm.toolscommon.model.component.util.ICorbaPortEventObserver;
+import jp.go.aist.rtm.toolscommon.model.core.CorePackage;
 
 /**
  * コンポーネントのEditPart
@@ -206,7 +209,6 @@ public class ComponentEditPart extends AbstractEditPart {
 				}
 			}
 		}
-
 	}
 
 	/**
@@ -686,6 +688,26 @@ public class ComponentEditPart extends AbstractEditPart {
 						((OpenCompositeComponentAction) action).getParentSystemDiagramEditor());
 				openAction.setCompositeComponent(getModel());
 				openAction.run();
+			} else {
+				CorbaComponent component = (CorbaComponent) getModel();
+				List<CorbaComponent> components = new ArrayList<>();
+				components.add(component);
+				
+				IWorkbenchWindow activeWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+				IWorkbenchPart activePart = activeWindow.getActivePage().getActivePart();
+						
+				int status = component.getComponentState();
+				List<ComponentActionDelegate.Command> commands = new ArrayList<>();
+				if (status == ExecutionContext.RTC_INACTIVE) {
+					commands = ComponentActionDelegate.commandOf_ACTIVATE(LOGGER, components);
+				} else if (status == ExecutionContext.RTC_ACTIVE) {
+					commands = ComponentActionDelegate.commandOf_DEACTIVATE(LOGGER, components);
+				} else if (status == ExecutionContext.RTC_ERROR) {
+					commands = ComponentActionDelegate.commandOf_RESET(LOGGER, components);
+				}
+				ComponentActionDelegate actionDelegate = new ComponentActionDelegate();
+				actionDelegate.setActivePart(null, activePart);
+				actionDelegate.run(commands);
 			}
 		}
 		// オフラインエディタの場合はインスタンス名の直接編集可
