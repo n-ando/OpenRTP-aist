@@ -231,7 +231,7 @@ public class ToolsCommonPreferenceManager {
 	/** STATUS_OBSERVER_ATTACH_ENABLE の取得 */
 	public final Boolean isSTATUS_OBSERVER_ATTACH_ENABLE() {
 		String key = KEY_STATUS_OBSERVER_ATTACH_ENABLE;
-		store.setDefault(key, true);
+		store.setDefault(key, false);
 		return store.getBoolean(key);
 	}
 
@@ -243,7 +243,7 @@ public class ToolsCommonPreferenceManager {
 
 	/** STATUS_OBSERVER_ATTACH_ENABLE の復元 */
 	public void resetSTATUS_OBSERVER_ATTACH_ENABLE() {
-		setSTATUS_OBSERVER_ATTACH_ENABLE(true);
+		setSTATUS_OBSERVER_ATTACH_ENABLE(false);
 	}
 
 	/**
