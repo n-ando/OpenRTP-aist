@@ -857,7 +857,8 @@ public class SystemDiagramImpl extends ModelElementImpl implements SystemDiagram
 							    public void run() {
 						            MessageDialog.openError(shell,
 						            		Messages.getString("IPCaution.title"),
-						            		Messages.getString("IPCaution.message") + " (" + oldAddress + " -> " + currentIP + ")");
+						            		Messages.getString("IPCaution.message01") + " (" + oldAddress + " -> " + currentIP + ")" + System.lineSeparator()
+						            		+ Messages.getString("IPCaution.message02"));
 							    }
 							});
 						}
