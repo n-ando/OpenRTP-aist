@@ -8,28 +8,14 @@ package jp.go.aist.rtm.toolscommon.model.component.impl;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-
-import jp.go.aist.rtm.toolscommon.manager.ToolsCommonPreferenceManager;
-import jp.go.aist.rtm.toolscommon.model.component.Component;
-import jp.go.aist.rtm.toolscommon.model.component.ComponentPackage;
-import jp.go.aist.rtm.toolscommon.model.component.IPropertyMap;
-import jp.go.aist.rtm.toolscommon.model.component.CorbaStatusObserver;
-import jp.go.aist.rtm.toolscommon.model.component.PortConnector;
-import jp.go.aist.rtm.toolscommon.model.component.SystemDiagram;
-import jp.go.aist.rtm.toolscommon.model.component.SystemDiagramKind;
-import jp.go.aist.rtm.toolscommon.model.component.util.CorbaObserverHandler;
-import jp.go.aist.rtm.toolscommon.model.component.util.PropertyMap;
-import jp.go.aist.rtm.toolscommon.model.core.Point;
-import jp.go.aist.rtm.toolscommon.model.core.impl.ModelElementImpl;
-import jp.go.aist.rtm.toolscommon.synchronizationframework.RefreshThread;
-import jp.go.aist.rtm.toolscommon.synchronizationframework.SynchronizationSupport;
-import jp.go.aist.rtm.toolscommon.ui.propertysource.SystemDiagramPropertySource;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
@@ -39,10 +25,30 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.openrtp.namespaces.rts.version02.RtsProfileExt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import jp.go.aist.rtm.toolscommon.manager.ToolsCommonPreferenceManager;
+import jp.go.aist.rtm.toolscommon.model.component.Component;
+import jp.go.aist.rtm.toolscommon.model.component.ComponentPackage;
+import jp.go.aist.rtm.toolscommon.model.component.CorbaStatusObserver;
+import jp.go.aist.rtm.toolscommon.model.component.IPropertyMap;
+import jp.go.aist.rtm.toolscommon.model.component.PortConnector;
+import jp.go.aist.rtm.toolscommon.model.component.SystemDiagram;
+import jp.go.aist.rtm.toolscommon.model.component.SystemDiagramKind;
+import jp.go.aist.rtm.toolscommon.model.component.util.CorbaObserverHandler;
+import jp.go.aist.rtm.toolscommon.model.component.util.PropertyMap;
+import jp.go.aist.rtm.toolscommon.model.core.Point;
+import jp.go.aist.rtm.toolscommon.model.core.impl.ModelElementImpl;
+import jp.go.aist.rtm.toolscommon.nl.Messages;
+import jp.go.aist.rtm.toolscommon.synchronizationframework.RefreshThread;
+import jp.go.aist.rtm.toolscommon.synchronizationframework.SynchronizationSupport;
+import jp.go.aist.rtm.toolscommon.ui.propertysource.SystemDiagramPropertySource;
 
 /**
  * <!-- begin-user-doc --> An implementation of the model object '<em><b>System Diagram</b></em>'.
@@ -98,6 +104,8 @@ public class SystemDiagramImpl extends ModelElementImpl implements SystemDiagram
 	protected SystemDiagramKind kind = KIND_EDEFAULT;
 
 	protected IPropertyMap properties;
+	
+	private String currentIP = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -834,6 +842,32 @@ public class SystemDiagramImpl extends ModelElementImpl implements SystemDiagram
 
 	void synchronizeRemote() {
 		if (getParentSystemDiagram() == null) {
+			try {
+				InetAddress addr = InetAddress.getLocalHost();
+				String address = addr.getHostAddress();
+				if(currentIP==null) {
+					currentIP = address;
+				} else {
+					if(currentIP.equals(address)==false) {
+						String oldAddress = currentIP;
+						currentIP = address;
+						if( 0 < PlatformUI.getWorkbench().getWorkbenchWindowCount() ) {
+							Shell shell = PlatformUI.getWorkbench().getWorkbenchWindows()[0].getShell();
+							shell.getDisplay().asyncExec(new Runnable() {
+							    public void run() {
+						            MessageDialog.openError(shell,
+						            		Messages.getString("IPCaution.title"),
+						            		Messages.getString("IPCaution.message01") + " (" + oldAddress + " -> " + currentIP + ")" + System.lineSeparator()
+						            		+ Messages.getString("IPCaution.message02"));
+							    }
+							});
+						}
+					}
+				}
+			} catch (UnknownHostException e) {
+				e.printStackTrace();
+			}
+			
 			for (Component component : getUnmodifiedComponents()) {
 				if (component instanceof CorbaComponentImpl) {
 					CorbaComponentImpl corbaComp = (CorbaComponentImpl) component;
