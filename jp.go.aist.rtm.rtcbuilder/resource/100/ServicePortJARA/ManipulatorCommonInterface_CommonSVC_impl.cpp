@@ -25,94 +25,85 @@ JARA_ARM_ManipulatorCommonInterface_CommonSVC_impl::~JARA_ARM_ManipulatorCommonI
 /*
  * Methods corresponding to IDL attributes and operations
  */
-JARA_ARM::RETURN_ID* JARA_ARM_ManipulatorCommonInterface_CommonSVC_impl::clearAlarms()
+JARA_ARM::RETURN_ID JARA_ARM_ManipulatorCommonInterface_CommonSVC_impl::clearAlarms()
 {
-	JARA_ARM::RETURN_ID* result;
   // Please insert your code here and remove the following warning pragma
 #ifndef WIN32
-  #warning "Code missing in function <JARA_ARM::RETURN_ID* JARA_ARM_ManipulatorCommonInterface_CommonSVC_impl::clearAlarms()>"
+  #warning "Code missing in function <JARA_ARM::RETURN_ID JARA_ARM_ManipulatorCommonInterface_CommonSVC_impl::clearAlarms()>"
 #endif
-  return result;
+  return 0;
 }
 
-JARA_ARM::RETURN_ID* JARA_ARM_ManipulatorCommonInterface_CommonSVC_impl::getActiveAlarm(JARA_ARM::AlarmSeq_out alarms)
+JARA_ARM::RETURN_ID JARA_ARM_ManipulatorCommonInterface_CommonSVC_impl::getActiveAlarm(JARA_ARM::AlarmSeq_out alarms)
 {
-	JARA_ARM::RETURN_ID* result;
   // Please insert your code here and remove the following warning pragma
 #ifndef WIN32
-  #warning "Code missing in function <JARA_ARM::RETURN_ID* JARA_ARM_ManipulatorCommonInterface_CommonSVC_impl::getActiveAlarm(JARA_ARM::AlarmSeq_out alarms)>"
+  #warning "Code missing in function <JARA_ARM::RETURN_ID JARA_ARM_ManipulatorCommonInterface_CommonSVC_impl::getActiveAlarm(JARA_ARM::AlarmSeq_out alarms)>"
 #endif
-  return result;
+  return 0;
 }
 
-JARA_ARM::RETURN_ID* JARA_ARM_ManipulatorCommonInterface_CommonSVC_impl::getFeedbackPosJoint(JARA_ARM::JointPos_out pos)
+JARA_ARM::RETURN_ID JARA_ARM_ManipulatorCommonInterface_CommonSVC_impl::getFeedbackPosJoint(JARA_ARM::JointPos& pos)
 {
-	JARA_ARM::RETURN_ID* result;
   // Please insert your code here and remove the following warning pragma
 #ifndef WIN32
-  #warning "Code missing in function <JARA_ARM::RETURN_ID* JARA_ARM_ManipulatorCommonInterface_CommonSVC_impl::getFeedbackPosJoint(JARA_ARM::JointPos_out pos)>"
+  #warning "Code missing in function <JARA_ARM::RETURN_ID JARA_ARM_ManipulatorCommonInterface_CommonSVC_impl::getFeedbackPosJoint(JARA_ARM::JointPos& pos)>"
 #endif
-  return result;
+  return 0;
 }
 
-JARA_ARM::RETURN_ID* JARA_ARM_ManipulatorCommonInterface_CommonSVC_impl::getManipInfo(JARA_ARM::ManipInfo_out mInfo)
+JARA_ARM::RETURN_ID JARA_ARM_ManipulatorCommonInterface_CommonSVC_impl::getManipInfo(JARA_ARM::ManipInfo_out mInfo)
 {
-	JARA_ARM::RETURN_ID* result;
   // Please insert your code here and remove the following warning pragma
 #ifndef WIN32
-  #warning "Code missing in function <JARA_ARM::RETURN_ID* JARA_ARM_ManipulatorCommonInterface_CommonSVC_impl::getManipInfo(JARA_ARM::ManipInfo_out mInfo)>"
+  #warning "Code missing in function <JARA_ARM::RETURN_ID JARA_ARM_ManipulatorCommonInterface_CommonSVC_impl::getManipInfo(JARA_ARM::ManipInfo_out mInfo)>"
 #endif
-  return result;
+  return 0;
 }
 
-JARA_ARM::RETURN_ID* JARA_ARM_ManipulatorCommonInterface_CommonSVC_impl::getSoftLimitJoint(JARA_ARM::LimitSeq_out softLimit)
+JARA_ARM::RETURN_ID JARA_ARM_ManipulatorCommonInterface_CommonSVC_impl::getSoftLimitJoint(JARA_ARM::LimitSeq_out softLimit)
 {
-	JARA_ARM::RETURN_ID* result;
   // Please insert your code here and remove the following warning pragma
 #ifndef WIN32
-  #warning "Code missing in function <JARA_ARM::RETURN_ID* JARA_ARM_ManipulatorCommonInterface_CommonSVC_impl::getSoftLimitJoint(JARA_ARM::LimitSeq_out softLimit)>"
+  #warning "Code missing in function <JARA_ARM::RETURN_ID JARA_ARM_ManipulatorCommonInterface_CommonSVC_impl::getSoftLimitJoint(JARA_ARM::LimitSeq_out softLimit)>"
 #endif
-  return result;
+  return 0;
 }
 
-JARA_ARM::RETURN_ID* JARA_ARM_ManipulatorCommonInterface_CommonSVC_impl::getState(JARA_ARM::ULONG& state)
+JARA_ARM::RETURN_ID JARA_ARM_ManipulatorCommonInterface_CommonSVC_impl::getState(JARA_ARM::ULONG& state)
 {
-	JARA_ARM::RETURN_ID* result;
   // Please insert your code here and remove the following warning pragma
 #ifndef WIN32
-  #warning "Code missing in function <JARA_ARM::RETURN_ID* JARA_ARM_ManipulatorCommonInterface_CommonSVC_impl::getState(JARA_ARM::ULONG& state)>"
+  #warning "Code missing in function <JARA_ARM::RETURN_ID JARA_ARM_ManipulatorCommonInterface_CommonSVC_impl::getState(JARA_ARM::ULONG& state)>"
 #endif
-  return result;
+  return 0;
 }
 
-JARA_ARM::RETURN_ID* JARA_ARM_ManipulatorCommonInterface_CommonSVC_impl::servoOFF()
+JARA_ARM::RETURN_ID JARA_ARM_ManipulatorCommonInterface_CommonSVC_impl::servoOFF()
 {
-	JARA_ARM::RETURN_ID* result;
   // Please insert your code here and remove the following warning pragma
 #ifndef WIN32
-  #warning "Code missing in function <JARA_ARM::RETURN_ID* JARA_ARM_ManipulatorCommonInterface_CommonSVC_impl::servoOFF()>"
+  #warning "Code missing in function <JARA_ARM::RETURN_ID JARA_ARM_ManipulatorCommonInterface_CommonSVC_impl::servoOFF()>"
 #endif
-  return result;
+  return 0;
 }
 
-JARA_ARM::RETURN_ID* JARA_ARM_ManipulatorCommonInterface_CommonSVC_impl::servoON()
+JARA_ARM::RETURN_ID JARA_ARM_ManipulatorCommonInterface_CommonSVC_impl::servoON()
 {
-	JARA_ARM::RETURN_ID* result;
   // Please insert your code here and remove the following warning pragma
 #ifndef WIN32
-  #warning "Code missing in function <JARA_ARM::RETURN_ID* JARA_ARM_ManipulatorCommonInterface_CommonSVC_impl::servoON()>"
+  #warning "Code missing in function <JARA_ARM::RETURN_ID JARA_ARM_ManipulatorCommonInterface_CommonSVC_impl::servoON()>"
 #endif
-  return result;
+  return 0;
 }
 
-JARA_ARM::RETURN_ID* JARA_ARM_ManipulatorCommonInterface_CommonSVC_impl::setSoftLimitJoint(const JARA_ARM::LimitSeq& softLimit)
+JARA_ARM::RETURN_ID JARA_ARM_ManipulatorCommonInterface_CommonSVC_impl::setSoftLimitJoint(const JARA_ARM::LimitSeq& softLimit)
 {
-	JARA_ARM::RETURN_ID* result;
   // Please insert your code here and remove the following warning pragma
 #ifndef WIN32
-  #warning "Code missing in function <JARA_ARM::RETURN_ID* JARA_ARM_ManipulatorCommonInterface_CommonSVC_impl::setSoftLimitJoint(const JARA_ARM::LimitSeq& softLimit)>"
+  #warning "Code missing in function <JARA_ARM::RETURN_ID JARA_ARM_ManipulatorCommonInterface_CommonSVC_impl::setSoftLimitJoint(const JARA_ARM::LimitSeq& softLimit)>"
 #endif
-  return result;
+  return 0;
 }
 
 

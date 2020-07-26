@@ -42,24 +42,22 @@ void ImageCalibService_CalibrationServiceSVC_impl::setImageNumber(::CORBA::Short
   return 0;
 }
 
-RTC::CameraImage* ImageCalibService_CalibrationServiceSVC_impl::captureCalibImage(::CORBA::Short num)
+RTC::CameraImage ImageCalibService_CalibrationServiceSVC_impl::captureCalibImage(::CORBA::Short num)
 {
-	RTC::CameraImage* result;
   // Please insert your code here and remove the following warning pragma
 #ifndef WIN32
-  #warning "Code missing in function <RTC::CameraImage* ImageCalibService_CalibrationServiceSVC_impl::captureCalibImage(::CORBA::Short num)>"
+  #warning "Code missing in function <RTC::CameraImage ImageCalibService_CalibrationServiceSVC_impl::captureCalibImage(::CORBA::Short num)>"
 #endif
-  return result;
+  return 0;
 }
 
-RTC::CameraImage* ImageCalibService_CalibrationServiceSVC_impl::getCalibImage(::CORBA::Short num)
+RTC::CameraImage ImageCalibService_CalibrationServiceSVC_impl::getCalibImage(::CORBA::Short num)
 {
-	RTC::CameraImage* result;
   // Please insert your code here and remove the following warning pragma
 #ifndef WIN32
-  #warning "Code missing in function <RTC::CameraImage* ImageCalibService_CalibrationServiceSVC_impl::getCalibImage(::CORBA::Short num)>"
+  #warning "Code missing in function <RTC::CameraImage ImageCalibService_CalibrationServiceSVC_impl::getCalibImage(::CORBA::Short num)>"
 #endif
-  return result;
+  return 0;
 }
 
 ImageCalibService::ImageList* ImageCalibService_CalibrationServiceSVC_impl::getCalibImages()
@@ -82,12 +80,11 @@ ImageCalibService::ImageList* ImageCalibService_CalibrationServiceSVC_impl::getC
 
 RTC::CameraInfo ImageCalibService_CalibrationServiceSVC_impl::getCalibParameter()
 {
-	RTC::CameraInfo result;
   // Please insert your code here and remove the following warning pragma
 #ifndef WIN32
   #warning "Code missing in function <RTC::CameraInfo ImageCalibService_CalibrationServiceSVC_impl::getCalibParameter()>"
 #endif
-  return result;
+  return 0;
 }
 
 
