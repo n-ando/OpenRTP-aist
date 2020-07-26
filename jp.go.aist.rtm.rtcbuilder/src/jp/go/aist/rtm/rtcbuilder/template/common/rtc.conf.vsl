@@ -1,405 +1,959 @@
-${sharp}------------------------------------------------------------
-${sharp} RT-Component manager configuration
+${sharp}============================================================
+${sharp} rtc.conf settings example
 ${sharp}
-${sharp} See details in the following reference manual or web page.
-${sharp} https://openrtm.org/openrtm/en/content/configuration
-${sharp} https://openrtm.org/openrtm/ja/content/rtcconf_reference_ja
+${sharp} See details in the following reference manual on the web page or the
+${sharp} following documents.
 ${sharp}
+${sharp} English reference:  https://openrtm.org/openrtm/en/rtc_conf_reference
+${sharp} Japanese reference: https://openrtm.org/openrtm/ja/rtc_conf_reference
+${sharp}
+${sharp}============================================================
+${sharp} Set your nameserver address (localhost:2809 is default)
+${sharp}corba.nameservers: localhost, 192.168.0.1:2800, otherhost, ...
 
-${sharp}------------------------------------------------------------
-${sharp} Typically used configuration parameters
-${sharp}
-${sharp} corba.name_servers: localhost, 192.168.0.1
-${sharp} corba.endpoints: <interface addess>, <interface addess>
-${sharp} logger.enable: YES
-${sharp} logger.file_name: ./rtc%p.log
-${sharp} logger.log_level: NORMAL
-${sharp}
-${sharp} The following properties should be specified in component specific
-${sharp} configuration files.
-${sharp} exec_cxt.periodic.type: PeriodicExecutionContext
-${sharp} exec_cxt.periodic.rate: 1000
+${sharp} If you have two or more network interfaces, try this setting
+${sharp}   Interface with address 192.168.0.5 is mainly used. 
+${sharp}corba.endpoints: 192.168.0.5
+
+${sharp} Select logger function: YES is default
+${sharp}logger.enable: YES
+
+${sharp} Set log level: INFO is defalut
+${sharp}logger.log_level: DEBUG
+
+${sharp} The following setting names unique RTC name on nameserver
+${sharp}   RTC numbering is performed globally on nameserver
+${sharp}manager.components.naming_policy: ns_unique
+
+${sharp} Component pre-creation and pre-activation
+${sharp}   If you want to create an additional instance of the RTC
+${sharp}manager.components.precreate: ${rtcParam.name}
+${sharp}   If you want to activate ${sharp}0 instance
+${sharp}manager.components.preactivation: ${rtcParam.name}0
+
+${sharp} Creating connection periviously
+${sharp}manager.components.preconnect:   ¥
+  <comp0 name>.<port name>?      ¥
+  port=<comp1 name>.<port name>& ¥
+  dataflow_type=push&            ¥
+  interface_type=corba_cdr
+
+${sharp} Execution contexts rate [Hz] setting
+${sharp}exec_cxt.periodic.rate: 30
+
+${sharp} RTC's state transition timeout setting 
+${sharp}exec_cxt.transition_timeout: 5.0
 
 ${sharp} Component specific configruation files:
-${sharp} If you want to load component specific configuration file, please
-${sharp} uncomment the following line.
+${sharp}   If you want to load component specific configuration file, please
+${sharp}   uncomment the following line.
 ${sharp}
 ${sharp} ${rtcParam.category}.${rtcParam.name}.config_file: ${rtcParam.name}.conf
 ${sharp} or
 ${sharp} ${rtcParam.category}.${rtcParam.name}0.config_file: ${rtcParam.name}0.conf
 ${sharp} ${rtcParam.category}.${rtcParam.name}1.config_file: ${rtcParam.name}1.conf
 ${sharp} ${rtcParam.category}.${rtcParam.name}2.config_file: ${rtcParam.name}2.conf
-${sharp}
-${sharp}------------------------------------------------------------
-
+${sharp} See below for more information on other options
 #if(${rtcParam.checkConfig()})${rtcParam.category}.${rtcParam.name}.config_file: ${rtcParam.name}.conf
 #end
 
+${sharp} The end of rtc.conf example
+${sharp}------------------------------------------------------------ 
 
+
+${sharp}----------------------------------------------------------------------
 ${sharp}
-${sharp} Please delete the following part if you are familiar with OpenRTM's
-${sharp} configuration parameters.
+${sharp} RT-Component manager configuration reference
 ${sharp}
-${sharp}${sharp}----------------------------------------------------------------------
-${sharp}${sharp}
-${sharp}${sharp} RT-Component manager configurations
-${sharp}${sharp}
-${sharp}${sharp}----------------------------------------------------------------------
+${sharp} Copyright (c) 2003-2020 by Noriaki Ando <n-ando@aist.go.jp>
+${sharp}      National Institute of
+${sharp}          Advanced Industrial Science and Technology (AIST), Japan
+${sharp}
+${sharp} This configuration and document file is licensed under
+${sharp} a Creative Commons Attribution-ShareAlike 4.0 International License.
+${sharp}
+${sharp} You should have received a copy of the license along with this
+${sharp} work. If not, see <http://creativecommons.org/licenses/by-sa/4.0/>.
+${sharp}
+${sharp} $Id$
+${sharp}
+${sharp} See details in the following reference manual on the web page.
+${sharp} English reference:  https://openrtm.org/openrtm/en/rtc_conf_reference
+${sharp} Japanese reference: https://openrtm.org/openrtm/ja/rtc_conf_reference
+${sharp}
+${sharp} Sections
+${sharp} - Version related parameters
+${sharp} - Naming options
+${sharp} - Logger options
+${sharp} - CORBA options
+${sharp} - Manager's generic options
+${sharp} - Manager's lifecycle options
+${sharp} - Module management options
+${sharp} - Manager's language support options
+${sharp} - Manager's local service options
+${sharp} - SSL Transport options
+${sharp} - Timer options
+${sharp} - Execution context options
+${sharp} - SDO service options
+${sharp} - Fluent-bit logger plugin options
+${sharp}
 
+${sharp}============================================================
+${sharp} Version related parameters
+${sharp}============================================================
+${sharp}------------------------------------------------------------
+${sharp} Configuration version (read-only) 
+${sharp}
+${sharp} This parameter is the configuration version that is set internally.
+${sharp} Usually, it is the same as the version of OpenRTM-aist. It is
+${sharp} unnecessary to set by rtc.conf. By reading out this parameter, it will
+${sharp} tell you the version of rtc.conf that OpenRTM-aist assumes.
+${sharp}
+${sharp} - Setting: Read-only, no effect if it is set
+${sharp} - Default: The version of current OpenRTM-aist configuration
+${sharp} - Example:
+${sharp}config.version: 2.0
 
+${sharp}------------------------------------------------------------
+${sharp} OpenRTM-aist name (read-only)
+${sharp}
+${sharp} This parameter is the name of OpenRTM-aist with version that is set
+${sharp} internally. It is unnecessary to set by rtc.conf. By reading out this
+${sharp} parameter, it will tell you the name of OpenRTM-aist with version.
+${sharp}
+${sharp} - Setting: Read-only, no effect if it is set
+${sharp} - Default: The name of current OpenRTM-aist with version
+${sharp} - Example:
+${sharp}openrtm.name: OpenRTM-aist-2.0.0
 
+${sharp}------------------------------------------------------------
+${sharp} OpenRTM-aist version (read-only)
+${sharp}
+${sharp} This parameter is the version of OpenRTM-aist that is set internally.
+${sharp} It is unnecessary to set by rtc.conf. By reading out this parameter, it will
+${sharp} tell you the version of OpenRTM-aist.
+${sharp}
+${sharp} - Setting: Read-only, no effect if it is set
+${sharp} - Default: The version of current OpenRTM-aist
+${sharp} - Example:
+${sharp}openrtm.version: 2.0.0
 
-${sharp}${sharp}------------------------------------------------------------
-${sharp}${sharp} Configuration version (optional)
-${sharp}${sharp}
-${sharp} config.version: 1.2
+${sharp} End of version related parameters section
+${sharp}============================================================
 
-${sharp}${sharp}------------------------------------------------------------
-${sharp}${sharp} OpenRTM-aist version (optional)
-${sharp}${sharp}
-${sharp} openrtm.version: 1.2.0
+${sharp}============================================================
+${sharp} Naming options
+${sharp}============================================================
+${sharp}------------------------------------------------------------
+${sharp} Enable/Disable naming functions
+${sharp}
+${sharp} This option enables/disables the function related to the naming
+${sharp} service. If YES is specified, the RTC reference is registered in the
+${sharp} name service. If NO, no RTC reference is registered with the name
+${sharp} service.
+${sharp}
+${sharp} - Setting: YES: registration on NS enable, NO: do nothing
+${sharp} - Default: YES
+${sharp} - Example:
+${sharp}naming.enable: YES
 
-${sharp}${sharp}------------------------------------------------------------
-${sharp}${sharp} The name of manager (default = manager)
-${sharp}${sharp}
-${sharp} manager.name: manager
+${sharp}------------------------------------------------------------
+${sharp} Naming Types
+${sharp}
+${sharp} This option specifies the name service type. Currently only "corba"
+${sharp} and "manager" are supported. 
+${sharp}
+${sharp} - Setting: "corba", "manager"
+${sharp} - Default: "corba"
+${sharp} - Example:
+${sharp}naming.type: corba
 
-${sharp}${sharp}------------------------------------------------------------
-${sharp}${sharp} The instance name of manager (default = manager)
-${sharp}${sharp}
-${sharp} manager.instance_name: manager
+${sharp}------------------------------------------------------------
+${sharp} Naming format
+${sharp}
+${sharp} The name format of components that is bound to naming services.
+${sharp} The delimiter between names is "/".
+${sharp} The delimiter between name and kind is ".".
+${sharp}
+${sharp} example: (OpenRTM-aist-0.2.0 style)
+${sharp}       %h.host_cxt/%M.mgr_cxt/%c.cat_cxt/%m.mod_cxt/%n.rtc
+${sharp} This is formatted according to the following replacement rules.
+${sharp}
+${sharp} %n: The instance name of the component.
+${sharp} %t: The type name of the component.
+${sharp} %m: The module name of the component.
+${sharp} %v: The version of the component.
+${sharp} %V: The component vendor.
+${sharp} %c: The category of the component.
+${sharp} %h: The hostname.
+${sharp} %M: The manager name.
+${sharp} %p: PID of the manager.
+${sharp}
+${sharp} - Setting: <name>.<kind>/<name>.<kind>/...
+${sharp} - Default: %h.host/%n.rtc
+${sharp} - Example:
+${sharp}naming.formats: %h.host/%n.rtc
 
-${sharp}${sharp}
-${sharp}${sharp} Manager naming format
-${sharp}${sharp}
-${sharp}${sharp} The name format of manager that is bound to naming services.
-${sharp}${sharp} The delimiter between names is "/".
-${sharp}${sharp} The delimiter between name and kind is ".".
-${sharp}${sharp}
-${sharp}${sharp} This is formatted according to the following replacement rules.
-${sharp}${sharp}
-${sharp}${sharp} %n: The instance name of the manager.
-${sharp}${sharp} %h: The hostname.
-${sharp}${sharp} %M: The manager name.
-${sharp}${sharp} %p: PID of the manager.
-${sharp}${sharp}
-${sharp} naming.formats: %h.host_cxt/%n.mgr
+${sharp}------------------------------------------------------------
+${sharp} Auto update to Naming Server
+${sharp}
+${sharp} Registration of the RTC to the name server is usually performed when
+${sharp} the instance is created. Therefore, the name and its reference of the
+${sharp} RTCs are not registered in the name server started after the RTC is
+${sharp} instantiated. By specifying this option, the name server will be
+${sharp} checked periodically, and if the startup of the name server is
+${sharp} confirmed, the names and references of RTCs will be registered again.
+${sharp}
+${sharp} - Setting: YES or NO
+${sharp} - Default: YES
+${sharp} - Example:
+${sharp}naming.update.enable: YES
 
+${sharp}------------------------------------------------------------
+${sharp} Update interval [s] for auto update
+${sharp}
+${sharp} This option specifies the name service type. Currently only corba and
+${sharp} manager are supported.
+${sharp}
+${sharp} - Setting: Registration update period in seconds [s]
+${sharp} - Default: 10.0 [s]
+${sharp} - Example:
+${sharp}naming.update.interval: 10.0
 
-${sharp}${sharp}------------------------------------------------------------
-${sharp}${sharp} Enable a function to set colors on terminal output
-${sharp}${sharp} 
-${sharp} logger.escape_sequence_enable: NO
+${sharp}------------------------------------------------------------
+${sharp} Rebind references in auto update
+${sharp}
+${sharp} If YES is specified for this option, the names and references will be
+${sharp} re-registered even if the name is deleted on the name server.
+${sharp}
+${sharp} - Setting: YES or NO
+${sharp} - Default: NO
+${sharp} - Example:
+${sharp}naming.update.rebind: NO
 
+${sharp} End of Naming options section
+${sharp}============================================================
 
+${sharp}============================================================
+${sharp} Logger options
+${sharp}============================================================
+${sharp}------------------------------------------------------------
+${sharp} Enable/Disable logger [YES/NO]
+${sharp}
+${sharp} This option specifies if enables the logger. 
+${sharp}
+${sharp} - Setting: YES or NO
+${sharp} - Default: YES
+${sharp} - Example:
+${sharp}logger.enable: YES
 
-${sharp}${sharp}------------------------------------------------------------
-${sharp}${sharp} Master manager
-${sharp}${sharp} - manager.is_master: YES/NO, This process made a master or not.
-${sharp}${sharp} - manager.corba_servant: YES/NO, create manager's corba service or not
-${sharp}${sharp} - corba.master_manager: <host_name>:<port>, master manager's location
-${sharp} manager.is_master: YES
-${sharp} manager.corba_servant: YES
-${sharp} corba.master_manager: localhost:2810
+${sharp}------------------------------------------------------------
+${sharp} Log file name (default = ./rtc%p.log)
+${sharp}
+${sharp} Specify log file name. You can also output to multiple files separated
+${sharp} by commas. A specifier %p to replace the process ID is available. If
+${sharp} the file name is stdout, the log will be output to standard output.
+${sharp}
+${sharp} Replable strings:
+${sharp} %p: PID
+${sharp}
+${sharp} - Setting: file names and/or "stdout"
+${sharp} - Default: ./rtc%p.log
+${sharp} - Example:
+${sharp}logger.file_name: ./rtc%p.log, stdout
 
-${sharp}${sharp}------------------------------------------------------------
-${sharp}${sharp} Manager auto shutdown options
-${sharp}${sharp} - manager.shutdown_on_nortcs: YES/NO,
-${sharp}${sharp}   process will be shutdown in case no rtc exists when rtc is deleted.
-${sharp}${sharp} - manager.shutdown_auto:
-${sharp}${sharp}   process will be shutdown in case no rtc exists on periodic check.
-${sharp}${sharp} - manager.auto_shutdown_duration:
-${sharp}${sharp}   manager duration time [s] until shutdown after no RTCs existing
-${sharp} manager.shutdown_on_nortcs: YES
-${sharp} manager.shutdown_auto: YES
-${sharp} manager.auto_shutdown_duration: 10.0
+${sharp}------------------------------------------------------------
+${sharp} Log date format (default = %b %d %H:%M:%S)
+${sharp}
+${sharp} This option specifies the date/time format to be written in the log.
+${sharp} The following strftime(3)-like format specifiers are available.
+${sharp} 
+${sharp} %a abbreviated weekday name 
+${sharp} %A full weekday name 
+${sharp} %b abbreviated month name 
+${sharp} %B full month name 
+${sharp} %c the standard date and time string 
+${sharp} %d day of the month, as a number (1-31) 
+${sharp} %H hour, 24 hour format (0-23) 
+${sharp} %I hour, 12 hour format (1-12) 
+${sharp} %j day of the year, as a number (1-366) 
+${sharp} %m month as a number (1-12).
+${sharp}    Note: some versions of Microsoft Visual C++ may use values that range
+${sharp}    from 0-11. 
+${sharp} %M minute as a number (0-59) 
+${sharp} %p locale's equivalent of AM or PM 
+${sharp} %Q millisecond as a number (0-999) from ver 1.1
+${sharp} %q microsecond as a number (0-999) from ver 1.1
+${sharp} %S second as a number (0-59) 
+${sharp} %U week of the year, sunday as the first day 
+${sharp} %w weekday as a decimal (0-6, sunday=0) 
+${sharp} %W week of the year, monday as the first day 
+${sharp} %x standard date string 
+${sharp} %X standard time string 
+${sharp} %y year in decimal, without the century (0-99) 
+${sharp} %Y year in decimal, with the century 
+${sharp} %Z time zone name 
+${sharp} %% a percent sign 
+${sharp}  
+${sharp} - Setting: Format with %{aAbBcdHIjmMpQqSUwWxXyYZ%} replace string
+${sharp} - Default: %b %d %H:%M:%S.%Q
+${sharp} - Example:
+${sharp} logger.date_format: No                        // Not implemented
+${sharp} logger.date_format: Disable                   // Not implemented
+${sharp} logger.date_format: [%Y-%m-%dT%H.%M.%S%Z]     // W3C standard format
+${sharp} logger.date_format: [%b %d %H:%M:%S]          // Syslog format
+${sharp} logger.date_format: [%a %b %d %Y %H:%M:%S %Z] // RFC2822 format
+${sharp} logger.date_format: [%a %b %d %H:%M:%S %Z %Y] // data command format
+${sharp} logger.date_format: [%Y-%m-%d %H.%M.%S]
+${sharp}logger.date_format: %b %d %H:%M:%S.%Q
 
-${sharp}${sharp}------------------------------------------------------------
-${sharp}${sharp} Manager termination wait time
-${sharp}${sharp} - manager.termination_waittime:
-${sharp}${sharp}   wait time length before manager termination thread started
-${sharp} manager.termination_waittime: 0.5
+${sharp}------------------------------------------------------------
+${sharp} Log level (default = INFO)
+${sharp}
+${sharp} This option specifes the log level for logging. The following log
+${sharp} levels are allowed.
+${sharp}
+${sharp} SILENT, FATAL, ERROR, WARN, INFO, DEBUG, TRACE, VERBOSE, PARANOID
+${sharp}
+${sharp} The log message levels that are output when each log level is
+${sharp} specified are shown below.
+${sharp}
+${sharp} SILENT  : completely silent
+${sharp} FATAL   : includes (FATAL)
+${sharp} ERROR   : includes (FATAL, ERROR)
+${sharp} WARN    : includes (FATAL, ERROR, WARN)
+${sharp} INFO    : includes (FATAL, ERROR, WARN, INFO)
+${sharp} DEBUG   : includes (FATAL, ERROR, WARN, INFO, DEBUG)
+${sharp} TRACE   : includes (FATAL, ERROR, WARN, INFO, DEBUG, TRACE)
+${sharp} VERBOSE : includes (FATAL, ERROR, WARN, INFO, DEBUG, TRACE, VERBOSE)
+${sharp} PARANOID: includes (FATAL, ERROR, WARN, INFO, DEBUG, TRACE, VERBOSE, PARA)
+${sharp}
+${sharp} Warning!!!
+${sharp} "TRACE", "VERBOSE", "PARANOID" logging level will create a huge log file!!
+${sharp} "PARANOID" log level will tangle the log file.
+${sharp}
+${sharp} - Setting: SILENT, FATAL, ERROR, WARN, INFO, DEBUG, TRACE, VERBOSE, PARANOID
+${sharp} - Default: INFO
+${sharp} - Example:
+${sharp}logger.log_level: INFO
 
-${sharp}${sharp}------------------------------------------------------------
-${sharp}${sharp} Manager process's CPU affinity setting
-${sharp}${sharp}
-${sharp}${sharp} This option make the process bound to specific CPU(s).  Options must
-${sharp}${sharp} be one or more comma separated numbers to identify CPU ID.  CPU ID
-${sharp}${sharp} is started from 0, and maximum number is number of CPU core -1.  If
-${sharp}${sharp} invalid CPU ID is specified, all the CPU will be used for the
-${sharp}${sharp} process.
-${sharp}${sharp}
-${sharp}${sharp} Example:
-${sharp}${sharp}   manager.cpu_affinity: 0, 1, 2, ...
-${sharp}${sharp}
-${sharp} manager.cpu_affinity: 0
+${sharp}------------------------------------------------------------
+${sharp} Logger's clock time
+${sharp}
+${sharp} logger.clock_type option specifies a type of clock to be used for
+${sharp} timestamp of log message. Now these three types are available.
+${sharp}
+${sharp} - system: system clock [default]
+${sharp} - logical: logical clock
+${sharp} - adjusted: adjusted clock
+${sharp}
+${sharp} To use logical time clock, call and set time by the following
+${sharp} function in somewhere.
+${sharp} coil::ClockManager::instance().getClock("logical").settime()
+${sharp}
+${sharp} - Setting: system, logical, adjusted
+${sharp} - Default: system
+${sharp} - Example:
+${sharp}logger.clock_type: system
 
+${sharp}------------------------------------------------------------
+${sharp} Enable a function to set colors on terminal output
+${sharp}
+${sharp} This option specifies whether the log output will be colored. If
+${sharp} logger.file_name: stdout is specified, the log output will be
+${sharp} displayed in color if the terminal supports escape sequences. Coloring
+${sharp} the output to files is not recommended.
+${sharp}
+${sharp} - Setting: YES or NO
+${sharp} - Default: NO
+${sharp} - Example:
+${sharp}logger.escape_sequence_enable: NO
 
-${sharp}${sharp}------------------------------------------------------------
-${sharp}${sharp} Naming policy
-${sharp}${sharp}
-${sharp}${sharp} "process_unique", "node_unique" and "ns_unique" are supported.
-${sharp}${sharp}
-${sharp} manager.components.naming_policy: process_unique
+${sharp} End of logger options section
+${sharp}============================================================
 
-${sharp}${sharp}------------------------------------------------------------
-${sharp}${sharp} Supported languages
-${sharp}${sharp}
-${sharp} manager.supported_languages: C++, Python, Java
+${sharp}============================================================
+${sharp} CORBA options
+${sharp}============================================================
+${sharp} CORBA ORB's arguments
+${sharp}
+${sharp} This option specifies the argument given to CORBA. CORBA has different
+${sharp} command line options depending on the implementation. Normally command
+${sharp} line arguments are given to the CORBA API ORB_init() function, but
+${sharp} this option passes the specified string to this ORB_init() function.
+${sharp}
+${sharp} Case study:
+${sharp} When sending image data etc. through the data port, be careful if the
+${sharp} size of the data sent at one time exceeds about 2 MB. In omniORB, the
+${sharp} size that can be handled by giop (General Inter-ORB Protocol) is
+${sharp} "2097152B (2MB)" by default, and if you try to send more data than
+${sharp} this size, you cannot send the correct data due to giop's limitation.
+${sharp} It is possible to change the maximum size by using the corba.args
+${sharp} option. This specification must be specified for both OutPort and
+${sharp} InPort.
+${sharp} corba.args: -ORBgiopMaxMsgSize 3145728 ${sharp} add this line to rtc.conf
+${sharp}                                        ${sharp} TMa buffer size is 3MB
+${sharp}
+${sharp} In addition to specifying in corba.args, you can relax this
+${sharp} restriction by specifying environment variables as follows.
+${sharp}
+${sharp}  export ORBgiopMaxMsgSize=3145728
+${sharp}
+${sharp} - reference: omniORB configuration and API
+${sharp}   http://omniorb.sourceforge.net/omni41/omniORB/omniORB004.html
+${sharp}
+${sharp} - Setting: CORBA specific command arguments
+${sharp} - Default: None
+${sharp} - Example:
+${sharp} corba.args: -ORBInitialHost myhost -ORBInitialPort 8888
+${sharp}corba.args:
 
+${sharp}------------------------------------------------------------
+${sharp} CORBA endpoints
+${sharp}
+${sharp} In CORBA, a remote object is accessed by a reference called IOR
+${sharp} (interoperable object reference). Usually, only one set of the address
+${sharp} and port number of the node on which the object operates is described
+${sharp} in the IOR. When the node running OpenRTM has two or more network
+${sharp} interfaces, an unintended address may be assigned as the address of
+${sharp} the node included in IOR.
+${sharp}
+${sharp} To solve this, this option allows you to specify the network address
+${sharp} used by CORBA. Specify as ''<host address>:<port number>'', but the
+${sharp} port number can be omitted including colon ":".
+${sharp}
+${sharp} Depending on the ORB implementation, the IOR can contain multiple
+${sharp} addresses. However, it should be noted that in Java IDL, which is the
+${sharp} Java standard CORBA, there is a problem that the operation becomes
+${sharp} slow when accessing the object via IOR that specifies multiple
+${sharp} addresses.
+${sharp}
+${sharp} Multiple ''<host address>:<port number>'' pairs can be specified by
+${sharp} separating them with'',(comma)''. You can also include all the node's
+${sharp} addresses in the IOR by specifying "all'' as a special string.
+${sharp}
+${sharp} NOTE:
+${sharp} The old option "corba.endpoint" will be obsolete near future,
+${sharp} unrecommended.
+${sharp}
+${sharp} Examples:
+${sharp}   corba.endpoints: myhost:      (use myhost and default port)
+${sharp}   corba.endpoints: :9876        (use default addr and port 9876)
+${sharp}   corba.endpoints: myhost:9876  (use myhost and port 9876)
+${sharp}   corba.endpoints: 192.168.1.10:1111, 192.168.10.11:2222
+${sharp}   corba.endpoints: 192.168.1.10, 192.168.10.11
+${sharp}   corba.endpoints: all
+${sharp}
+${sharp} - Setting: <host_addr>:<port>, <host_addr>:<port>, ... or "all"
+${sharp} - Default: None
+${sharp} - Example:
+${sharp}corba.endpoints: 192.168.1.10:1111, 192.168.10.11:2222
+${sharp}corba.endpoints: 192.168.1.10, 192.168.10.11
+${sharp}corba.endpoints: all
 
-${sharp}${sharp}------------------------------------------------------------
-${sharp}${sharp} Enable a module automatic search function
-${sharp}${sharp}
-${sharp} manager.modules.search_auto: YES
+${sharp}------------------------------------------------------------
+${sharp} CORBA IPv4 endpoints
+${sharp}
+${sharp} This parameter is read-only and sets the IPv4 endpoint used by the
+${sharp} current process.　Reading this parameter will tell you which endpoint
+${sharp} you are currently using.
+${sharp}
+${sharp} - Setting: Read-only
+${sharp} - Default: None
+${sharp} - Example:
+${sharp}corba.endpoints_ipv4: [readonly]
 
-${sharp}${sharp}------------------------------------------------------------
-${sharp}${sharp} Module List to load before CORBA initialization
-${sharp}${sharp}
-${sharp}${sharp} Valid settings:
-${sharp}${sharp} manager.preload.modules: SSLTransport.dll
-${sharp}${sharp} manager.preload.modules: SSLTransport.py
-${sharp}${sharp} manager.preload.modules: SSLTransport
-${sharp}${sharp} manager.preload.modules: C:\\Python27\\Lib\\site-packages\\OpenRTM_aist\\ext\\SSLTransport
-${sharp}${sharp}
-${sharp} manager.preload.modules:
+${sharp}------------------------------------------------------------
+${sharp} CORBA IPv6 endpoints
+${sharp}
+${sharp} This parameter is read-only and sets the IPv6 endpoint used by the
+${sharp} current process.　Reading this parameter will tell you which endpoint
+${sharp} you are currently using.
+${sharp}
+${sharp} - Setting: Read-only
+${sharp} - Default: None
+${sharp} - Example:
+${sharp}corba.endpoints_ipv6: [readonly]
 
+${sharp}------------------------------------------------------------
+${sharp} Specify what kind of IP addresses will be set to corba.endpoints
+${sharp}
+${sharp} This option specifies which address of the available endpoints should
+${sharp} be used as an IPv4 or IpV6 address.
+${sharp}
+${sharp} - Setting: {ipv4|ipv6}(<number of endpoint address>, ...), 
+${sharp} - Default: None
+${sharp} - Example:
+${sharp} corba.endpoint_property: ipv4
+${sharp} corba.endpoint_property: ipv4, ipv6(0)
+${sharp} corba.endpoint_property: ipv6
+${sharp} corba.endpoint_property: ipv4(0,1), ipv6(2,3)
+${sharp}
+${sharp}corba.endpoint_property:
 
+${sharp}------------------------------------------------------------
+${sharp} CORBA name server setting
+${sharp}
+${sharp} This option specifies the name server that registers RTC etc. You can
+${sharp} specify multiple name servers separated by commas. Even if there is no
+${sharp} name server at the specified address and port number, no error occurs
+${sharp} and the RTC name is registered only in the existing name server. If
+${sharp} the port number is omitted, the default port number 2809 will be used.
+${sharp}
+${sharp} - Setting: <nameserver address>:<port number>, ...
+${sharp} - Default: localhost:2809
+${sharp} - Example:
+${sharp}   corba.nameservers: openrtm.aist.go.jp:9876
+${sharp}   corba.nameservers: rtm0.aist.go.jp, rtm1.aist.go.jp, rtm2.aist.go.jp
+${sharp}
+${sharp}corba.nameservers: localhost
 
-${sharp}${sharp}============================================================
-${sharp}${sharp} CORBA configuration
-${sharp}${sharp}============================================================
-${sharp}${sharp}
-${sharp}${sharp} CORBA ORB's arguments
-${sharp}${sharp}
-${sharp}${sharp} ORB specific command line options given to ORB_init().
-${sharp}${sharp} See your ORB documentation.
-${sharp}${sharp}
-${sharp}${sharp} Example:
-${sharp}${sharp}   corba.args: -ORBInitialHost myhost -ORBInitialPort 8888
-${sharp}${sharp}
-${sharp}${sharp}
-${sharp} corba.args: -ORBgiopMaxMsgSize 4194304
+${sharp}------------------------------------------------------------
+${sharp} IOR host address replacement by guessed endpoint from routing (experimental)
+${sharp}
+${sharp} This option replaces a host address with an endpoint that is guessed
+${sharp} by route information to nameserver's address. This option may be
+${sharp} effective for CORBA implementation that does not supports IOR's
+${sharp} multiple profile or alternate IIOP address. However, since other
+${sharp} object references that are obtained from RT-Components or other are
+${sharp} not modified by this rule, other RTCs that are connected to this RTC
+${sharp} have to also support IOR multiple profile feature.  When this option
+${sharp} is used, corba.endpoints option should also be specified with
+${sharp} multiple endpoints.
+${sharp}
+${sharp} - Setting: YES or NO
+${sharp} - Default: NO
+${sharp} - Example:
+${sharp}corba.nameservice.replace_endpoint: NO
 
-${sharp}${sharp}
-${sharp}${sharp} ORB endpoint
-${sharp}${sharp}
-${sharp}${sharp} If you have two or more network interfaces, ORB endpoint address and/or
-${sharp}${sharp} port have to be specified. If hostname or port number is abbreviated,
-${sharp}${sharp} default interface or port number is used. At least one colon ':'
-${sharp}${sharp} is needed when you specify this option.
-${sharp}${sharp}
-${sharp}${sharp} Examples:
-${sharp}${sharp}   corba.endpoint: myhost:      (use myhost and default port)
-${sharp}${sharp}   corba.endpoint: :9876        (use default addr and port 9876)
-${sharp}${sharp}   corba.endpoint: myhost:9876  (use myhost and port 9876)
-${sharp}${sharp}
-${sharp} corba.endpoint: 
+${sharp}------------------------------------------------------------
+${sharp} IOR alternate IIOP addresses
+${sharp}
+${sharp} This option adds alternate IIOP addresses into the IOR Profiles.
+${sharp} IOR can include additional endpoints for a servant. It is almost
+${sharp} same as "corba.endpoints" option, but this option does not create
+${sharp} actual endpoint on the ORB. (corba.endpoints try to create actual
+${sharp} endpoint, and if it cannot be created, error will be returned.)
+${sharp} This option just add alternate IIOP endpoint address information to
+${sharp} an IOR.
+${sharp}
+${sharp} This option can be used when RTCs are located inside of NAT or
+${sharp} router.  Generally speaking, RTCs in a private network cannot
+${sharp} connect to RTCs in the global network, because global client cannot
+${sharp} reach to private servants. However, if route (or NAT) is properly
+${sharp} configured for port forwarding, global RTCs can reach to RTCs in
+${sharp} private network.
+${sharp}
+${sharp} A setting example is as follows.
+${sharp} 1) Configure your router properly for port-forwarding.
+${sharp}    ex. global 2810 port is forwarded to private 2810
+${sharp} 2) Set the following options in rtc.conf
+${sharp}  corba.nameservers: my.global.nameserver.com <- name server in global network
+${sharp}  corba.endpoints: :2810 <- actual port number
+${sharp}  corba.additional_ior_addresses: w.x.y.z:2810 <- routers global IP addr/port
+${sharp} 3) Launch global RTCs and private RTC, and connect them.
+${sharp}
+${sharp} - Setting: <address>:<port>
+${sharp} - Default: None
+${sharp} - Example:
+${sharp}corba.alternate_iiop_addresses: addr:port
 
-${sharp}${sharp}
-${sharp}${sharp} Multiple endpoint options (experimental)
-${sharp}${sharp}
-${sharp}${sharp} Multiple endpoint addresses and ports can be specified using this option.
-${sharp}${sharp}
-${sharp}${sharp} Example:
-${sharp}${sharp}   corba.endpoints: 192.168.1.10:1111, 192.168.10.11:2222
-${sharp}${sharp}   corba.endpoints: 192.168.1.10, 192.168.10.11
-${sharp}${sharp}   corba.endpoints: all
-${sharp}${sharp}
-${sharp} corba.endpoints:
-${sharp} corba.endpoints_ipv4: [readonly]
-${sharp} corba.endpoints_ipv6: [readonly]
+${sharp} End of CORBA options section
+${sharp}============================================================
 
-${sharp}${sharp}
-${sharp}${sharp} Specify what kind of IP addresses will be set to corba.endpoints
-${sharp}${sharp}
-${sharp}${sharp} Examples:
-${sharp}${sharp} corba.endpoint_property: ipv4
-${sharp}${sharp} corba.endpoint_property: ipv4, ipv6(0)
-${sharp}${sharp} corba.endpoint_property: ipv6
-${sharp}${sharp} corba.endpoint_property: ipv4(0,1), ipv6(2,3)
-${sharp}${sharp}
-${sharp} corba.endpoint_property:
+${sharp}============================================================
+${sharp} Manager's generic options
+${sharp}============================================================
+${sharp}------------------------------------------------------------
+${sharp} The name of manager (default = manager)
+${sharp}
+${sharp} This "manager.name" is used for grouping master-slave managers with
+${sharp} stringfied CORBA object name. If the "manager.name" is set to
+${sharp} "manager" and the manager is master, the object reference is located
+${sharp} as follows.
+${sharp}
+${sharp} corbaloc::<hostname>:2810/manager 
+${sharp}
+${sharp} and other slave manager also has the following stringfied ior.
+${sharp}
+${sharp} corbaloc::<hostname>:<port_number>/manager
+${sharp}
+${sharp} - Setting: any string name of manager
+${sharp} - Default: manager
+${sharp} - Example:
+${sharp}manager.name: manager
 
-${sharp}${sharp}
-${sharp}${sharp} CORBA name server setting
-${sharp}${sharp}
-${sharp}${sharp} Multiple name servers can be specified separating by comma.
-${sharp}${sharp} If port number is abbreviated, default port number is used.
-${sharp}${sharp} The default port number is depend on ORB implementation.
-${sharp}${sharp}
-${sharp}${sharp} Examples:
-${sharp}${sharp}   corba.nameservers: openrtm.aist.go.jp:9876
-${sharp}${sharp}   corba.nameservers: rtm0.aist.go.jp, rtm1.aist.go.jp, rtm2.aist.go.jp
-${sharp}${sharp}
-${sharp} corba.nameservers: localhost
+${sharp}------------------------------------------------------------
+${sharp} The instance name of the manager (default = manager)
+${sharp}
+${sharp} This "manager.instance_name" is used for the name of the manager on
+${sharp} the naming service registration. Usually, a master manager's reference
+${sharp} is registered on name-servers with the name "manager|mgr". If this
+${sharp} option is set to "foobar", the registered the maaster manager name
+${sharp} will be "foobar|mgr".
+${sharp}
+${sharp} - Setting: any string name of manager
+${sharp} - Default: manager
+${sharp} - Example:
+${sharp}manager.instance_name: manager
 
-${sharp}${sharp}
-${sharp}${sharp} IOR host address replacement by guessed endpoint from routing (experimental)
-${sharp}${sharp}
-${sharp}${sharp} This option replaces a host address with an endpoint that is guessed
-${sharp}${sharp} by route information to nameserver's address. This option may be
-${sharp}${sharp} effective for CORBA implementation that does not supports IOR's
-${sharp}${sharp} multiple profile or alternate IIOP address. However, since other
-${sharp}${sharp} object references that are obtained from RT-Components or other are
-${sharp}${sharp} not modified by this rule, other RTCs that are connected to this RTC
-${sharp}${sharp} have to also support IOR multiple profile feature.  When this option
-${sharp}${sharp} is used, corba.endpoints option should also be specified with
-${sharp}${sharp} multiple endpoints.
-${sharp}${sharp}
-${sharp} corba.nameservice.replace_endpoint: NO
+${sharp}------------------------------------------------------------
+${sharp} Manager naming format
+${sharp}
+${sharp} The name format of manager that is bound to naming services.
+${sharp} The delimiter between names is "/".
+${sharp} The delimiter between name and kind is ".".
+${sharp}
+${sharp} This is formatted according to the following replacement rules.
+${sharp}
+${sharp} %n: The instance name of the manager.
+${sharp} %h: The hostname.
+${sharp} %M: The manager name.
+${sharp} %p: PID of the manager.
+${sharp}
+${sharp} Setting: Read/Write, <name>.<context>/<name>.<context>...
+${sharp} Default: %h.host_cxt/%n.mgr
+${sharp} Example:
+${sharp}manager.naming_formats: %h.host_cxt/%n.mgr
 
-${sharp}${sharp}
-${sharp}${sharp} IOR alternate IIOP addresses
-${sharp}${sharp}
-${sharp}${sharp} This option adds alternate IIOP addresses into the IOR Profiles.
-${sharp}${sharp} IOR can include additional endpoints for a servant. It is almost
-${sharp}${sharp} same as "corba.endpoints" option, but this option does not create
-${sharp}${sharp} actual endpoint on the ORB. (corba.endpoints try to create actual
-${sharp}${sharp} endpoint, and if it cannot be created, error will be returned.)
-${sharp}${sharp} This option just add alternate IIOP endpoint address information to
-${sharp}${sharp} an IOR.
-${sharp}${sharp}
-${sharp}${sharp} This option can be used when RTCs are located inside of NAT or
-${sharp}${sharp} router.  Generally speaking, RTCs in a private network cannot
-${sharp}${sharp} connect to RTCs in the global network, because global client cannot
-${sharp}${sharp} reach to private servants. However, if route (or NAT) is properly
-${sharp}${sharp} configured for port forwarding, global RTCs can reach to RTCs in
-${sharp}${sharp} private network.
-${sharp}${sharp}
-${sharp}${sharp} A setting example is as follows.
-${sharp}${sharp} 1) Configure your router properly for port-forwarding.
-${sharp}${sharp}    ex. global 2810 port is forwarded to private 2810
-${sharp}${sharp} 2) Set the following options in rtc.conf
-${sharp}${sharp}  corba.nameservers: my.global.nameserver.com <- name server in global network
-${sharp}${sharp}  corba.endpoints: :2810 <- actual port number
-${sharp}${sharp}  corba.additional_ior_addresses: w.x.y.z:2810 <- routers global IP addr/port
-${sharp}${sharp} 3) Launch global RTCs and private RTC, and connect them.
-${sharp}${sharp}
-${sharp} corba.alternate_iiop_addresses: addr:port
+${sharp}------------------------------------------------------------
+${sharp} Master manager or not
+${sharp}
+${sharp} This option specifies whether this process will be the master manager?
+${sharp} If the command line option '''-d''' is specified, it will become the
+${sharp} master manager even if this value is set to NO.
+${sharp}
+${sharp} - Setting: Read/Write, "YES" or "NO"
+${sharp} - Default: NO
+${sharp} - Example:
+${sharp}manager.is_master: NO
 
-${sharp}${sharp}
-${sharp}${sharp} Auto update to Master Manager
-${sharp}${sharp}
-${sharp} corba.update_master_manager.enable:YES
+${sharp}------------------------------------------------------------
+${sharp} Creating masnter manager servant
+${sharp}
+${sharp} Setting whether to start the manager's CORBA servant. If set to YES,
+${sharp} the manager's CORBA servant will be started, allowing remote manager
+${sharp} operations. In the case of NO, the CORBA servant will not be started
+${sharp} and the manager cannot operate via CORBA.
+${sharp}
+${sharp} - Setting: Read/Write, "YES" or "NO"
+${sharp} - Default: YES
+${sharp} - Example:
+${sharp}manager.corba_servant: YES
 
-${sharp}${sharp}
-${sharp}${sharp} Update interval [s] for auto update
-${sharp}${sharp}
-${sharp} corba.update_master_manager.interval: 10.0
+${sharp}------------------------------------------------------------
+${sharp} Master manager's location
+${sharp}
+${sharp} This option specifies the address and port number of the master
+${sharp} manager used by the slave manager. The slave manager assumes the
+${sharp} master manager specified here as its own master manager, accesses the
+${sharp} master manager at startup, and performs negotiation. Slave managers
+${sharp} and standalone components that are not launched directly by the master
+${sharp} manager are managed by the master manager specified by this option.
+${sharp}
+${sharp} - Setting: Read/Write, <hostname or IP address>:<port_number>
+${sharp} - Default: localhost:2810
+${sharp} - Example:
+${sharp}corba.master_manager: localhost:2810
 
-${sharp}${sharp}------------------------------------------------------------
-${sharp}${sharp} SSL Transport settings
-${sharp}${sharp}
-${sharp} corba.ssl.certificate_authority_file: root.crt
-${sharp} corba.ssl.key_file: server.pem
-${sharp} corba.ssl.key_file_password: password
-${sharp} corba.args:-ORBclientTransportRule "* ssl, tcp"
+${sharp}------------------------------------------------------------
+${sharp} Auto update to Master Manager
+${sharp}
+${sharp} This option is valid in slave-manager. A Slave-manager must
+${sharp} register itself to master managers. If this option is set to
+${sharp} "YES", the slave manager make registration it to master manager
+${sharp} periodically. If "NO" is set, the slave manager make registration
+${sharp} itself to master managers once when it is started.
+${sharp}
+${sharp} - Setting: YES/NO (Read/Write)
+${sharp} - Default: YES
+${sharp} - Example:
+${sharp}manager.update_master_manager.enable:YES
 
-${sharp}${sharp}============================================================
-${sharp}${sharp} Naming configurations
-${sharp}${sharp}============================================================
-${sharp}${sharp}
-${sharp}${sharp} Enable/Disable naming functions
-${sharp}${sharp}
-${sharp} naming.enable: YES
+${sharp}------------------------------------------------------------
+${sharp} Update interval [s] for auto update
+${sharp}
+${sharp} This option is related to corba.update_master_manager.enable.
+${sharp} If "corba.update_master_manager.enable" option is set YES, update interval is set by this option. The default interval is 10 sec.
+${sharp}
+${sharp} - Setting: seconds (Read/Write)
+${sharp} - Default: 10.0
+${sharp} - Example:
+${sharp}manager.update_master_manager.interval: 10.0
 
-${sharp}${sharp}
-${sharp}${sharp} Naming Types
-${sharp}${sharp}
-${sharp}${sharp} "corba" and "manager" are supported.
-${sharp}${sharp}
-${sharp} naming.type: corba
+${sharp}------------------------------------------------------------
+${sharp} Naming policy
+${sharp}
+${sharp} This option specifies a naming (numbering) policy for the RTCs.
+${sharp} When an RTC instance is created, a name with the component type
+${sharp} name (type_name) with an incremental number as follows is
+${sharp} assigned.
+${sharp}
+${sharp} <type_name> <number> 
+${sharp} ex. ConsoleOut0, ConsoleOut1, ConsoleOut2, ...
+${sharp}
+${sharp} By default, the same type components in the same process are
+${sharp} numbered sequentially from 0, so RTCs created on different
+${sharp} processes or on different nodes (computers) may have the same
+${sharp} name. When these RTCs are registered on the name server (ns), RTCs
+${sharp} with the same path and the same name overwrite each other's object
+${sharp} references, and it becomes impossible to access the desired RTC.
+${sharp} Therefore, two policies are provided: "node_unique", which assigns
+${sharp} a unique number to each node, and "ns_unique", which assigns a
+${sharp} unique number on the name server.
+${sharp}
+${sharp} The following three options can be specified by default.
+${sharp}
+${sharp} - process_unique: Give a unique name (number) within the process
+${sharp} - node_unique: Give a unique name (number) within the node
+${sharp} - ns_unique: Give a unique name (number) on the nameserver
+${sharp}
+${sharp} The policies can be extended by users.
+${sharp}
+${sharp} - Setting: Read/Write, {process_unique, node_unique, ns_unique}
+${sharp} - Default: process_unique
+${sharp} - Example:
+${sharp}manager.components.naming_policy: process_unique
 
-${sharp}${sharp}
-${sharp}${sharp} Naming format
-${sharp}${sharp}
-${sharp}${sharp} The name format of components that is bound to naming services.
-${sharp}${sharp} The delimiter between names is "/".
-${sharp}${sharp} The delimiter between name and kind is ".".
-${sharp}${sharp}
-${sharp}${sharp} %n: The instance name of the component.
-${sharp}${sharp} %t: The type name of the component.
-${sharp}${sharp} %v: The version of the component.
-${sharp}${sharp} %V: The component vendor.
-${sharp}${sharp} %c: The category of the component.
-${sharp}${sharp} %h: The hostname.
-${sharp}${sharp} %M: The manager name.
-${sharp}${sharp} %p: PID of the manager.
-${sharp}${sharp}
-${sharp} naming.formats: %h.host/%n.rtc
+${sharp}------------------------------------------------------------
+${sharp} Prior component creation
+${sharp}
+${sharp} This option specifies components' names (module name) creating in advance
+${sharp} before starting the manager's event-loop. The components' factories should
+${sharp} be registered by manager.module.preload option or statically linked to the
+${sharp}  manager.
+${sharp}
+${sharp} - Setting: Read/Write, <component class name>, ...
+${sharp} - Default: None
+${sharp} - Example:
+${sharp} manager.components.precreate: ConsoleIn, ConsoleOut, SeqIn, SeqOut
+${sharp}
+${sharp}manager.components.precreate: 
 
-${sharp}${sharp}
-${sharp}${sharp} Auto update to Naming Server
-${sharp}${sharp}
-${sharp} naming.update.enable: YES
-${sharp}${sharp}
-${sharp}${sharp} Update interval [s] for auto update
-${sharp}${sharp}
-${sharp} naming.update.interval: 10.0
-${sharp}${sharp}
-${sharp}${sharp} Rebind references in auto update
-${sharp}${sharp}
-${sharp} naming.update.rebind: NO
+${sharp}------------------------------------------------------------
+${sharp} Prior connection creation
+${sharp}
+${sharp} This option specifies the connector to create before starting the
+${sharp} manager event loop. The target component and port must have been
+${sharp} previously created with the "manager.components.precreate" option.
+${sharp} Ports are specified in the format
+${sharp} "<comp0>.<Port0>?port=<comp1>.<port1>&<option_key>=<option_value>&...".
+${sharp} If no dataflow_type or interface_type is specified,
+${sharp} "dataflow_type=push", "interface_type=corba_cdr" will be specified
+${sharp} automatically.
+${sharp}
+${sharp} - Setting: <comp0>.<Port0>?port=<comp1>.<port1>&<option_key>=<option_value>&...
+${sharp} - Default: none
+${sharp} - Example:
+${sharp} manager.components.preconnect: ConsoleIn.out?port=ConsoleOut.in& \
+${sharp}                                dataflow_type=push&interface_type=corba_cdr,\
+${sharp}                                SeqIn.octet?port=SeqOut.octet& \
+${sharp}                                dataflow_type=push&interface_type=direct
+${sharp}manager.components.preconnect: 
 
-${sharp}${sharp} End of Naming configuration section
-${sharp}${sharp}------------------------------------------------------------
+${sharp}------------------------------------------------------------
+${sharp} Prior component activation
+${sharp}
+${sharp} This option specifies components' names (module name) to be
+${sharp} activated in advance before starting the manager's event-loop. The
+${sharp} target components should be created previously by
+${sharp} manager.components.precreate optinos.
+${sharp}
+${sharp} Example:
+${sharp} manager.components.preactivation: ConsoleIn0, ConsoleOut0
+${sharp}
+${sharp}manager.components.preactivation:
 
-${sharp}${sharp}============================================================
-${sharp}${sharp} Module management
-${sharp}${sharp}============================================================
-${sharp}${sharp}
-${sharp}${sharp} Loadable module search path list
-${sharp}${sharp}
-${sharp}${sharp} Manager searches loadable modules from the specified search path list.
-${sharp}${sharp} Path list elements should be separated by comma.
-${sharp}${sharp} Path delimiter is '/' on UNIX, and '\\' on Windows
-${sharp}${sharp} Valid path examples:
-${sharp}${sharp}   manager.modules.load_path: C:/Program Files/OpenRTM-aist,  \
-${sharp}${sharp}   			       C:\\Program Files\\OpenRTM-aist
-${sharp}${sharp}   manager.modules.load_path: /usr/lib, /usr/local/lib,       \
-${sharp}${sharp}   			       /usr/local/lib/OpenRTM-aist/libs
-${sharp}${sharp}
-${sharp} manager.modules.load_path: ./
+${sharp}------------------------------------------------------------
+${sharp} Manager process's CPU affinity setting
+${sharp}
+${sharp} This option make the process bound to specific CPU(s).  Options must
+${sharp} be one or more comma separated numbers to identify CPU ID.  CPU ID
+${sharp} is started from 0, and maximum number is number of CPU core -1.  If
+${sharp} invalid CPU ID is specified, all the CPU will be used for the
+${sharp} process.
+${sharp}
+${sharp} - Setting: Read/Write, duration [s]
+${sharp} - Default: 0.5
+${sharp} - Example:
+${sharp}   manager.cpu_affinity: 0, 1, 2, ...
+${sharp}manager.cpu_affinity: 0
 
-${sharp}${sharp}
-${sharp}${sharp} Preload module list
-${sharp}${sharp}
-${sharp}${sharp} Manager can load loadable modules before starting up.
-${sharp}${sharp} Loadable modules, which is specified only as its file name, is searched
-${sharp}${sharp} in each module load path specified in the "manager.modules.load_path".
-${sharp}${sharp} If the "manager.modules.abs_path_allowed" option is YES, loadable file
-${sharp}${sharp} can be specified as full-path name.
-${sharp}${sharp}
-${sharp}${sharp} Module initialization function name is usually estimated module file
-${sharp}${sharp} name.  If the module file name is ConsoleIn.so, the initialization
-${sharp}${sharp} function name is set to "ConsleInInit." If you want to specify
-${sharp}${sharp} specify the initialization function name, the initialization
-${sharp}${sharp} function name in parenthesis after module file name can be
-${sharp}${sharp} specified, like as "Hoge.so (ConsoleInInit)".  File extensions such
-${sharp}${sharp} as ".so", ".dll", ".dylib" can be drop. If module file name without
-${sharp}${sharp} file extension is specified, an extension specified in property
-${sharp}${sharp} variable "manager.modules.C++.suffixes" is supplied.
-${sharp}${sharp}
-${sharp}${sharp} Valid settings:
-${sharp}${sharp} manager.modules.preload: ConsoleIn.dll, ConsoleOut.dll
-${sharp}${sharp} manager.modules.preload: ConsoleIn.so, ConsoleOut.so
-${sharp}${sharp} manager.modules.preload: Hoge.so (ConsoleInInit), ConsoleOut
-${sharp}${sharp} manager.modules.abs_path_allowed: YES
-${sharp}${sharp} manager.modules.preload: /usr/lib/OpenRTM-aist/ConsoleIn.so
-${sharp}${sharp}
-${sharp} manager.modules.preload:
+${sharp} End of Manager's generic options section
+${sharp}============================================================
 
-${sharp}${sharp}
-${sharp}${sharp} Permission flag of absolute module path
-${sharp}${sharp}
-${sharp}${sharp} If this option is "YES", absolute path specification for module is allowed.
-${sharp}${sharp}
+${sharp}============================================================
+${sharp} Manager's lifecycle options
+${sharp}============================================================
+${sharp}------------------------------------------------------------
+${sharp} Manager auto shutdown options
+${sharp}
+${sharp} This option specifies whether to shut-down the manager and
+${sharp} terminate the process when there is no RTC on the process, that is
+${sharp} when the last one of the RTC on the same process has terminated.
+${sharp} If YES, the process terminates when no RTC is left. In the case of
+${sharp} NO, both the manager and the process continue to operate even when
+${sharp} there is no RTC.
+${sharp}
+${sharp} - Setting: Read/Write, YES/NO
+${sharp} - Default: YES
+${sharp} - Example:
+${sharp}manager.shutdown_on_nortcs: YES
+
+${sharp}------------------------------------------------------------
+${sharp} Manager auto shutdown options
+${sharp}
+${sharp} If this option is set to YES, the process checks for the presence
+${sharp} of an RTC at regular intervals, and if no RTC exists, shuts down
+${sharp} the manager and the process. If NO, the manager and the processes
+${sharp} continue to run without any RTC.
+${sharp}
+${sharp} The difference between "manager.shutdown_on_nortcs" and
+${sharp} "manager.shutdown_auto" is the trigger of shutdown. The former
+${sharp} trigger is the removal of the last RTC, while the latter trigger
+${sharp} is the time specified by the "manager.auto_shutdown_duration"
+${sharp} option.
+${sharp}
+${sharp} - Setting: Read/Write, YES/NO
+${sharp} - Default: YES
+${sharp} - Example:
+${sharp}manager.shutdown_auto: YES
+
+${sharp}------------------------------------------------------------
+${sharp} Manager auto shutdown options
+${sharp}
+${sharp} This option specifies how often to check for the existence of RTCs
+${sharp} in the process. The unit is seconds. If the above
+${sharp} "manager.shutdown_auto" is set to YES, the process checks for RTC
+${sharp} at the cycle set by this option.
+${sharp}
+${sharp} - Setting: Read/Write, duration [s]
+${sharp} - Default: 10.0
+${sharp} - Example:
+${sharp}manager.auto_shutdown_duration: 10.0
+
+${sharp}------------------------------------------------------------
+${sharp} Manager termination wait time
+${sharp}
+${sharp} This option specifies the time between the terminate request to
+${sharp} the manager and the actual termination thread starting execution.
+${sharp} The unit is seconds. Usually, there is no need to specify or
+${sharp} change this option. However, if another termination procedure is
+${sharp} executed before the CORBA termination procedure ends normally and
+${sharp} an exception occurs, adjusting this time may solve the problem.
+${sharp}
+${sharp} - Setting: Read/Write, duration [s]
+${sharp} - Default: 0.5
+${sharp} - Example:
+${sharp}manager.termination_waittime: 0.5
+
+${sharp} End of Manager's lifecycle options section
+${sharp}============================================================
+
+${sharp}============================================================
+${sharp} Module management options
+${sharp}============================================================
+${sharp}------------------------------------------------------------
+${sharp} Loadable module search path list
+${sharp}
+${sharp} Manager searches loadable modules from the specified search path list.
+${sharp} Path list elements should be separated by comma.
+${sharp} Path delimiter is '/' on UNIX, and '\\' on Windows
+${sharp}
+${sharp} - Setting: Module load path, <path1>, <path2>, ...
+${sharp} - Default: ./
+${sharp} - Example:
+${sharp}   manager.modules.load_path: C:/Program Files/OpenRTM-aist,  \
+${sharp}   			       C:\\Program Files\\OpenRTM-aist
+${sharp}   manager.modules.load_path: /usr/lib, /usr/local/lib,       \
+${sharp}   			       /usr/local/lib/OpenRTM-aist/libs
+${sharp}manager.modules.load_path: ./
+
+${sharp}------------------------------------------------------------
+${sharp} Preload module list
+${sharp}
+${sharp} Manager can load loadable modules before starting up. Loadable
+${sharp} modules, which is specified only as its file name, is searched in
+${sharp} each module load path specified in the
+${sharp} "manager.modules.load_path". If the
+${sharp} "manager.modules.abs_path_allowed" option is YES, loadable file
+${sharp} can be specified as full-path name.
+${sharp}
+${sharp} Module initialization function name is usually estimated as
+${sharp} <module_base_name>Init from the module file name.  If the module
+${sharp} file name is ConsoleIn.so, the initialization function name is set
+${sharp} to "ConsleInInit." If you want to specify the initialization
+${sharp} function name, the initialization function name in parenthesis
+${sharp} after module file name can be specified, like as "Hoge.so
+${sharp} (ConsoleInInit)".  File extensions such as ".so", ".dll", ".dylib"
+${sharp} can be drop. If module file name without file extension is
+${sharp} specified, an extension specified in property variable
+${sharp} "manager.modules.C++.suffixes" is supplied.
+${sharp}
+${sharp} - Setting: <module_name>(.<extention>) (init_func_name), ...
+${sharp} - Default: none
+${sharp} - Example: 
+${sharp}   manager.modules.preload: ConsoleIn.dll, ConsoleOut.dll // Win
+${sharp}   manager.modules.preload: ConsoleIn.so, ConsoleOut.so // Linux
+${sharp}   manager.modules.preload: Hoge.so (ConsoleInInit), ConsoleOut
+${sharp} - Example: Specifing absolute path
+${sharp}   manager.modules.abs_path_allowed: YES
+${sharp}   manager.modules.preload: /usr/lib/OpenRTM-aist/ConsoleIn.so
+${sharp}manager.modules.preload:
+
+${sharp}------------------------------------------------------------
+${sharp} Permission flag of absolute module path
+${sharp}
+${sharp} If this option is "YES", absolute path specification for the
+${sharp} module is allowed. For the security reason, specifying modules to
+${sharp} be loaded by the absolute path is not allowed by default. The
+${sharp} modules to be loaded have to be deployed specified directories. If
+${sharp} you want to specify loaded modules by absolute path during the
+${sharp} development and debugging phase, you can use this option.
+${sharp}
+${sharp} - Setting: Read/Write, YES/ON
+${sharp} - Default: NO
+${sharp} - Example:
 ${sharp} manager.modules.abs_path_allowed: YES
+${sharp}manager.modules.abs_path_allowed: NO
 
-${sharp}${sharp}
-${sharp}${sharp} The following options are not implemented yet.
-${sharp}${sharp}
+${sharp}------------------------------------------------------------
+${sharp} Enable a module automatic search function
+${sharp}
+${sharp} This option specifies whether to automatically search for RTC
+${sharp} loadable modules. If this option is set to "YES", when RTC
+${sharp} instantiation is requested to the manager, the target RTC loadable
+${sharp} module (DLL, so, etc.) is automatically searched and loaded from
+${sharp} the module search path, and the component is instantiated. If NO,
+${sharp} the target RTC's loadable module must be loaded in advance.
+${sharp}
+${sharp} - Setting: Read/Write, YES / NO
+${sharp} - Default: YES
+${sharp} - Example:
+${sharp}manager.modules.search_auto: YES
+
+${sharp}------------------------------------------------------------
+${sharp} Module List to load before CORBA initialization
+${sharp}
+${sharp} This option specifies the module to load before CORBA
+${sharp} initialization. A loadable module that implements some
+${sharp} functionality must be loaded before CORBA initialization, and such
+${sharp} a module is specified with this option. The module specification
+${sharp} method is the same as for manager.modules.preload.
+${sharp}
+${sharp} - Setting: <module_name>(.<extention>) (init_func_name), ...
+${sharp} - Default: none
+${sharp} - Example: 
+${sharp}   manager.preload.modules: SSLTransport.dll
+${sharp}   manager.preload.modules: SSLTransport.py
+${sharp}   manager.preload.modules: SSLTransport
+${sharp}   manager.preload.modules: \
+${sharp}   C:\\Python27\\Lib\\site-packages\\OpenRTM_aist\\ext\\SSLTransport
+${sharp}manager.preload.modules: none
+
+${sharp}------------------------------------------------------------
+${sharp} The following options are not implemented yet. 
+${sharp}
 ${sharp} manager.modules.config_ext:
 ${sharp} manager.modules.config_path:
 ${sharp} manager.modules.detect_loadable:
@@ -408,313 +962,381 @@ ${sharp} manager.modules.init_func_prefix:
 ${sharp} manager.modules.download_allowed:
 ${sharp} manager.modules.download_dir:
 ${sharp} manager.modules.download_cleanup:
-${sharp}${sharp}
 
-${sharp}${sharp}
-${sharp}${sharp} Advance component creation
-${sharp}${sharp}
-${sharp}${sharp} This option specifies components' names (module name) creating in advance
-${sharp}${sharp} before starting the manager's event-loop. The components' factories should
-${sharp}${sharp} be registered by manager.module.preload option or statically linked to the
-${sharp}${sharp}  manager.
-${sharp}${sharp}
-${sharp}${sharp} Example:
-${sharp}${sharp} manager.components.precreate: ConsoleIn, ConsoleOut, SeqIn, SeqOut
-${sharp}${sharp}
-${sharp} manager.components.precreate:
+${sharp} End of Module management options section
+${sharp}============================================================
 
-${sharp}${sharp}
-${sharp}${sharp} Advance connection creation
-${sharp}${sharp}
-${sharp}${sharp} This option specifies connections to be created in advance before
-${sharp}${sharp} starting the manager's event-loop. The target components and ports
-${sharp}${sharp} must be created previously by manager.components.precreate optinos.
-${sharp}${sharp} A port is specified as XXX format, and a connection is specified by
-${sharp}${sharp} a delimiter XX between ports such as ConsoleIn.out:ConsoleOut.in. A
-${sharp}${sharp} connector profile is specified in the following parentheses "()" by
-${sharp}${sharp} "key=falue" format with "&" delimiter.
-${sharp}${sharp}
-${sharp}${sharp} Example:
-${sharp}${sharp} manager.components.preconnect: ConsoleIn.out?port=ConsoleOut.in&dataflow_type=push&interface_type=corba_cdr, SeqIn.octet?port=SeqOut.octet&dataflow_type=push&interface_type=direct
-${sharp}${sharp} if no parenthis parts are included, dataflow_type=push, interface_type=corba_cdr
-${sharp}${sharp}
-${sharp} manager.components.preconnect:
+${sharp}============================================================
+${sharp} Manager's language support options
+${sharp}============================================================
+${sharp}------------------------------------------------------------
+${sharp} Supported languages
+${sharp}
+${sharp} The master manager launches the slave manager and the RTCs in
+${sharp} response to a request from a remote application. The slave manager
+${sharp} is not only limited to the C++ language version, but maybe the
+${sharp} Java version or Python version. This option sets the languages
+${sharp} ​​supported by the master manager. The language name specified
+${sharp} here is used for specifying options such as "manager.modules.
+${sharp} <Language> .manager_cmd" below. For example, if "Lua" is specified
+${sharp} for this option,
+${sharp}
+${sharp} - manager.modules.Lua.manager_cmd
+${sharp} - manager.modules.Lua.profile_cmd
+${sharp} - manager.modules.Lua.suffixes
+${sharp} - manager.modules.Lua.load_paths
+${sharp}
+${sharp} If these options are correctly specified, the master manager will
+${sharp} be able to start a Lua language's slave manager and Lua version
+${sharp} RTCs. (Currently, Lua version does not support these functions.)
+${sharp}
+${sharp} Python means Python version 2 series, and Python3 means Python
+${sharp} version 3 series.
+${sharp}
+${sharp} - Setting: Read/Write, C++, Python, Pyton3, Java
+${sharp} - Default: C++, Python, Python3, Java
+${sharp} - Example:
+${sharp}manager.supported_languages: C++, Python3, Java
 
-${sharp}${sharp}
-${sharp}${sharp} Advance component activation
-${sharp}${sharp}
-${sharp}${sharp} This option specifies components' names (module name) to be
-${sharp}${sharp} activated in advance before starting the manager's event-loop. The
-${sharp}${sharp} target components should be created previously by
-${sharp}${sharp} manager.components.precreate optinos.
-${sharp}${sharp}
-${sharp}${sharp} Example:
-${sharp}${sharp} manager.components.preactivation: ConsoleIn0, ConsoleOut0
-${sharp}${sharp}
-${sharp} manager.components.preactivation:
+${sharp}------------------------------------------------------------
+${sharp} Language specific module file extension
+${sharp}
+${sharp} This option specifies the extension of the loadable module RTC.
+${sharp}   manager.modules. <lang> .suffixes
+${sharp} The <lang> part of must be specified in
+${sharp} manager.supported_languages. "."(Dot) is not required. Since the
+${sharp} appropriate default extensions are specified for C++,
+${sharp} Python/Python3 and Java languages respectively, usually no setting
+${sharp} is required.
+${sharp}
+${sharp} - Setting: Extension of loadable module
+${sharp} - Default:
+${sharp}  - C ++: Windows: dll, Linux etc .: so, Mac OS X: dylib
+${sharp}  - Python / Python3: py
+${sharp}  - Java: class
+${sharp} -Example
+${sharp}  manager.modules.C ++. suffixes: dll
+${sharp}  manager.modules.Python.suffixes: so
+${sharp}  manager.modules.Java.suffixes: class
+${sharp}manager.modules.<lang>.suffixes
 
-${sharp}${sharp}
-${sharp}${sharp} Loading local service modules
-${sharp}${sharp}
-${sharp}${sharp} Local service mechanisms are provided for services provided among
-${sharp}${sharp} components in the same process. Components can obtain and utilize
-${sharp}${sharp} local services from the manager. By using this mechanism components
-${sharp}${sharp} can share resources each other.
-${sharp}${sharp}
-${sharp}${sharp} Local service modules sometimes must be initialized before component
-${sharp}${sharp} module loading and initialization. Loadable modules which is
-${sharp}${sharp} specified in this option are previously loaded and initialized.
-${sharp}${sharp}
-${sharp} manager.local_service.modules: IEEE1394CameraService.so
+${sharp}------------------------------------------------------------
+${sharp} Language specific manager executable
+${sharp}
+${sharp} This option specifies the name of the manager executable for each
+${sharp} language. When the master manager is requested to instantiate an
+${sharp} RTC, the slave manager is executed and the RTC is instantiated on
+${sharp} the slave manager process. The C++ version RTC uses the C++
+${sharp} version manager (rtcd), and the Python version RTC uses the
+${sharp} Python version manager (rtcd_python). The command search path
+${sharp} default executables are specified for C++, Python/Python3 and
+${sharp} Java languages respectively, usually no setting is required.
+${sharp}
+${sharp} - Setting: Manager command name
+${sharp} - Default:
+${sharp}  - C++: rtcd
+${sharp}  - Python: rtcd_python
+${sharp}  - Python3: rtcd_python3
+${sharp}  - Java: rtc_java
+${sharp} -Example
+${sharp}manager.modules.<lang>.manager_cmd: rtcd_<lang_specific_suffix>
+${sharp}manager.modules.C++.manager_cmd: rtcd
+${sharp}manager.modules.Python.manager_cmd: rtcd_python
+${sharp}manager.modules.Java.manager_cmd: rtcd_java
 
-${sharp}${sharp}
-${sharp}${sharp} Specifying enabled local services
-${sharp}${sharp}
-${sharp}${sharp} All the loaded local service modules are activated and enabled in
-${sharp}${sharp} default.  This option specify local serivces to be enabled when
-${sharp}${sharp} manager enables local services.
-${sharp}${sharp}
-${sharp} manager.local_service.enabled_services: IEEE1394CameraService
+${sharp}------------------------------------------------------------
+${sharp} Language specific profile executable
+${sharp}
+${sharp} This option specifies the name of the profile executable, which
+${sharp} is a command to get RTC profile, for each language. When
+${sharp} searching RTCs from the existing loadable modules, master manager
+${sharp} execute profile command to get each components' profile from
+${sharp} loadable modules. The C++ version RTC uses the C++ version
+${sharp} profile command (rtcprof), and the Python version RTC uses the
+${sharp} Python version manager (rtcprof_python). The command search path
+${sharp} must be set for the specified executable. Since the appropriate
+${sharp} default executables are specified for C++, Python/Python3 and
+${sharp} Java languages respectively, usually no setting is required.
+${sharp}
+${sharp}
+${sharp} - Setting: Profile command name
+${sharp} - Default:
+${sharp}  - C++: rtcprof
+${sharp}  - Python: rtcprof_python
+${sharp}  - Python3: rtcprof_python3
+${sharp}  - Java: rtc_java
+${sharp} - Example:
+${sharp}manager.modules.<lang>.profile_cmd: rtcprof_<lang_specific_suffix>
+${sharp}manager.modules.C++.profile_cmd: rtcprof
+${sharp}manager.modules.Python.profile_cmd: rtcprof_python
+${sharp}manager.modules.Python3.profile_cmd: rtcprof_python3
+${sharp}manager.modules.Java.profile_cmd: rtcprof_java
+
+${sharp}------------------------------------------------------------
+${sharp} Language specific module load path
+${sharp}
+${sharp} This option specifies the load path of the loadable module RTC for
+${sharp} each language. When master manager searching RTCs from somewhere,
+${sharp} the specified load path is used.
+${sharp}
+${sharp} - Setting: RTC's module load path
+${sharp} - Default: none
+${sharp} - Example:
+${sharp}manager.modules.<lang>.load_path: <lang_specific_module_load_path>
+${sharp}manager.modules.C++.load_path: ./, /usr/share/openrtm-1.2/components/cxx
+${sharp}manager.modules.Python.load_path: ./, /usr/share/openrtm-1.2/components/python
+${sharp}manager.modules.Python3.load_path: ./, /usr/share/openrtm-1.2/components/python3
+${sharp}manager.modules.Java.load_path: ./, /usr/share/openrtm-1.2/components/java
+
+${sharp} End of Manager's language spport options section
+${sharp}============================================================
 
 
-${sharp}${sharp}============================================================
-${sharp}${sharp} Logger configurations
-${sharp}${sharp}============================================================
-${sharp}${sharp}
-${sharp}${sharp} Enable/Disable logger [YES/NO]
-${sharp} logger.enable: YES
+${sharp}============================================================
+${sharp} Timer options
+${sharp}============================================================
+${sharp}------------------------------------------------------------
+${sharp} Enable/disable timer function
+${sharp}
+${sharp} This option enables or disables the timer function. If it is set NO
+${sharp} the functions that use the timer is disabled, such as periodic
+${sharp} confirmation and re-registration of the name server.
+${sharp}
+${sharp} - Setting: Read/Write, YES or NO
+${sharp} - Default: YES
+${sharp} - Example:
+${sharp}timer.enable: YES
 
-${sharp}${sharp}
-${sharp}${sharp} Log file name (default = ./rtc%p.log)
-${sharp}${sharp}
-${sharp}${sharp} %p: PID
-${sharp}${sharp}
-${sharp} logger.file_name: ./rtc%p.log
+${sharp}------------------------------------------------------------
+${sharp} Timer clock tick setting [s]
+${sharp}
+${sharp} This option specifies the resolution of the timer. For example, if you
+${sharp} specify this option as 1 second, you cannot control the timer
+${sharp} execution with a resolution greater than 1 second.
+${sharp}
+${sharp} - Setting: Read/Write, seconds[s]
+${sharp} - Default: 0.1 [s]
+${sharp} - Example:
+${sharp}timer.tick: 0.1
 
-${sharp}${sharp}
-${sharp}${sharp} Log date format (default = %b %d %H:%M:%S)
-${sharp}${sharp}
-${sharp}${sharp} The following strftime(3) like format expression is available.
-${sharp}${sharp} If no prefix is needed, use "No" or "Disable".
-${sharp}${sharp}
-${sharp}${sharp} %a abbreviated weekday name
-${sharp}${sharp} %A full weekday name
-${sharp}${sharp} %b abbreviated month name
-${sharp}${sharp} %B full month name
-${sharp}${sharp} %c the standard date and time string
-${sharp}${sharp} %d day of the month, as a number (1-31)
-${sharp}${sharp} %H hour, 24 hour format (0-23)
-${sharp}${sharp} %I hour, 12 hour format (1-12)
-${sharp}${sharp} %j day of the year, as a number (1-366)
-${sharp}${sharp} %m month as a number (1-12).
-${sharp}${sharp}    Note: some versions of Microsoft Visual C++ may use values that range
-${sharp}${sharp}    from 0-11.
-${sharp}${sharp} %M minute as a number (0-59)
-${sharp}${sharp} %p locale's equivalent of AM or PM
-${sharp}${sharp} %Q millisecond as a number (0-999) from ver 1.1
-${sharp}${sharp} %q microsecond as a number (0-999) from ver 1.1
-${sharp}${sharp} %S second as a number (0-59)
-${sharp}${sharp} %U week of the year, sunday as the first day
-${sharp}${sharp} %w weekday as a decimal (0-6, sunday=0)
-${sharp}${sharp} %W week of the year, monday as the first day
-${sharp}${sharp} %x standard date string
-${sharp}${sharp} %X standard time string
-${sharp}${sharp} %y year in decimal, without the century (0-99)
-${sharp}${sharp} %Y year in decimal, with the century
-${sharp}${sharp} %Z time zone name
-${sharp}${sharp} %% a percent sign
-${sharp}${sharp}
-${sharp}${sharp}
-${sharp}${sharp} logger.date_format: No
-${sharp}${sharp} logger.date_format: Disable
-${sharp}${sharp} logger.date_format: [%Y-%m-%dT%H.%M.%S%Z]     // W3C standard format
-${sharp}${sharp} logger.date_format: [%b %d %H:%M:%S]          // Syslog format
-${sharp}${sharp} logger.date_format: [%a %b %d %Y %H:%M:%S %Z] // RFC2822 format
-${sharp}${sharp} logger.date_format: [%a %b %d %H:%M:%S %Z %Y] // data command format
-${sharp}${sharp} logger.date_format: [%Y-%m-%d %H.%M.%S]
-${sharp}${sharp}
-${sharp} logger.date_format: %b %d %H:%M:%S
+${sharp} End of Timer options section
+${sharp}============================================================
 
-${sharp}${sharp}
-${sharp}${sharp} Log level (default = INFO)
-${sharp}${sharp}
-${sharp}${sharp} The following LogLevels are allowed.
-${sharp}${sharp} SILENT, FATAL, ERROR, WARN, INFO, DEBUG, TRACE, VERBOSE, PARANOID
-${sharp}${sharp}
-${sharp}${sharp}
-${sharp}${sharp} SILENT  : completely silent
-${sharp}${sharp} FATAL   : includes (FATAL)
-${sharp}${sharp} ERROR   : includes (FATAL, ERROR)
-${sharp}${sharp} WARN    : includes (FATAL, ERROR, WARN)
-${sharp}${sharp} INFO    : includes (FATAL, ERROR, WARN, INFO)
-${sharp}${sharp} DEBUG   : includes (FATAL, ERROR, WARN, INFO, DEBUG)
-${sharp}${sharp} TRACE   : includes (FATAL, ERROR, WARN, INFO, DEBUG, TRACE)
-${sharp}${sharp} VERBOSE : includes (FATAL, ERROR, WARN, INFO, DEBUG, TRACE, VERBOSE)
-${sharp}${sharp} PARANOID: includes (FATAL, ERROR, WARN, INFO, DEBUG, TRACE, VERBOSE, PARA)
-${sharp}${sharp}
-${sharp}${sharp} Warning!!!
-${sharp}${sharp} "TRACE", "VERBOSE", "PARANOID" logging level will create a huge log file!!
-${sharp}${sharp} "PARANOID" log level will tangle the log file.
-${sharp}${sharp}
-${sharp} logger.log_level: INFO
-
-${sharp}${sharp}
-${sharp}${sharp} Logger's clock time
-${sharp}${sharp}
-${sharp}${sharp} logger.clock_type option specifies a type of clock to be used for
-${sharp}${sharp} timestamp of log message. Now these three types are available.
-${sharp}${sharp}
-${sharp}${sharp} - system: system clock [default]
-${sharp}${sharp} - logical: logical clock
-${sharp}${sharp} - adjusted: adjusted clock
-${sharp}${sharp}
-${sharp}${sharp} To use logical time clock, call and set time by the following
-${sharp}${sharp} function in somewhere.
-${sharp}${sharp} coil::ClockManager::instance().getClock("logical").settime()
-${sharp}${sharp}
-${sharp} logger.clock_type: system
-
-${sharp}${sharp}============================================================
-${sharp}${sharp} Timer configuration
-${sharp}${sharp}============================================================
-${sharp}${sharp}
-${sharp}${sharp} Enable/disable timer function
-${sharp}${sharp}
-${sharp} timer.enable: YES
-
-${sharp}${sharp}
-${sharp}${sharp} Timer clock tick setting [s]
-${sharp}${sharp}
-${sharp} timer.tick: 0.1
-
-${sharp}${sharp}============================================================
-${sharp}${sharp} Execution context settings
-${sharp}${sharp}============================================================
-${sharp}${sharp}
-${sharp}${sharp} Periodic type ExecutionContext
-${sharp}${sharp}
-${sharp}${sharp} Other availabilities in OpenRTM-aist
-${sharp}${sharp}
-${sharp}${sharp} - ExtTrigExecutionContext:   External triggered EC. It is embedded in
-${sharp}${sharp}                              OpenRTM library.
-${sharp}${sharp} - OpenHRPExecutionContext:   External triggred paralell execution
-${sharp}${sharp}                              EC. It is embedded in OpenRTM
-${sharp}${sharp}                              library. This is usually used with
-${sharp}${sharp}                              OpenHRP3.
-${sharp}${sharp} - SimulatorExecutionContext: External triggred paralell execution
-${sharp}${sharp}                              EC. It is embedded in OpenRTM
-${sharp}${sharp}                              library. This is usually used with
-${sharp}${sharp}                              Choreonoid.
-${sharp}${sharp} - RTPreemptEC:               Real-time execution context for Linux
-${sharp}${sharp}                              RT-preemptive pathed kernel.
-${sharp}${sharp} - ArtExecutionContext:       Real-time execution context for ARTLinux
-${sharp}${sharp}                              (http://sourceforge.net/projects/art-linux/)
-${sharp}${sharp}
-${sharp}${sharp} exec_cxt.periodic.type: PeriodicExecutionContext
+${sharp}============================================================
+${sharp} Execution context options
+${sharp}============================================================
+${sharp}
+${sharp}------------------------------------------------------------
+${sharp} Periodic type ExecutionContext
+${sharp}
+${sharp} Other availabilities in OpenRTM-aist
+${sharp}
+${sharp} - ExtTrigExecutionContext:   External triggered EC. It is embedded in
+${sharp}                              OpenRTM library.
+${sharp} - OpenHRPExecutionContext:   External triggred paralell execution
+${sharp}                              EC. It is embedded in OpenRTM
+${sharp}                              library. This is usually used with
+${sharp}                              OpenHRP3.
+${sharp} - SimulatorExecutionContext: External triggred paralell execution
+${sharp}                              EC. It is embedded in OpenRTM
+${sharp}                              library. This is usually used with
+${sharp}                              Choreonoid.
+${sharp} - RTPreemptEC:               Real-time execution context for Linux
+${sharp}                              RT-preemptive pathed kernel.
+${sharp} - ArtExecutionContext:       Real-time execution context for ARTLinux
+${sharp}                              (http://sourceforge.net/projects/art-linux/)
+${sharp}
+${sharp} - Setting: (Periodic|ExtTrig|OpenHRP~Simulator~RTPreemptExecutionContext)
+${sharp} - Default: PeriodicExecutionContext
+${sharp} - Example:
+${sharp}exec_cxt.periodic.type: PeriodicExecutionContext
 ${sharp} exec_cxt.event_driven_type: to be implemented
 
-${sharp}${sharp}
-${sharp}${sharp} The execution cycle of ExecutionContext
-${sharp}${sharp}
-${sharp} exec_cxt.periodic.rate: 1000
+${sharp}------------------------------------------------------------
+${sharp} The execution cycle of ExecutionContext
+${sharp}
+${sharp} This option specifies the system wide EC's period. If RTC does not
+${sharp} specifies EC's periodic rate, this periodic rate will be used.
+${sharp}
+${sharp} - Setting: Read/Write, period [Hz]
+${sharp} - Default: 1000 [Hz]
+${sharp} - Example:
+${sharp}exec_cxt.periodic.rate: 1000
 
-${sharp}${sharp}
-${sharp}${sharp} State transition mode settings YES/NO
-${sharp}${sharp}
-${sharp}${sharp} Default: YES (efault setting is recommended.)
-${sharp}${sharp}
-${sharp}${sharp} Activating, deactivating and resetting of RTC makes state
-${sharp}${sharp} transition.  Some execution contexts execute main logic in different
-${sharp}${sharp} thread.  If these flags set to YES, activation, deactivation and
-${sharp}${sharp} resetting will be performed synchronously.  In other words, if these
-${sharp}${sharp} flags are YES, activation/deactivation/resetting-operations must be
-${sharp}${sharp} returned after state transition completed.
-${sharp}${sharp}
-${sharp}${sharp} "synchronous_transition" will set synchronous transition flags to
-${sharp}${sharp} all other synchronous transition flags
-${sharp}${sharp} (synchronous_activation/deactivation/resetting.
-${sharp}${sharp}
-${sharp} exec_cxt.sync_transition: YES
-${sharp} exec_cxt.sync_activation: YES
-${sharp} exec_cxt.sync_deactivation: YES
-${sharp} exec_cxt.sync_reset: YES
+${sharp}------------------------------------------------------------
+${sharp} State transition mode settings YES/NO
+${sharp}
+${sharp} Default: YES (Default setting is recommended.)
+${sharp}
+${sharp} Activating, deactivating and resetting of RTC makes state
+${sharp} transition.  Some execution contexts execute main logic in different
+${sharp} thread.  If these flags set to YES, activation, deactivation and
+${sharp} resetting will be performed synchronously.  In other words, if these
+${sharp} flags are YES, activation/deactivation/resetting-operations must be
+${sharp} returned after state transition completed.
+${sharp}
+${sharp} "synchronous_transition" will set synchronous transition flags to
+${sharp} all other synchronous transition flags
+${sharp} (synchronous_activation/deactivation/resetting.
+${sharp}
+${sharp}exec_cxt.sync_transition: YES
+${sharp}exec_cxt.sync_activation: YES
+${sharp}exec_cxt.sync_deactivation: YES
+${sharp}exec_cxt.sync_reset: YES
 
-${sharp}${sharp}
-${sharp}${sharp} Timeout of synchronous state transition [s]
-${sharp}${sharp}
-${sharp}${sharp} Default: 1.0 [s]
-${sharp}${sharp}
-${sharp}${sharp} When synchronous transition flags are set to YES, the following
-${sharp}${sharp} timeout settings are valid. If "transition_timeout" is set, the
-${sharp}${sharp} value will be set to all other timeout of activation/deactivation
-${sharp}${sharp} and resetting
-${sharp}${sharp}
-${sharp} exec_cxt.transition_timeout: 0.5
-${sharp} exec_cxt.activation_timeout: 0.5
-${sharp} exec_cxt.deactivation_timeout: 0.5
-${sharp} exec_cxt.reset_timeout: 0.5
+${sharp}------------------------------------------------------------
+${sharp} Timeout of synchronous state transition [s]
+${sharp}
+${sharp} Default: 1.0 [s]
+${sharp}
+${sharp} When synchronous transition flags are set to YES, the following
+${sharp} timeout settings are valid. If "transition_timeout" is set, the
+${sharp} value will be set to all other timeout of activation/deactivation
+${sharp} and resetting
+${sharp}
+${sharp}exec_cxt.transition_timeout: 0.5
+${sharp}exec_cxt.activation_timeout: 0.5
+${sharp}exec_cxt.deactivation_timeout: 0.5
+${sharp}exec_cxt.reset_timeout: 0.5
 
+${sharp} End of Execution context settings
+${sharp}============================================================
 
+${sharp}============================================================
+${sharp} SDO service options
+${sharp}============================================================
+${sharp}------------------------------------------------------------
+${sharp} SDO service provider settings
+${sharp}
+${sharp} This parameter contains a list of currently available SDO services
+${sharp} (providers).
+${sharp}
+${sharp} - Setting: Read-only, available SDO services (provider)
+${sharp} - Default: None
+${sharp} - Example:
+${sharp}sdo.service.provider.available_services: [read only]
 
-${sharp}${sharp}============================================================
-${sharp}${sharp} SDO service settings
-${sharp}${sharp}============================================================
-${sharp}${sharp}
-${sharp}${sharp} SDO service provider settings
-${sharp}${sharp}
-${sharp} sdo.service.provider.available_services: [read only]
-${sharp} sdo.service.provider.enabled_services: ALL
-${sharp} sdo.service.provider.providing_services: [read only]
-${sharp}${sharp}
-${sharp}${sharp} SDO service consumer settings
-${sharp}${sharp}
-${sharp} sdo.service.consumer.available_services: [read only]
-${sharp} sdo.service.consumer.enabled_services: ALL
+${sharp}------------------------------------------------------------
+${sharp} SDO service provider settings
+${sharp}
+${sharp} This option effectively specifies the SDO service (provider). Specify
+${sharp} a specific service by service type name, or specify "ALL" to enable
+${sharp} all services.
+${sharp}
+${sharp} - Setting: Read-Write, <sdo service0>, <sdo service1>, ... or ALL
+${sharp} - Default: None
+${sharp} - Example:
+${sharp}sdo.service.provider.enabled_services: ALL
 
+${sharp}------------------------------------------------------------
+${sharp} SDO service provider settings
+${sharp}
+${sharp} This option contains the currently instantiated and provided SDO
+${sharp} service (provider).
+${sharp}
+${sharp} - Setting: Read-only, providing SDO services (provider)
+${sharp} - Default: None
+${sharp} - Example:
+${sharp}sdo.service.provider.providing_services: [read only]
 
-${sharp}${sharp}============================================================
-${sharp}${sharp} Fluent-bit logger plugin setting
-${sharp}${sharp}============================================================
-${sharp}${sharp}
-${sharp}${sharp} This is fluentbit logger plugin example in rtc.conf
-${sharp}${sharp}
-${sharp} logger.enable: YES
-${sharp} logger.log_level: PARANOID
-${sharp} logger.file_name: rtc%p.log, stderr
+${sharp}------------------------------------------------------------
+${sharp} SDO service provider settings
+${sharp}
+${sharp} This parameter contains a list of currently available SDO services
+${sharp} (consumers).
+${sharp}
+${sharp} - Setting: Read-only, available SDO services (consumer)
+${sharp} - Default: None
+${sharp} - Example:
+${sharp}sdo.service.consumer.available_services: [read only]
 
-${sharp}${sharp} fluentbit specific configurations
-${sharp} logger.plugins: FluentBit.so
+${sharp}------------------------------------------------------------
+${sharp} SDO service provider settings
+${sharp}
+${sharp} This option specifies the SDO service (consumer) to use. Specify a
+${sharp} specific service by service type name, or specify "ALL" to enable all
+${sharp} services.
+${sharp}
+${sharp} - Setting: Read-Write, <sdo service0>, <sdo service1> , ... or ALL 
+${sharp} - Default: ALL
+${sharp} - Example:
+${sharp}sdo.service.consumer.enabled_services: ALL
 
-${sharp}${sharp} Output example (forward)
-${sharp} logger.logstream.fluentd.output0.plugin: forward
-${sharp} logger.logstream.fluentd.output0.tag: fluent_forward
-${sharp} logger.logstream.fluentd.output0.match: *
+${sharp} End of SDO service options section
+${sharp}============================================================
+
+${sharp}============================================================
+${sharp} Manager's local service options
+${sharp}============================================================
+${sharp}------------------------------------------------------------
+${sharp} Loading local service modules
+${sharp}
+${sharp} Local service mechanisms are provided for services provided among
+${sharp} components in the same process. Components can obtain and utilize
+${sharp} local services from the manager. By using this mechanism components
+${sharp} can share resources each other.
+${sharp}
+${sharp} Local service modules sometimes must be initialized before component
+${sharp} module loading and initialization. Loadable modules which is
+${sharp} specified in this option are previously loaded and initialized.
+${sharp}
+${sharp}manager.local_service.modules: IEEE1394CameraService.so
+
+${sharp}------------------------------------------------------------
+${sharp} Specifying enabled local services
+${sharp}
+${sharp} All the loaded local service modules are activated and enabled in
+${sharp} default.  This option specify local serivces to be enabled when
+${sharp} manager enables local services.
+${sharp}
+${sharp}manager.local_service.enabled_services: IEEE1394CameraService
+
+${sharp} End of Manager's local service options section
+${sharp}============================================================
+
+${sharp}============================================================
+${sharp} SSL Transport configurations
+${sharp}============================================================
+${sharp}
+${sharp} corba.ssl.certificate_authority_file: root.crt
+${sharp} corba.ssl.key_file: server.pem
+${sharp} corba.ssl.key_file_password: password
+${sharp} corba.args:-ORBclientTransportRule "* ssl, tcp"
+
+${sharp} End of SSL Transport options section
+${sharp}============================================================
+
+${sharp}============================================================
+${sharp} Fluent-bit logger plugin setting
+${sharp}============================================================
+${sharp}
+${sharp} This is fluentbit logger plugin example in rtc.conf
+${sharp}
+${sharp}logger.enable: YES
+${sharp}logger.log_level: PARANOID
+${sharp}logger.file_name: rtc%p.log, stderr
+
+${sharp} fluentbit specific configurations
+${sharp}logger.plugins: FluentBit.so
+
+${sharp} Output example (forward)
+${sharp}logger.logstream.fluentd.output0.plugin: forward
+${sharp}logger.logstream.fluentd.output0.tag: fluent_forward
+${sharp}logger.logstream.fluentd.output0.match: *
 ${sharp}logger.logstream.fluentd.output0.host: 127.0.0.1 (default)
 ${sharp}logger.logstream.fluentd.output0.port: 24224 (default)
 
-${sharp}${sharp} Output example (stdout)
-${sharp} logger.logstream.fluentd.output1.plugin: stdout
-${sharp} logger.logstream.fluentd.output1.tag: fluent_stdout
-${sharp} logger.logstream.fluentd.output1.match: *
+${sharp} Output example (stdout)
+${sharp}logger.logstream.fluentd.output1.plugin: stdout
+${sharp}logger.logstream.fluentd.output1.tag: fluent_stdout
+${sharp}logger.logstream.fluentd.output1.match: *
 
 ${sharp} Input example (CPU)
-${sharp} logger.logstream.fluentd.input0.plugin: cpu
-${sharp} logger.logstream.fluentd.input0.tag: fluent_cpu
+${sharp}logger.logstream.fluentd.input0.plugin: cpu
+${sharp}logger.logstream.fluentd.input0.tag: fluent_cpu
 
+${sharp} Option example
+${sharp}logger.logstream.fluentd.option.Flush: 5 (default)
 
-${sharp}${sharp}============================================================
-${sharp}${sharp} DataPort setting
-${sharp}${sharp}============================================================
-
-${sharp}${sharp}------------------------------------------------------------
-${sharp}${sharp}
-${sharp}${sharp} Number of connectors that can be generated on the target data port
-${sharp} port.inport.<InPortName>.fan_in: 100
-${sharp} port.outport.<OutPortName>.fan_out: 100
-
-
-${sharp}${sharp}------------------------------------------------------------
-${sharp}${sharp}
-${sharp}${sharp} Enable a function of double connection prevention
-${sharp} port.inport.<InPortName>.allow_dup_connection: YES
-${sharp} port.outport.<OutPortName>.allow_dup_connection: YES
+${sharp} End of fluent-bit logger plugin options section
+${sharp}============================================================
