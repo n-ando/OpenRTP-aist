@@ -30,12 +30,11 @@ ${sharp}   If you want to create an additional instance of the RTC
 ${sharp}manager.components.precreate: ${rtcParam.name}
 ${sharp}   If you want to activate ${sharp}0 instance
 ${sharp}manager.components.preactivation: ${rtcParam.name}0
-
+${sharp} Creating connection previously
 ${sharp}manager.components.preconnect:   ¥
 ${sharp}   <comp0 name>.<port name>?      ¥
 ${sharp}   port=<comp1 name>.<port name>& ¥
 ${sharp}   dataflow_type=push&            ¥
-${sharp} Creating connection previously
 ${sharp}   interface_type=corba_cdr
 
 ${sharp} Execution contexts rate [Hz] setting
