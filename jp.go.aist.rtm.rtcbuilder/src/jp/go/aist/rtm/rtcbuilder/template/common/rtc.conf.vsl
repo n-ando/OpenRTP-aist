@@ -31,11 +31,11 @@ ${sharp}manager.components.precreate: ${rtcParam.name}
 ${sharp}   If you want to activate ${sharp}0 instance
 ${sharp}manager.components.preactivation: ${rtcParam.name}0
 
-${sharp} Creating connection periviously
 ${sharp}manager.components.preconnect:   ¥
 ${sharp}   <comp0 name>.<port name>?      ¥
 ${sharp}   port=<comp1 name>.<port name>& ¥
 ${sharp}   dataflow_type=push&            ¥
+${sharp} Creating connection previously
 ${sharp}   interface_type=corba_cdr
 
 ${sharp} Execution contexts rate [Hz] setting
@@ -254,7 +254,7 @@ ${sharp} Specify log file name. You can also output to multiple files separated
 ${sharp} by commas. A specifier %p to replace the process ID is available. If
 ${sharp} the file name is stdout, the log will be output to standard output.
 ${sharp}
-${sharp} Replable strings:
+${sharp} Replaceable strings:
 ${sharp} %p: PID
 ${sharp}
 ${sharp} - Setting: file names and/or "stdout"
@@ -310,7 +310,7 @@ ${sharp}logger.date_format: %b %d %H:%M:%S.%Q
 ${sharp}------------------------------------------------------------
 ${sharp} Log level (default = INFO)
 ${sharp}
-${sharp} This option specifes the log level for logging. The following log
+${sharp} This option specifies the log level for logging. The following log
 ${sharp} levels are allowed.
 ${sharp}
 ${sharp} SILENT, FATAL, ERROR, WARN, INFO, DEBUG, TRACE, VERBOSE, PARANOID
@@ -589,7 +589,7 @@ ${sharp}
 ${sharp} This "manager.instance_name" is used for the name of the manager on
 ${sharp} the naming service registration. Usually, a master manager's reference
 ${sharp} is registered on name-servers with the name "manager|mgr". If this
-${sharp} option is set to "foobar", the registered the maaster manager name
+${sharp} option is set to "foobar", the registered the master manager name
 ${sharp} will be "foobar|mgr".
 ${sharp}
 ${sharp} - Setting: any string name of manager
@@ -629,7 +629,7 @@ ${sharp} - Example:
 ${sharp}manager.is_master: NO
 
 ${sharp}------------------------------------------------------------
-${sharp} Creating masnter manager servant
+${sharp} Creating master manager servant
 ${sharp}
 ${sharp} Setting whether to start the manager's CORBA servant. If set to YES,
 ${sharp} the manager's CORBA servant will be started, allowing remote manager

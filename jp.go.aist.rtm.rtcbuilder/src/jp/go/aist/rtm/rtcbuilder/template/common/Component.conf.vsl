@@ -1,7 +1,7 @@
 ${sharp}============================================================
 ${sharp} Component Configuration for ${rtcParam.name}
 ${sharp}
-${sharp} Component specific configurration file is specified from rtc.conf as
+${sharp} Component specific configuration file is specified from rtc.conf as
 ${sharp} follows.
 ${sharp}
 ${sharp} English reference:  https://openrtm.org/openrtm/en/comp_conf_reference
