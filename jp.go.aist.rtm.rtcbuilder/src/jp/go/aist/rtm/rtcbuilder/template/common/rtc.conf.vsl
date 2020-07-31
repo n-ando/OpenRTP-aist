@@ -33,10 +33,10 @@ ${sharp}manager.components.preactivation: ${rtcParam.name}0
 
 ${sharp} Creating connection periviously
 ${sharp}manager.components.preconnect:   ¥
-  <comp0 name>.<port name>?      ¥
-  port=<comp1 name>.<port name>& ¥
-  dataflow_type=push&            ¥
-  interface_type=corba_cdr
+${sharp}   <comp0 name>.<port name>?      ¥
+${sharp}   port=<comp1 name>.<port name>& ¥
+${sharp}   dataflow_type=push&            ¥
+${sharp}   interface_type=corba_cdr
 
 ${sharp} Execution contexts rate [Hz] setting
 ${sharp}exec_cxt.periodic.rate: 30
