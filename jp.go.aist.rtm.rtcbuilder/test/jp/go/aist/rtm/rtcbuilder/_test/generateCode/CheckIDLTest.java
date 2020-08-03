@@ -207,7 +207,7 @@ public class CheckIDLTest extends TestBase {
 		Generator generator = new Generator();
 		List<GeneratedResult> result = generator.generateTemplateCode(genParam, idlDirs);
 
-		String resourceDir = rootPath + "/resource/100/CXX/CheckIDL/";
+		String resourceDir = rootPath + "/resource/100/CXX/CheckIDLDef/";
 
 		checkCode(result, resourceDir, "Sample.cpp");
 		checkCode(result, resourceDir, "Sample.h");

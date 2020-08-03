@@ -5,9 +5,6 @@
  *
  */
 
-#include "ManipulatorCommonInterface_DataTypesSkel.h"
-#include "BasicDataTypeSkel.h"
-
 #include "ManipulatorCommonInterface_CommonSkel.h"
 
 #ifndef MANIPULATORCOMMONINTERFACE_COMMONSVC_IMPL_H
@@ -37,15 +34,15 @@ class JARA_ARM_ManipulatorCommonInterface_CommonSVC_impl
    virtual ~JARA_ARM_ManipulatorCommonInterface_CommonSVC_impl();
 
    // attributes and operations
-   JARA_ARM::RETURN_ID* clearAlarms();
-   JARA_ARM::RETURN_ID* getActiveAlarm(JARA_ARM::AlarmSeq_out alarms);
-   JARA_ARM::RETURN_ID* getFeedbackPosJoint(JARA_ARM::JointPos_out pos);
-   JARA_ARM::RETURN_ID* getManipInfo(JARA_ARM::ManipInfo_out mInfo);
-   JARA_ARM::RETURN_ID* getSoftLimitJoint(JARA_ARM::LimitSeq_out softLimit);
-   JARA_ARM::RETURN_ID* getState(JARA_ARM::ULONG& state);
-   JARA_ARM::RETURN_ID* servoOFF();
-   JARA_ARM::RETURN_ID* servoON();
-   JARA_ARM::RETURN_ID* setSoftLimitJoint(const JARA_ARM::LimitSeq& softLimit);
+   JARA_ARM::RETURN_ID clearAlarms();
+   JARA_ARM::RETURN_ID getActiveAlarm(JARA_ARM::AlarmSeq_out alarms);
+   JARA_ARM::RETURN_ID getFeedbackPosJoint(JARA_ARM::JointPos& pos);
+   JARA_ARM::RETURN_ID getManipInfo(JARA_ARM::ManipInfo_out mInfo);
+   JARA_ARM::RETURN_ID getSoftLimitJoint(JARA_ARM::LimitSeq_out softLimit);
+   JARA_ARM::RETURN_ID getState(JARA_ARM::ULONG& state);
+   JARA_ARM::RETURN_ID servoOFF();
+   JARA_ARM::RETURN_ID servoON();
+   JARA_ARM::RETURN_ID setSoftLimitJoint(const JARA_ARM::LimitSeq& softLimit);
 
 };
 
