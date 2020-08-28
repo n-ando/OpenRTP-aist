@@ -25,6 +25,9 @@ public class PreProcessor {
 	private static final Pattern COMMENT_PATTERN = Pattern
 			.compile("/\\*(.*?)(\\*/)", Pattern.DOTALL);
 
+	private static final Pattern PRAGMA_PATTERN = Pattern
+			.compile(" *(#pragma ).*");
+	
 	private static final Pattern SPACE_PATTERN = Pattern
 			.compile("^ +", Pattern.MULTILINE);
 	
@@ -40,9 +43,10 @@ public class PreProcessor {
 	 */
 	public static String parseAlltoSpace(String target) {
 		String targetNoCmt = eraseComments(target);
+		String targetNoPgm = erasePragma(targetNoCmt);
 		//
 		StringBuffer targetNoSpace = new StringBuffer();
-		Matcher matcherSpace = SPACE_PATTERN.matcher(targetNoCmt);
+		Matcher matcherSpace = SPACE_PATTERN.matcher(targetNoPgm);
 		while (matcherSpace.find()) {
 			matcherSpace.appendReplacement(targetNoSpace, Matcher.quoteReplacement(""));
 		}
@@ -69,6 +73,17 @@ public class PreProcessor {
 
 		return result.toString();
 	}
+	
+	private static String erasePragma(String target) {
+		StringBuffer result = new StringBuffer();
+		Matcher matcher = PRAGMA_PATTERN.matcher(target);
+		while (matcher.find()) {
+			matcher.appendReplacement(result, Matcher.quoteReplacement(""));
+		}
+		matcher.appendTail(result);
+
+		return result.toString();
+	}
 
 	/**
 	 * 対象文字列に対してプリプロセッサを実行する。
@@ -80,9 +95,10 @@ public class PreProcessor {
 	 */
 	public static String parse(String target, List<String> includeBaseDirs, List<String> includeFilesOut, boolean isCheck) throws IOException, HeaderException {
 		String targetNoCmt = eraseComments(target);
+		String targetNoPgm = erasePragma(targetNoCmt);
 		/////
 		StringBuffer result = new StringBuffer();
-		Matcher matcher = PREPROSESSOR_PATTERN.matcher(targetNoCmt);
+		Matcher matcher = PREPROSESSOR_PATTERN.matcher(targetNoPgm);
 		while (matcher.find()) {
 			String replateString = "";
 			String includeFileContent = getIncludeFileContentThoroughgoing(
