@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.5.1)
 
 project(YYY)
 string(TOLOWER ${PROJECT_NAME} PROJECT_NAME_LOWER)
