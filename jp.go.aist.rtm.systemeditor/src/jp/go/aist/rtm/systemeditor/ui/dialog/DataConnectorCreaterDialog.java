@@ -9,19 +9,19 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.TabFolder;
+import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Text;
 
 import jp.go.aist.rtm.systemeditor.manager.SystemEditorPreferenceManager;
@@ -67,9 +67,6 @@ public class DataConnectorCreaterDialog extends ConnectorDialogBase {
 	private Text skipCountText;
 	private Combo timePolicyCombo;
 
-	Composite detailComposite;
-	Point defaultDialogSize;
-	
 	private ConnectorProfile connectorProfile;
 	private ConnectorProfile dialogResult;
 	private OutPort outport;
@@ -152,17 +149,43 @@ public class DataConnectorCreaterDialog extends ConnectorDialogBase {
 	 * メインとなる表示部を作成する
 	 */
 	private void createConnectorProfileComposite(final Composite mainComposite) {
-		GridLayout gl;
 		GridData gd;
-		Composite portProfileEditComposite = new Composite(mainComposite,
+		gd = new GridData();
+		gd.horizontalAlignment = GridData.FILL;
+		gd.verticalAlignment = GridData.FILL;
+		gd.grabExcessHorizontalSpace = true;
+		gd.grabExcessVerticalSpace = true;
+
+		TabFolder tabFolder = new TabFolder(mainComposite, SWT.NONE);
+		tabFolder.setLayoutData(gd);
+		/////
+		TabItem itemBasic = new TabItem(tabFolder, SWT.NONE, 0);
+		itemBasic.setText(Messages.getString("DataConnectorCreaterDialog.tab.basic"));
+		itemBasic.setControl(createBasicTab(tabFolder));
+		/////
+		TabItem itemBuffer = new TabItem(tabFolder, SWT.NONE, 1);
+		itemBuffer.setText(Messages.getString("DataConnectorCreaterDialog.tab.buffer"));
+		itemBuffer.setControl(createBufferTab(tabFolder));
+		/////
+		TabItem itemProperty = new TabItem(tabFolder, SWT.NONE, 2);
+		itemProperty.setText(Messages.getString("DataConnectorCreaterDialog.tab.properties"));
+		itemProperty.setControl(createPropertyTab(tabFolder));
+		
+		loadData();
+	}
+
+	private Composite createBasicTab(TabFolder tabFolder) {
+		GridData gd;
+		GridLayout gl;
+		Composite portProfileEditComposite = new Composite(tabFolder,
 				SWT.NONE);
 		gl = new GridLayout(3, false);
-		gl.marginBottom = 0;
-		gl.marginHeight = 0;
-		gl.marginLeft = 0;
-		gl.marginRight = 0;
-		gl.marginTop = 0;
-		gl.marginWidth = 0;
+		gl.marginBottom = 3;
+		gl.marginHeight = 3;
+		gl.marginLeft = 3;
+		gl.marginRight = 3;
+		gl.marginTop = 3;
+		gl.marginWidth = 3;
 		portProfileEditComposite.setLayout(gl);
 		gd = new GridData();
 		gd.horizontalAlignment = GridData.FILL;
@@ -437,45 +460,17 @@ public class DataConnectorCreaterDialog extends ConnectorDialogBase {
 			}
 		});
 		createLabel(portProfileEditComposite, "");
-		
-		final Button detailCheck = new Button(portProfileEditComposite,
-				SWT.CHECK);
-		detailCheck.setText(LABEL_DETAIL);
-		detailCheck.setSelection(false);
-		createLabel(portProfileEditComposite, "");
-		createLabel(portProfileEditComposite, "");
-
-		detailCheck.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				boolean selection = detailCheck.getSelection();
-				if (selection && detailComposite == null) {
-					disableNotify = true;
-					createDetailComposite(mainComposite);
-					disableNotify = false;
-				}
-				detailComposite.setVisible(selection);
-				if (!selection) {
-					// 詳細チェック解除時に、元のダイアログのサイズに戻す
-					getShell().setSize(defaultDialogSize);
-				} else {
-					getShell().setSize(
-							getShell().computeSize(SWT.DEFAULT, SWT.DEFAULT));
-				}
-			}
-		});
-
-		loadData();
+		return portProfileEditComposite;
 	}
 
 	/**
 	 * 詳細設定の表示部を作成する
 	 */
-	Composite createDetailComposite(Composite parent) {
+	private Composite createBufferTab(Composite parent) {
 		GridLayout gl;
 		GridData gd;
 
-		detailComposite = new Composite(parent, SWT.NONE);
+		Composite detailComposite = new Composite(parent, SWT.NONE);
 		gl = new GridLayout(2, false);
 		gd = new GridData(GridData.FILL_BOTH);
 		detailComposite.setLayout(gl);
@@ -488,20 +483,14 @@ public class DataConnectorCreaterDialog extends ConnectorDialogBase {
 		ib = new BufferPackage();
 		createBufferComposite(detailComposite, "Buffer (Inport)", ib);
 		
-		additionalTableViewer = createAdditionalTableViewer(detailComposite);
-		
 		loadDetailData();
-
-		defaultDialogSize = getShell().getSize();
-		getShell().setSize(getShell().computeSize(SWT.DEFAULT, SWT.DEFAULT));
 
 		return detailComposite;
 	}
-
 	/**
 	 * ポートバッファ設定の表示部を作成する
 	 */
-	Composite createBufferComposite(Composite parent, String label,
+	private Composite createBufferComposite(Composite parent, String label,
 			BufferPackage pkg) {
 		GridLayout gl;
 		GridData gd;
@@ -642,13 +631,29 @@ public class DataConnectorCreaterDialog extends ConnectorDialogBase {
 		return composite;
 	}
 
-	Label createLabel(Composite parent, String label) {
+	private Composite createPropertyTab(Composite parent) {
+		GridLayout gl;
+		GridData gd;
+
+		Composite propertyComposite = new Composite(parent, SWT.NONE);
+		gl = new GridLayout(2, false);
+		gd = new GridData(GridData.FILL_BOTH);
+		propertyComposite.setLayout(gl);
+		propertyComposite.setLayoutData(gd);
+		propertyComposite.setVisible(false);
+		/////
+		additionalTableViewer = createAdditionalTableViewer(propertyComposite);
+		
+		return propertyComposite;
+	}
+	
+	private Label createLabel(Composite parent, String label) {
 		Label l = new Label(parent, SWT.NONE);
 		l.setText(label);
 		return l;
 	}
 
-	boolean isOffline() {
+	private boolean isOffline() {
 		if (inport != null) {
 			return inport.eContainer() instanceof ComponentSpecification;
 		} else if (outport != null) {
@@ -947,7 +952,7 @@ public class DataConnectorCreaterDialog extends ConnectorDialogBase {
 			}
 		}
 
-		if (ob != null && ob.enable) {
+		if (ob != null && ob.enable && 0 < ob.lengthText.getText().length()) {
 			boolean isInt = false;
 			try {
 				int i = Integer.parseInt(ob.lengthText.getText());
@@ -963,35 +968,39 @@ public class DataConnectorCreaterDialog extends ConnectorDialogBase {
 			}
 			//
 			boolean isDouble = false;
-			try {
-				double d = Double.parseDouble(ob.writeTimeoutText.getText());
-				if (d >= 0.0) {
-					isDouble = true;
+			if(0 < ib.lengthText.getText().length()) {
+				try {
+					double d = Double.parseDouble(ob.writeTimeoutText.getText());
+					if (d >= 0.0) {
+						isDouble = true;
+					}
+				} catch (Exception ex) {
+					// void
 				}
-			} catch (Exception ex) {
-				// void
-			}
-			if (!isDouble) {
-				setMessage(MSG_ERROR_OUTPORT_WRITE_TIMEOUT_NOT_NUMERIC,
-						IMessageProvider.ERROR);
+				if (!isDouble) {
+					setMessage(MSG_ERROR_OUTPORT_WRITE_TIMEOUT_NOT_NUMERIC,
+							IMessageProvider.ERROR);
+				}
 			}
 			//
 			isDouble = false;
-			try {
-				double d = Double.parseDouble(ob.readTimeoutText.getText());
-				if (d >= 0.0) {
-					isDouble = true;
+			if(0 < ob.readTimeoutText.getText().length()) {
+				try {
+					double d = Double.parseDouble(ob.readTimeoutText.getText());
+					if (d >= 0.0) {
+						isDouble = true;
+					}
+				} catch (Exception ex) {
+					// void
 				}
-			} catch (Exception ex) {
-				// void
-			}
-			if (!isDouble) {
-				setMessage(MSG_ERROR_OUTPORT_READ_TIMEOUT_NOT_NUMERIC,
-						IMessageProvider.ERROR);
+				if (!isDouble) {
+					setMessage(MSG_ERROR_OUTPORT_READ_TIMEOUT_NOT_NUMERIC,
+							IMessageProvider.ERROR);
+				}
 			}
 		}
 
-		if (ib != null && ib.enable) {
+		if (ib != null && ib.enable && 0 < ib.lengthText.getText().length()) {
 			boolean isInt = false;
 			try {
 				int i = Integer.parseInt(ib.lengthText.getText());
@@ -1007,31 +1016,35 @@ public class DataConnectorCreaterDialog extends ConnectorDialogBase {
 			}
 			//
 			boolean isDouble = false;
-			try {
-				double d = Double.parseDouble(ib.writeTimeoutText.getText());
-				if (d >= 0.0) {
-					isDouble = true;
+			if(0 < ib.writeTimeoutText.getText().length()) {
+				try {
+					double d = Double.parseDouble(ib.writeTimeoutText.getText());
+					if (d >= 0.0) {
+						isDouble = true;
+					}
+				} catch (Exception ex) {
+					// void
 				}
-			} catch (Exception ex) {
-				// void
-			}
-			if (!isDouble) {
-				setMessage(MSG_ERROR_INPORT_WRITE_TIMEOUT_NOT_NUMERIC,
-						IMessageProvider.ERROR);
+				if (!isDouble) {
+					setMessage(MSG_ERROR_INPORT_WRITE_TIMEOUT_NOT_NUMERIC,
+							IMessageProvider.ERROR);
+				}
 			}
 			//
 			isDouble = false;
-			try {
-				double d = Double.parseDouble(ib.readTimeoutText.getText());
-				if (d >= 0.0) {
-					isDouble = true;
+			if(0 < ib.readTimeoutText.getText().length()) {
+				try {
+					double d = Double.parseDouble(ib.readTimeoutText.getText());
+					if (d >= 0.0) {
+						isDouble = true;
+					}
+				} catch (Exception ex) {
+					// void
 				}
-			} catch (Exception ex) {
-				// void
-			}
-			if (!isDouble) {
-				setMessage(MSG_ERROR_INPORT_READ_TIMEOUT_NOT_NUMERIC,
-						IMessageProvider.ERROR);
+				if (!isDouble) {
+					setMessage(MSG_ERROR_INPORT_READ_TIMEOUT_NOT_NUMERIC,
+							IMessageProvider.ERROR);
+				}
 			}
 		}
 
