@@ -23,11 +23,21 @@ public class StartNameServiceAction implements IViewActionDelegate {
 	private static String SCRIPT_WINDOWS = System.getenv("RTM_ROOT") + "bin" + Path.SEPARATOR + "rtm-naming.bat";
 	private static String SCRIPT_WINDOWS_STOP = System.getenv("RTM_ROOT") + "bin" + Path.SEPARATOR + "kill-rtm-naming.bat";
 
-	private static String SCRIPT_LINUX = "/usr/bin/rtm-naming";
-
+	private static String SCRIPT_UNIX = "/usr/bin/rtm-naming";
+	private String[] UNIX_CANDIDATE_LIST = {"/usr/bin/rtm-naming",
+											"/usr/local/bin/rtm-naming",
+											System.getenv("RTM_ROOT") + "bin" + Path.SEPARATOR + "rtm-naming"};
 
 	public void init(IViewPart view) {
 		this.view = (NameServiceView) view;
+		// find rtm-naming
+		for(String each :  UNIX_CANDIDATE_LIST) {
+			File targetFile = new File(each);
+			if(targetFile.exists() == true) {
+				SCRIPT_UNIX = each;
+				break;
+			}
+		}
 	}
 
 	public void run(IAction action) {
@@ -48,7 +58,7 @@ public class StartNameServiceAction implements IViewActionDelegate {
 				if(passwdDialog.open()!=Dialog.OK) return;
 
 				passWord = passwdDialog.getPassWord();
-				pb = new ProcessBuilder(SCRIPT_LINUX, "-k", "-f", "-w " + passWord);
+				pb = new ProcessBuilder(SCRIPT_UNIX, "-k", "-f", "-w " + passWord);
 			}
 			try {
 				pb.start();
@@ -70,7 +80,7 @@ public class StartNameServiceAction implements IViewActionDelegate {
 				pb = new ProcessBuilder(SCRIPT_WINDOWS);
 
 			} else {
-				pb = new ProcessBuilder(SCRIPT_LINUX, "-f", "-w " + passWord);
+				pb = new ProcessBuilder(SCRIPT_UNIX, "-f", "-w " + passWord);
 			}
 			try {
 				pb.start();
@@ -115,7 +125,7 @@ public class StartNameServiceAction implements IViewActionDelegate {
 			}
 
 		} else {
-			File targetFile = new File(SCRIPT_LINUX);
+			File targetFile = new File(SCRIPT_UNIX);
 			if(targetFile.exists()==false) {
 				action.setEnabled(false);
 			}
