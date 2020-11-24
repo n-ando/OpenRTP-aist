@@ -1,13 +1,20 @@
-all: img dmg
+all: subdirs dmg
 
-icns:
-	iconutil -c icns rtmlogo.iconset
+DMGNAME=openrtp_v1.2.2.dmg
 
-img:
+# subdirs build
+SUBDIRS = bin
+.PHONY: subdirs $(SUBDIRS)
+subdirs: $(SUBDIRS)
+$(SUBDIRS):
+	$(MAKE) -C $@
+
+backImage.tiff:
+	rm -rf backImage.tiff
 	tiffutil -cathidpicheck backImage/openrtp_800x400.tif backImage/openrtp_1600x800.tif -out backImage.tiff
 
-dmg:
-	rm -f openrtp_v1.2.2.dmg
+dmg: subdirs backImage.tiff
+	rm -f $(DMGNAME)
 	create-dmg \
 		--volname "OpenRTP Installer" \
 		--volicon "icons/openrtp.icns" \
@@ -15,11 +22,12 @@ dmg:
 		--window-pos 200 120 \
 		--window-size 800 440 \
 		--icon-size 100 \
-		--icon "openrtp.app" 200 190 \
+		--icon "OpenRTP.app" 200 190 \
 		--hide-extension "OpenRTP.app" \
 		--app-drop-link 600 185 \
-		"openrtp_v1.2.2.dmg" \
-		"bin/openrtp.app/"
+		"$(DMGNAME)" \
+		"bin/OpenRTP.app/"
+	shasum -a 256 $(DMGNAME)
 
 clean:
 	rm -f .DS_store
