@@ -52,7 +52,7 @@ public class FSMTest extends TestBase {
 		checkCode(result, resourceDir, "src/FinalState.java");
 		checkCode(result, resourceDir, "src/Top.java");
 		
-		checkCode(result, resourceDir, "test/src/CMakeLists.txt");
+//		checkCode(result, resourceDir, "test/src/CMakeLists.txt");
 		checkCode(result, resourceDir, "test/src/ModuleNameTest.java");
 		checkCode(result, resourceDir, "test/src/ModuleNameTestComp.java");
 		checkCode(result, resourceDir, "test/src/ModuleNameTestImpl.java");
@@ -86,7 +86,7 @@ public class FSMTest extends TestBase {
 		checkCode(result, resourceDir, "src/FinalState.java");
 		checkCode(result, resourceDir, "src/Top.java");
 		
-		checkCode(result, resourceDir, "test/src/CMakeLists.txt");
+//		checkCode(result, resourceDir, "test/src/CMakeLists.txt");
 		checkCode(result, resourceDir, "test/src/ModuleNameTest.java");
 		checkCode(result, resourceDir, "test/src/ModuleNameTestComp.java");
 		checkCode(result, resourceDir, "test/src/ModuleNameTestImpl.java");
