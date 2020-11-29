@@ -330,6 +330,7 @@ fi
 
 find_OPENRTP_DIR
 
+export SWT_GTK3=0
 export GDK_NATIVE_WINDOWS=1
 cd $OPENRTP_DIR
 $OPENRTP_EXECUTABLE $ECLIPSE_ARGS -vmargs -Djava.util.logging.config.file=$OPENRTP_DIR/logger.properties
