@@ -3,7 +3,7 @@
  * @file  ${rtcParam.name}Test.h
  * @brief ${rtcParam.description}
  * @date  ${dol}Date${dol}
-#parse("${template}/cpp/_doc.vsl")
+ *
  * ${dol}Id${dol}
  */
 
@@ -39,22 +39,6 @@ ${sharp}include <rtm/DataOutPort.h>
 /*!
  * @class ${rtcParam.name}Test
  * @brief ${rtcParam.description}
-#if( ${rtcParam.docDescription.length()} > 0 )
- *
- * ${tmpltHelper.convertDoc(${rtcParam.docDescription})}
-#end
-#if( ${rtcParam.docInOut.length()} > 0 )
- *
- * ${tmpltHelper.convertDoc(${rtcParam.docInOut})}
-#end
-#if( ${rtcParam.docAlgorithm.length()} > 0 )
- *
- * ${tmpltHelper.convertDoc(${rtcParam.docAlgorithm})}
-#end
-#if( ${rtcParam.docReference.length()} > 0 )
- *
- * ${tmpltHelper.convertDoc(${rtcParam.docReference})}
-#end
  *
  */
 class ${rtcParam.name}Test

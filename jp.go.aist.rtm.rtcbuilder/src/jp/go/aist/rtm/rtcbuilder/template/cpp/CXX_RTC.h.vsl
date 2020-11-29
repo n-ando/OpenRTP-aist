@@ -1,9 +1,31 @@
 // -*- C++ -*-
+#if( ${rtcParam.docDescription.length()} > 0 || ${rtcParam.docInOut.length()} > 0 || ${rtcParam.docAlgorithm.length()} > 0 || ${rtcParam.docReference.length()} > 0 || ${rtcParam.docCreator.length()} > 0 || ${rtcParam.docLicense.length()} > 0)
+/*! \mainpage
+#if( ${rtcParam.docDescription.length()} > 0 )
+ *
+ * ${tmpltHelper.convertDoc(${rtcParam.docDescription})}
+#end
+#if( ${rtcParam.docInOut.length()} > 0 )
+ *
+ * ${tmpltHelper.convertDoc(${rtcParam.docInOut})}
+#end
+#if( ${rtcParam.docAlgorithm.length()} > 0 )
+ *
+ * ${tmpltHelper.convertDoc(${rtcParam.docAlgorithm})}
+#end
+#if( ${rtcParam.docReference.length()} > 0 )
+ *
+ * @see ${tmpltHelper.convertDoc(${rtcParam.docReference})}
+#end
+#parse("${template}/cpp/_doc.vsl")
+ */
+ 
+ #end
 /*!
  * @file  ${rtcParam.name}.h
  * @brief ${rtcParam.description}
  * @date  ${dol}Date${dol}
-#parse("${template}/cpp/_doc.vsl")
+ *
  * ${dol}Id${dol}
  */
 
@@ -50,22 +72,6 @@ ${sharp}include "${rtcParam.name}FSM.h"
 /*!
  * @class ${rtcParam.name}
  * @brief ${rtcParam.description}
-#if( ${rtcParam.docDescription.length()} > 0 )
- *
- * ${tmpltHelper.convertDoc(${rtcParam.docDescription})}
-#end
-#if( ${rtcParam.docInOut.length()} > 0 )
- *
- * ${tmpltHelper.convertDoc(${rtcParam.docInOut})}
-#end
-#if( ${rtcParam.docAlgorithm.length()} > 0 )
- *
- * ${tmpltHelper.convertDoc(${rtcParam.docAlgorithm})}
-#end
-#if( ${rtcParam.docReference.length()} > 0 )
- *
- * ${tmpltHelper.convertDoc(${rtcParam.docReference})}
-#end
  *
  */
 class ${rtcParam.name}
