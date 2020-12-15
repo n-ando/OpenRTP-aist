@@ -1,21 +1,14 @@
 package jp.go.aist.rtm.systemeditor.ui.dialog;
 
 import static jp.go.aist.rtm.systemeditor.ui.util.UIUtil.COLOR_MODIFY;
-import static jp.go.aist.rtm.systemeditor.ui.util.UIUtil.COLOR_WHITE;
 import static jp.go.aist.rtm.systemeditor.ui.util.UIUtil.COLOR_UNEDITABLE;
+import static jp.go.aist.rtm.systemeditor.ui.util.UIUtil.COLOR_WHITE;
 import static jp.go.aist.rtm.systemeditor.ui.util.UIUtil.getColor;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import jp.go.aist.rtm.systemeditor.corba.CORBAHelper;
-import jp.go.aist.rtm.systemeditor.nl.Messages;
-import jp.go.aist.rtm.toolscommon.model.component.CorbaComponent;
-import jp.go.aist.rtm.toolscommon.model.component.SystemDiagram;
-import jp.go.aist.rtm.toolscommon.model.manager.ManagerFactory;
-import jp.go.aist.rtm.toolscommon.model.manager.RTCManager;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -47,6 +40,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import RTM.ManagerHelper;
+import jp.go.aist.rtm.systemeditor.corba.CORBAHelper;
+import jp.go.aist.rtm.systemeditor.corba.CORBAHelper.CreateComponentParameter;
+import jp.go.aist.rtm.systemeditor.nl.Messages;
+import jp.go.aist.rtm.toolscommon.model.component.CorbaComponent;
+import jp.go.aist.rtm.toolscommon.model.component.SystemDiagram;
+import jp.go.aist.rtm.toolscommon.model.manager.ManagerFactory;
+import jp.go.aist.rtm.toolscommon.model.manager.RTCManager;
 
 /**
  * RTシステム復元設定を行うダイアログ
@@ -347,6 +347,9 @@ public class RestoreComponentDialog extends Dialog {
 						}
 						target.component.setCorbaObject(rtobj);
 					} catch (Exception e1) {
+						target.status = String.format("Fail to create rtobject: comp=<%s>", target.compId);
+						target.isError = true;
+						continue;
 					}
 					target.status = String.format("Created: comp=<%s>", target.compId);
 					target.isError = false;
@@ -439,23 +442,46 @@ public class RestoreComponentDialog extends Dialog {
 		public TargetInfo(CorbaComponent component) {
 			this.component = component;
 			this.compName = component.getInstanceNameL();
+
+			String lang = "";
+			String vendor = "";
+			String category = "";
+			String version = "";
+
 			String type = component.getProperty(PROP_IMPLEMENTATION_ID);
-			String lang = component.getProperty(PROP_LANGUAGE);
-			String vendor = component.getProperty(PROP_VENDOR);
-			String category = component.getProperty(PROP_CATEGORY);
-			String version = component.getProperty(PROP_VERSION);
+			if(type == null) {
+				component.setProperty(CreateComponentParameter.KEY_INSTANCE_NAME, this.compName);
+				String componentId = component.getComponentId();
+				String elems[] = componentId.split(":");
+				if(elems.length < 5) return;
+				vendor = elems[1];
+				category = elems[2];
+				type = elems[3];
+				component.setProperty(CreateComponentParameter.KEY_IMPLEMENTATION_ID, type);
+				version = elems[4];
+//				lang = "C++";
+				
+			} else {
+				lang = component.getProperty(PROP_LANGUAGE);
+				vendor = component.getProperty(PROP_VENDOR);
+				category = component.getProperty(PROP_CATEGORY);
+				version = component.getProperty(PROP_VERSION);
+			}
+			
 			this.compId = "RTC:" + vendor + ":" + category + ":" + type + ":" + lang + ":" + version;
 			
 			String endPoints = component.getProperty(PROP_CORBA_ENDPOINTS);
-			String[] epList = endPoints.split(",");
-			StringBuilder builder = new StringBuilder();
-			for(String each : epList) {
-				if(0<builder.length()) {
-					builder.append(",");
+			if(endPoints != null) {
+				String[] epList = endPoints.split(",");
+				StringBuilder builder = new StringBuilder();
+				for(String each : epList) {
+					if(0<builder.length()) {
+						builder.append(",");
+					}
+					builder.append(getHostName(each));
 				}
-				builder.append(getHostName(each));
+				this.node = builder.toString();
 			}
-			this.node = builder.toString();
 			
 			this.containerName = component.getProperty(PROP_MANAGER_NAME);
 			//
