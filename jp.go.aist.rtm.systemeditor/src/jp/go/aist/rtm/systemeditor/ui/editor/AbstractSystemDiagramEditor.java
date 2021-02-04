@@ -2,10 +2,14 @@ package jp.go.aist.rtm.systemeditor.ui.editor;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URLDecoder;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -573,6 +577,24 @@ public abstract class AbstractSystemDiagramEditor extends GraphicalEditor {
 			SystemDiagram diagram = systemDiagram.getRootDiagram();
 			RtsProfileExt profile = handler.save(diagram);
 			diagram.setProfile(profile);
+			
+			String targetFileName = resource.getURI().devicePath();
+			if(getEditorId()==OfflineSystemDiagramEditor.OFFLINE_SYSTEM_DIAGRAM_EDITOR_ID) {
+				File targetFile = new File(targetFileName);
+				String rtcPath = targetFile.getParent() + File.separator + "RTCs";
+				File targetRtcs = new File(rtcPath);
+				if(targetRtcs.exists()==false) {
+					targetRtcs.mkdir();
+				}
+				for(org.openrtp.namespaces.rts.version02.Component each : profile.getComponents()) {
+					URI pathUri = URI.createURI(each.getPathUri());
+					java.nio.file.Path srcFile = Paths.get(pathUri.device() + File.separator + pathUri.path());
+					java.nio.file.Path dstFile = Paths.get(rtcPath + File.separator + each.getInstanceName() + ".xml");
+					Files.copy(srcFile, dstFile, StandardCopyOption.REPLACE_EXISTING);
+					URI newURI = URI.createFileURI("RTCs" + File.separator + each.getInstanceName() + ".xml");
+					each.setPathUri(newURI.toString());
+				 }
+			}
 
 			// STEP3: 拡張ポイント (RTSプロファイル保存前)
 			progressMonitor.worked(3);
@@ -595,7 +617,6 @@ public abstract class AbstractSystemDiagramEditor extends GraphicalEditor {
 			// STEP4: RTSプロファイルオブジェクトをファイルへ保存
 			progressMonitor.worked(4);
 
-			String targetFileName = resource.getURI().devicePath();
 			XmlHandler xmlHandler = new XmlHandler();
 			xmlHandler.saveXmlRts(profile, URLDecoder.decode(targetFileName,
 					"UTF-8"));
@@ -620,7 +641,7 @@ public abstract class AbstractSystemDiagramEditor extends GraphicalEditor {
 					}
 				}
 			}
-
+			
 			progressMonitor.worked(6);
 			progressMonitor.done();
 

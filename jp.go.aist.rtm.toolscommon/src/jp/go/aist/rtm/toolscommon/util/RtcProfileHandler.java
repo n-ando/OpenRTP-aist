@@ -120,6 +120,8 @@ public class RtcProfileHandler {
 			specification.setActiveConfigurationSet(parser
 					.getActiveConfigurationSet());
 		}
+		
+		specification.setProperty("language", module.getLanguage().getKind());
 
 		String moduleId = SPEC_SUFFIX + SPEC_MAJOR_SEPARATOR
 				+ specification.getVenderL() + SPEC_MAJOR_SEPARATOR
