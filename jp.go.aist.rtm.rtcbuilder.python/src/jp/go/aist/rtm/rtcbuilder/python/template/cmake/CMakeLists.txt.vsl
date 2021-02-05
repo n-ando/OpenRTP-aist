@@ -20,7 +20,12 @@ set(PROJECT_MAINTAINER "${rtcParam.docCreator}")
 #else
 set(PROJECT_MAINTAINER "unknown")
 #end
-set(PROJECT_TYPE "python/${rtcParam.category}")
+if(WIN32)
+    set(PYTHON_COMMAND "python")
+else()
+    set(PYTHON_COMMAND "python3")
+endif()
+set(PROJECT_TYPE "${dol}{PYTHON_COMMAND}/${rtcParam.category}")
 
 find_package(OpenRTM REQUIRED)
 set(RTM_VER ${dol}{OPENRTM_VERSION})
@@ -104,7 +109,7 @@ set(OTHER_SRCS CMakeLists.txt
                RTC.xml ${rtcParam.name}.conf rtc.conf)
 
 ${sharp} check python installed
-find_package(PythonInterp)
+find_package(PythonInterp 3)
 
 if(WIN32)
    set(OPENRTM_SHARE_PREFIX "OpenRTM-aist/${dol}{RTM_VER}/Components/${dol}{PROJECT_TYPE}")
