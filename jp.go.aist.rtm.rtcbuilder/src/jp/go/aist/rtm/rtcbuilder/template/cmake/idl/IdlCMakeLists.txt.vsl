@@ -21,8 +21,14 @@ macro(_COMPILE_IDL _idl_file)
     set(_idl_srcs_var ${dol}{_idl}_SRCS)
     _IDL_OUTPUTS(${dol}{_idl} ${dol}{CMAKE_CURRENT_BINARY_DIR} ${dol}{_idl_srcs_var})
 
+    if(WIN32)
+        set(_python_command "python")
+    else(WIN32)
+        set(_python_command "python3")
+    endif(WIN32)
+ 
     add_custom_command(OUTPUT ${dol}{${dol}{_idl_srcs_var}}
-        COMMAND python ${dol}{OPENRTM_DIR}/bin/${dol}{_rtm_skelwrapper_command} --include-dir= --skel-suffix=Skel --stub-suffix=Stub --idl-file=${dol}{_idl}.idl
+        COMMAND ${dol}{_python_command} ${dol}{OPENRTM_DIR}/bin/${dol}{_rtm_skelwrapper_command} --include-dir= --skel-suffix=Skel --stub-suffix=Stub --idl-file=${dol}{_idl}.idl
         COMMAND ${dol}{OPENRTM_IDLC} ${dol}{OPENRTM_IDLFLAGS} ${dol}{_idl_file}
         WORKING_DIRECTORY ${dol}{CURRENT_BINARY_DIR}
         DEPENDS ${dol}{_idl_file}
