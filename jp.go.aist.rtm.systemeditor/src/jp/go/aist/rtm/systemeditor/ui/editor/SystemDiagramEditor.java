@@ -258,6 +258,21 @@ public class SystemDiagramEditor extends AbstractSystemDiagramEditor {
 				RtsProfileHandler handler = new RtsProfileHandler();
 				RtsProfileExt profile = handler.load(strPath);
 
+				// STEP2: 拡張ポイント (ダイアグラム生成前)
+				ProfileLoader creator = new ProfileLoader();
+				for (LoadProfileExtension.ErrorInfo info : creator
+						.preLoad(profile, strPath)) {
+					if (info.isError()) {
+						openError(DIALOG_TITLE_ERROR, info.getMessage());
+						return;
+					} else {
+						if (!openConfirm(DIALOG_TITLE_CONFIRM,
+								info.getMessage())) {
+							return;
+						}
+					}
+				}
+				
 				// プロファイル読込
 				SystemDiagram diagram = handler.load(profile,
 						SystemDiagramKind.ONLINE_LITERAL);
@@ -273,11 +288,13 @@ public class SystemDiagramEditor extends AbstractSystemDiagramEditor {
 				// マッピング設定ダイアログを開始
 				RestoreComponentDialog dialog = new RestoreComponentDialog(
 						getSite().getShell());
-				dialog.setCorbaComponents(corbaComponents);
+				dialog.setSystemInfo(corbaComponents, profile);
 				dialog.setSystemDiagram(diagram);
 				if (dialog.open() != IDialogConstants.OK_ID) {
 					return;
 				}
+				
+				//TODO 復元処理
 
 				// 同期サポート割当
 				SystemEditorWrapperFactory.getInstance()
@@ -295,7 +312,22 @@ public class SystemDiagramEditor extends AbstractSystemDiagramEditor {
 
 				handler.restoreCompositeComponentPort(diagram);
 
+				SystemDiagram oldDiagram = getSystemDiagram();
 				setSystemDiagram(diagram);
+				
+				// STEP4: 拡張ポイント (ダイアグラム生成後)
+				for (LoadProfileExtension.ErrorInfo info : creator
+						.postLoad(diagram, profile, oldDiagram)) {
+					if (info.isError()) {
+						openError(DIALOG_TITLE_ERROR, info.getMessage());
+						return;
+					} else {
+						if (!openConfirm(DIALOG_TITLE_CONFIRM,
+								info.getMessage())) {
+							return;
+						}
+					}
+				}
 
 			} catch (Exception e) {
 				throw new InvocationTargetException(e,
