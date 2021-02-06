@@ -155,6 +155,7 @@ public class PythonGenerateManager extends GenerateManager {
 		//////////
 		result.add(generatePythonTestSource(contextMap));
 		for (IdlFileParam idlFileParam : rtcParam.getConsumerIdlPathes()) {
+			if(idlFileParam.isDataPort()) continue;
 			contextMap.put("idlFileParam", idlFileParam);
 			result.add(generateTestSVCIDLExampleSource(contextMap));
 		}
