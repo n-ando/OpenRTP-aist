@@ -271,7 +271,7 @@ public class BaseTest extends TestBase {
 
 		String resourceDir = rootPath + "/resource/100/base/name/";
 
-		assertEquals(9, result.size());
+		assertEquals(8, result.size());
 		checkCode(result, resourceDir, "foo.py");
 	}
 

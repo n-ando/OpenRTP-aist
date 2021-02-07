@@ -80,7 +80,6 @@ public class TestComp extends TestBase {
 		String resourceDir = rootPath + "resource/100/TestComp/XXX/";
 
 		assertEquals(default_file_num+2, result.size());
-		checkCode(result, resourceDir, ".travis.yml");
 		checkCode(result, resourceDir, "CMakeLists.txt");
 		checkCode(result, resourceDir, "COPYING");
 		checkCode(result, resourceDir, "COPYING.LESSER");
@@ -155,7 +154,6 @@ public class TestComp extends TestBase {
 		String resourceDir = rootPath + "resource/100/TestComp/YYY/";
 
 		assertEquals(default_file_num+2, result.size());
-		checkCode(result, resourceDir, ".travis.yml");
 		checkCode(result, resourceDir, "CMakeLists.txt");
 		checkCode(result, resourceDir, "COPYING");
 		checkCode(result, resourceDir, "COPYING.LESSER");
