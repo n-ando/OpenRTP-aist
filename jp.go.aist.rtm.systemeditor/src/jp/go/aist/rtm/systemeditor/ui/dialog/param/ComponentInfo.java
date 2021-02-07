@@ -129,6 +129,10 @@ public class ComponentInfo {
 		}
 	}
 
+	public Component getProfile() {
+		return profile;
+	}
+
 	public void setRestore(boolean isRestore) {
 		this.isRestore = isRestore;
 	}

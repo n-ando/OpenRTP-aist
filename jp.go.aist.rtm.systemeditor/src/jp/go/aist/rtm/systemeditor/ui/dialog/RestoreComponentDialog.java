@@ -414,7 +414,8 @@ public class RestoreComponentDialog extends Dialog {
 		this.configDetailBtn.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				RestoreConfigurationDialog dialog = new RestoreConfigurationDialog(getShell());
+				if(selectedTarget == null) return;
+				RestoreConfigurationDialog dialog = new RestoreConfigurationDialog(getShell(), selectedTarget.getProfile());
 				dialog.open();
 			}
 		});

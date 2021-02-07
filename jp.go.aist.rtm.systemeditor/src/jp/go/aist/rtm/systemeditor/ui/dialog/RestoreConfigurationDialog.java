@@ -38,14 +38,16 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
+import org.openrtp.namespaces.rts.version02.Component;
+import org.openrtp.namespaces.rts.version02.ConfigurationData;
+import org.openrtp.namespaces.rts.version02.ConfigurationSet;
 
 import jp.go.aist.rtm.systemeditor.RTSystemEditorPlugin;
 import jp.go.aist.rtm.systemeditor.nl.Messages;
-import jp.go.aist.rtm.systemeditor.ui.views.configurationview.configurationwrapper.ComponentConfigurationWrapper;
-import jp.go.aist.rtm.systemeditor.ui.views.configurationview.configurationwrapper.ConfigurationSetConfigurationWrapper;
-import jp.go.aist.rtm.systemeditor.ui.views.configurationview.configurationwrapper.NamedValueConfigurationWrapper;
+import jp.go.aist.rtm.systemeditor.ui.dialog.param.ComponentProfileWrapper;
+import jp.go.aist.rtm.systemeditor.ui.dialog.param.ConfigurationSetProfileWrapper;
+import jp.go.aist.rtm.systemeditor.ui.dialog.param.NamedValueProfileWrapper;
 import jp.go.aist.rtm.systemeditor.ui.views.configurationview.configurationwrapper.Secretable;
-import jp.go.aist.rtm.toolscommon.model.component.Component;
 
 public class RestoreConfigurationDialog extends Dialog {
 	static final int APPLY_ID = 998;
@@ -74,7 +76,7 @@ public class RestoreConfigurationDialog extends Dialog {
 	private static final String MSG_KEY_ALREADY_EXIST = Messages.getString("ConfigurationView.43");
 
 	private Component targetComponent;
-	private ComponentConfigurationWrapper copiedComponent;
+	private ComponentProfileWrapper copiedComponent;
 
 	private Table leftTable;
 	private TableViewer leftTableViewer;
@@ -88,8 +90,10 @@ public class RestoreConfigurationDialog extends Dialog {
 	private Button sortCheckButton;
 	private Button detailNamedValueCheckButton;
 
-	public RestoreConfigurationDialog(Shell parentShell) {
+	public RestoreConfigurationDialog(Shell parentShell, Component target) {
 		super(parentShell);
+		
+		this.targetComponent = target;
 		setShellStyle(getShellStyle() | SWT.CENTER | SWT.RESIZE);
 	}
 	@Override
@@ -122,6 +126,8 @@ public class RestoreConfigurationDialog extends Dialog {
 		createRightControl(sashForm);
 
 		sashForm.setWeights(new int[] { 30, 70 });
+
+		buildData();
 		
 		return sashForm;
 	}
@@ -355,9 +361,9 @@ public class RestoreConfigurationDialog extends Dialog {
 		});
 	}
 
-	private ConfigurationSetConfigurationWrapper getSelectedConfigurationSet() {
+	private ConfigurationSetProfileWrapper getSelectedConfigurationSet() {
 		if (this.leftTableViewer.getSelection() instanceof StructuredSelection) {
-			ConfigurationSetConfigurationWrapper ret = (ConfigurationSetConfigurationWrapper) ((StructuredSelection) this.leftTableViewer
+			ConfigurationSetProfileWrapper ret = (ConfigurationSetProfileWrapper) ((StructuredSelection) this.leftTableViewer
 					.getSelection()).getFirstElement();
 			return ret;
 		}
@@ -365,11 +371,11 @@ public class RestoreConfigurationDialog extends Dialog {
 	}
 	
 	private String createDefaultNamedValueKey(String preString) {
-		ConfigurationSetConfigurationWrapper currentConfugurationSet = getSelectedConfigurationSet();
+		ConfigurationSetProfileWrapper currentConfugurationSet = getSelectedConfigurationSet();
 		int number = 1;
 		for (;; number++) {
 			boolean isExist = false;
-			for (NamedValueConfigurationWrapper current : currentConfugurationSet.getNamedValueList()) {
+			for (NamedValueProfileWrapper current : currentConfugurationSet.getNamedValueList()) {
 				if ((preString + "_" + number).equals(current.getKey())) {
 					isExist = true;
 					break;
@@ -386,7 +392,7 @@ public class RestoreConfigurationDialog extends Dialog {
 		int number = 1;
 		for (;; number++) {
 			boolean isExist = false;
-			for (ConfigurationSetConfigurationWrapper current : copiedComponent.getConfigurationSetList()) {
+			for (ConfigurationSetProfileWrapper current : copiedComponent.getConfigurationSetList()) {
 				if ((preString + "_" + number).equals(current.getId())) {
 					isExist = true;
 					break;
@@ -416,8 +422,12 @@ public class RestoreConfigurationDialog extends Dialog {
 		btnClose.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-//				notifyModified();
-//				restoreComponent();
+				targetComponent.getConfigurationSets().clear();
+				for(ConfigurationSetProfileWrapper each : copiedComponent.getConfigurationSetList()) {
+					ConfigurationSet config = createProfile(each);
+					targetComponent.getConfigurationSets().add(createProfile(each));
+				}
+				targetComponent.setActiveConfigurationSet(copiedComponent.getActiveConfigSet().getId());
 				close();
 			}
 		});
@@ -434,9 +444,27 @@ public class RestoreConfigurationDialog extends Dialog {
 	private void buildData() {
 		copiedComponent = null;
 		if (targetComponent != null) {
-			copiedComponent = createConfigurationWrapper(targetComponent);
+			copiedComponent = createProfileWrapper(targetComponent);
 		}
 		refreshData();
+	}
+	
+	public ComponentProfileWrapper createProfileWrapper(Component target) {
+		return ComponentProfileWrapper.create(target, sortCheckButton.getSelection());
+	}
+	
+	private ConfigurationSet createProfile(ConfigurationSetProfileWrapper source) {
+		ConfigurationSet result = new ConfigurationSet();
+		
+		result.setId(source.getId());
+		for(NamedValueProfileWrapper nv : source.getNamedValueList()) {
+			ConfigurationData data = new ConfigurationData();
+			data.setName(nv.getKey());
+			data.setData(nv.getValue());
+			result.getConfigurationData().add(data);
+		}
+		
+		return result;
 	}
 	
 	private void refreshData() {
@@ -472,7 +500,7 @@ public class RestoreConfigurationDialog extends Dialog {
 		this.detailNamedValueCheckButton.setEnabled(false);
 
 		if (this.copiedComponent != null) {
-			ConfigurationSetConfigurationWrapper currentConfugurationSet = getSelectedConfigurationSet();
+			ConfigurationSetProfileWrapper currentConfugurationSet = getSelectedConfigurationSet();
 			if (currentConfugurationSet != null) {
 				this.rightTableViewerFilter.setDetail(this.detailNamedValueCheckButton.getSelection());
 				this.rightTableViewer.setInput(currentConfugurationSet.getNamedValueList());
@@ -488,14 +516,14 @@ public class RestoreConfigurationDialog extends Dialog {
 	 */
 	private boolean isActiveConfigurationSetChanged() {
 		if (copiedComponent.getActiveConfigSet() == null
-				|| copiedComponent.getActiveConfigSet().getConfigurationSet() == null) {
+				|| copiedComponent.getActiveConfigSet() == null) {
 			return targetComponent.getActiveConfigurationSet() != null;
 		}
 		if (targetComponent.getActiveConfigurationSet() == null) {
 			return true;
 		}
-		if (!copiedComponent.getActiveConfigSet().getConfigurationSet().getId()
-				.equals(targetComponent.getActiveConfigurationSet().getId())) {
+		if (!copiedComponent.getActiveConfigSet()
+				.equals(targetComponent.getActiveConfigurationSet())) {
 			return true;
 		}
 		return false;
@@ -515,11 +543,6 @@ public class RestoreConfigurationDialog extends Dialog {
 		return this.detailNamedValueCheckButton.getSelection();
 	}
 
-	public ComponentConfigurationWrapper createConfigurationWrapper(
-			Component target) {
-		return ComponentConfigurationWrapper.create(target, sortCheckButton.getSelection());
-	}
-
 	/**
 	 * 左テーブルのCellModifierクラス
 	 */
@@ -532,9 +555,9 @@ public class RestoreConfigurationDialog extends Dialog {
 
 		@Override
 		public boolean canModify(Object element, String property) {
-			ConfigurationSetConfigurationWrapper configurationSet = null;
-			if (element instanceof ConfigurationSetConfigurationWrapper) {
-				configurationSet = (ConfigurationSetConfigurationWrapper) element;
+			ConfigurationSetProfileWrapper configurationSet = null;
+			if (element instanceof ConfigurationSetProfileWrapper) {
+				configurationSet = (ConfigurationSetProfileWrapper) element;
 			}
 			if (PROPERTY_ACTIVE_CONFIGSET.equals(property)) {
 				if (configurationSet.isSecret()) {
@@ -550,16 +573,16 @@ public class RestoreConfigurationDialog extends Dialog {
 			if (PROPERTY_ACTIVE_CONFIGSET.equals(property)) {
 				result = Boolean.TRUE;
 			} else if (PROPERTY_CONFIG_SET.equals(property)) {
-				result = ((ConfigurationSetConfigurationWrapper) element).getId();
+				result = ((ConfigurationSetProfileWrapper) element).getId();
 			}
 			return result;
 		}
 
 		@Override
 		public void modify(Object element, String property, Object value) {
-			ConfigurationSetConfigurationWrapper configurationSet = null;
+			ConfigurationSetProfileWrapper configurationSet = null;
 			if (element instanceof Item) {
-				configurationSet = ((ConfigurationSetConfigurationWrapper) ((Item) element).getData());
+				configurationSet = ((ConfigurationSetProfileWrapper) ((Item) element).getData());
 			}
 			if (configurationSet == null) {
 				return;
@@ -570,7 +593,7 @@ public class RestoreConfigurationDialog extends Dialog {
 				viewer.refresh();
 			} else if (PROPERTY_CONFIG_SET.equals(property)) {
 				boolean isDuplicate = false;
-				for (ConfigurationSetConfigurationWrapper current : copiedComponent.getConfigurationSetList()) {
+				for (ConfigurationSetProfileWrapper current : copiedComponent.getConfigurationSetList()) {
 					if (configurationSet != current && ((String) value).equals(current.getId())) {
 						isDuplicate = true;
 						break;
@@ -600,11 +623,10 @@ public class RestoreConfigurationDialog extends Dialog {
 
 		@Override
 		public boolean canModify(Object element, String property) {
-
 			if (PROPERTY_KEY.equals(property)) {
 				return true;
 			} else if (PROPERTY_VALUE.equals(property)) {
-				NamedValueConfigurationWrapper item = (NamedValueConfigurationWrapper) element;
+				NamedValueProfileWrapper item = (NamedValueProfileWrapper) element;
 				return item.canModify();
 			}
 
@@ -613,7 +635,7 @@ public class RestoreConfigurationDialog extends Dialog {
 
 		@Override
 		public Object getValue(Object element, String property) {
-			NamedValueConfigurationWrapper item = (NamedValueConfigurationWrapper) element;
+			NamedValueProfileWrapper item = (NamedValueProfileWrapper) element;
 
 			if (PROPERTY_KEY.equals(property)) {
 				return item.getKey();
@@ -629,15 +651,15 @@ public class RestoreConfigurationDialog extends Dialog {
 			if (element instanceof TableItem == false) {
 				return;
 			}
-			NamedValueConfigurationWrapper item = ((NamedValueConfigurationWrapper) ((TableItem) element).getData());
-			ConfigurationSetConfigurationWrapper currentConfugurationSet = getSelectedConfigurationSet();
+			NamedValueProfileWrapper item = ((NamedValueProfileWrapper) ((TableItem) element).getData());
+			ConfigurationSetProfileWrapper currentConfugurationSet = getSelectedConfigurationSet();
 			if (item == null || currentConfugurationSet == null) {
 				return;
 			}
 
 			if (PROPERTY_KEY.equals(property)) {
 				boolean isDuplicate = false;
-				for (NamedValueConfigurationWrapper current : currentConfugurationSet.getNamedValueList()) {
+				for (NamedValueProfileWrapper current : currentConfugurationSet.getNamedValueList()) {
 					if (item != current && ((String) value).equals(current.getKey())) {
 						isDuplicate = true;
 						break;
@@ -667,7 +689,7 @@ public class RestoreConfigurationDialog extends Dialog {
 		public Image getColumnImage(Object element, int columnIndex) {
 			Image result = null;
 			if (columnIndex == 0) {
-				ConfigurationSetConfigurationWrapper item = (ConfigurationSetConfigurationWrapper) element;
+				ConfigurationSetProfileWrapper item = (ConfigurationSetProfileWrapper) element;
 				if (item == copiedComponent.getActiveConfigSet()) {
 					result = RTSystemEditorPlugin
 							.getCachedImage("icons/Radiobutton_Checked.png");
@@ -682,7 +704,7 @@ public class RestoreConfigurationDialog extends Dialog {
 
 		@Override
 		public String getColumnText(Object element, int columnIndex) {
-			ConfigurationSetConfigurationWrapper item = (ConfigurationSetConfigurationWrapper) element;
+			ConfigurationSetProfileWrapper item = (ConfigurationSetProfileWrapper) element;
 
 			String result = null;
 			if (columnIndex == 1) {
@@ -695,13 +717,12 @@ public class RestoreConfigurationDialog extends Dialog {
 
 		@Override
 		public Color getBackground(Object element, int columnIndex) {
-			ConfigurationSetConfigurationWrapper configurationSetConfigurationWrapper = (ConfigurationSetConfigurationWrapper) element;
+			ConfigurationSetProfileWrapper configurationSetConfigurationWrapper = (ConfigurationSetProfileWrapper) element;
 
 			boolean isModify = false;
 			if (columnIndex == 0) {
 				if (isActiveConfigurationSetChanged()) {
-					if (targetComponent.getActiveConfigurationSet() == configurationSetConfigurationWrapper
-							.getConfigurationSet()
+					if (targetComponent.getActiveConfigurationSet() == configurationSetConfigurationWrapper.getConfigurationSet().getId()
 							|| copiedComponent.getActiveConfigSet() == configurationSetConfigurationWrapper) {
 						isModify = true;
 					}
@@ -738,7 +759,7 @@ public class RestoreConfigurationDialog extends Dialog {
 
 		@Override
 		public String getColumnText(Object element, int columnIndex) {
-			NamedValueConfigurationWrapper item = (NamedValueConfigurationWrapper) element;
+			NamedValueProfileWrapper item = (NamedValueProfileWrapper) element;
 
 			if (columnIndex == 0) {
 				return getModiedLabelString(item.isKeyModified())
@@ -757,7 +778,7 @@ public class RestoreConfigurationDialog extends Dialog {
 
 		@Override
 		public Color getBackground(Object element, int columnIndex) {
-			NamedValueConfigurationWrapper namedValueConfigurationWrapper = (NamedValueConfigurationWrapper) element;
+			NamedValueProfileWrapper namedValueConfigurationWrapper = (NamedValueProfileWrapper) element;
 			if (columnIndex == 0
 					&& namedValueConfigurationWrapper.isKeyModified()
 					|| columnIndex == 1
@@ -818,7 +839,7 @@ public class RestoreConfigurationDialog extends Dialog {
 	}
 
 	/** 編集用のコンフィグを返す */
-	public ComponentConfigurationWrapper getComponentConfig() {
+	public ComponentProfileWrapper getComponentConfig() {
 		return copiedComponent;
 	}
 }
