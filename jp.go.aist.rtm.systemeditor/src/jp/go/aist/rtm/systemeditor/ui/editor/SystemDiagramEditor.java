@@ -32,6 +32,7 @@ import jp.go.aist.rtm.systemeditor.nl.Messages;
 import jp.go.aist.rtm.systemeditor.restoration.Restoration;
 import jp.go.aist.rtm.systemeditor.restoration.Result;
 import jp.go.aist.rtm.systemeditor.ui.dialog.RestoreComponentDialog;
+import jp.go.aist.rtm.systemeditor.ui.dialog.param.ComponentInfo;
 import jp.go.aist.rtm.systemeditor.ui.editor.action.OpenAndCreateRestoreAction;
 import jp.go.aist.rtm.systemeditor.ui.editor.action.OpenAndQuickRestoreAction;
 import jp.go.aist.rtm.systemeditor.ui.editor.action.OpenAndRestoreAction;
@@ -294,7 +295,7 @@ public class SystemDiagramEditor extends AbstractSystemDiagramEditor {
 					return;
 				}
 				
-				//TODO 復元処理
+				List<ComponentInfo> componentList = dialog.getComponentList();
 
 				// 同期サポート割当
 				SystemEditorWrapperFactory.getInstance()
@@ -306,6 +307,18 @@ public class SystemDiagramEditor extends AbstractSystemDiagramEditor {
 						diagram.getComponents());
 				diagram.getComponents().clear();
 				for (Component c : eComps) {
+					boolean isSkip = false;
+					for(ComponentInfo info :componentList) {
+						if(info.getComponent() == c) {
+							if(info.isRestore()==false) {
+								isSkip = true;
+								break;
+							}
+						}
+					}
+					if(isSkip) continue;
+					
+					Rehabilitation.rehabilitateComponent(c, diagram, false);
 					c.synchronizeManually();
 					diagram.addComponent(c);
 				}
@@ -335,17 +348,17 @@ public class SystemDiagramEditor extends AbstractSystemDiagramEditor {
 								+ e.getMessage());
 			}
 
-			try {
-				RtsProfileHandler handler = new RtsProfileHandler();
-				handler.restoreConnection(getSystemDiagram());
-				handler.restoreConfigSet(getSystemDiagram());
-				handler.restoreExecutionContext(getSystemDiagram());
-				doReplace(getSystemDiagram(), site);
-			} catch (Exception e) {
-				LOGGER.error("Fail to replace diagram", e);
-				throw new InvocationTargetException(e,
-						Messages.getString("SystemDiagramEditor.8"));
-			}
+//			try {
+//				RtsProfileHandler handler = new RtsProfileHandler();
+//				handler.restoreConnection(getSystemDiagram());
+//				handler.restoreConfigSet(getSystemDiagram());
+//				handler.restoreExecutionContext(getSystemDiagram());
+//				doReplace(getSystemDiagram(), site);
+//			} catch (Exception e) {
+//				LOGGER.error("Fail to replace diagram", e);
+//				throw new InvocationTargetException(e,
+//						Messages.getString("SystemDiagramEditor.8"));
+//			}
 
 		} catch (Exception e) {
 			throw new PartInitException(

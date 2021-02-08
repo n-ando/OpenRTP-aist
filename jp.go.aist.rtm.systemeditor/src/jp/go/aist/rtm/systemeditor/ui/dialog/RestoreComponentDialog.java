@@ -118,6 +118,10 @@ public class RestoreComponentDialog extends Dialog {
 	
 	private ConnectorLabelProvider connectorProvider = new ConnectorLabelProvider();
 
+	public List<ComponentInfo> getComponentList() {
+		return componentList;
+	}
+
 	public RestoreComponentDialog(Shell parentShell) {
 		super(parentShell);
 		setShellStyle(getShellStyle() | SWT.CENTER | SWT.RESIZE);
@@ -629,10 +633,11 @@ public class RestoreComponentDialog extends Dialog {
 				this.nodeText.setText(this.selectedTarget.getNode());
 			}
 			
+			this.createBtn.setSelection(true);
 			for(String item : this.rtcCombo.getItems()) {
 				if(item.equals(this.selectedTarget.getCompRawId())) {
 					this.rtcCombo.setText(item);
-					this.createBtn.setSelection(true);
+					this.createBtn.setSelection(false);
 					break;
 				}
 			}

@@ -48,6 +48,10 @@ public class ComponentInfo {
 	private CorbaComponent component;
 	private Component profile;
 
+	public CorbaComponent getComponent() {
+		return component;
+	}
+
 	public ComponentInfo(CorbaComponent component, Component profile) {
 		this.component = component;
 		this.profile = profile;
