@@ -39,8 +39,9 @@ import OpenRTM_aist
 # Import Service implementation class
 # <rtc-template block="service_impl">
 #foreach($providerIdlFile in ${rtcParam.consumerIdlPathes})
+#if( ${providerIdlFile.isDataPort()} == false )
 from ${tmpltHelper.getFilenameNoExt(${providerIdlFile.idlFile})}_idl_example import *
-#end
+#end#end
 
 import ${rtcParam.name}
 
