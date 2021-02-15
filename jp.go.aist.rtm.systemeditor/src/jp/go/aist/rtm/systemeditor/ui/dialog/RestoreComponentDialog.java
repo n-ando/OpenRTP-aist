@@ -10,7 +10,6 @@ import java.util.Map;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ITableColorProvider;
@@ -49,6 +48,7 @@ import jp.go.aist.rtm.nameserviceview.model.manager.impl.NameServerManagerImpl;
 import jp.go.aist.rtm.systemeditor.corba.CORBAHelper;
 import jp.go.aist.rtm.systemeditor.nl.Messages;
 import jp.go.aist.rtm.systemeditor.ui.dialog.param.ComponentInfo;
+import jp.go.aist.rtm.systemeditor.ui.dialog.param.ConnectorInfo;
 import jp.go.aist.rtm.systemeditor.ui.util.DeployUtil;
 import jp.go.aist.rtm.toolscommon.model.component.CorbaComponent;
 import jp.go.aist.rtm.toolscommon.model.component.SystemDiagram;
@@ -132,6 +132,15 @@ public class RestoreComponentDialog extends Dialog {
 	}
 	
 	public void setSystemInfo(List<CorbaComponent> list, RtsProfileExt profile) {
+		NameServerManager ns = NameServerManagerImpl.getInstance();
+		EList<?> nscomps = ns.getNodes();
+		List<CorbaComponent> componentCandidates = new ArrayList<CorbaComponent>(); 
+		componentCandidates = DeployUtil.searchComponentList(nscomps, componentCandidates);
+		for(CorbaComponent comp : componentCandidates) {
+			RTCInfo rtc = new RTCInfo(comp);
+			this.rtcList.add(rtc);
+		}
+		/////
 		if (list != null) {
 			for (CorbaComponent comp : list) {
 				Component targetComp = null;
@@ -144,6 +153,14 @@ public class RestoreComponentDialog extends Dialog {
 					}
 				}
 				ComponentInfo target = new ComponentInfo(comp, targetComp);
+				if(target.getCompRawId() != null && 0 < target.getCompRawId().length()) {
+					for(RTCInfo rtc : rtcList) {
+						if(rtc.compId.equals(target.getCompRawId())) {
+							target.setSelectedRTC(rtc.component);
+							break;
+						}
+					}
+				}
 				this.componentList.add(target);
 				String epName = target.getNode();
 				if (epName == null) {
@@ -167,8 +184,8 @@ public class RestoreComponentDialog extends Dialog {
 				this.connectorList.add(target);
 				//
 				for(ComponentInfo comp : this.componentList) {
-					if(comp.getCompRawId().equals(target.sourceRTC) || 
-							comp.getCompRawId().equals(target.targetRTC)) {
+					if(comp.getCompRawId().equals(target.getSourceRTC()) || 
+							comp.getCompRawId().equals(target.getTargetRTC())) {
 						comp.addConnector(target);
 					}
 				}
@@ -178,21 +195,12 @@ public class RestoreComponentDialog extends Dialog {
 				this.connectorList.add(target);
 				//
 				for(ComponentInfo comp : this.componentList) {
-					if(comp.getCompRawId().equals(target.sourceRTC) || 
-							comp.getCompRawId().equals(target.targetRTC)) {
+					if(comp.getCompRawId().equals(target.getSourceRTC()) || 
+							comp.getCompRawId().equals(target.getTargetRTC())) {
 						comp.addConnector(target);
 					}
 				}
 			}
-		}
-		/////
-		NameServerManager ns = NameServerManagerImpl.getInstance();
-		EList<?> nscomps = ns.getNodes();
-		List<CorbaComponent> componentCandidates = new ArrayList<CorbaComponent>(); 
-		componentCandidates = DeployUtil.searchComponentList(nscomps, componentCandidates);
-		for(CorbaComponent comp : componentCandidates) {
-			RTCInfo rtc = new RTCInfo(comp);
-			this.rtcList.add(rtc);
 		}
 	}
 
@@ -391,7 +399,7 @@ public class RestoreComponentDialog extends Dialog {
 		this.activateBtn.setText("Activate RTC");
 		/////
 		Label dummyLabe2 = new Label(detailGroup, SWT.NONE);
-		dummyLabel.setText("");
+		dummyLabe2.setText("");
 		
 		Composite configComposite = new Composite(detailGroup, SWT.NONE);
 		gl = new GridLayout(1, false);
@@ -571,9 +579,24 @@ public class RestoreComponentDialog extends Dialog {
 
 		this.selectedTarget.setRestore(includeBtn.getSelection());
 		this.selectedTarget.setCreate(createBtn.getSelection());
-		this.selectedTarget.setTargetRTC(rtcCombo.getText());
-		this.selectedTarget.setContainerName(this.containerText.getText());
-		this.selectedTarget.setNode(this.nodeText.getText());
+		if(createBtn.getSelection()) {
+			this.selectedTarget.setTargetRTC("");
+			this.selectedTarget.setSelectedRTC(null);
+			this.selectedTarget.setContainerName(this.containerText.getText());
+			this.selectedTarget.setNode(this.nodeText.getText());
+		} else {
+			this.selectedTarget.setTargetRTC(rtcCombo.getText());
+			if(rtcCombo.getText() != null && 0 < rtcCombo.getText().length()) {
+				for(RTCInfo rtc : rtcList) {
+					if(rtc.compId.equals(rtcCombo.getText())) {
+						this.selectedTarget.setSelectedRTC(rtc.component);
+						break;
+					}
+				}
+			}
+			this.selectedTarget.setContainerName("");
+			this.selectedTarget.setNode("");
+		}
 		this.selectedTarget.setActivate(activateBtn.getSelection());
 		this.selectedTarget.setConfig(configurationBtn.getSelection());
 
@@ -587,7 +610,7 @@ public class RestoreComponentDialog extends Dialog {
 			return;
 		}
 
-		this.selectedConnector.isConnect = connectBtn.getSelection();
+		this.selectedConnector.setConnect(connectBtn.getSelection());
 
 		this.connectorTableViewer.refresh();
 	}
@@ -633,7 +656,7 @@ public class RestoreComponentDialog extends Dialog {
 				this.nodeText.setText(this.selectedTarget.getNode());
 			}
 			
-			this.createBtn.setSelection(true);
+//			this.createBtn.setSelection(true);
 			for(String item : this.rtcCombo.getItems()) {
 				if(item.equals(this.selectedTarget.getCompRawId())) {
 					this.rtcCombo.setText(item);
@@ -653,15 +676,15 @@ public class RestoreComponentDialog extends Dialog {
 			this.targetPortLabel.setText("");
 			this.targetComponentLabel.setText("");
 		} else {
-			this.connectBtn.setSelection(this.selectedConnector.isConnect);
-			if (this.selectedConnector.sourcePort != null) {
-				this.sourcePortLabel.setText(this.selectedConnector.sourcePort);
+			this.connectBtn.setSelection(this.selectedConnector.isConnect());
+			if (this.selectedConnector.getSourcePort() != null) {
+				this.sourcePortLabel.setText(this.selectedConnector.getSourcePort());
 			}
-			if (this.selectedConnector.targetPort != null) {
-				this.targetPortLabel.setText(this.selectedConnector.targetPort);
+			if (this.selectedConnector.getTargetPort() != null) {
+				this.targetPortLabel.setText(this.selectedConnector.getTargetPort());
 			}
-			if (this.selectedConnector.targetRTC != null) {
-				this.targetComponentLabel.setText(this.selectedConnector.targetRTC);
+			if (this.selectedConnector.getTargetRTC() != null) {
+				this.targetComponentLabel.setText(this.selectedConnector.getTargetRTC());
 			}
 		}
 	}
@@ -689,49 +712,6 @@ public class RestoreComponentDialog extends Dialog {
 		}
 	}
 	//
-	public static class ConnectorInfo {
-		private boolean isConnect;
-		private String sourceRTC;
-		private String sourcePort;
-		private String targetPort;
-		private String targetRTC;
-		private String dataType;
-		private DataportConnector dataConnector;
-		private ServiceportConnector serviceConnector;
-		
-		public ConnectorInfo(DataportConnector conn) {
-			this.dataConnector = conn;
-			
-			this.sourceRTC = conn.getSourceDataPort().getComponentId();
-			String srcPort = conn.getSourceDataPort().getPortName();
-			String[] srvelems = srcPort.split("\\.");
-			this.sourcePort = srvelems[1];
-			
-			this.targetRTC = conn.getTargetDataPort().getComponentId();
-			String trgPort = conn.getTargetDataPort().getPortName();
-			String[] trgelems = trgPort.split("\\.");
-			this.targetPort = trgelems[1];
-			
-			this.dataType = conn.getDataType();
-		}
-		
-		public ConnectorInfo(ServiceportConnector conn) {
-			this.serviceConnector = conn;
-			
-			this.sourceRTC = conn.getSourceServicePort().getComponentId();
-			String srcPort = conn.getSourceServicePort().getPortName();
-			String[] srvelems = srcPort.split("\\.");
-			this.sourcePort = srvelems[1];
-			
-			this.targetRTC = conn.getTargetServicePort().getComponentId();
-			String trgPort = conn.getTargetServicePort().getPortName();
-			String[] trgelems = trgPort.split("\\.");
-			this.targetPort = trgelems[1];
-
-			this.dataType = "";
-		}
-	}
-	
 	public static class RTCInfo {
 		private String compName;
 		private String compId;
@@ -838,22 +818,22 @@ public class RestoreComponentDialog extends Dialog {
 					return "";
 				}
 			} else if (columnIndex == 4) {
-				if(entry.isCreate()) {
+				if(entry.isCreate() == false) {
 					return entry.getTargetRTC();
 				} else {
 					return "";
 				}
 			} else if (columnIndex == 5) {
 				if(entry.isCreate()) {
-					return "";
-				} else {
 					return entry.getNode();
+				} else {
+					return "";
 				}
 			} else if (columnIndex == 6) {
 				if(entry.isCreate()) {
-					return "";
-				} else {
 					return entry.getContainerName();
+				} else {
+					return "";
 				}
 			} else if (columnIndex == 7) {
 				if(entry.isActivate()) {
@@ -909,33 +889,33 @@ public class RestoreComponentDialog extends Dialog {
 		public String getColumnText(Object element, int columnIndex) {
 			ConnectorInfo entry = (ConnectorInfo) element;
 			if (columnIndex == 0) {
-				if(entry.isConnect) {
+				if(entry.isConnect()) {
 					return "O";
 				} else {
 					return "";
 				}
 			} else if (columnIndex == 1) {
-				if(baseComponent.equals(entry.sourceRTC)) {
-					return entry.sourcePort;
-				} else if(baseComponent.equals(entry.targetRTC)) {
-					return entry.targetPort;
+				if(baseComponent.equals(entry.getSourceRTC())) {
+					return entry.getSourcePort();
+				} else if(baseComponent.equals(entry.getTargetRTC())) {
+					return entry.getTargetPort();
 				}
 				
 			} else if (columnIndex == 2) {
-				return entry.dataType;
+				return entry.getDataType();
 				
 			} else if (columnIndex == 3) {
-				if(baseComponent.equals(entry.sourceRTC)) {
-					return entry.targetPort;
-				} else if(baseComponent.equals(entry.targetRTC)) {
-					return entry.sourcePort;
+				if(baseComponent.equals(entry.getSourceRTC())) {
+					return entry.getTargetPort();
+				} else if(baseComponent.equals(entry.getTargetRTC())) {
+					return entry.getSourcePort();
 				}
 				
 			} else if (columnIndex == 4) {
-				if(baseComponent.equals(entry.sourceRTC)) {
-					return entry.targetRTC;
-				} else if(baseComponent.equals(entry.targetRTC)) {
-					return entry.sourceRTC;
+				if(baseComponent.equals(entry.getSourceRTC())) {
+					return entry.getTargetRTC();
+				} else if(baseComponent.equals(entry.getTargetRTC())) {
+					return entry.getSourceRTC();
 				}
 			}
 			return "";

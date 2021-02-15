@@ -563,6 +563,8 @@ public class RestoreConfigurationDialog extends Dialog {
 				if (configurationSet.isSecret()) {
 					return false;
 				}
+//			} else if (PROPERTY_CONFIG_SET.equals(property)) {
+//				return false;
 			}
 			return true;
 		}

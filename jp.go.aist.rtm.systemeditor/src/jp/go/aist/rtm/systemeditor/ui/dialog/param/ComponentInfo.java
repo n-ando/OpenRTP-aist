@@ -9,7 +9,6 @@ import org.openrtp.namespaces.rts.version02.ConfigurationSet;
 import jp.go.aist.rtm.systemeditor.corba.CORBAHelper;
 import jp.go.aist.rtm.systemeditor.corba.CORBAHelper.CreateComponentParameter;
 import jp.go.aist.rtm.systemeditor.nl.Messages;
-import jp.go.aist.rtm.systemeditor.ui.dialog.RestoreComponentDialog.ConnectorInfo;
 import jp.go.aist.rtm.systemeditor.ui.dialog.RestoreComponentDialog.Endpoint;
 import jp.go.aist.rtm.systemeditor.ui.dialog.RestoreComponentDialog.EndpointCache;
 import jp.go.aist.rtm.toolscommon.model.component.CorbaComponent;
@@ -45,15 +44,19 @@ public class ComponentInfo {
 	private boolean isError;
 	private List<ConnectorInfo> connectorList = new ArrayList<ConnectorInfo>();
 
-	private CorbaComponent component;
+	private CorbaComponent corbaComponent;
+	private CorbaComponent selectedRTC;
 	private Component profile;
 
-	public CorbaComponent getComponent() {
-		return component;
+	public CorbaComponent getCorbaComponent() {
+		return corbaComponent;
+	}
+	public void setCorbaComponent(CorbaComponent corbaComponent) {
+		this.corbaComponent = corbaComponent;
 	}
 
 	public ComponentInfo(CorbaComponent component, Component profile) {
-		this.component = component;
+		this.corbaComponent = component;
 		this.profile = profile;
 		
 		this.isRestore = true;
@@ -128,8 +131,8 @@ public class ComponentInfo {
 	}
 
 	public void setTarget(RTC.RTObject rtc) {
-		if (this.component != null) {
-			this.component.setCorbaObject(rtc);
+		if (this.corbaComponent != null) {
+			this.corbaComponent.setCorbaObject(rtc);
 		}
 	}
 
@@ -175,6 +178,13 @@ public class ComponentInfo {
 		return targetRTC;
 	}
 
+	public CorbaComponent getSelectedRTC() {
+		return selectedRTC;
+	}
+	public void setSelectedRTC(CorbaComponent selectedRTC) {
+		this.selectedRTC = selectedRTC;
+	}
+	
 	public void setCompName(String compName) {
 		this.compName = compName;
 	}
@@ -213,7 +223,10 @@ public class ComponentInfo {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-
+	public String getStatus() {
+		return status;
+	}
+	
 	public void setError(boolean isError) {
 		this.isError = isError;
 	}
@@ -275,19 +288,20 @@ public class ComponentInfo {
 		}
 		try {
 			RTC.RTObject rtobj = null;
-			if (this.component.isCompositeComponent()) {
+			if (this.corbaComponent.isCompositeComponent()) {
 				rtobj = CORBAHelper.factory().createCompositeRTObject(
-						manager, this.component, diagram);
+						manager, this.corbaComponent, diagram);
 			} else {
 				rtobj = CORBAHelper.factory().createRTObject(
-						manager, this.component, diagram);
+						manager, this.corbaComponent, diagram);
 			}
 			if (rtobj == null) {
 				this.status = String.format("Fail to create rtobject: comp=<%s>", this.compId);
 				this.isError = true;
 				return;
 			}
-			this.component.setCorbaObject(rtobj);
+			this.corbaComponent.setCorbaObject(rtobj);
+			this.selectedRTC = this.corbaComponent;
 		} catch (Exception e1) {
 			this.status = String.format("Fail to create rtobject: comp=<%s>", this.compId);
 			this.isError = true;

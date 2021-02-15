@@ -1493,11 +1493,19 @@ public class RtsProfileHandler extends ProfileHandlerBase {
 			Component eComp,
 			List<org.openrtp.namespaces.rts.version02.Component> components) {
 		for (org.openrtp.namespaces.rts.version02.Component component : components) {
-			if (component.getId().equals(eComp.getComponentId())
-					&& component.getInstanceName().equals(
-							eComp.getInstanceNameL())
-					&& component.getPathUri().equals(eComp.getPathId())) {
-				return component;
+			if(eComp instanceof ComponentSpecification) {
+				if (component.getId().equals(eComp.getComponentId())
+						&& component.getInstanceName().equals(
+								eComp.getInstanceNameL())
+						&& component.getPathUri().equals(eComp.getPathId())) {
+					return component;
+				}
+			} else {
+				if (component.getId().equals(eComp.getComponentId())
+						&& component.getInstanceName().equals(
+								eComp.getInstanceNameL())) {
+					return component;
+				}
 			}
 		}
 		return null;

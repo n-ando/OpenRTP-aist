@@ -4,7 +4,9 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.gef.ContextMenuProvider;
@@ -19,7 +21,12 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.FileEditorInput;
+import org.openrtp.namespaces.rts.version02.DataportConnector;
+import org.openrtp.namespaces.rts.version02.Property;
 import org.openrtp.namespaces.rts.version02.RtsProfileExt;
+import org.openrtp.namespaces.rts.version02.ServiceportConnector;
+import org.openrtp.namespaces.rts.version02.TargetPort;
+import org.openrtp.namespaces.rts.version02.TargetPortExt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,6 +40,7 @@ import jp.go.aist.rtm.systemeditor.restoration.Restoration;
 import jp.go.aist.rtm.systemeditor.restoration.Result;
 import jp.go.aist.rtm.systemeditor.ui.dialog.RestoreComponentDialog;
 import jp.go.aist.rtm.systemeditor.ui.dialog.param.ComponentInfo;
+import jp.go.aist.rtm.systemeditor.ui.dialog.param.ConnectorInfo;
 import jp.go.aist.rtm.systemeditor.ui.editor.action.OpenAndCreateRestoreAction;
 import jp.go.aist.rtm.systemeditor.ui.editor.action.OpenAndQuickRestoreAction;
 import jp.go.aist.rtm.systemeditor.ui.editor.action.OpenAndRestoreAction;
@@ -40,6 +48,7 @@ import jp.go.aist.rtm.systemeditor.ui.editor.action.OpenWithMappingRestoreAction
 import jp.go.aist.rtm.systemeditor.ui.editor.action.RestoreOption;
 import jp.go.aist.rtm.toolscommon.model.component.Component;
 import jp.go.aist.rtm.toolscommon.model.component.CorbaComponent;
+import jp.go.aist.rtm.toolscommon.model.component.ExecutionContext;
 import jp.go.aist.rtm.toolscommon.model.component.SystemDiagram;
 import jp.go.aist.rtm.toolscommon.model.component.SystemDiagramKind;
 import jp.go.aist.rtm.toolscommon.util.RtsProfileHandler;
@@ -254,6 +263,10 @@ public class SystemDiagramEditor extends AbstractSystemDiagramEditor {
 			FileEditorInput editorInput) throws PartInitException {
 		try {
 			final String strPath = editorInput.getPath().toOSString();
+			
+			List<ComponentInfo> componentList = new ArrayList<ComponentInfo>();
+			 Map<String, Component> compIdMap = new HashMap<String, Component>();
+			 String errMsg = "";
 
 			try {
 				RtsProfileHandler handler = new RtsProfileHandler();
@@ -295,7 +308,7 @@ public class SystemDiagramEditor extends AbstractSystemDiagramEditor {
 					return;
 				}
 				
-				List<ComponentInfo> componentList = dialog.getComponentList();
+				componentList = dialog.getComponentList();
 
 				// 同期サポート割当
 				SystemEditorWrapperFactory.getInstance()
@@ -303,24 +316,35 @@ public class SystemDiagramEditor extends AbstractSystemDiagramEditor {
 						.assignSynchonizationSupportToDiagram(diagram);
 
 				// 読み込み時に明示的に状態の同期を実行
-				List<Component> eComps = new ArrayList<>(
-						diagram.getComponents());
+				List<Component> eComps = new ArrayList<>(diagram.getComponents());
 				diagram.getComponents().clear();
 				for (Component c : eComps) {
+					Component targetComp = c;
 					boolean isSkip = false;
 					for(ComponentInfo info :componentList) {
-						if(info.getComponent() == c) {
+						if(info.getCorbaComponent() == c) {
 							if(info.isRestore()==false) {
 								isSkip = true;
 								break;
 							}
+							compIdMap.put(c.getComponentId(), targetComp);
+							targetComp = info.getSelectedRTC();
+							if(targetComp == null) {
+								errMsg = info.getStatus();
+							}
+							targetComp.setConstraint(c.getConstraint());
+							
+							c.setPathId(targetComp.getPathId());
+							info.getProfile().setPathUri(targetComp.getPathId());
+							c.setComponentId(targetComp.getComponentId());
+							c.setInstanceNameL(targetComp.getInstanceNameL());
 						}
 					}
 					if(isSkip) continue;
 					
-					Rehabilitation.rehabilitateComponent(c, diagram, false);
-					c.synchronizeManually();
-					diagram.addComponent(c);
+					Rehabilitation.rehabilitateComponent(targetComp, diagram, false);
+					targetComp.synchronizeManually();
+					diagram.addComponent(targetComp);
 				}
 
 				handler.restoreCompositeComponentPort(diagram);
@@ -341,28 +365,107 @@ public class SystemDiagramEditor extends AbstractSystemDiagramEditor {
 						}
 					}
 				}
+				/////
+				adjustPortProfile(componentList, compIdMap, profile);
 
 			} catch (Exception e) {
 				throw new InvocationTargetException(e,
 						Messages.getString("SystemDiagramEditor.5") + "\r\n"
-								+ e.getMessage());
+								+ e.getMessage()+ "\r\n"
+								+ errMsg);
 			}
 
-//			try {
-//				RtsProfileHandler handler = new RtsProfileHandler();
-//				handler.restoreConnection(getSystemDiagram());
-//				handler.restoreConfigSet(getSystemDiagram());
-//				handler.restoreExecutionContext(getSystemDiagram());
-//				doReplace(getSystemDiagram(), site);
-//			} catch (Exception e) {
-//				LOGGER.error("Fail to replace diagram", e);
-//				throw new InvocationTargetException(e,
-//						Messages.getString("SystemDiagramEditor.8"));
-//			}
+			try {
+				RtsProfileHandler handler = new RtsProfileHandler();
+				handler.restoreConnection(getSystemDiagram());
+				handler.restoreConfigSet(getSystemDiagram());
+				handler.restoreExecutionContext(getSystemDiagram());
+				doReplace(getSystemDiagram(), site);
+			} catch (Exception e) {
+				LOGGER.error("Fail to replace diagram", e);
+				throw new InvocationTargetException(e,
+						Messages.getString("SystemDiagramEditor.8"));
+			}
+			//////////
+			for(ComponentInfo comp : componentList) {
+				if(comp.isRestore() == false) continue;
+				CorbaComponent target = comp.getSelectedRTC();
+				int state = target.getComponentState();
+				if(comp.isActivate()) {
+					if(state == ExecutionContext.RTC_ACTIVE) continue;
+					target.activateR();
+				} else {
+					if(state == ExecutionContext.RTC_INACTIVE) continue;
+					target.deactivateR();
+				}
+			}
 
 		} catch (Exception e) {
 			throw new PartInitException(
 					Messages.getString("SystemDiagramEditor.9"), e);
+		}
+	}
+
+	private void adjustPortProfile(List<ComponentInfo> componentList, Map<String, Component> compIdMap,
+			RtsProfileExt profile) {
+		List<DataportConnector> removeDataList = new ArrayList<DataportConnector>();
+		List<ServiceportConnector> removeServiceList = new ArrayList<ServiceportConnector>();
+		for(ComponentInfo info :componentList) {
+			for(ConnectorInfo conn : info.getConnectorList()) {
+				if(conn.isConnect() == false ) {
+					for(DataportConnector d_conn : profile.getDataPortConnectors() ) {
+						if(d_conn == conn.getDataConnector()) {
+							removeDataList.add(d_conn);
+							break;
+						}
+					}
+					for(ServiceportConnector s_conn : profile.getServicePortConnectors() ) {
+						if(s_conn == conn.getServiceConnector()) {
+							removeServiceList.add(s_conn);
+							break;
+						}
+					}
+				}
+			}
+		}
+		if( 0<removeDataList.size() ) {
+			for(DataportConnector d_conn : removeDataList ) {
+				profile.getDataPortConnectors().remove(d_conn);
+			}
+		}
+		if( 0<removeServiceList.size() ) {
+			for(ServiceportConnector s_conn : removeServiceList ) {
+				profile.getServicePortConnectors().remove(s_conn);
+			}
+		}
+		
+		if(profile.getDataPortConnectors()!=null) {
+			for(DataportConnector each : profile.getDataPortConnectors()) {
+				replacePortInfo(compIdMap, (TargetPortExt)each.getSourceDataPort());
+				replacePortInfo(compIdMap, (TargetPortExt)each.getTargetDataPort());
+			}
+		}
+		if(profile.getServicePortConnectors()!=null) {
+			for(ServiceportConnector each : profile.getServicePortConnectors()) {
+				replacePortInfo(compIdMap, (TargetPortExt)each.getSourceServicePort());
+				replacePortInfo(compIdMap, (TargetPortExt)each.getTargetServicePort());
+			}
+		}
+	}
+
+	private void replacePortInfo(Map<String, Component> compIdMap, TargetPortExt port) {
+		if(compIdMap.containsKey(port.getComponentId())) {
+			Component comp = compIdMap.get(port.getComponentId());
+			port.setComponentId(comp.getComponentId());
+			String portName = port.getPortName();
+			portName = portName.replace(port.getInstanceName(), comp.getInstanceNameL());
+			port.setPortName(portName);
+			port.setInstanceName(comp.getInstanceNameL());
+			for(Property prop : port.getProperties()) {
+				if(prop.getName().equals("COMPONENT_PATH_ID")) {
+					prop.setValue(comp.getPathId());
+				}
+			}
 		}
 	}
 
