@@ -202,8 +202,8 @@ public abstract class AbstractSystemDiagramEditor extends GraphicalEditor {
 			@Override
 			protected void init() {
 				setId(ActionFactory.SAVE_AS.getId());
-				setText("Save As...");
-				setToolTipText("Save As...");
+				setText("Save System");
+				setToolTipText("Save System");
 			}
 
 			@Override

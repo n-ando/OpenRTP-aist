@@ -65,20 +65,20 @@ public class SystemDiagramEditor extends AbstractSystemDiagramEditor {
 	 */
 	public static final String SYSTEM_DIAGRAM_EDITOR_ID = "jp.go.aist.rtm.systemeditor.ui.editor.SystemDiagramEditor"; //$NON-NLS-1$
 
-	@Override
-	protected void createActions() {
-		super.createActions();
-		addAction(new OpenAndRestoreAction(this));
-		addAction(new OpenAndQuickRestoreAction(this));
-		addAction(new OpenAndCreateRestoreAction(this));
-		addAction(new OpenWithMappingRestoreAction(this));
-	}
+//	@Override
+//	protected void createActions() {
+//		super.createActions();
+//		addAction(new OpenAndRestoreAction(this));
+//		addAction(new OpenAndQuickRestoreAction(this));
+//		addAction(new OpenAndCreateRestoreAction(this));
+//		addAction(new OpenWithMappingRestoreAction(this));
+//	}
 
-	@SuppressWarnings("unchecked")
-	private void addAction(IAction action) {
-		getActionRegistry().registerAction(action);
-		getPropertyActions().add(action.getId());
-	}
+//	@SuppressWarnings("unchecked")
+//	private void addAction(IAction action) {
+//		getActionRegistry().registerAction(action);
+//		getPropertyActions().add(action.getId());
+//	}
 
 	/**
 	 * 設定の変更に対するリスナ
@@ -119,12 +119,13 @@ public class SystemDiagramEditor extends AbstractSystemDiagramEditor {
 		}
 
 		if (targetInput instanceof FileEditorInput) {
-			// RTSプロファイルをファイルからロードする
-			if (restore.doMapping()) {
-				doLoadWithMapping(site, (FileEditorInput) targetInput);
-			} else {
-				doLoad(site, restore, (FileEditorInput) targetInput);
-			}
+			doLoadWithMapping(site, (FileEditorInput) targetInput);
+//			// RTSプロファイルをファイルからロードする
+//			if (restore.doMapping()) {
+//				doLoadWithMapping(site, (FileEditorInput) targetInput);
+//			} else {
+//				doLoad(site, restore, (FileEditorInput) targetInput);
+//			}
 		}
 
 		// システムダイアグラムの同期スレッド開始

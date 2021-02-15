@@ -293,7 +293,7 @@ public class ComponentInfo {
 						manager, this.corbaComponent, diagram);
 			} else {
 				rtobj = CORBAHelper.factory().createRTObject(
-						manager, this.corbaComponent, diagram);
+						manager, this.corbaComponent, diagram, this.containerName);
 			}
 			if (rtobj == null) {
 				this.status = String.format("Fail to create rtobject: comp=<%s>", this.compId);

@@ -18,8 +18,8 @@ public class OpenAction extends EditorPartAction {
 	@Override
 	protected void init() {
 		setId(ID);
-		setText("Open...");
-		setToolTipText("Open...");
+		setText("Load System");
+		setToolTipText("Load System");
 	}
 
 	@Override
