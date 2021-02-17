@@ -78,6 +78,7 @@ public class ComponentInfo {
 				}
 			}
 		}
+		this.isConfig = this.hasConfig;
 		
 		String lang = "";
 		String vendor = "";

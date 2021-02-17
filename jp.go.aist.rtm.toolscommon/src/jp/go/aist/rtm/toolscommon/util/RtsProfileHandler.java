@@ -106,15 +106,16 @@ public class RtsProfileHandler extends ProfileHandlerBase {
 	 * ダイアグラムの直下に含まれる全コンポーネントに対し、IORからCORABAオブジェクトを設定する
 	 * @param eDiagram
 	 */
-	public void populateCorbaBaseObject(SystemDiagram eDiagram) {
-		for (Object element : eDiagram.getRegisteredComponents()) {
-			if (!(element instanceof CorbaComponent)) continue;
-			CorbaComponent eCorbaComp = (CorbaComponent)element;
-			String ior = eCorbaComp.getIor();
-			if (ior == null) continue;
-			eCorbaComp.setCorbaObject(getRTObject(ior));
-		}
-	}
+	//Restore方式変更により変更
+//	public void populateCorbaBaseObject(SystemDiagram eDiagram) {
+//		for (Object element : eDiagram.getRegisteredComponents()) {
+//			if (!(element instanceof CorbaComponent)) continue;
+//			CorbaComponent eCorbaComp = (CorbaComponent)element;
+//			String ior = eCorbaComp.getIor();
+//			if (ior == null) continue;
+//			eCorbaComp.setCorbaObject(getRTObject(ior));
+//		}
+//	}
 
 	private RTC.RTObject getRTObject(String ior) {
 		try {

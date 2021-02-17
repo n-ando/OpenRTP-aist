@@ -18,31 +18,6 @@ import java.util.List;
 import javax.xml.datatype.DatatypeConstants;
 import javax.xml.datatype.XMLGregorianCalendar;
 
-import jp.go.aist.rtm.systemeditor.RTSystemEditorPlugin;
-import jp.go.aist.rtm.systemeditor.extension.SaveProfileExtension;
-import jp.go.aist.rtm.systemeditor.factory.ProfileSaver;
-import jp.go.aist.rtm.systemeditor.nl.Messages;
-import jp.go.aist.rtm.systemeditor.ui.action.OpenCompositeComponentAction;
-import jp.go.aist.rtm.systemeditor.ui.dialog.ProfileInformationDialog;
-import jp.go.aist.rtm.systemeditor.ui.editor.action.MoveComponentAction;
-import jp.go.aist.rtm.systemeditor.ui.editor.action.OpenAction;
-import jp.go.aist.rtm.systemeditor.ui.editor.action.RestoreOption;
-import jp.go.aist.rtm.systemeditor.ui.editor.dnd.SystemDiagramDropTargetListener;
-import jp.go.aist.rtm.systemeditor.ui.editor.editpart.AutoScrollAutoexposeHelper;
-import jp.go.aist.rtm.systemeditor.ui.editor.editpart.SystemDiagramEditPart;
-import jp.go.aist.rtm.systemeditor.ui.editor.editpart.factory.SystemDiagramEditPartFactory;
-import jp.go.aist.rtm.systemeditor.ui.util.ComponentUtil;
-import jp.go.aist.rtm.toolscommon.model.component.Component;
-import jp.go.aist.rtm.toolscommon.model.component.ComponentFactory;
-import jp.go.aist.rtm.toolscommon.model.component.CorbaComponent;
-import jp.go.aist.rtm.toolscommon.model.component.SystemDiagram;
-import jp.go.aist.rtm.toolscommon.profiles.util.XmlHandler;
-import jp.go.aist.rtm.toolscommon.synchronizationframework.SynchronizationSupport;
-import jp.go.aist.rtm.toolscommon.ui.views.propertysheetview.RtcPropertySheetPage;
-import jp.go.aist.rtm.toolscommon.util.RtsProfileHandler;
-import jp.go.aist.rtm.toolscommon.validation.ValidateException;
-import jp.go.aist.rtm.toolscommon.validation.Validator;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -101,6 +76,30 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.sun.org.apache.xerces.internal.jaxp.datatype.XMLGregorianCalendarImpl;
+
+import jp.go.aist.rtm.systemeditor.RTSystemEditorPlugin;
+import jp.go.aist.rtm.systemeditor.extension.SaveProfileExtension;
+import jp.go.aist.rtm.systemeditor.factory.ProfileSaver;
+import jp.go.aist.rtm.systemeditor.nl.Messages;
+import jp.go.aist.rtm.systemeditor.ui.action.OpenCompositeComponentAction;
+import jp.go.aist.rtm.systemeditor.ui.dialog.ProfileInformationDialog;
+import jp.go.aist.rtm.systemeditor.ui.editor.action.MoveComponentAction;
+import jp.go.aist.rtm.systemeditor.ui.editor.action.OpenAction;
+import jp.go.aist.rtm.systemeditor.ui.editor.dnd.SystemDiagramDropTargetListener;
+import jp.go.aist.rtm.systemeditor.ui.editor.editpart.AutoScrollAutoexposeHelper;
+import jp.go.aist.rtm.systemeditor.ui.editor.editpart.SystemDiagramEditPart;
+import jp.go.aist.rtm.systemeditor.ui.editor.editpart.factory.SystemDiagramEditPartFactory;
+import jp.go.aist.rtm.systemeditor.ui.util.ComponentUtil;
+import jp.go.aist.rtm.toolscommon.model.component.Component;
+import jp.go.aist.rtm.toolscommon.model.component.ComponentFactory;
+import jp.go.aist.rtm.toolscommon.model.component.CorbaComponent;
+import jp.go.aist.rtm.toolscommon.model.component.SystemDiagram;
+import jp.go.aist.rtm.toolscommon.profiles.util.XmlHandler;
+import jp.go.aist.rtm.toolscommon.synchronizationframework.SynchronizationSupport;
+import jp.go.aist.rtm.toolscommon.ui.views.propertysheetview.RtcPropertySheetPage;
+import jp.go.aist.rtm.toolscommon.util.RtsProfileHandler;
+import jp.go.aist.rtm.toolscommon.validation.ValidateException;
+import jp.go.aist.rtm.toolscommon.validation.Validator;
 
 public abstract class AbstractSystemDiagramEditor extends GraphicalEditor {
 
@@ -715,16 +714,24 @@ public abstract class AbstractSystemDiagramEditor extends GraphicalEditor {
 			throws PartInitException {
 		IEditorInput newInput;
 		try {
-			newInput = load(input, site, RestoreOption.NONE);
+			//Restore方式変更により変更
+//			newInput = load(input, site, RestoreOption.NONE);
+			newInput = load(input, site);
 		} catch (Throwable t) {
 			// 起動時にファイルオープンエラーが発生した時はエディタの中身を空にする 2009.11.06
-			newInput = load(new NullEditorInput(), site, RestoreOption.NONE);
+			//Restore方式変更により変更
+//			newInput = load(new NullEditorInput(), site, RestoreOption.NONE);
+			newInput = load(new NullEditorInput(), site);
 		}
 		super.init(site, newInput);
 	}
 
+	//Restore方式変更により変更
+//	protected abstract IEditorInput load(IEditorInput input,
+//			final IEditorSite site, final RestoreOption doReplace)
+//			throws PartInitException;
 	protected abstract IEditorInput load(IEditorInput input,
-			final IEditorSite site, final RestoreOption doReplace)
+			final IEditorSite site)
 			throws PartInitException;
 
 	private SimpleDateFormat formater = new SimpleDateFormat("yyyy_MM_dd_hh_mm_ss_SSS");
@@ -858,7 +865,9 @@ public abstract class AbstractSystemDiagramEditor extends GraphicalEditor {
 		return (title == null) ? diagramName : title;
 	}
 
-	public void open(RestoreOption restore) {
+	//Restore方式変更により変更
+//	public void open(RestoreOption restore) {
+	public void open() {
 		boolean save = false;
 		if (isDirty()) {
 			save = MessageDialog.openQuestion(getSite().getShell(), "", //$NON-NLS-1$
@@ -871,7 +880,9 @@ public abstract class AbstractSystemDiagramEditor extends GraphicalEditor {
 		IFile createNewFile = createNewFilebySelection(null, SWT.OPEN);
 		if (createNewFile != null) {
 			try {
-				load(new FileEditorInput(createNewFile), getEditorSite(), restore);
+				//Restore方式変更により変更
+//				load(new FileEditorInput(createNewFile), getEditorSite(), restore);
+				load(new FileEditorInput(createNewFile), getEditorSite());
 			} catch (PartInitException e) {
 				LOGGER.error("Fail to load file. file=" + createNewFile, e);
 				if (e.getStatus().getException() != null)

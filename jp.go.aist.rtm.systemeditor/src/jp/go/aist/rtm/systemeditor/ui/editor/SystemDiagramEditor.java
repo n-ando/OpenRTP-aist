@@ -8,15 +8,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.GraphicalViewer;
-import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.dialogs.ProgressMonitorDialog;
-import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
@@ -25,7 +21,6 @@ import org.openrtp.namespaces.rts.version02.DataportConnector;
 import org.openrtp.namespaces.rts.version02.Property;
 import org.openrtp.namespaces.rts.version02.RtsProfileExt;
 import org.openrtp.namespaces.rts.version02.ServiceportConnector;
-import org.openrtp.namespaces.rts.version02.TargetPort;
 import org.openrtp.namespaces.rts.version02.TargetPortExt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,11 +36,6 @@ import jp.go.aist.rtm.systemeditor.restoration.Result;
 import jp.go.aist.rtm.systemeditor.ui.dialog.RestoreComponentDialog;
 import jp.go.aist.rtm.systemeditor.ui.dialog.param.ComponentInfo;
 import jp.go.aist.rtm.systemeditor.ui.dialog.param.ConnectorInfo;
-import jp.go.aist.rtm.systemeditor.ui.editor.action.OpenAndCreateRestoreAction;
-import jp.go.aist.rtm.systemeditor.ui.editor.action.OpenAndQuickRestoreAction;
-import jp.go.aist.rtm.systemeditor.ui.editor.action.OpenAndRestoreAction;
-import jp.go.aist.rtm.systemeditor.ui.editor.action.OpenWithMappingRestoreAction;
-import jp.go.aist.rtm.systemeditor.ui.editor.action.RestoreOption;
 import jp.go.aist.rtm.toolscommon.model.component.Component;
 import jp.go.aist.rtm.toolscommon.model.component.CorbaComponent;
 import jp.go.aist.rtm.toolscommon.model.component.ExecutionContext;
@@ -65,6 +55,7 @@ public class SystemDiagramEditor extends AbstractSystemDiagramEditor {
 	 */
 	public static final String SYSTEM_DIAGRAM_EDITOR_ID = "jp.go.aist.rtm.systemeditor.ui.editor.SystemDiagramEditor"; //$NON-NLS-1$
 
+	//Restore方式変更により削除
 //	@Override
 //	protected void createActions() {
 //		super.createActions();
@@ -109,8 +100,11 @@ public class SystemDiagramEditor extends AbstractSystemDiagramEditor {
 				preferenceListener);
 	}
 
-	protected IEditorInput load(IEditorInput input, final IEditorSite site,
-			final RestoreOption restore) throws PartInitException {
+	//Restore方式変更により変更
+//	protected IEditorInput load(IEditorInput input, final IEditorSite site,
+//			final RestoreOption restore) throws PartInitException {
+	protected IEditorInput load(IEditorInput input, final IEditorSite site)
+			throws PartInitException {
 
 		IEditorInput targetInput = getTargetInput(input, "System Editor");
 
@@ -120,12 +114,6 @@ public class SystemDiagramEditor extends AbstractSystemDiagramEditor {
 
 		if (targetInput instanceof FileEditorInput) {
 			doLoadWithMapping(site, (FileEditorInput) targetInput);
-//			// RTSプロファイルをファイルからロードする
-//			if (restore.doMapping()) {
-//				doLoadWithMapping(site, (FileEditorInput) targetInput);
-//			} else {
-//				doLoad(site, restore, (FileEditorInput) targetInput);
-//			}
 		}
 
 		// システムダイアグラムの同期スレッド開始
@@ -140,125 +128,126 @@ public class SystemDiagramEditor extends AbstractSystemDiagramEditor {
 
 		return targetInput;
 	}
-
-	private void doLoad(final IEditorSite site, final RestoreOption restore,
-			FileEditorInput editorInput) throws PartInitException {
-		try {
-			final String strPath = editorInput.getPath().toOSString();
-
-			ProgressMonitorDialog dialog = new ProgressMonitorDialog(
-					site.getShell());
-			IRunnableWithProgress runable = new IRunnableWithProgress() {
-				@Override
-				public void run(IProgressMonitor monitor)
-						throws InvocationTargetException, InterruptedException {
-					monitor.beginTask(
-							Messages.getString("SystemDiagramEditor.3"), 100);
-					monitor.subTask(Messages.getString("SystemDiagramEditor.4"));
-
-					try {
-						RtsProfileHandler handler = new RtsProfileHandler();
-
-						// STEP1: ファイルからRTSプロファイルオブジェクトを作成
-						monitor.internalWorked(20);
-
-						RtsProfileExt profile = handler.load(strPath);
-
-						// STEP2: 拡張ポイント (ダイアグラム生成前)
-						monitor.internalWorked(20);
-
-						ProfileLoader creator = new ProfileLoader();
-						for (LoadProfileExtension.ErrorInfo info : creator
-								.preLoad(profile, strPath)) {
-							if (info.isError()) {
-								openError(DIALOG_TITLE_ERROR, info.getMessage());
-								return;
-							} else {
-								if (!openConfirm(DIALOG_TITLE_CONFIRM,
-										info.getMessage())) {
-									return;
-								}
-							}
-						}
-
-						// STEP3: RTSプロファイルオブジェクトからダイアグラムを作成
-						monitor.internalWorked(20);
-
-						SystemDiagram diagram = handler.load(profile,
-								SystemDiagramKind.ONLINE_LITERAL);
-
-						if (restore.doQuick()) {
-							handler.populateCorbaBaseObject(diagram);
-						}
-						SystemEditorWrapperFactory.getInstance()
-								.getSynchronizationManager()
-								.assignSynchonizationSupportToDiagram(diagram);
-						// リモートコンのポーネントが未起動時に、コンポーネントを生成するか指定
-						Rehabilitation.rehabilitation(diagram,
-								restore.doCreate());
-
-						// 読み込み時に明示的に状態の同期を実行
-						List<Component> eComps = new ArrayList<>(
-								diagram.getComponents());
-						diagram.getComponents().clear();
-						for (Component c : eComps) {
-							c.synchronizeManually();
-							diagram.addComponent(c);
-						}
-						handler.restoreCompositeComponentPort(diagram);
-
-						SystemDiagram oldDiagram = getSystemDiagram();
-						setSystemDiagram(diagram);
-
-						// STEP4: 拡張ポイント (ダイアグラム生成後)
-						monitor.internalWorked(20);
-
-						for (LoadProfileExtension.ErrorInfo info : creator
-								.postLoad(diagram, profile, oldDiagram)) {
-							if (info.isError()) {
-								openError(DIALOG_TITLE_ERROR, info.getMessage());
-								return;
-							} else {
-								if (!openConfirm(DIALOG_TITLE_CONFIRM,
-										info.getMessage())) {
-									return;
-								}
-							}
-						}
-					} catch (Exception e) {
-						monitor.done();
-						throw new InvocationTargetException(
-								e,
-								Messages.getString("SystemDiagramEditor.5") + "\r\n" + e.getMessage()); //$NON-NLS-1$
-					}
-
-					monitor.internalWorked(35);
-
-					if (restore.doReplace()) {
-						monitor.subTask(Messages
-								.getString("SystemDiagramEditor.7")); //$NON-NLS-1$
-						try {
-							RtsProfileHandler handler = new RtsProfileHandler();
-							handler.restoreConnection(getSystemDiagram());
-							handler.restoreConfigSet(getSystemDiagram());
-							handler.restoreExecutionContext(getSystemDiagram());
-							doReplace(getSystemDiagram(), site);
-						} catch (Exception e) {
-							LOGGER.error("Fail to replace diagram", e);
-							throw new InvocationTargetException(e,
-									Messages.getString("SystemDiagramEditor.8")); //$NON-NLS-1$
-						}
-					}
-
-					monitor.done();
-				}
-			};
-			dialog.run(false, false, runable);
-		} catch (Exception e) {
-			throw new PartInitException(
-					Messages.getString("SystemDiagramEditor.9"), e); //$NON-NLS-1$
-		}
-	}
+	
+	//Restore方式変更により削除
+//	private void doLoad(final IEditorSite site, final RestoreOption restore,
+//			FileEditorInput editorInput) throws PartInitException {
+//		try {
+//			final String strPath = editorInput.getPath().toOSString();
+//
+//			ProgressMonitorDialog dialog = new ProgressMonitorDialog(
+//					site.getShell());
+//			IRunnableWithProgress runable = new IRunnableWithProgress() {
+//				@Override
+//				public void run(IProgressMonitor monitor)
+//						throws InvocationTargetException, InterruptedException {
+//					monitor.beginTask(
+//							Messages.getString("SystemDiagramEditor.3"), 100);
+//					monitor.subTask(Messages.getString("SystemDiagramEditor.4"));
+//
+//					try {
+//						RtsProfileHandler handler = new RtsProfileHandler();
+//
+//						// STEP1: ファイルからRTSプロファイルオブジェクトを作成
+//						monitor.internalWorked(20);
+//
+//						RtsProfileExt profile = handler.load(strPath);
+//
+//						// STEP2: 拡張ポイント (ダイアグラム生成前)
+//						monitor.internalWorked(20);
+//
+//						ProfileLoader creator = new ProfileLoader();
+//						for (LoadProfileExtension.ErrorInfo info : creator
+//								.preLoad(profile, strPath)) {
+//							if (info.isError()) {
+//								openError(DIALOG_TITLE_ERROR, info.getMessage());
+//								return;
+//							} else {
+//								if (!openConfirm(DIALOG_TITLE_CONFIRM,
+//										info.getMessage())) {
+//									return;
+//								}
+//							}
+//						}
+//
+//						// STEP3: RTSプロファイルオブジェクトからダイアグラムを作成
+//						monitor.internalWorked(20);
+//
+//						SystemDiagram diagram = handler.load(profile,
+//								SystemDiagramKind.ONLINE_LITERAL);
+//
+//						if (restore.doQuick()) {
+//							handler.populateCorbaBaseObject(diagram);
+//						}
+//						SystemEditorWrapperFactory.getInstance()
+//								.getSynchronizationManager()
+//								.assignSynchonizationSupportToDiagram(diagram);
+//						// リモートコンのポーネントが未起動時に、コンポーネントを生成するか指定
+//						Rehabilitation.rehabilitation(diagram,
+//								restore.doCreate());
+//
+//						// 読み込み時に明示的に状態の同期を実行
+//						List<Component> eComps = new ArrayList<>(
+//								diagram.getComponents());
+//						diagram.getComponents().clear();
+//						for (Component c : eComps) {
+//							c.synchronizeManually();
+//							diagram.addComponent(c);
+//						}
+//						handler.restoreCompositeComponentPort(diagram);
+//
+//						SystemDiagram oldDiagram = getSystemDiagram();
+//						setSystemDiagram(diagram);
+//
+//						// STEP4: 拡張ポイント (ダイアグラム生成後)
+//						monitor.internalWorked(20);
+//
+//						for (LoadProfileExtension.ErrorInfo info : creator
+//								.postLoad(diagram, profile, oldDiagram)) {
+//							if (info.isError()) {
+//								openError(DIALOG_TITLE_ERROR, info.getMessage());
+//								return;
+//							} else {
+//								if (!openConfirm(DIALOG_TITLE_CONFIRM,
+//										info.getMessage())) {
+//									return;
+//								}
+//							}
+//						}
+//					} catch (Exception e) {
+//						monitor.done();
+//						throw new InvocationTargetException(
+//								e,
+//								Messages.getString("SystemDiagramEditor.5") + "\r\n" + e.getMessage()); //$NON-NLS-1$
+//					}
+//
+//					monitor.internalWorked(35);
+//
+//					if (restore.doReplace()) {
+//						monitor.subTask(Messages
+//								.getString("SystemDiagramEditor.7")); //$NON-NLS-1$
+//						try {
+//							RtsProfileHandler handler = new RtsProfileHandler();
+//							handler.restoreConnection(getSystemDiagram());
+//							handler.restoreConfigSet(getSystemDiagram());
+//							handler.restoreExecutionContext(getSystemDiagram());
+//							doReplace(getSystemDiagram(), site);
+//						} catch (Exception e) {
+//							LOGGER.error("Fail to replace diagram", e);
+//							throw new InvocationTargetException(e,
+//									Messages.getString("SystemDiagramEditor.8")); //$NON-NLS-1$
+//						}
+//					}
+//
+//					monitor.done();
+//				}
+//			};
+//			dialog.run(false, false, runable);
+//		} catch (Exception e) {
+//			throw new PartInitException(
+//					Messages.getString("SystemDiagramEditor.9"), e); //$NON-NLS-1$
+//		}
+//	}
 
 	private void doLoadWithMapping(final IEditorSite site,
 			FileEditorInput editorInput) throws PartInitException {

@@ -75,6 +75,7 @@ public class RestoreComponentDialog extends Dialog {
 	private static final String LABEL_COMPONENT_ID = "Component Id:";
 	private static final String LABEL_NODE = "Node:";
 	private static final String LABEL_CONTAINER = "Container:";
+	private static final String LABEL_CONFIG = "   Active Config. Set:";
 
 	private static final String LABEL_SOURCE_PORT_NAME = "Source Port:";
 	private static final String LABEL_DATA_TYPE = "Data Type:";
@@ -98,7 +99,10 @@ public class RestoreComponentDialog extends Dialog {
 	private Label mgrLabel;
 	private Text containerText;
 	private Button activateBtn;
+	
 	private Button configurationBtn;
+	private Label configLabel;
+	private Label configText;
 	private Button configDetailBtn;
 
 	private Button connectBtn;
@@ -409,7 +413,7 @@ public class RestoreComponentDialog extends Dialog {
 		configComposite.setLayoutData(gd);
 		configComposite.setFont(dialogArea.getFont());
 		gl = new GridLayout();
-		gl.numColumns = 2;
+		gl.numColumns = 4;
 		configComposite.setLayout(gl);
 		
 		this.configurationBtn = new Button(configComposite, SWT.CHECK);
@@ -421,6 +425,16 @@ public class RestoreComponentDialog extends Dialog {
 			}
 		});
 		
+		this.configLabel = new Label(configComposite, SWT.NONE);
+		this.configLabel.setText(LABEL_CONFIG);
+		
+		this.configText = new Label(configComposite, SWT.BORDER);
+		gd = new GridData();
+		gd.horizontalAlignment = SWT.FILL;
+		gd.grabExcessHorizontalSpace = true;
+		this.configText.setLayoutData(gd);
+		this.configText.setBackground(getColor(COLOR_UNEDITABLE));
+		
 		this.configDetailBtn = new Button(configComposite, SWT.PUSH);
 		this.configDetailBtn.setText("Detail Setting");
 		this.configDetailBtn.addSelectionListener(new SelectionAdapter() {
@@ -429,6 +443,7 @@ public class RestoreComponentDialog extends Dialog {
 				if(selectedTarget == null) return;
 				RestoreConfigurationDialog dialog = new RestoreConfigurationDialog(getShell(), selectedTarget.getProfile());
 				dialog.open();
+				configText.setText(selectedTarget.getProfile().getActiveConfigurationSet());
 			}
 		});
 		//////////
@@ -636,6 +651,7 @@ public class RestoreComponentDialog extends Dialog {
 			this.configDetailBtn.setEnabled(this.selectedTarget.isHasConfig());
 			if(this.selectedTarget.isHasConfig()) {
 				this.configurationBtn.setSelection(this.selectedTarget.isConfig());
+				this.configText.setText(this.selectedTarget.getProfile().getActiveConfigurationSet());
 				this.configDetailBtn.setSelection(this.selectedTarget.isConfig());
 			}
 			
@@ -700,6 +716,8 @@ public class RestoreComponentDialog extends Dialog {
 		activateBtn.setEnabled(includeBtn.getSelection());
 		
 		configurationBtn.setEnabled(includeBtn.getSelection() && this.selectedTarget.isHasConfig());
+		configLabel.setEnabled(includeBtn.getSelection() && this.selectedTarget.isHasConfig() && this.configurationBtn.getSelection());
+		configText.setEnabled(includeBtn.getSelection() && this.selectedTarget.isHasConfig() && this.configurationBtn.getSelection());
 		configDetailBtn.setEnabled(includeBtn.getSelection() && this.selectedTarget.isHasConfig() && this.configurationBtn.getSelection());
 		
 		connectorTableViewer.getTable().setEnabled(includeBtn.getSelection());

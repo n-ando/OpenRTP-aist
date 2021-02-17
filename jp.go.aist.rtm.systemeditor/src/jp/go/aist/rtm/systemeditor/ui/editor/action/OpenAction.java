@@ -29,6 +29,8 @@ public class OpenAction extends EditorPartAction {
 
 	@Override
 	public void run() {
-		((AbstractSystemDiagramEditor) getEditorPart()).open(RestoreOption.NONE);
+		//Restore方式変更により変更
+//		((AbstractSystemDiagramEditor) getEditorPart()).open(RestoreOption.NONE);
+		((AbstractSystemDiagramEditor) getEditorPart()).open();
 	}
 }

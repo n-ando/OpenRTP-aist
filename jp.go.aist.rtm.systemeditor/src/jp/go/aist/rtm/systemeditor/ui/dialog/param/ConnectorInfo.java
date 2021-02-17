@@ -13,6 +13,40 @@ public class ConnectorInfo {
 	private DataportConnector dataConnector;
 	private ServiceportConnector serviceConnector;
 	
+	public ConnectorInfo(DataportConnector conn) {
+		this.dataConnector = conn;
+		this.isConnect = true;
+		
+		this.sourceRTC = conn.getSourceDataPort().getComponentId();
+		String srcPort = conn.getSourceDataPort().getPortName();
+		String[] srvelems = srcPort.split("\\.");
+		this.sourcePort = srvelems[1];
+		
+		this.targetRTC = conn.getTargetDataPort().getComponentId();
+		String trgPort = conn.getTargetDataPort().getPortName();
+		String[] trgelems = trgPort.split("\\.");
+		this.targetPort = trgelems[1];
+		
+		this.dataType = conn.getDataType();
+	}
+	
+	public ConnectorInfo(ServiceportConnector conn) {
+		this.serviceConnector = conn;
+		this.isConnect = true;
+		
+		this.sourceRTC = conn.getSourceServicePort().getComponentId();
+		String srcPort = conn.getSourceServicePort().getPortName();
+		String[] srvelems = srcPort.split("\\.");
+		this.sourcePort = srvelems[1];
+		
+		this.targetRTC = conn.getTargetServicePort().getComponentId();
+		String trgPort = conn.getTargetServicePort().getPortName();
+		String[] trgelems = trgPort.split("\\.");
+		this.targetPort = trgelems[1];
+
+		this.dataType = "";
+	}
+
 	public void setConnect(boolean isConnect) {
 		this.isConnect = isConnect;
 	}
@@ -45,36 +79,5 @@ public class ConnectorInfo {
 	}
 	public ServiceportConnector getServiceConnector() {
 		return serviceConnector;
-	}
-	public ConnectorInfo(DataportConnector conn) {
-		this.dataConnector = conn;
-		
-		this.sourceRTC = conn.getSourceDataPort().getComponentId();
-		String srcPort = conn.getSourceDataPort().getPortName();
-		String[] srvelems = srcPort.split("\\.");
-		this.sourcePort = srvelems[1];
-		
-		this.targetRTC = conn.getTargetDataPort().getComponentId();
-		String trgPort = conn.getTargetDataPort().getPortName();
-		String[] trgelems = trgPort.split("\\.");
-		this.targetPort = trgelems[1];
-		
-		this.dataType = conn.getDataType();
-	}
-	
-	public ConnectorInfo(ServiceportConnector conn) {
-		this.serviceConnector = conn;
-		
-		this.sourceRTC = conn.getSourceServicePort().getComponentId();
-		String srcPort = conn.getSourceServicePort().getPortName();
-		String[] srvelems = srcPort.split("\\.");
-		this.sourcePort = srvelems[1];
-		
-		this.targetRTC = conn.getTargetServicePort().getComponentId();
-		String trgPort = conn.getTargetServicePort().getPortName();
-		String[] trgelems = trgPort.split("\\.");
-		this.targetPort = trgelems[1];
-
-		this.dataType = "";
 	}
 }

@@ -3,7 +3,10 @@ package jp.go.aist.rtm.systemeditor.factory;
 import java.io.IOException;
 import java.net.URLDecoder;
 
-import jp.go.aist.rtm.systemeditor.ui.editor.action.RestoreOption;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.openrtp.namespaces.rts.version02.RtsProfileExt;
+
 import jp.go.aist.rtm.toolscommon.factory.MappingRuleFactory;
 import jp.go.aist.rtm.toolscommon.model.component.Component;
 import jp.go.aist.rtm.toolscommon.model.component.SystemDiagram;
@@ -12,10 +15,6 @@ import jp.go.aist.rtm.toolscommon.profiles.util.XmlHandler;
 import jp.go.aist.rtm.toolscommon.synchronizationframework.SynchronizationManager;
 import jp.go.aist.rtm.toolscommon.synchronizationframework.mapping.MappingRule;
 import jp.go.aist.rtm.toolscommon.util.RtsProfileHandler;
-
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.resource.Resource;
-import org.openrtp.namespaces.rts.version02.RtsProfileExt;
 
 /**
  * システムエディタで必要となるWrapperObjectのファクトリ
@@ -73,12 +72,14 @@ public class SystemEditorWrapperFactory {
 	 * @throws IOException
 	 *             ファイルが読み込めない場合など
 	 */
+	//Restore方式変更により変更
+//	public EObject loadContentFromResource(String strPath, RestoreOption restore)
+//			throws Exception {
 	@Deprecated
-	public EObject loadContentFromResource(String strPath, RestoreOption restore)
-			throws Exception {
+	public EObject loadContentFromResource(String strPath) throws Exception {
 		RtsProfileHandler handler = new RtsProfileHandler();
 		SystemDiagram diagram = handler.load(strPath, SystemDiagramKind.ONLINE_LITERAL);
-		if (restore.doQuick()) handler.populateCorbaBaseObject(diagram);
+//		if (restore.doQuick()) handler.populateCorbaBaseObject(diagram);
 
 		return postLoad(handler, diagram);
 	}
