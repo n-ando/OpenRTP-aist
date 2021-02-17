@@ -30,6 +30,7 @@ import com.mxgraph.util.mxResources;
 import com.mxgraph.view.mxCellState;
 import com.mxgraph.view.mxGraph;
 
+import jp.go.aist.rtm.rtcbuilder.fsm.EventParam;
 import jp.go.aist.rtm.rtcbuilder.fsm.editor.SCXMLGraphEditor;
 import jp.go.aist.rtm.rtcbuilder.fsm.editor.SCXMLGraphEditor.EditorStatus;
 import jp.go.aist.rtm.rtcbuilder.fsm.editor.config.SCXMLConstraints.RestrictedState;
@@ -368,6 +369,27 @@ public class SCXMLGraph extends mxGraph {
 				}
 				if (target.isInitial()) {
 					warnings += "There is a transition going into from the Initial Pseudostate!\n";
+				}
+				
+				List<EventParam> eventList = editor.getEventList();
+				EventParam targetEvent = null;
+				for(EventParam event : eventList) {
+					if(event.getName().equals(edgeValue.getEvent()) 
+							&& event.getSource().equals(edgeValue.getSCXMLSource())
+							&& edgeValue.getSCXMLTargets().contains(event.getTarget())) {
+						targetEvent = event;
+						break;
+					}
+				}
+				if(targetEvent!=null) {
+					for(EventParam event : eventList) {
+						if(targetEvent.getName().equals(event.getName())) {
+							if(targetEvent.getDataType().equals(event.getDataType()) == false) {
+								warnings += "There are events with the same name with different data types!\n";
+								break;
+							}
+						}
+					}
 				}
 			}
 		}

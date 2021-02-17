@@ -922,6 +922,7 @@ public class SCXMLGraphEditor extends JPanel {
 								JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 				if (confirm!=JOptionPane.YES_OPTION) return;
 			}
+			//
 			if(observer!=null) {
 				SCXMLImportExport exporter = new SCXMLImportExport();
 				try {

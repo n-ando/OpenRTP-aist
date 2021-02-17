@@ -373,7 +373,7 @@ class ${rtcParam.name}Test
 #end
 #end
 #if( ${tmpltHelper.checkFSM(${rtcParam})})
-#foreach($eachTrans in ${fsmParam.getAllTransList()})
+#foreach($eachTrans in ${fsmParam.getAllTransListNoDupl()})
 #if( ${eachTrans.event.length()} > 0 )
     ${eachTrans.dataType} ${rtcParam.commonPrefix}${rtcParam.dataPortPrefix}${eachTrans.event}${rtcParam.dataPortSuffix}${rtcParam.commonSuffix};
     RTC::OutPort<${eachTrans.dataType}> ${rtcParam.commonPrefix}${rtcParam.dataPortPrefix}${eachTrans.event}Out${rtcParam.dataPortSuffix}${rtcParam.commonSuffix};
