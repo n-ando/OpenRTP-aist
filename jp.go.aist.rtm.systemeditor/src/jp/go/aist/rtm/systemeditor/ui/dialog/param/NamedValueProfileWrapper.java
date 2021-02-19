@@ -1,8 +1,5 @@
 package jp.go.aist.rtm.systemeditor.ui.dialog.param;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.apache.commons.lang.builder.CompareToBuilder;
 
 import jp.go.aist.rtm.systemeditor.ui.views.configurationview.configurationwrapper.Secretable;

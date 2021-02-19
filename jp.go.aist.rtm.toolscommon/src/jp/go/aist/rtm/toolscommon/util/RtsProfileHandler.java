@@ -29,7 +29,6 @@ import org.openrtp.namespaces.rts.version02.TargetComponent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import jp.go.aist.rtm.toolscommon.corba.CorbaUtil;
 import jp.go.aist.rtm.toolscommon.factory.ComponentLoader;
 import jp.go.aist.rtm.toolscommon.model.component.Component;
 import jp.go.aist.rtm.toolscommon.model.component.ComponentFactory;
@@ -100,29 +99,6 @@ public class RtsProfileHandler extends ProfileHandlerBase {
 		loader.setDiagram(diagram);
 		populate(diagram, profile);
 		return diagram;
-	}
-
-	/**
-	 * ダイアグラムの直下に含まれる全コンポーネントに対し、IORからCORABAオブジェクトを設定する
-	 * @param eDiagram
-	 */
-	//Restore方式変更により変更
-//	public void populateCorbaBaseObject(SystemDiagram eDiagram) {
-//		for (Object element : eDiagram.getRegisteredComponents()) {
-//			if (!(element instanceof CorbaComponent)) continue;
-//			CorbaComponent eCorbaComp = (CorbaComponent)element;
-//			String ior = eCorbaComp.getIor();
-//			if (ior == null) continue;
-//			eCorbaComp.setCorbaObject(getRTObject(ior));
-//		}
-//	}
-
-	private RTC.RTObject getRTObject(String ior) {
-		try {
-			return RTC.RTObjectHelper.narrow(CorbaUtil.stringToObject(ior));
-		} catch (Exception e) {
-			return null;
-		}
 	}
 
 	/**

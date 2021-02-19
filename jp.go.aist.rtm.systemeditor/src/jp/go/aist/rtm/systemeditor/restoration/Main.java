@@ -147,9 +147,6 @@ public class Main {
 		CorbaWrapperFactory.setInstance(corbaWrapperFactory);
 		SystemDiagram systemDiagram = null;
 		try {
-			//Restore方式変更により変更
-//			systemDiagram = (SystemDiagram) systemEditorWrapperFactory
-//					.loadContentFromResource(resource.getURI().devicePath(), RestoreOption.NONE);
 			systemDiagram = (SystemDiagram) systemEditorWrapperFactory
 					.loadContentFromResource(resource.getURI().devicePath());
 		} catch (Exception e) {

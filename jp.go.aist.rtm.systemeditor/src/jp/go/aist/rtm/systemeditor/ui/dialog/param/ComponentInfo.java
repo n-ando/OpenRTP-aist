@@ -256,7 +256,13 @@ public class ComponentInfo {
 	}
 	
 	public void restoreComponent(EndpointCache endpoints, SystemDiagram diagram) {
-		if(this.isRestore == false || this.isCreate == false) {
+		if(this.isRestore == false) return;
+		if(this.isCreate == false) {
+			if(selectedRTC == null) {
+				this.status = String.format(Messages.getString("RestoreComponentDialog.not_selected") 
+						+ "\r\n comp=<%s>", this.compId);
+				this.isError = true;
+			}
 			return;
 		}
 		if(this.node==null || this.node.length()==0) {
@@ -283,7 +289,8 @@ public class ComponentInfo {
 		//
 		RTCManager manager = ep.getManager();
 		if(manager==null) {
-			this.status = String.format("No manager, it can not create component: comp=<%s>", this.compId);
+			this.status = String.format(Messages.getString("RestoreComponentDialog.not_exist_manager")
+					+ "\r\n comp=<%s>", this.compId);
 			this.isError = true;
 			return;
 		}
@@ -297,14 +304,16 @@ public class ComponentInfo {
 						manager, this.corbaComponent, diagram, this.containerName);
 			}
 			if (rtobj == null) {
-				this.status = String.format("Fail to create rtobject: comp=<%s>", this.compId);
+				this.status = String.format(Messages.getString("RestoreComponentDialog.not_exist_manager")
+						+ "\r\n comp=<%s>", this.compId);
 				this.isError = true;
 				return;
 			}
 			this.corbaComponent.setCorbaObject(rtobj);
 			this.selectedRTC = this.corbaComponent;
 		} catch (Exception e1) {
-			this.status = String.format("Fail to create rtobject: comp=<%s>", this.compId);
+			this.status = String.format(Messages.getString("RestoreComponentDialog.not_exist_manager")
+					+ "\r\n comp=<%s>", this.compId);
 			this.isError = true;
 			return;
 		}

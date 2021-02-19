@@ -72,14 +72,10 @@ public class SystemEditorWrapperFactory {
 	 * @throws IOException
 	 *             ファイルが読み込めない場合など
 	 */
-	//Restore方式変更により変更
-//	public EObject loadContentFromResource(String strPath, RestoreOption restore)
-//			throws Exception {
 	@Deprecated
 	public EObject loadContentFromResource(String strPath) throws Exception {
 		RtsProfileHandler handler = new RtsProfileHandler();
 		SystemDiagram diagram = handler.load(strPath, SystemDiagramKind.ONLINE_LITERAL);
-//		if (restore.doQuick()) handler.populateCorbaBaseObject(diagram);
 
 		return postLoad(handler, diagram);
 	}

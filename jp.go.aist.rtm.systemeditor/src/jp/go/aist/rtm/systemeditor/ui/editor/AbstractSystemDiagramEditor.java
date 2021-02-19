@@ -194,6 +194,22 @@ public abstract class AbstractSystemDiagramEditor extends GraphicalEditor {
 
 		action = new SaveAction(this) {
 			@Override
+			protected void init() {
+				setId(ActionFactory.SAVE.getId());
+				setText("Save System");
+				setToolTipText("Save System");
+			}
+
+			@Override
+			public void run() {
+				doSave(null);
+			}
+		};
+		getActionRegistry().registerAction(action);
+		getPropertyActions().add(action.getId());
+
+		action = new SaveAction(this) {
+			@Override
 			protected boolean calculateEnabled() {
 				return true;
 			}
@@ -201,8 +217,8 @@ public abstract class AbstractSystemDiagramEditor extends GraphicalEditor {
 			@Override
 			protected void init() {
 				setId(ActionFactory.SAVE_AS.getId());
-				setText("Save System");
-				setToolTipText("Save System");
+				setText("Save As System");
+				setToolTipText("Save As System");
 			}
 
 			@Override
@@ -714,22 +730,14 @@ public abstract class AbstractSystemDiagramEditor extends GraphicalEditor {
 			throws PartInitException {
 		IEditorInput newInput;
 		try {
-			//Restore方式変更により変更
-//			newInput = load(input, site, RestoreOption.NONE);
 			newInput = load(input, site);
 		} catch (Throwable t) {
 			// 起動時にファイルオープンエラーが発生した時はエディタの中身を空にする 2009.11.06
-			//Restore方式変更により変更
-//			newInput = load(new NullEditorInput(), site, RestoreOption.NONE);
 			newInput = load(new NullEditorInput(), site);
 		}
 		super.init(site, newInput);
 	}
 
-	//Restore方式変更により変更
-//	protected abstract IEditorInput load(IEditorInput input,
-//			final IEditorSite site, final RestoreOption doReplace)
-//			throws PartInitException;
 	protected abstract IEditorInput load(IEditorInput input,
 			final IEditorSite site)
 			throws PartInitException;
@@ -865,8 +873,6 @@ public abstract class AbstractSystemDiagramEditor extends GraphicalEditor {
 		return (title == null) ? diagramName : title;
 	}
 
-	//Restore方式変更により変更
-//	public void open(RestoreOption restore) {
 	public void open() {
 		boolean save = false;
 		if (isDirty()) {
@@ -880,14 +886,12 @@ public abstract class AbstractSystemDiagramEditor extends GraphicalEditor {
 		IFile createNewFile = createNewFilebySelection(null, SWT.OPEN);
 		if (createNewFile != null) {
 			try {
-				//Restore方式変更により変更
-//				load(new FileEditorInput(createNewFile), getEditorSite(), restore);
 				load(new FileEditorInput(createNewFile), getEditorSite());
 			} catch (PartInitException e) {
 				LOGGER.error("Fail to load file. file=" + createNewFile, e);
 				if (e.getStatus().getException() != null)
-					MessageDialog.openError(getSite().getShell(), "", e //$NON-NLS-1$
-							.getStatus().getException().getMessage());
+					MessageDialog.openError(getSite().getShell(), "",
+							e.getStatus().getException().getMessage());
 			}
 		}
 	}

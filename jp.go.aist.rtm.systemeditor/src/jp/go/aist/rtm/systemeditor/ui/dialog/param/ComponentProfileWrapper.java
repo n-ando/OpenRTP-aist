@@ -3,10 +3,8 @@ package jp.go.aist.rtm.systemeditor.ui.dialog.param;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.openrtp.namespaces.rts.version02.Component;
 import org.openrtp.namespaces.rts.version02.ConfigurationData;

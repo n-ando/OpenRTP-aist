@@ -51,9 +51,6 @@ public class OfflineSystemDiagramEditor extends AbstractSystemDiagramEditor {
 		getSystemDiagram().setKind(SystemDiagramKind.OFFLINE_LITERAL);
 	}
 
-	//Restore方式変更により変更
-//	protected IEditorInput load(IEditorInput input, final IEditorSite site,
-//			final RestoreOption restore) throws PartInitException {
 	protected IEditorInput load(IEditorInput input, final IEditorSite site)
 			throws PartInitException {
 		
