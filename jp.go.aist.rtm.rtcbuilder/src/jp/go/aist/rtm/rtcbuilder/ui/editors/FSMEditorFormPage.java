@@ -667,7 +667,7 @@ public class FSMEditorFormPage extends AbstractEditorFormPage {
 							break;
 						}
 						//
-						String sourceName = param.getTarget();
+						String sourceName = param.getSource();
 						Optional<StateParam> sourceState = 
 								fsmParam.getAllStateList().stream()
 								    .filter(v -> v.getName().equals(sourceName)).findFirst();
