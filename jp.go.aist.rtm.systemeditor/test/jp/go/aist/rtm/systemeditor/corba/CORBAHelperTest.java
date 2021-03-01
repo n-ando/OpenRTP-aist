@@ -27,15 +27,15 @@ public class CORBAHelperTest {
 	public void testFactoryBuildCreateComponentParam() {
 		{
 			CorbaComponent comp = new CorbaComponentMock();
-			String act = CORBAHelper.factory().buildCreateComponentParam(comp);
+			String act = CORBAHelper.factory().buildCreateComponentParam(comp, null);
 			assertEquals(null, act);
 			//
 			comp.setProperty(KEY_IMPLEMENTATION_ID, "Type1");
-			act = CORBAHelper.factory().buildCreateComponentParam(comp);
+			act = CORBAHelper.factory().buildCreateComponentParam(comp, null);
 			assertEquals(null, act);
 			//
 			comp.setProperty(KEY_INSTANCE_NAME, "type1");
-			act = CORBAHelper.factory().buildCreateComponentParam(comp);
+			act = CORBAHelper.factory().buildCreateComponentParam(comp, null);
 			assertEquals("Type1?instance_name=type1", act);
 		}
 		{
@@ -43,7 +43,7 @@ public class CORBAHelperTest {
 			comp.setProperty(KEY_IMPLEMENTATION_ID, "Type1");
 			comp.setProperty(KEY_INSTANCE_NAME, "type1");
 			comp.setProperty(KEY_MANAGER_NAME, "pg1");
-			String act = CORBAHelper.factory().buildCreateComponentParam(comp);
+			String act = CORBAHelper.factory().buildCreateComponentParam(comp, null);
 			assertEquals("Type1?instance_name=type1&manager_name=pg1", act);
 		}
 	}

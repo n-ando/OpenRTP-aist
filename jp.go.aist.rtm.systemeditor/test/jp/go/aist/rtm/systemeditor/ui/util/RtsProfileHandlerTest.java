@@ -254,13 +254,6 @@ public class RtsProfileHandlerTest {
 				}
 			}
 		}
-		handler.populateCorbaBaseObject(diagram);
-		for (int i = 0; i < existComponents.size(); i++) {
-			CorbaComponentImpl component = existComponents.get(i);
-			CorbaComponentImpl loadComponent = (CorbaComponentImpl) diagram.getComponents().get(i);
-			assertEquals(component.getCorbaBaseObject(), loadComponent.getCorbaBaseObject());
-			didAssert = true;
-		}
 		assertTrue(didAssert);
 	}
 

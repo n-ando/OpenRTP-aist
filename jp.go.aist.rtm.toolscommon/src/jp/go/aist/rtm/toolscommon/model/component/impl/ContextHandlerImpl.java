@@ -174,7 +174,7 @@ public class ContextHandlerImpl extends EObjectImpl implements ContextHandler {
 		int featureId = eContainerFeatureID();
 		if (featureId == EOPPOSITE_FEATURE_BASE
 				- ComponentPackage.COMPONENT__EXECUTION_CONTEXT_HANDLER) {
-			return "owned";
+			return "";
 		} else if (featureId == EOPPOSITE_FEATURE_BASE
 				- ComponentPackage.COMPONENT__PARTICIPATION_CONTEXT_HANDLER) {
 			return "participate";

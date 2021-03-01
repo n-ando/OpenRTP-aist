@@ -8,7 +8,6 @@ import java.util.concurrent.Executors;
 
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.ui.PlatformUI;
-import org.msgpack.value.Value;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 

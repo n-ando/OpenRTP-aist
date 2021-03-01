@@ -11,21 +11,20 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import jp.go.aist.rtm.nameserviceview.model.nameservice.NameservicePackage;
-import jp.go.aist.rtm.systemeditor.factory.SystemEditorWrapperFactory;
-import jp.go.aist.rtm.systemeditor.nl.Messages;
-import jp.go.aist.rtm.systemeditor.ui.editor.action.RestoreOption;
-import jp.go.aist.rtm.toolscommon.factory.CorbaWrapperFactory;
-import jp.go.aist.rtm.toolscommon.model.component.ComponentPackage;
-import jp.go.aist.rtm.toolscommon.model.component.SystemDiagram;
-import jp.go.aist.rtm.toolscommon.model.core.CorePackage;
-import jp.go.aist.rtm.toolscommon.synchronizationframework.mapping.MappingRule;
-
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.xmi.impl.XMLResourceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import jp.go.aist.rtm.nameserviceview.model.nameservice.NameservicePackage;
+import jp.go.aist.rtm.systemeditor.factory.SystemEditorWrapperFactory;
+import jp.go.aist.rtm.systemeditor.nl.Messages;
+import jp.go.aist.rtm.toolscommon.factory.CorbaWrapperFactory;
+import jp.go.aist.rtm.toolscommon.model.component.ComponentPackage;
+import jp.go.aist.rtm.toolscommon.model.component.SystemDiagram;
+import jp.go.aist.rtm.toolscommon.model.core.CorePackage;
+import jp.go.aist.rtm.toolscommon.synchronizationframework.mapping.MappingRule;
 
 public class Main {
 
@@ -149,7 +148,7 @@ public class Main {
 		SystemDiagram systemDiagram = null;
 		try {
 			systemDiagram = (SystemDiagram) systemEditorWrapperFactory
-					.loadContentFromResource(resource.getURI().devicePath(), RestoreOption.NONE);
+					.loadContentFromResource(resource.getURI().devicePath());
 		} catch (Exception e) {
 			throw new RuntimeException(); // system error
 		}
