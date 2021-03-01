@@ -2162,6 +2162,8 @@ public class CorbaComponentImpl extends ComponentImpl implements CorbaComponent 
 	@Override
 	public boolean supportedCorbaObserver() {
 		// OpenRTM-aistバージョンチェック
+		// Workaround for OpenRTM-1.0
+		// When ObserverProfile added to 1.0 RTCs, they will die.
 		if (dummyServiceProfile == null) {
 			dummyServiceProfile = new _SDOPackage.ServiceProfile();
 			dummyServiceProfile.id = "";
