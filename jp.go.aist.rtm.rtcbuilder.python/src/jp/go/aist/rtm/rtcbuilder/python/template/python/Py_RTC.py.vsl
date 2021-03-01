@@ -302,7 +302,7 @@ class ${rtcParam.name}(OpenRTM_aist.DataFlowComponentBase):
         self._fsm = StaticFSM.Machine(${rtcParam.name}FSM.${tmpltHelper.getTopFSMName(${rtcParam})}, self)
         self._${rtcParam.getEventport().tmplVarName}In = EventPort.EventInPort("${rtcParam.getEventport().name}", self._fsm)
         self.addInPort("${rtcParam.getEventport().name}", self._${rtcParam.getEventport().tmplVarName}In)
-#foreach($eachTrans in ${fsmParam.getAllTransList()})
+#foreach($eachTrans in ${fsmParam.getAllTransListNoDupl()})
 #if( ${eachTrans.event.length()} > 0 )
 #if( ${eachTrans.existDataType()})
         self._${rtcParam.getEventport().tmplVarName}In.bindEvent1("${eachTrans.event}", ${rtcParam.name}FSM.${tmpltHelper.getTopFSMName(${rtcParam})}.${eachTrans.event}, OpenRTM_aist.instantiateDataType(${pyConv.convFullName(${eachTrans.dataType})}))

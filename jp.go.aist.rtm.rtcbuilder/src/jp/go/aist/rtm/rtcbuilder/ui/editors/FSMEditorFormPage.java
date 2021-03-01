@@ -645,13 +645,13 @@ public class FSMEditorFormPage extends AbstractEditorFormPage {
 					}
 				}
 				//
-				if(result != null) {
+				if(result == null) {
 					if(fsmParam.existInitialState()==false) {
 						result = Messages.getString("IMC.FSM_NOT_INITIAL");
 					}
 				}
 				//
-				if(result != null) {
+				if(result == null) {
 					for(TransitionParam param : fsmParam.getAllTransList()) {
 						if(StringUtil.checkProhibitedChar(param.getEvent())==false) {
 							result = Messages.getString("IMC.FSM_EVENT_NAME_PROHIBITED") + param.getEvent();
@@ -667,13 +667,25 @@ public class FSMEditorFormPage extends AbstractEditorFormPage {
 							break;
 						}
 						//
-						String sourceName = param.getTarget();
+						String sourceName = param.getSource();
 						Optional<StateParam> sourceState = 
 								fsmParam.getAllStateList().stream()
 								    .filter(v -> v.getName().equals(sourceName)).findFirst();
 						if(sourceState.get().isFinal()) {
-							result = Messages.getString("IMC.FSM_INITIAL_IN");
+							result = Messages.getString("IMC.FSM_FINAL_OUT");
 							break;
+						}
+					}
+					//
+					List<EventParam> eventList = rtcParam.getEventports().get(0).getEvents();
+					for(EventParam sourceParam : eventList) {
+						for(EventParam targetParam : eventList) {
+							if(sourceParam.getName().equals(targetParam.getName())) {
+								if(sourceParam.getDataType().equals(targetParam.getDataType()) == false) {
+									result = Messages.getString("IMC.FSM_EVENT_TYPE");
+									break;
+								}
+							}
 						}
 					}
 				}

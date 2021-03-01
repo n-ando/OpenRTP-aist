@@ -32,7 +32,7 @@ namespace ${rtcParam.name}Fsm {
     FSM_STATE(${fsmParam.name});
 
     // Machine's event protocol
-#foreach($eachTrans in ${fsmParam.getAllTransList()})
+#foreach($eachTrans in ${fsmParam.getAllTransListNoDupl()})
 #if( ${eachTrans.event.length()} > 0 )
 #if( ${eachTrans.existEventParam()} )
     /*!

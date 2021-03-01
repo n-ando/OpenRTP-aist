@@ -220,7 +220,7 @@ class ${rtcParam.name}Test(OpenRTM_aist.DataFlowComponentBase):
         self._${serviceInterface.tmplVarName} = OpenRTM_aist.CorbaConsumer(interfaceType=${pyConv.convFullName(${serviceInterface.interfaceType})})
 #end#end#end#end#end
 #if( ${tmpltHelper.checkFSM(${rtcParam})})
-#foreach($eachTrans in ${fsmParam.getAllTransList()})
+#foreach($eachTrans in ${fsmParam.getAllTransListNoDupl()})
 #if( ${eachTrans.event.length()} > 0 )
         self._d_${eachTrans.event} = OpenRTM_aist.instantiateDataType(${pyConv.convFullName(${eachTrans.dataType})})
         """
@@ -279,7 +279,7 @@ class ${rtcParam.name}Test(OpenRTM_aist.DataFlowComponentBase):
         self.addOutPort("${port.name}",self._${port.name}Out)
 #end
 #if( ${tmpltHelper.checkFSM(${rtcParam})})
-#foreach($eachTrans in ${fsmParam.getAllTransList()})
+#foreach($eachTrans in ${fsmParam.getAllTransListNoDupl()})
 #if( ${eachTrans.event.length()} > 0 )
         self.addOutPort("${eachTrans.event}", self._${eachTrans.event}Out)
 #end#end#end

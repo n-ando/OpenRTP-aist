@@ -108,6 +108,22 @@ public class StateParam {
 		return allTransList;
 	}
 	
+	public List<TransitionParam> getAllTransListNoDupl() {
+		List<TransitionParam> result = new ArrayList<TransitionParam>(); 
+		for(TransitionParam each : allTransList) {
+			boolean isExist = false;
+			for(TransitionParam exist : result) {
+				if(exist.getEvent().equals(each.getEvent())) {
+					isExist = true;
+					break;
+				}
+			}
+			if(isExist) continue;
+			result.add(each);
+		}
+		return result;
+	}
+
 	public StateParam getStateParam(String stateName) {
 		StateParam result = null;
 		for(StateParam each : allStateList) {

@@ -28,7 +28,7 @@ public class ${fsmParam.name} extends StateDef implements ${rtcParam.name}Protoc
     public void onExit() {
     }
     
-#foreach($eachTrans in ${fsmParam.getAllTransList()})
+#foreach($eachTrans in ${fsmParam.getAllTransListNoDupl()})
 #if( ${eachTrans.event.length()} > 0 )
 #if( ${eachTrans.existEventParam()} )
     @Override

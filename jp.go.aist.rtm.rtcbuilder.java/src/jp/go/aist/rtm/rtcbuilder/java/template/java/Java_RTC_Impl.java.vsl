@@ -217,7 +217,7 @@ public class ${rtcParam.name}Impl extends DataFlowComponentBase {
 #if( ${tmpltHelper.checkFSM(${rtcParam})} )
         addInPort("${rtcParam.getEventport().name}", m_${rtcParam.getEventport().name}In);
         
-#foreach($eachTrans in ${fsmParam.getAllTransList()})
+#foreach($eachTrans in ${fsmParam.getAllTransListNoDupl()})
 #if( ${eachTrans.event.length()} > 0 )
 #if( ${eachTrans.existEventParam()} )
 #if( ${eachTrans.existDataType()} )

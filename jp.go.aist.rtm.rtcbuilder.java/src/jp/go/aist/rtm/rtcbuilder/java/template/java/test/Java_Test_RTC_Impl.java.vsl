@@ -130,7 +130,7 @@ public class ${rtcParam.name}TestImpl extends DataFlowComponentBase {
         m_${servicePort.name}Port = new CorbaPort("${servicePort.name}");
 #end#end#end
 #if( ${tmpltHelper.checkFSM(${rtcParam})})
-#foreach($eachTrans in ${fsmParam.getAllTransList()})
+#foreach($eachTrans in ${fsmParam.getAllTransListNoDupl()})
 #if( ${eachTrans.event.length()} > 0 )
         m_${eachTrans.event}_val = new ${javaConv.getDataTypeName(${eachTrans.dataType})}();
         initializeParam(m_${eachTrans.event}_val);
@@ -214,7 +214,7 @@ public class ${rtcParam.name}TestImpl extends DataFlowComponentBase {
 #end#end#end
 #if( ${tmpltHelper.existFSMEvent(${fsmParam})})
         try {
-#foreach($eachTrans in ${fsmParam.getAllTransList()})
+#foreach($eachTrans in ${fsmParam.getAllTransListNoDupl()})
 #if( ${eachTrans.event.length()} > 0 )
             addOutPort("${eachTrans.event}", m_${eachTrans.event}Out);
 #end
@@ -377,9 +377,9 @@ public class ${rtcParam.name}TestImpl extends DataFlowComponentBase {
 #if( ${tmpltHelper.existFSMEvent(${fsmParam})})
         System.out.println("Please select action!!");
         System.out.println("Commands: ");
-#foreach($eachTrans in ${fsmParam.getAllTransList()})
+#foreach($eachTrans in ${fsmParam.getAllTransListNoDupl()})
 #if( ${eachTrans.event.length()} > 0 )
-        System.out.println("  ${fsmParam.getAllTransList().indexOf(${eachTrans})}   : ${eachTrans.event}");
+        System.out.println("  ${fsmParam.getAllTransListNoDupl().indexOf(${eachTrans})}   : ${eachTrans.event}");
 #end
 #end
         System.out.print(">> ");
@@ -394,9 +394,9 @@ public class ${rtcParam.name}TestImpl extends DataFlowComponentBase {
 
             System.out.print("[command]: "+cmd);
             System.out.println("");
-#foreach($eachTrans in ${fsmParam.getAllTransList()})
+#foreach($eachTrans in ${fsmParam.getAllTransListNoDupl()})
 #if( ${eachTrans.event.length()} > 0 )
-           #if( 1 < ${fsmParam.getAllTransList().indexOf(${eachTrans})}) else#end if(cmd.equals("${fsmParam.getAllTransList().indexOf(${eachTrans})}")){
+           #if( 1 < ${fsmParam.getAllTransListNoDupl().indexOf(${eachTrans})}) else#end if(cmd.equals("${fsmParam.getAllTransListNoDupl().indexOf(${eachTrans})}")){
                 m_${eachTrans.event}_val.data = ${tmpltHelperJava.getInitialValue(${eachTrans})};
                 m_${eachTrans.event}Out.write();
             }
@@ -597,7 +597,7 @@ public class ${rtcParam.name}TestImpl extends DataFlowComponentBase {
 
 #end
 #if( ${tmpltHelper.checkFSM(${rtcParam})})
-#foreach($eachTrans in ${fsmParam.getAllTransList()})
+#foreach($eachTrans in ${fsmParam.getAllTransListNoDupl()})
 #if( ${eachTrans.event.length()} > 0 )
     protected ${javaConv.getDataTypeName(${eachTrans.dataType})} m_${eachTrans.event}_val;
     protected DataRef<${javaConv.getDataTypeName(${eachTrans.dataType})}> m_${eachTrans.event};
