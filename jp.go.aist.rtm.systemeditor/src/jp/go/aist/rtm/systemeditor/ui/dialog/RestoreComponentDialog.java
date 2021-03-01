@@ -42,18 +42,21 @@ import org.openrtp.namespaces.rts.version02.ServiceportConnector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import RTC.RTObjectHelper;
 import RTM.ManagerHelper;
 import jp.go.aist.rtm.nameserviceview.model.manager.NameServerManager;
 import jp.go.aist.rtm.nameserviceview.model.manager.impl.NameServerManagerImpl;
+import jp.go.aist.rtm.nameserviceview.model.nameservice.NamingContextNode;
+import jp.go.aist.rtm.nameserviceview.model.nameservice.NamingObjectNode;
 import jp.go.aist.rtm.systemeditor.corba.CORBAHelper;
 import jp.go.aist.rtm.systemeditor.nl.Messages;
 import jp.go.aist.rtm.systemeditor.ui.dialog.param.ComponentInfo;
 import jp.go.aist.rtm.systemeditor.ui.dialog.param.ConnectorInfo;
-import jp.go.aist.rtm.systemeditor.ui.util.DeployUtil;
 import jp.go.aist.rtm.toolscommon.model.component.CorbaComponent;
 import jp.go.aist.rtm.toolscommon.model.component.SystemDiagram;
 import jp.go.aist.rtm.toolscommon.model.manager.ManagerFactory;
 import jp.go.aist.rtm.toolscommon.model.manager.RTCManager;
+import jp.go.aist.rtm.toolscommon.util.AdapterUtil;
 
 /**
  * RTシステム復元設定を行うダイアログ
@@ -139,7 +142,7 @@ public class RestoreComponentDialog extends Dialog {
 		NameServerManager ns = NameServerManagerImpl.getInstance();
 		EList<?> nscomps = ns.getNodes();
 		List<CorbaComponent> componentCandidates = new ArrayList<CorbaComponent>(); 
-		componentCandidates = DeployUtil.searchComponentList(nscomps, componentCandidates);
+		componentCandidates = searchComponentList(nscomps, componentCandidates);
 		for(CorbaComponent comp : componentCandidates) {
 			RTCInfo rtc = new RTCInfo(comp);
 			this.rtcList.add(rtc);
@@ -179,7 +182,7 @@ public class RestoreComponentDialog extends Dialog {
 				RTC.RTObject rtc = ep.getComponent(target.getCompName());
 				if (rtc != null) {
 					target.setTarget(rtc);
-				}
+				}	
 			}
 		}
 		if(profile != null) {
@@ -206,6 +209,29 @@ public class RestoreComponentDialog extends Dialog {
 				}
 			}
 		}
+	}
+
+	private List<CorbaComponent> searchComponentList(EList target, List<CorbaComponent> result) {
+		for(int index=0;index<target.size();index++) {
+			if( target.get(index) instanceof NamingObjectNode ) {
+				NamingObjectNode obj = ((NamingObjectNode)target.get(index));
+				try {
+					if( obj.getCorbaObject()._is_a(RTObjectHelper.id()) ) {
+						CorbaComponent component = (CorbaComponent)(jp.go.aist.rtm.toolscommon.model.component.Component) AdapterUtil.getAdapter(obj,jp.go.aist.rtm.toolscommon.model.component.Component.class);
+						obj.getSynchronizationSupport().getSynchronizationManager().assignSynchonizationSupport(component);					
+						component.synchronizeManually();
+						component.setIor(obj.getCorbaObject().toString());
+						result.add(component);
+					}
+				} catch (Exception e) {
+					LOGGER.error("Fail to search component", e);
+				}
+			} else {
+				EList nscomps = ((NamingContextNode)target.get(index)).getNodes();
+				searchComponentList(nscomps, result);
+			}
+		}
+		return result;
 	}
 
 	@Override

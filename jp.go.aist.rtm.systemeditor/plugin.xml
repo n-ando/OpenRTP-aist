@@ -129,28 +129,6 @@
 				class="jp.go.aist.rtm.systemeditor.ui.action.CombineActionDelegate">
 			</action>
 		</viewerContribution>
-  <viewerContribution
-        id="jp.go.aist.rtm.systemeditor.ui.editor.OfflineSystemDiagramEditor.deploy"
-        targetID="jp.go.aist.rtm.systemeditor.ui.editor.OfflineSystemDiagramEditor">
-     <action
-           class="jp.go.aist.rtm.systemeditor.ui.action.DeployLoadActionDelegate"
-           id="jp.go.aist.rtm.systemeditor.ui.action.DeployLoadActionDelegate"
-           label="%Deploy_Load"
-           menubarPath="deploy">
-     </action>
-     <action
-           class="jp.go.aist.rtm.systemeditor.ui.action.DeploySaveActionDelegate"
-           id="jp.go.aist.rtm.systemeditor.ui.action.DeploySaveActionDelegate"
-           label="%Deploy_Save"
-           menubarPath="deploy">
-     </action>
-     <action
-           class="jp.go.aist.rtm.systemeditor.ui.action.DeployActionDelegate"
-           id="jp.go.aist.rtm.systemeditor.ui.action.DeployActionDelegate"
-           label="%Deploy_System"
-           menubarPath="deploy">
-     </action>
-  </viewerContribution>
 		<viewerContribution
 			id="jp.go.aist.rtm.systemeditor.ui.editor.OfflineSystemDiagramEditor.combine" 
 			targetID="jp.go.aist.rtm.systemeditor.ui.editor.OfflineSystemDiagramEditor">
@@ -162,12 +140,6 @@
 				menubarPath="composite"
 				class="jp.go.aist.rtm.systemeditor.ui.action.CombineActionDelegate">
 			</action>
-		   <action
-		         class="jp.go.aist.rtm.systemeditor.ui.action.DeploySettingActionDelegate"
-		         id="jp.go.aist.rtm.systemeditor.ui.action.DeploySettingActionDelegate"
-		         label="%Set_Deploy_Info"
-		         menubarPath="deploy">
-		   </action>
 		</viewerContribution>
 		<!--
 		<viewerContribution

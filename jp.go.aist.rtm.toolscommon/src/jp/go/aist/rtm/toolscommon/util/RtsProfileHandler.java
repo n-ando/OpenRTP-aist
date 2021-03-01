@@ -52,7 +52,7 @@ import jp.go.aist.rtm.toolscommon.profiles.util.XmlHandler;
  * RTSプロファイルの入出力を司るクラス
  *
  */
-public class RtsProfileHandler extends ProfileHandlerBase {
+public class RtsProfileHandler {
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(RtsProfileHandler.class);
@@ -769,11 +769,7 @@ public class RtsProfileHandler extends ProfileHandlerBase {
 			org.openrtp.namespaces.rts.version02.Component original) {
 		// プロパティ設定
 		for (String key : eComp.getPropertyKeys()) {
-			//デプロイ情報は除外
-			if(key.equals(KEY_DEPLOY_TYPE) || key.equals(KEY_DEPLOY_TARGET)
-					|| key.equals(KEY_DEPLOY_IOR)) continue;
-			//
-			setProperty(key, eComp.getProperty(key), target.getProperties());
+				setProperty(key, eComp.getProperty(key), target.getProperties());
 		}
 		populateIOR(target.getProperties(), eComp);
 	}
