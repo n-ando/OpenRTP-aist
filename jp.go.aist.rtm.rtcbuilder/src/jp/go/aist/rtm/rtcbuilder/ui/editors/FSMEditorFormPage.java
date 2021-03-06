@@ -364,6 +364,10 @@ public class FSMEditorFormPage extends AbstractEditorFormPage {
 					StringBuffer buffer = new StringBuffer();
 					StateParam rootState = scHandler.parseSCXML(strPath, buffer);
 					if(rootState!=null) {
+						editor.getRtcParam().getEventports().get(0).getEvents().clear();
+						clearText();
+						sourceText.setText("");
+						targetText.setText("");
 						editor.getRtcParam().setFsmParam(rootState);
 						editor.getRtcParam().setFsmContents(buffer.toString());
 						editor.getRtcParam().parseEvent();
@@ -577,22 +581,6 @@ public class FSMEditorFormPage extends AbstractEditorFormPage {
 			}
 		}
 		//
-		String targetFile = editor.getRtcParam().getName() + "FSM.scxml";
-		IWorkspace workspace = ResourcesPlugin.getWorkspace();
-		IWorkspaceRoot root = workspace.getRoot();
-		IProject project = root.getProject(editor.getRtcParam().getOutputProject());
-		IFile fsmFile  = project.getFile(targetFile);
-		if(fsmFile.exists()) {
-			targetFile = fsmFile.getLocation().toOSString();
-			ScXMLHandler handler = new ScXMLHandler();
-			StringBuffer buffer = new StringBuffer();
-			StateParam rootState = handler.parseSCXML(targetFile, buffer);
-			if(rootState!=null) {
-				rtcParam.setFsmParam(rootState);
-				rtcParam.setFsmContents(buffer.toString());
-			}
-		}
-		//
 		if(0<rtcParam.getEventports().size()) {
 			EventPortParam eport = rtcParam.getEventports().get(0);
 			portNameText.setText(eport.getName());
@@ -736,18 +724,26 @@ public class FSMEditorFormPage extends AbstractEditorFormPage {
 				StateParam target = rootState.getStateParam(trans.getTarget());
 				if(source.isInitial() || target.isInitial()) continue;
 				
-				EventParam newParam = new EventParam();
-				newParam.setName(trans.getEvent());
-				newParam.setCondition(trans.getCondition());
-				newParam.setSource(trans.getSource());
-				newParam.setTarget(trans.getTarget());
-				for(EventParam event : eventList) {
-					if(newParam.checkSame(event)) {
-						newParam.replaceContents(event);
+				boolean isExist = false;
+				for(EventParam eventp : eventList) {
+					if(trans.getSource().equals(eventp.getSource())
+							&& trans.getTarget().equals(eventp.getTarget())
+							&& trans.getCondition().equals(eventp.getCondition())
+							&& trans.getEvent().equals(eventp.getName()) ) {
+						newEventList.add(eventp);
+						isExist = true;
 						break;
 					}
 				}
-				newEventList.add(newParam);
+				
+				if(isExist==false) {
+					EventParam newParam = new EventParam();
+					newParam.setName(trans.getEvent());
+					newParam.setCondition(trans.getCondition());
+					newParam.setSource(trans.getSource());
+					newParam.setTarget(trans.getTarget());
+					newEventList.add(newParam);
+				}
 			}
 			rtcParam.getEventports().get(0).getEvents().clear();
 			rtcParam.getEventports().get(0).getEvents().addAll(newEventList);

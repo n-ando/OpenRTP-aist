@@ -52,6 +52,9 @@ public class TransitionParam {
 	public EventParam getEventParam() {
 		return eventParam;
 	}
+	public void setEventParam(EventParam eventParam) {
+		this.eventParam = eventParam;
+	}
 	public boolean existEventParam() {
 		return eventParam != null;
 	}
@@ -75,14 +78,15 @@ public class TransitionParam {
 	public void searchEventParam(RtcParam rtcParam) {
 		String transName = this.event;
 		if(transName == null) transName = "";
+		
 		String transCondition = this.condition;
 		if(transCondition == null) transCondition = "";
+		
 		String transSource = this.source;
 		if(transSource == null) transSource = "";
-		else transSource = transSource;
+		
 		String transTarget = this.target;
 		if(transTarget == null) transTarget = "";
-		else transTarget = transTarget;
 
 		EventPortParam eventPort = rtcParam.getEventport();
 		if(eventPort==null) return;

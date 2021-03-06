@@ -938,19 +938,23 @@ public class RtcParam extends AbstractRecordedParam implements Serializable {
 		
 		for(TransitionParam trans : fsmParam.getAllTransList()) {
 			boolean isExist = false;
-			EventParam eventp = new EventParam();
-			eventp.setName(trans.getEvent());
-			eventp.setCondition(trans.getCondition());
-			eventp.setSource(trans.getSource());
-			eventp.setTarget(trans.getTarget());
-			
-			for(EventParam orgEv : eventList) {
-				if(orgEv.checkSame(eventp)) {
+			for(EventParam eventp : eventList) {
+				if(eventp.getName().equals(trans.getEvent())
+						&& eventp.getCondition().equals(trans.getCondition())
+						&& eventp.getSource().equals(trans.getSource())
+						&& eventp.getTarget().equals(trans.getTarget()) ) {
+					trans.setEventParam(eventp);
 					isExist = true;
 					break;
 				}
 			}
-			if(isExist==false) {
+			if(isExist == false) {
+				EventParam eventp = new EventParam();
+				eventp.setName(trans.getEvent());
+				eventp.setCondition(trans.getCondition());
+				eventp.setSource(trans.getSource());
+				eventp.setTarget(trans.getTarget());
+				trans.setEventParam(eventp);
 				eventList.add(eventp);
 			}
 		}
