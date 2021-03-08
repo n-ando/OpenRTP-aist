@@ -52,7 +52,7 @@ import org.eclipse.swt.widgets.Text;
  */
 public class ConfigurationDialog extends TitleAreaDialog {
 
-	private static final int NAME_WIDTH = 100;
+	private static final int NAME_WIDTH = 150;
 
 	private static final String NORMAL_COLOR = "NORMAL_COLOR"; // @jve:decl-index=0: //$NON-NLS-1$
 	private static final String MODIFY_COLOR = "MODIFY_COLOR"; // @jve:decl-index=0: //$NON-NLS-1$
@@ -310,11 +310,9 @@ public class ConfigurationDialog extends TitleAreaDialog {
 		gd = new GridData();
 		gd.widthHint = NAME_WIDTH;
 
-		Label keyLabel = new Label(namedValueComposite, SWT.NONE);
+		Label keyLabel = new Label(namedValueComposite, SWT.WRAP);
 		keyLabel.setText(namedValue.getKey());
-		if (namedValue.getKey().length() * 6 <= NAME_WIDTH) {
-			keyLabel.setLayoutData(gd);
-		}
+		keyLabel.setLayoutData(gd);
 
 		gl = new GridLayout(1, false);
 		gl.marginHeight = 0;
