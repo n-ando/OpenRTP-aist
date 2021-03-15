@@ -186,6 +186,7 @@ public class SCXMLTransitionEditor extends SCXMLEditorRoot {
 		edge.setCondition(txtCondition.getText());
 		//
 		targetParam.setName(txtEvent.getText());
+		targetParam.setCondition(txtCondition.getText());
 		targetParam.setDataType((String)cmbType.getSelectedItem());
 		targetParam.setDoc_description(txtDescription.getText());
 		targetParam.setDoc_type(txtType.getText());
