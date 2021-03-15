@@ -1153,11 +1153,11 @@
 				relationship="stack"
 				relative="jp.go.aist.rtm.systemeditor.ui.views.configurationview.ConfigurationView">
 			</view>
-<!--			<view
+			<view
 				id="jp.go.aist.rtm.systemeditor.ui.views.logview.LogView"
 				relationship="stack"
 				relative="jp.go.aist.rtm.systemeditor.ui.views.configurationview.ConfigurationView">
-			</view>-->
+			</view>
 			<view
 				id="jp.go.aist.rtm.systemeditor.ui.views.actionorderview.ActionOrderView"
 				relationship="stack"
@@ -1168,7 +1168,7 @@
 			<viewShortcut id="jp.go.aist.rtm.systemeditor.ui.views.managercontrolview.ManagerControlView"/>
 			<viewShortcut id="jp.go.aist.rtm.systemeditor.ui.views.compositecomponentview.CompositeComponentView"/>
 			<viewShortcut id="jp.go.aist.rtm.systemeditor.ui.views.executioncontextview.ExecutionContextView"/>
-			<!--<viewShortcut id="jp.go.aist.rtm.systemeditor.ui.views.logview.LogView"/>-->
+			<viewShortcut id="jp.go.aist.rtm.systemeditor.ui.views.logview.LogView"/>
 			<viewShortcut id="jp.go.aist.rtm.systemeditor.ui.views.actionorderview.ActionOrderView"/>
 		</perspectiveExtension>
 	</extension>

@@ -135,15 +135,6 @@ public interface ComponentFactory extends EFactory {
 	CorbaStatusObserver createCorbaStatusObserver();
 
 	/**
-	 * Returns a new object of class '<em>Corba Log Observer</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Corba Log Observer</em>'.
-	 * @generated
-	 */
-	CorbaLogObserver createCorbaLogObserver();
-
-	/**
 	 * Returns a new object of class '<em>Specification</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

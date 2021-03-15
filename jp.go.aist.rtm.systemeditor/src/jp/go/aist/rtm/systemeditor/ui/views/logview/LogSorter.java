@@ -8,8 +8,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 
-import OpenRTM.LogLevel;
-
 public class LogSorter extends ViewerComparator {
 	public static final int ORDER_ASC = 1;
 	public static final int NONE = 0;
@@ -86,25 +84,25 @@ public class LogSorter extends ViewerComparator {
 	private Integer convertLogLevel(String source) {
 		switch(source) {
 		case "SILENT":
-			return LogLevel._SILENT;
+			return 0;
 		case "ERROR":
-			return LogLevel._ERROR;
+			return 1;
 		case "WARN":
-			return LogLevel._WARN;
+			return 2;
 		case "INFO":
-			return LogLevel._INFO;
+			return 3;
 		case "NORMAL":
-			return LogLevel._NORMAL;
+			return 4;
 		case "DEBUG":
-			return LogLevel._DEBUG;
+			return 5;
 		case "TRACE":
-			return LogLevel._TRACE;
+			return 6;
 		case "VERBOSE":
-			return LogLevel._VERBOSE;
+			return 7;
 		case "PARANOID":
-			return LogLevel._PARANOID;
+			return 8;
 		default:
-			return LogLevel._SILENT;
+			return 0;
 		}
 	}
 	

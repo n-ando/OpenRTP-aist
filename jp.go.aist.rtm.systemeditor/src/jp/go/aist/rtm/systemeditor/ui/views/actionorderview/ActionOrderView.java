@@ -56,7 +56,6 @@ public class ActionOrderView extends ViewPart {
 	private List<TableViewer> actionOrderlistTableViewer;
 
 	private SystemDiagram targetDiagram;
-//	private RTCStore rtcStore;
 	private ActionOrder actionOrder = new ActionOrder();
 	private int selectedTable = -1;
 
@@ -338,57 +337,6 @@ public class ActionOrderView extends ViewPart {
 	@Override
 	public void setFocus() {
 	}
-
-//	/** RTC一覧を表すクラス */
-//	static class RTCStore {
-//		static Map<SystemDiagram, RTCStore> store = new HashMap<SystemDiagram, RTCStore>();
-//
-//		public static RTCStore get(SystemDiagram diagram) {
-//			RTCStore result = store.get(diagram);
-//			if (result == null) {
-//				result = new RTCStore();
-//				store.put(diagram, result);
-//			}
-//			result.reset(diagram);
-//			return result;
-//		}
-//
-//		List<RTC> rtcs = new ArrayList<RTC>();
-//
-//		void reset(SystemDiagram diagram) {
-//			List<String> pathes = new ArrayList<String>();
-//			for (RTC rtc : rtcs) {
-//				if (rtc.display) {
-//					pathes.add(rtc.comp.getPathId());
-//				}
-//			}
-//			rtcs.clear();
-//			for (Component comp : diagram.getRegisteredComponents()) {
-//				if (!(comp instanceof CorbaComponent)) {
-//					continue;
-//				}
-//				CorbaComponent corbaComp = (CorbaComponent) comp;
-//				if (corbaComp.getLogObserver() == null) {
-//					continue;
-//				}
-//				RTC rtc = new RTC(corbaComp);
-//				if (pathes.contains(comp.getPathId())) {
-//					rtc.display = true;
-//				}
-//				rtcs.add(rtc);
-//			}
-//		}
-//
-//		static class RTC {
-//			boolean display;
-//			CorbaComponent comp;
-//
-//			RTC(CorbaComponent comp) {
-//				this.comp = comp;
-//				this.display = false;
-//			}
-//		}
-//	}
 
 	private class ActionOrder {
 		private List<Component> startupOrder = new ArrayList<Component>();
