@@ -295,7 +295,8 @@ public class ConfigurationDialog extends TitleAreaDialog {
 			final NamedValueConfigurationWrapper namedValue) {
 		GridLayout gl;
 		gl = new GridLayout(2, false);
-		gl.marginHeight = 1;
+		gl.marginHeight = 0;
+		gl.marginBottom = 4;
 
 		GridData gd;
 		gd = new GridData();
@@ -303,14 +304,14 @@ public class ConfigurationDialog extends TitleAreaDialog {
 		gd.horizontalSpan = 2;
 		gd.grabExcessHorizontalSpace = true;
 
-		Composite namedValueComposite = new Composite(parent, SWT.NONE);
-		namedValueComposite.setLayout(gl);
-		namedValueComposite.setLayoutData(gd);
+		Group namedValueGroup = new Group(parent, SWT.NONE);
+		namedValueGroup.setLayout(gl);
+		namedValueGroup.setLayoutData(gd);
 
 		gd = new GridData();
 		gd.widthHint = NAME_WIDTH;
 
-		Label keyLabel = new Label(namedValueComposite, SWT.WRAP);
+		Label keyLabel = new Label(namedValueGroup, SWT.WRAP | SWT.CENTER);
 		keyLabel.setText(namedValue.getKey());
 		keyLabel.setLayoutData(gd);
 
@@ -318,7 +319,7 @@ public class ConfigurationDialog extends TitleAreaDialog {
 		gl.marginHeight = 0;
 		gl.marginWidth = 0;
 
-		Composite valueComposite = new Composite(namedValueComposite, SWT.NONE);
+		Composite valueComposite = new Composite(namedValueGroup, SWT.NONE);
 		valueComposite.setLayout(gl);
 		valueComposite.setLayoutData(createGridData());
 
@@ -395,7 +396,8 @@ public class ConfigurationDialog extends TitleAreaDialog {
 		Group group = new Group(parent, SWT.NONE);
 		
 		GridLayout gl = new GridLayout(3, false);
-		gl.marginHeight = 1;
+		gl.marginHeight = 0;
+		gl.marginBottom = 5;
 		group.setLayout(gl);
 		
 		group.setLayoutData(createGridData());
