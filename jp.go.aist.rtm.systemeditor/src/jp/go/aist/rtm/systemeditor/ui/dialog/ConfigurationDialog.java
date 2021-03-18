@@ -295,7 +295,7 @@ public class ConfigurationDialog extends TitleAreaDialog {
 			final NamedValueConfigurationWrapper namedValue) {
 		GridLayout gl;
 		gl = new GridLayout(2, false);
-		gl.marginHeight = 0;
+		gl.marginTop = 2;
 		gl.marginBottom = 4;
 
 		GridData gd;
