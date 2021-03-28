@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 # -*- Python -*-
 
+# <rtc-template block="description">
 """
  @file ${rtcParam.name}.py
  @brief ${rtcParam.description}
@@ -17,6 +18,8 @@
 #end
 
 """
+# </rtc-template>
+
 import sys
 import time
 sys.path.append(".")
@@ -93,6 +96,7 @@ ${pyConv.convToLower(${rtcParam.name})}_spec = ["implementation_id", "${rtcParam
          ""]
 # </rtc-template>
 
+# <rtc-template block="component_description">
 ${sharp}${sharp}
 ${sharp} @class ${rtcParam.name}
 ${sharp} @brief ${rtcParam.description}
@@ -114,6 +118,7 @@ ${sharp} ${tmpltHelperPy.convertModuleDocPy(${rtcParam.docReference})}
 #end
 ${sharp} 
 ${sharp} 
+# </rtc-template>
 class ${rtcParam.name}(OpenRTM_aist.DataFlowComponentBase):
 	
     ${sharp}${sharp}
