@@ -1,4 +1,5 @@
 // -*- Java -*-
+// <rtc-template block="description">
 /*!
  * @file testComp.java
  * @brief Standalone component
@@ -6,6 +7,7 @@
  *
  * $Id$
  */
+// </rtc-template>
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

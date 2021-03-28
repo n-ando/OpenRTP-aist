@@ -1,4 +1,5 @@
 // -*- C++ -*-
+// <rtc-template block="description">
 /*!
  * @file  Sample.h
  * @brief Sample Comp
@@ -6,6 +7,7 @@
  *
  * $Id$
  */
+// </rtc-template>
 
 #ifndef SAMPLE_H
 #define SAMPLE_H

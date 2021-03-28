@@ -1,4 +1,5 @@
 // -*- Java -*-
+// <rtc-template block="description">
 /*!
  * @file  testImpl.java
  * @brief test component
@@ -6,6 +7,7 @@
  *
  * $Id$
  */
+// </rtc-template>
 import jp.go.aist.rtm.RTC.DataFlowComponentBase;
 import jp.go.aist.rtm.RTC.Manager;
 import jp.go.aist.rtm.RTC.port.CorbaPort;
@@ -13,12 +15,14 @@ import org.omg.PortableServer.POAPackage.ObjectNotActive;
 import org.omg.PortableServer.POAPackage.ServantAlreadyActive;
 import org.omg.PortableServer.POAPackage.WrongPolicy;
 import RTC.ReturnCode_t;
+// <rtc-template block="component_description">
 /**
  * testImpl
  * <p>
  * test component
  *
  */
+// </rtc-template>
 public class testImpl extends DataFlowComponentBase {
   /**
    * constructor

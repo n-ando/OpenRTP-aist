@@ -1,4 +1,5 @@
 // -*- C++ -*-
+// <rtc-template block="description">
 /*!
  * @file  foo.cpp
  * @brief MDesc
@@ -6,9 +7,8 @@
  *
  * $Id$
  */
-
+// </rtc-template>
 #include "foo.h"
-
 // Module specification
 // <rtc-template block="module_spec">
 static const char* const foo_spec[] =
@@ -30,20 +30,16 @@ static const char* const foo_spec[] =
     "conf.default.double_param0", "0.11",
     "conf.default.str_param0", "hoge",
     "conf.default.str_param1", "dara",
-
     // Widget
     // Constraints
-
     "conf.__type__.int_param0", "int",
     "conf.__type__.int_param1", "int",
     "conf.__type__.double_param0", "double",
     "conf.__type__.str_param0", "std::string",
     "conf.__type__.str_param1", "std::string",
-
     ""
   };
 // </rtc-template>
-
 /*!
  * @brief constructor
  * @param manager Maneger Object
@@ -54,33 +50,22 @@ foo::foo(RTC::Manager* manager)
     // </rtc-template>
 {
 }
-
 /*!
  * @brief destructor
  */
 foo::~foo()
 {
 }
-
-
-
 RTC::ReturnCode_t foo::onInitialize()
 {
   // Registration: InPort/OutPort/Service
   // <rtc-template block="registration">
   // Set InPort buffers
-  
   // Set OutPort buffer
-
-  
   // Set service provider to Ports
-  
   // Set service consumers to Ports
-  
   // Set CORBA Service Ports
-  
   // </rtc-template>
-
   // <rtc-template block="bind_config">
   // Bind variables and configuration variable
   bindParameter("int_param0", m_int_param0, "0");
@@ -89,93 +74,76 @@ RTC::ReturnCode_t foo::onInitialize()
   bindParameter("str_param0", m_str_param0, "hoge");
   bindParameter("str_param1", m_str_param1, "dara");
   // </rtc-template>
-
-  
   return RTC::RTC_OK;
 }
-
 /*
 RTC::ReturnCode_t foo::onFinalize()
 {
   return RTC::RTC_OK;
 }
 */
-
 /*
 RTC::ReturnCode_t foo::onStartup(RTC::UniqueId ec_id)
 {
   return RTC::RTC_OK;
 }
 */
-
 /*
 RTC::ReturnCode_t foo::onShutdown(RTC::UniqueId ec_id)
 {
   return RTC::RTC_OK;
 }
 */
-
 /*
 RTC::ReturnCode_t foo::onActivated(RTC::UniqueId ec_id)
 {
   return RTC::RTC_OK;
 }
 */
-
 /*
 RTC::ReturnCode_t foo::onDeactivated(RTC::UniqueId ec_id)
 {
   return RTC::RTC_OK;
 }
 */
-
 /*
 RTC::ReturnCode_t foo::onExecute(RTC::UniqueId ec_id)
 {
   return RTC::RTC_OK;
 }
 */
-
 /*
 RTC::ReturnCode_t foo::onAborting(RTC::UniqueId ec_id)
 {
   return RTC::RTC_OK;
 }
 */
-
 /*
 RTC::ReturnCode_t foo::onError(RTC::UniqueId ec_id)
 {
   return RTC::RTC_OK;
 }
 */
-
 /*
 RTC::ReturnCode_t foo::onReset(RTC::UniqueId ec_id)
 {
   return RTC::RTC_OK;
 }
 */
-
 /*
 RTC::ReturnCode_t foo::onStateUpdate(RTC::UniqueId ec_id)
 {
   return RTC::RTC_OK;
 }
 */
-
 /*
 RTC::ReturnCode_t foo::onRateChanged(RTC::UniqueId ec_id)
 {
   return RTC::RTC_OK;
 }
 */
-
-
-
 extern "C"
 {
- 
   void fooInit(RTC::Manager* manager)
   {
     coil::Properties profile(foo_spec);
@@ -183,7 +151,4 @@ extern "C"
                              RTC::Create<foo>,
                              RTC::Delete<foo>);
   }
-  
 };
-
-

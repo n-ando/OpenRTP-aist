@@ -1,4 +1,5 @@
 ﻿// -*- C++ -*-
+// <rtc-template block="description">
 /*!
  * @file  ModuleName.h
  * @brief ModuleDescription
@@ -6,38 +7,28 @@
  *
  * $Id$
  */
-
+// </rtc-template>
 #ifndef MODULENAME_H
 #define MODULENAME_H
-
 #include <rtm/idl/BasicDataTypeSkel.h>
 #include <rtm/idl/ExtendedDataTypesSkel.h>
 #include <rtm/idl/InterfaceDataTypesSkel.h>
-
 // Service implementation headers
 // <rtc-template block="service_impl_h">
-
 // </rtc-template>
-
 // Service Consumer stub headers
 // <rtc-template block="consumer_stub_h">
-
 // </rtc-template>
-
 #include <rtm/Manager.h>
 #include <rtm/DataFlowComponentBase.h>
 #include <rtm/CorbaPort.h>
 #include <rtm/DataInPort.h>
 #include <rtm/DataOutPort.h>
-
 // FSM headers
-
 #include <rtm/EventPort.h>
 // <rtc-template block="fsm_h">
 #include "ModuleNameFSM.h"
 // </rtc-template>
-
-
 /*!
  * @class ModuleName
  * @brief ModuleDescription
@@ -52,41 +43,29 @@ class ModuleName
    * @param manager Maneger Object
    */
   ModuleName(RTC::Manager* manager);
-
   /*!
    * @brief destructor
    */
   ~ModuleName() override;
-
   // <rtc-template block="public_attribute">
-  
   // </rtc-template>
-
   // <rtc-template block="public_operation">
-  
   // </rtc-template>
-
   // <rtc-template block="activity">
   /***
    *
    * The initialize action (on CREATED->ALIVE transition)
    *
    * @return RTC::ReturnCode_t
-   * 
-   * 
-   */
+   *   *   */
    RTC::ReturnCode_t onInitialize() override;
-
   /***
    *
    * The finalize action (on ALIVE->END transition)
    *
    * @return RTC::ReturnCode_t
-   * 
-   * 
-   */
+   *   *   */
   // RTC::ReturnCode_t onFinalize() override;
-
   /***
    *
    * The startup action when ExecutionContext startup
@@ -94,11 +73,8 @@ class ModuleName
    * @param ec_id target ExecutionContext Id
    *
    * @return RTC::ReturnCode_t
-   * 
-   * 
-   */
+   *   *   */
   // RTC::ReturnCode_t onStartup(RTC::UniqueId ec_id) override;
-
   /***
    *
    * The shutdown action when ExecutionContext stop
@@ -106,11 +82,8 @@ class ModuleName
    * @param ec_id target ExecutionContext Id
    *
    * @return RTC::ReturnCode_t
-   * 
-   * 
-   */
+   *   *   */
   // RTC::ReturnCode_t onShutdown(RTC::UniqueId ec_id) override;
-
   /***
    *
    * The activated action (Active state entry action)
@@ -118,11 +91,8 @@ class ModuleName
    * @param ec_id target ExecutionContext Id
    *
    * @return RTC::ReturnCode_t
-   * 
-   * 
-   */
+   *   *   */
   // RTC::ReturnCode_t onActivated(RTC::UniqueId ec_id) override;
-
   /***
    *
    * The deactivated action (Active state exit action)
@@ -130,11 +100,8 @@ class ModuleName
    * @param ec_id target ExecutionContext Id
    *
    * @return RTC::ReturnCode_t
-   * 
-   * 
-   */
+   *   *   */
   // RTC::ReturnCode_t onDeactivated(RTC::UniqueId ec_id) override;
-
   /***
    *
    * The execution action that is invoked periodically
@@ -142,11 +109,8 @@ class ModuleName
    * @param ec_id target ExecutionContext Id
    *
    * @return RTC::ReturnCode_t
-   * 
-   * 
-   */
+   *   *   */
   // RTC::ReturnCode_t onExecute(RTC::UniqueId ec_id) override;
-
   /***
    *
    * The aborting action when main logic error occurred.
@@ -154,11 +118,8 @@ class ModuleName
    * @param ec_id target ExecutionContext Id
    *
    * @return RTC::ReturnCode_t
-   * 
-   * 
-   */
+   *   *   */
   // RTC::ReturnCode_t onAborting(RTC::UniqueId ec_id) override;
-
   /***
    *
    * The error action in ERROR state
@@ -166,11 +127,8 @@ class ModuleName
    * @param ec_id target ExecutionContext Id
    *
    * @return RTC::ReturnCode_t
-   * 
-   * 
-   */
+   *   *   */
   // RTC::ReturnCode_t onError(RTC::UniqueId ec_id) override;
-
   /***
    *
    * The reset action that is invoked resetting
@@ -178,11 +136,8 @@ class ModuleName
    * @param ec_id target ExecutionContext Id
    *
    * @return RTC::ReturnCode_t
-   * 
-   * 
-   */
+   *   *   */
   // RTC::ReturnCode_t onReset(RTC::UniqueId ec_id) override;
-  
   /***
    *
    * The state update action that is invoked after onExecute() action
@@ -190,11 +145,8 @@ class ModuleName
    * @param ec_id target ExecutionContext Id
    *
    * @return RTC::ReturnCode_t
-   * 
-   * 
-   */
+   *   *   */
   // RTC::ReturnCode_t onStateUpdate(RTC::UniqueId ec_id) override;
-
   /***
    *
    * The action that is invoked when execution context's rate is changed
@@ -202,79 +154,48 @@ class ModuleName
    * @param ec_id target ExecutionContext Id
    *
    * @return RTC::ReturnCode_t
-   * 
-   * 
-   */
+   *   *   */
   // RTC::ReturnCode_t onRateChanged(RTC::UniqueId ec_id) override;
   // </rtc-template>
-
-
  protected:
   // <rtc-template block="protected_attribute">
-  
   // </rtc-template>
-
   // <rtc-template block="protected_operation">
-  
   // </rtc-template>
-
   // Configuration variable declaration
   // <rtc-template block="config_declare">
-
   // </rtc-template>
-
   // DataInPort declaration
   // <rtc-template block="inport_declare">
-  
   // </rtc-template>
-
-
   // DataOutPort declaration
   // <rtc-template block="outport_declare">
-  
   // </rtc-template>
-
   // CORBA Port declaration
   // <rtc-template block="corbaport_declare">
-  
   // </rtc-template>
-
   // Service declaration
   // <rtc-template block="service_declare">
-  
   // </rtc-template>
-
   // Consumer declaration
   // <rtc-template block="consumer_declare">
-  
   // </rtc-template>
-
   // State machine declaration
   // <rtc-template block="fsm_declare">
   RTC::Machine<ModuleNameFsm::Top> m_fsm;
   // </rtc-template>
-  
   // EventPort declaration
   // <rtc-template block="event_declare">
-  
   RTC::EventInPort< RTC::Machine<ModuleNameFsm::Top> > m_FSMEventVarIn;
   // </rtc-template>
-
  private:
   // <rtc-template block="private_attribute">
-  
   // </rtc-template>
-
   // <rtc-template block="private_operation">
-  
   // </rtc-template>
-
 };
-
-
 extern "C"
 {
   DLL_EXPORT void ModuleNameInit(RTC::Manager* manager);
 };
-
 #endif // MODULENAME_H

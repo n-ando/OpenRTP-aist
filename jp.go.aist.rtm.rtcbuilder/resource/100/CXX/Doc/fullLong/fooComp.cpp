@@ -1,4 +1,5 @@
 // -*- C++ -*-
+// <rtc-template block="description">
 /*!
  * @file fooComp.cpp
  * @brief Standalone component
@@ -12,13 +13,12 @@
  *
  * $Id$
  */
-
+// </rtc-template>
 #include <rtm/Manager.h>
 #include <iostream>
 #include <string>
 #include <stdlib.h>
 #include "foo.h"
-
 class OverwriteInstanceName
   : public RTM::RtcLifecycleActionListener
 {
@@ -30,10 +30,8 @@ public:
       {
         std::string opt = argv[i];
         if (opt.find("--instance_name=") == std::string::npos) { continue; }
-
         coil::replaceString(opt, "--instance_name=", "");
         if (opt.empty()) { continue; }
-
         m_name = opt;
       }
   }
@@ -53,44 +51,35 @@ private:
   std::string m_name;
   int32_t m_count;
 };
-
 void MyModuleInit(RTC::Manager* manager)
 {
   fooInit(manager);
   RTC::RtcBase* comp;
-
   // Create a component
   comp = manager->createComponent("foo");
-
   if (comp==NULL)
   {
     std::cerr << "Component create failed." << std::endl;
     abort();
   }
-
   // Example
   // The following procedure is examples how handle RT-Components.
   // These should not be in this function.
-
   // Get the component's object reference
 //  RTC::RTObject_var rtobj;
 //  rtobj = RTC::RTObject::_narrow(manager->getPOA()->servant_to_reference(comp));
-
   // Get the port list of the component
 //  PortServiceList* portlist;
 //  portlist = rtobj->get_ports();
-
   // getting port profiles
 //  std::cout << "Number of Ports: ";
-//  std::cout << portlist->length() << std::endl << std::endl; 
-//  for (CORBA::ULong i(0), n(portlist->length()); i < n; ++i)
+//  std::cout << portlist->length() << std::endl << std::endl;//  for (CORBA::ULong i(0), n(portlist->length()); i < n; ++i)
 //  {
 //    PortService_ptr port;
 //    port = (*portlist)[i];
 //    std::cout << "Port" << i << " (name): ";
 //    std::cout << port->get_port_profile()->name << std::endl;
-//    
-//    RTC::PortInterfaceProfileList iflist;
+////    RTC::PortInterfaceProfileList iflist;
 //    iflist = port->get_port_profile()->interfaces;
 //    std::cout << "---interfaces---" << std::endl;
 //    for (CORBA::ULong i(0), n(iflist.length()); i < n; ++i)
@@ -107,29 +96,22 @@ void MyModuleInit(RTC::Manager* manager)
 //    NVUtil::dump(port->get_port_profile()->properties);
 //    std::cout << "----------------" << std::endl << std::endl;
 //  }
-
   return;
 }
-
 int main (int argc, char** argv)
 {
   RTC::Manager* manager;
   manager = RTC::Manager::init(argc, argv);
   manager->addRtcLifecycleActionListener(new OverwriteInstanceName(argc, argv), true);
-
   // Set module initialization proceduer
   // This procedure will be invoked in activateManager() function.
   manager->setModuleInitProc(MyModuleInit);
-
   // Activate manager and register to naming service
   manager->activateManager();
-
   // run the manager in blocking mode
   // runManager(false) is the default.
   manager->runManager();
-
   // If you want to run the manager in non-blocking mode, do like this
   // manager->runManager(true);
-
   return 0;
 }

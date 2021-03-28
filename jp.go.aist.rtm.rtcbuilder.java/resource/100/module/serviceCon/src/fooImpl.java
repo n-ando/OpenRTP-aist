@@ -1,4 +1,5 @@
 // -*- Java -*-
+// <rtc-template block="description">
 /*!
  * @file  fooImpl.java
  * @brief ModuleDescription
@@ -6,18 +7,21 @@
  *
  * $Id$
  */
+// </rtc-template>
 import jp.go.aist.rtm.RTC.DataFlowComponentBase;
 import jp.go.aist.rtm.RTC.Manager;
 import jp.go.aist.rtm.RTC.port.CorbaConsumer;
 import jp.go.aist.rtm.RTC.port.CorbaPort;
 import RTC.ReturnCode_t;
 import SimpleService.MyService;
+// <rtc-template block="component_description">
 /**
  * fooImpl
  * <p>
  * ModuleDescription
  *
  */
+// </rtc-template>
 public class fooImpl extends DataFlowComponentBase {
   /**
    * constructor

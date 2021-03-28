@@ -1,4 +1,5 @@
 // -*- Java -*-
+// <rtc-template block="description">
 /*!
  * @file  fooImpl.java
  * @brief test module
@@ -6,6 +7,7 @@
  *
  * $Id$
  */
+// </rtc-template>
 import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -24,12 +26,14 @@ import org.omg.PortableServer.POAPackage.ObjectNotActive;
 import org.omg.PortableServer.POAPackage.ServantAlreadyActive;
 import org.omg.PortableServer.POAPackage.WrongPolicy;
 import RTC.ReturnCode_t;
+// <rtc-template block="component_description">
 /**
  * fooImpl
  * <p>
  * test module
  *
  */
+// </rtc-template>
 public class fooImpl extends DataFlowComponentBase {
   /**
    * constructor

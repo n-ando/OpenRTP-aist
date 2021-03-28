@@ -1,4 +1,5 @@
 // -*- C++ -*-
+// <rtc-template block="description">
 /*!
  * @file  foo.h
  * @brief MDesc
@@ -6,6 +7,7 @@
  *
  * $Id$
  */
+// </rtc-template>
 
 #ifndef FOO_H
 #define FOO_H

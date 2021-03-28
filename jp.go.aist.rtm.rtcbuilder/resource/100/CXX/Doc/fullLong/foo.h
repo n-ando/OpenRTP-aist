@@ -1,4 +1,5 @@
 // -*- C++ -*-
+// <rtc-template block="description">
 /*! \mainpage
  *
  * 本コンポーネントの概要説明1234567890123456789012345678901234567
@@ -20,7 +21,6 @@
  * ライセンス12345678901234567890123456789012345678901234567890
  *
  */
- 
  /*!
  * @file  foo.h
  * @brief MDesc
@@ -28,33 +28,25 @@
  *
  * $Id$
  */
-
+// </rtc-template>
 #ifndef FOO_H
 #define FOO_H
-
 #include <rtm/idl/BasicDataTypeSkel.h>
 #include <rtm/idl/ExtendedDataTypesSkel.h>
 #include <rtm/idl/InterfaceDataTypesSkel.h>
-
 // Service implementation headers
 // <rtc-template block="service_impl_h">
 #include "MyServiceSVC_impl.h"
-
 // </rtc-template>
-
 // Service Consumer stub headers
 // <rtc-template block="consumer_stub_h">
 #include "DAQServiceStub.h"
-
 // </rtc-template>
-
 #include <rtm/Manager.h>
 #include <rtm/DataFlowComponentBase.h>
 #include <rtm/CorbaPort.h>
 #include <rtm/DataInPort.h>
 #include <rtm/DataOutPort.h>
-
-
 /*!
  * @class foo
  * @brief MDesc
@@ -69,20 +61,14 @@ class foo
    * @param manager Maneger Object
    */
   foo(RTC::Manager* manager);
-
   /*!
    * @brief destructor
    */
   ~foo() override;
-
   // <rtc-template block="public_attribute">
-  
   // </rtc-template>
-
   // <rtc-template block="public_operation">
-  
   // </rtc-template>
-
   // <rtc-template block="activity">
   /***
    * on_initialize概要説明1234567890123456789012345678901234567890
@@ -91,15 +77,12 @@ class foo
    * The initialize action (on CREATED->ALIVE transition)
    *
    * @return RTC::ReturnCode_t
-   * 
-   * @pre on_initialize事前条件12345678901234567890123456789012345
+   *   * @pre on_initialize事前条件12345678901234567890123456789012345
    * 67890123456789012345678901234567890
    * @post on_initialize事後条件1234567890123456789012345678901234
    * 567890123456789012345678901234567890
-   * 
-   */
+   *   */
    RTC::ReturnCode_t onInitialize() override;
-
   /***
    * on_finalize概要説明123456789012345678901234567890123456789012
    * 3456789012345678901234567890
@@ -107,15 +90,12 @@ class foo
    * The finalize action (on ALIVE->END transition)
    *
    * @return RTC::ReturnCode_t
-   * 
-   * @pre on_finalize事前条件1234567890123456789012345678901234567
+   *   * @pre on_finalize事前条件1234567890123456789012345678901234567
    * 890123456789012345678901234567890
    * @post on_finalize事後条件123456789012345678901234567890123456
    * 7890123456789012345678901234567890
-   * 
-   */
+   *   */
   // RTC::ReturnCode_t onFinalize() override;
-
   /***
    * on_startup概要説明1234567890123456789012345678901234567890123
    * 456789012345678901234567890
@@ -125,15 +105,12 @@ class foo
    * @param ec_id target ExecutionContext Id
    *
    * @return RTC::ReturnCode_t
-   * 
-   * @pre on_startup事前条件12345678901234567890123456789012345678
+   *   * @pre on_startup事前条件12345678901234567890123456789012345678
    * 90123456789012345678901234567890
    * @post on_startup事後条件1234567890123456789012345678901234567
    * 890123456789012345678901234567890
-   * 
-   */
+   *   */
   // RTC::ReturnCode_t onStartup(RTC::UniqueId ec_id) override;
-
   /***
    * on_shutdown概要説明123456789012345678901234567890123456789012
    * 3456789012345678901234567890
@@ -143,15 +120,12 @@ class foo
    * @param ec_id target ExecutionContext Id
    *
    * @return RTC::ReturnCode_t
-   * 
-   * @pre on_shutdown事前条件1234567890123456789012345678901234567
+   *   * @pre on_shutdown事前条件1234567890123456789012345678901234567
    * 890123456789012345678901234567890
    * @post on_shutdown事後条件123456789012345678901234567890123456
    * 7890123456789012345678901234567890
-   * 
-   */
+   *   */
   // RTC::ReturnCode_t onShutdown(RTC::UniqueId ec_id) override;
-
   /***
    * on_activated概要説明12345678901234567890123456789012345678901
    * 23456789012345678901234567890
@@ -161,15 +135,12 @@ class foo
    * @param ec_id target ExecutionContext Id
    *
    * @return RTC::ReturnCode_t
-   * 
-   * @pre on_activated事前条件123456789012345678901234567890123456
+   *   * @pre on_activated事前条件123456789012345678901234567890123456
    * 7890123456789012345678901234567890
    * @post on_activated事後条件12345678901234567890123456789012345
    * 67890123456789012345678901234567890
-   * 
-   */
+   *   */
   // RTC::ReturnCode_t onActivated(RTC::UniqueId ec_id) override;
-
   /***
    * on_deactivated概要説明123456789012345678901234567890123456789
    * 0123456789012345678901234567890
@@ -179,15 +150,12 @@ class foo
    * @param ec_id target ExecutionContext Id
    *
    * @return RTC::ReturnCode_t
-   * 
-   * @pre on_deactivated事前条件1234567890123456789012345678901234
+   *   * @pre on_deactivated事前条件1234567890123456789012345678901234
    * 567890123456789012345678901234567890
    * @post on_deactivated事後条件123456789012345678901234567890123
    * 4567890123456789012345678901234567890
-   * 
-   */
+   *   */
   // RTC::ReturnCode_t onDeactivated(RTC::UniqueId ec_id) override;
-
   /***
    * on_execute概要説明1234567890123456789012345678901234567890123
    * 456789012345678901234567890
@@ -197,15 +165,12 @@ class foo
    * @param ec_id target ExecutionContext Id
    *
    * @return RTC::ReturnCode_t
-   * 
-   * @pre on_execute事前条件12345678901234567890123456789012345678
+   *   * @pre on_execute事前条件12345678901234567890123456789012345678
    * 90123456789012345678901234567890
    * @post on_execute事後条件1234567890123456789012345678901234567
    * 890123456789012345678901234567890
-   * 
-   */
+   *   */
   // RTC::ReturnCode_t onExecute(RTC::UniqueId ec_id) override;
-
   /***
    * on_aborting概要説明123456789012345678901234567890123456789012
    * 3456789012345678901234567890
@@ -215,15 +180,12 @@ class foo
    * @param ec_id target ExecutionContext Id
    *
    * @return RTC::ReturnCode_t
-   * 
-   * @pre on_aborting事前条件1234567890123456789012345678901234567
+   *   * @pre on_aborting事前条件1234567890123456789012345678901234567
    * 890123456789012345678901234567890
    * @post on_aborting事後条件123456789012345678901234567890123456
    * 7890123456789012345678901234567890
-   * 
-   */
+   *   */
   // RTC::ReturnCode_t onAborting(RTC::UniqueId ec_id) override;
-
   /***
    * on_error概要説明123456789012345678901234567890123456789012345
    * 6789012345678901234567890
@@ -233,15 +195,12 @@ class foo
    * @param ec_id target ExecutionContext Id
    *
    * @return RTC::ReturnCode_t
-   * 
-   * @pre on_error事前条件1234567890123456789012345678901234567890
+   *   * @pre on_error事前条件1234567890123456789012345678901234567890
    * 123456789012345678901234567890
    * @post on_error事後条件123456789012345678901234567890123456789
    * 0123456789012345678901234567890
-   * 
-   */
+   *   */
   // RTC::ReturnCode_t onError(RTC::UniqueId ec_id) override;
-
   /***
    * on_reset概要説明123456789012345678901234567890123456789012345
    * 6789012345678901234567890
@@ -251,15 +210,12 @@ class foo
    * @param ec_id target ExecutionContext Id
    *
    * @return RTC::ReturnCode_t
-   * 
-   * @pre on_reset事前条件1234567890123456789012345678901234567890
+   *   * @pre on_reset事前条件1234567890123456789012345678901234567890
    * 123456789012345678901234567890
    * @post on_reset事後条件123456789012345678901234567890123456789
    * 0123456789012345678901234567890
-   * 
-   */
+   *   */
   // RTC::ReturnCode_t onReset(RTC::UniqueId ec_id) override;
-  
   /***
    * on_state_update概要説明12345678901234567890123456789012345678
    * 90123456789012345678901234567890
@@ -269,15 +225,12 @@ class foo
    * @param ec_id target ExecutionContext Id
    *
    * @return RTC::ReturnCode_t
-   * 
-   * @pre on_state_update事前条件123456789012345678901234567890123
+   *   * @pre on_state_update事前条件123456789012345678901234567890123
    * 4567890123456789012345678901234567890
    * @post on_state_update事後条件12345678901234567890123456789012
    * 34567890123456789012345678901234567890
-   * 
-   */
+   *   */
   // RTC::ReturnCode_t onStateUpdate(RTC::UniqueId ec_id) override;
-
   /***
    * on_rate_changed概要説明12345678901234567890123456789012345678
    * 90123456789012345678901234567890
@@ -287,26 +240,18 @@ class foo
    * @param ec_id target ExecutionContext Id
    *
    * @return RTC::ReturnCode_t
-   * 
-   * @pre on_rate_changed事前条件123456789012345678901234567890123
+   *   * @pre on_rate_changed事前条件123456789012345678901234567890123
    * 4567890123456789012345678901234567890
    * @post on_rate_changed事後条件12345678901234567890123456789012
    * 34567890123456789012345678901234567890
-   * 
-   */
+   *   */
   // RTC::ReturnCode_t onRateChanged(RTC::UniqueId ec_id) override;
   // </rtc-template>
-
-
  protected:
   // <rtc-template block="protected_attribute">
-  
   // </rtc-template>
-
   // <rtc-template block="protected_operation">
-  
   // </rtc-template>
-
   // Configuration variable declaration
   // <rtc-template block="config_declare">
   /*!
@@ -375,9 +320,7 @@ class foo
    *               1234567890123456789012345678901234567890
    */
   std::string m_str_param1;
-
   // </rtc-template>
-
   // DataInPort declaration
   // <rtc-template block="inport_declare">
   RTC::TimedShort m_InName1;
@@ -418,10 +361,7 @@ class foo
    *                    01234567890
    */
   RTC::InPort<RTC::TimedLong> m_InNm2In;
-  
   // </rtc-template>
-
-
   // DataOutPort declaration
   // <rtc-template block="outport_declare">
   RTC::TimedLong m_OutName1;
@@ -462,9 +402,7 @@ class foo
    *                    901234567890
    */
   RTC::OutPort<RTC::TimedFloat> m_OutNme2Out;
-  
   // </rtc-template>
-
   // CORBA Port declaration
   // <rtc-template block="corbaport_declare">
   /*!
@@ -483,9 +421,7 @@ class foo
    *            567890
    */
   RTC::CorbaPort m_cmPortPort;
-  
   // </rtc-template>
-
   // Service declaration
   // <rtc-template block="service_declare">
   /*!
@@ -505,9 +441,7 @@ class foo
    *                  90
    */
   MyServiceSVC_impl m_acc;
-  
   // </rtc-template>
-
   // Consumer declaration
   // <rtc-template block="consumer_declare">
   /*!
@@ -527,25 +461,15 @@ class foo
    *                  90
    */
   RTC::CorbaConsumer<DAQService> m_rate;
-  
   // </rtc-template>
-
-
  private:
   // <rtc-template block="private_attribute">
-  
   // </rtc-template>
-
   // <rtc-template block="private_operation">
-  
   // </rtc-template>
-
 };
-
-
 extern "C"
 {
   DLL_EXPORT void fooInit(RTC::Manager* manager);
 };
-
 #endif // FOO_H

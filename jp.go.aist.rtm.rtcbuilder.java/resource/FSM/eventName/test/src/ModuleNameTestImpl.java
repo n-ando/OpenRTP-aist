@@ -1,4 +1,5 @@
 // -*- Java -*-
+// <rtc-template block="description">
 /*!
  * @file  ModuleNameTestImpl.java
  * @brief ModuleDescription
@@ -6,32 +7,29 @@
  *
  * $Id$
  */
-
-
+// </rtc-template>
 import jp.go.aist.rtm.RTC.DataFlowComponentBase;
 import jp.go.aist.rtm.RTC.Manager;
 import RTC.ReturnCode_t;
-
 import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import jp.go.aist.rtm.RTC.port.OutPort;
 import jp.go.aist.rtm.RTC.util.DataRef;
 import RTC.TimedLong;
-
-/*!
+// <rtc-template block="component_description">
+/**
  * @class ModuleNameTestImpl
  * @brief ModuleDescription
  *
  */
+// </rtc-template>
 public class ModuleNameTestImpl extends DataFlowComponentBase {
-
   /*!
    * @brief constructor
    * @param manager Maneger Object
@@ -50,9 +48,7 @@ public class ModuleNameTestImpl extends DataFlowComponentBase {
         m_Event02_FinalOut = new OutPort<TimedLong>("Event02_Final", m_Event02_Final);
     
         // </rtc-template>
-
     }
-
     /**
      *
      * The initialize action (on CREATED->ALIVE transition)
@@ -74,7 +70,6 @@ public class ModuleNameTestImpl extends DataFlowComponentBase {
         // </rtc-template>
         return super.onInitialize();
     }
-
     /***
      *
      * The finalize action (on ALIVE->END transition)
@@ -87,7 +82,6 @@ public class ModuleNameTestImpl extends DataFlowComponentBase {
 //    protected ReturnCode_t onFinalize() {
 //        return super.onFinalize();
 //    }
-
     /***
      *
      * The startup action when ExecutionContext startup
@@ -102,7 +96,6 @@ public class ModuleNameTestImpl extends DataFlowComponentBase {
 //    protected ReturnCode_t onStartup(int ec_id) {
 //        return super.onStartup(ec_id);
 //    }
-
     /***
      *
      * The shutdown action when ExecutionContext stop
@@ -117,7 +110,6 @@ public class ModuleNameTestImpl extends DataFlowComponentBase {
 //    protected ReturnCode_t onShutdown(int ec_id) {
 //        return super.onShutdown(ec_id);
 //    }
-
     /***
      *
      * The activated action (Active state entry action)
@@ -132,7 +124,6 @@ public class ModuleNameTestImpl extends DataFlowComponentBase {
 //    protected ReturnCode_t onActivated(int ec_id) {
 //        return super.onActivated(ec_id);
 //    }
-
     /***
      *
      * The deactivated action (Active state exit action)
@@ -147,7 +138,6 @@ public class ModuleNameTestImpl extends DataFlowComponentBase {
 //    protected ReturnCode_t onDeactivated(int ec_id) {
 //        return super.onDeactivated(ec_id);
 //    }
-
     /***
      *
      * The execution action that is invoked periodically
@@ -165,7 +155,6 @@ public class ModuleNameTestImpl extends DataFlowComponentBase {
         System.out.println("  1   : Event01_02");
         System.out.println("  2   : Event02_Final");
         System.out.print(">> ");
-
         BufferedReader buff = new BufferedReader(new InputStreamReader( System.in ));
         try {
             String cmd = buff.readLine();
@@ -173,7 +162,6 @@ public class ModuleNameTestImpl extends DataFlowComponentBase {
                 return super.onExecute(ec_id);
             }
             cmd = cmd.trim();
-
             System.out.print("[command]: "+cmd);
             System.out.println("");
             if(cmd.equals("1")){
@@ -188,10 +176,8 @@ public class ModuleNameTestImpl extends DataFlowComponentBase {
         catch (Exception ex) {
             System.out.println("Input Error!");
         }
-
         return super.onExecute(ec_id);
     }
-
     /***
      *
      * The aborting action when main logic error occurred.
@@ -206,7 +192,6 @@ public class ModuleNameTestImpl extends DataFlowComponentBase {
 //  public ReturnCode_t onAborting(int ec_id) {
 //      return super.onAborting(ec_id);
 //  }
-
     /***
      *
      * The error action in ERROR state
@@ -221,7 +206,6 @@ public class ModuleNameTestImpl extends DataFlowComponentBase {
 //    public ReturnCode_t onError(int ec_id) {
 //        return super.onError(ec_id);
 //    }
-
     /***
      *
      * The reset action that is invoked resetting
@@ -236,7 +220,6 @@ public class ModuleNameTestImpl extends DataFlowComponentBase {
 //    protected ReturnCode_t onReset(int ec_id) {
 //        return super.onReset(ec_id);
 //    }
-
     /***
      *
      * The state update action that is invoked after onExecute() action
@@ -251,7 +234,6 @@ public class ModuleNameTestImpl extends DataFlowComponentBase {
 //    protected ReturnCode_t onStateUpdate(int ec_id) {
 //        return super.onStateUpdate(ec_id);
 //    }
-
     /***
      *
      * The action that is invoked when execution context's rate is changed
@@ -271,7 +253,6 @@ public class ModuleNameTestImpl extends DataFlowComponentBase {
     // <rtc-template block="inport_declare">
     
     // </rtc-template>
-
     // DataOutPort declaration
     // <rtc-template block="outport_declare">
     protected TimedLong m_Event01_02_val;
@@ -284,17 +265,14 @@ public class ModuleNameTestImpl extends DataFlowComponentBase {
     
     
     // </rtc-template>
-
     // CORBA Port declaration
     // <rtc-template block="corbaport_declare">
     
     // </rtc-template>
-
     // Service declaration
     // <rtc-template block="service_declare">
     
     // </rtc-template>
-
     // Consumer declaration
     // <rtc-template block="consumer_declare">
     

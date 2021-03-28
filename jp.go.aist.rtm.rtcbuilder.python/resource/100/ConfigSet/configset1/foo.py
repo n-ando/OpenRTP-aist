@@ -1,11 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # -*- Python -*-
+# <rtc-template block="description">
 """
  @file foo.py
  @brief MDesc
  @date $Date$
 """
+# </rtc-template>
 import sys
 import time
 sys.path.append(".")
@@ -34,11 +36,13 @@ foo_spec = ["implementation_id", "foo",
          "conf.__type__.int_param0", "int",
          ""]
 # </rtc-template>
+# <rtc-template block="component_description">
 ##
 # @class foo
 # @brief MDesc
 # 
 # 
+# </rtc-template>
 class foo(OpenRTM_aist.DataFlowComponentBase):
 	
     ##

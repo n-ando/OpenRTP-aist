@@ -1,4 +1,5 @@
 // -*- C++ -*-
+// <rtc-template block="description">
 /*!
  * @file  ModuleName.cpp
  * @brief ModuleDescription
@@ -6,6 +7,7 @@
  *
  * $Id$
  */
+// </rtc-template>
 
 #include "ModuleName.h"
 
@@ -166,5 +168,4 @@ extern "C"
   }
   
 };
-
 
