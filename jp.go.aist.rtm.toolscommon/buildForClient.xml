@@ -5,6 +5,7 @@
 	<property name="source" value="src"/>
 	<property name="source.sdo" value="src/_SDOPackage"/>
 	<property name="source.rtc" value="src/RTC"/>
+	<property name="source.openrtm" value="src/OpenRTM"/>
 
 	<property name="dist.dir" value="jar" />
 	<property name="build.dir" value="bin"/>
@@ -19,7 +20,6 @@
 	<property name="idl.RTC" value="${idl.path}/RTC10.idl" />
 	<property name="idl.Manager" value="${idl.path}/Manager.idl" />
 	<property name="idl.ComponentObserver" value="${idl.path}/ComponentObserver.idl" />
-	<property name="idl.Logger" value="${idl.path}/Logger.idl" />
 
 	<target name="buildAll">
 		<antcall target="clean" />
@@ -29,6 +29,7 @@
 	<target name="idlCompile" description="IDLファイルをコンパイルします">
 		<delete dir="${source.sdo}" />
 		<delete dir="${source.rtc}" />
+		<delete dir="${source.openrtm}" />
 		<exec executable="${java.home}\..\bin\idlj">
 			<arg line="-fall -td ${source} -i ${idl.path} -emitAll ${idl.SDOPackage}"/>
 		</exec>
@@ -40,9 +41,6 @@
 		</exec>
 		<exec executable="${java.home}\..\bin\idlj" >
 			<arg line="-fall -td ${source} -i ${idl.path} -emitAll ${idl.ComponentObserver}" />
-		</exec>
-		<exec executable="${java.home}\..\bin\idlj">
-			<arg line="-fall -td ${source} -i ${idl.path} -emitAll ${idl.Logger}"/>
 		</exec>
 
 		<exec executable="n2a.bat">
