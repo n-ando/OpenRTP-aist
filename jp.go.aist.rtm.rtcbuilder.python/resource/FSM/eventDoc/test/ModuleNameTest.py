@@ -1,36 +1,27 @@
 ﻿#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # -*- Python -*-
-
+# <rtc-template block="description">
 """
  @file ModuleNameTest.py
  @brief ModuleDescription
  @date $Date$
-
-
 """
+# </rtc-template>
 from __future__ import print_function
 import sys
 import time
 sys.path.append(".")
-
 # Import RTM module
 import RTC
 import OpenRTM_aist
-
-
 # Import Service implementation class
 # <rtc-template block="service_impl">
-
 import ModuleName
-
 # </rtc-template>
-
 # Import Service stub modules
 # <rtc-template block="consumer_import">
 # </rtc-template>
-
-
 # This module's spesification
 # <rtc-template block="module_spec">
 modulenametest_spec = ["implementation_id", "ModuleNameTest", 
@@ -45,12 +36,13 @@ modulenametest_spec = ["implementation_id", "ModuleNameTest",
          "lang_type",         "SCRIPT",
          ""]
 # </rtc-template>
-
+# <rtc-template block="component_description">
 ##
 # @class ModuleNameTest
 # @brief ModuleDescription
 # 
 # 
+# </rtc-template>
 class ModuleNameTest(OpenRTM_aist.DataFlowComponentBase):
     
     ##
@@ -59,28 +51,19 @@ class ModuleNameTest(OpenRTM_aist.DataFlowComponentBase):
     # 
     def __init__(self, manager):
         OpenRTM_aist.DataFlowComponentBase.__init__(self, manager)
-
-
-
         
-
         self._d_Event01_02 = OpenRTM_aist.instantiateDataType(RTC.TimedLong)
         """
         """
         self._Event01_02Out = OpenRTM_aist.OutPort("Event01_02", self._d_Event01_02)
-
         self._d_Event02_Final = OpenRTM_aist.instantiateDataType(RTC.TimedString)
         """
         """
         self._Event02_FinalOut = OpenRTM_aist.OutPort("Event02_Final", self._d_Event02_Final)
-
-
         # initialize of configuration-data.
         # <rtc-template block="init_conf_param">
         
         # </rtc-template>
-
-
          
     ##
     #
@@ -229,7 +212,6 @@ class ModuleNameTest(OpenRTM_aist.DataFlowComponentBase):
     ##
     ## @return RTC::ReturnCode_t
     ##
-
     ##
     #def onStateUpdate(self, ec_id):
     #
@@ -250,7 +232,6 @@ class ModuleNameTest(OpenRTM_aist.DataFlowComponentBase):
     
     def runTest(self):
         return True
-
 def RunTest():
     manager = OpenRTM_aist.Manager.instance()
     comp = manager.getComponent("ModuleNameTest0")
@@ -258,34 +239,26 @@ def RunTest():
         print('Component get failed.', file=sys.stderr)
         return False
     return comp.runTest()
-
 def ModuleNameTestInit(manager):
     profile = OpenRTM_aist.Properties(defaults_str=modulenametest_spec)
     manager.registerFactory(profile,
                             ModuleNameTest,
                             OpenRTM_aist.Delete)
-
 def MyModuleInit(manager):
     ModuleNameTestInit(manager)
     ModuleName.ModuleNameInit(manager)
-
     # Create a component
     comp = manager.createComponent("ModuleNameTest")
-
 def main():
     mgr = OpenRTM_aist.Manager.init(sys.argv)
     mgr.setModuleInitProc(MyModuleInit)
     mgr.activateManager()
     mgr.runManager(True)
-
     ret = RunTest()
     mgr.shutdown()
-
     if ret:
         sys.exit(0)
     else:
         sys.exit(1)
-
 if __name__ == "__main__":
     main()
-

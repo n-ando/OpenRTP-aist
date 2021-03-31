@@ -1,36 +1,28 @@
 ﻿#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # -*- Python -*-
-
+# <rtc-template block="description">
 """
  @file ModuleName.py
  @brief ModuleDescription
  @date $Date$
-
-
 """
+# </rtc-template>
 import sys
 import time
 sys.path.append(".")
-
 # Import RTM module
 import RTC
 import OpenRTM_aist
 import OpenRTM_aist.StaticFSM as StaticFSM
 import OpenRTM_aist.EventPort as EventPort
 import ModuleNameFSM
-
-
 # Import Service implementation class
 # <rtc-template block="service_impl">
-
 # </rtc-template>
-
 # Import Service stub modules
 # <rtc-template block="consumer_import">
 # </rtc-template>
-
-
 # This module's spesification
 # <rtc-template block="module_spec">
 modulename_spec = ["implementation_id", "ModuleName", 
@@ -45,12 +37,13 @@ modulename_spec = ["implementation_id", "ModuleName",
          "lang_type",         "SCRIPT",
          ""]
 # </rtc-template>
-
+# <rtc-template block="component_description">
 ##
 # @class ModuleName
 # @brief ModuleDescription
 # 
 # 
+# </rtc-template>
 class ModuleName(OpenRTM_aist.DataFlowComponentBase):
 	
     ##
@@ -59,18 +52,11 @@ class ModuleName(OpenRTM_aist.DataFlowComponentBase):
     # 
     def __init__(self, manager):
         OpenRTM_aist.DataFlowComponentBase.__init__(self, manager)
-
-
-
 		
-
-
         # initialize of configuration-data.
         # <rtc-template block="init_conf_param">
 		
         # </rtc-template>
-
-
 		 
     ##
     #
@@ -225,7 +211,6 @@ class ModuleName(OpenRTM_aist.DataFlowComponentBase):
     ##
     ## @return RTC::ReturnCode_t
     ##
-
     ##
     #def onStateUpdate(self, ec_id):
     #
@@ -244,18 +229,13 @@ class ModuleName(OpenRTM_aist.DataFlowComponentBase):
     #
     #    return RTC.RTC_OK
 	
-
-
-
 def ModuleNameInit(manager):
     profile = OpenRTM_aist.Properties(defaults_str=modulename_spec)
     manager.registerFactory(profile,
                             ModuleName,
                             OpenRTM_aist.Delete)
-
 def MyModuleInit(manager):
     ModuleNameInit(manager)
-
     # create instance_name option for createComponent()
     instance_name = [i for i in sys.argv if "--instance_name=" in i]
     if instance_name:
@@ -265,7 +245,6 @@ def MyModuleInit(manager):
   
     # Create a component
     comp = manager.createComponent("ModuleName" + args)
-
 def main():
     # remove --instance_name= option
     argv = [i for i in sys.argv if not "--instance_name=" in i]
@@ -274,7 +253,5 @@ def main():
     mgr.setModuleInitProc(MyModuleInit)
     mgr.activateManager()
     mgr.runManager()
-
 if __name__ == "__main__":
     main()
-

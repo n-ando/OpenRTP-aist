@@ -1,4 +1,5 @@
 // -*- C++ -*-
+// <rtc-template block="description">
 /*!
  * @file  ModuleName.cpp
  * @brief ModuleDescription
@@ -6,9 +7,8 @@
  *
  * $Id$
  */
-
+// </rtc-template>
 #include "ModuleName.h"
-
 // Module specification
 // <rtc-template block="module_spec">
 static const char* const modulename_spec[] =
@@ -27,7 +27,6 @@ static const char* const modulename_spec[] =
     ""
   };
 // </rtc-template>
-
 /*!
  * @brief constructor
  * @param manager Maneger Object
@@ -39,124 +38,96 @@ ModuleName::ModuleName(RTC::Manager* manager)
     // </rtc-template>
 {
 }
-
 /*!
  * @brief destructor
  */
 ModuleName::~ModuleName()
 {
 }
-
-
-
 RTC::ReturnCode_t ModuleName::onInitialize()
 {
   // Registration: InPort/OutPort/Service
   // <rtc-template block="registration">
   // Set InPort buffers
-  
   // Set OutPort buffer
-
-  
   // Set service provider to Ports
   m_sv_namePort.registerProvider("if_name", "ImageCalibService::CalibrationService", m_if_name);
-  
   // Set service consumers to Ports
-  
   // Set CORBA Service Ports
   addPort(m_sv_namePort);
-  
   // </rtc-template>
-
   // <rtc-template block="bind_config">
   // </rtc-template>
-
-  
   return RTC::RTC_OK;
 }
-
 /*
 RTC::ReturnCode_t ModuleName::onFinalize()
 {
   return RTC::RTC_OK;
 }
 */
-
 /*
 RTC::ReturnCode_t ModuleName::onStartup(RTC::UniqueId ec_id)
 {
   return RTC::RTC_OK;
 }
 */
-
 /*
 RTC::ReturnCode_t ModuleName::onShutdown(RTC::UniqueId ec_id)
 {
   return RTC::RTC_OK;
 }
 */
-
 /*
 RTC::ReturnCode_t ModuleName::onActivated(RTC::UniqueId ec_id)
 {
   return RTC::RTC_OK;
 }
 */
-
 /*
 RTC::ReturnCode_t ModuleName::onDeactivated(RTC::UniqueId ec_id)
 {
   return RTC::RTC_OK;
 }
 */
-
 /*
 RTC::ReturnCode_t ModuleName::onExecute(RTC::UniqueId ec_id)
 {
   return RTC::RTC_OK;
 }
 */
-
 /*
 RTC::ReturnCode_t ModuleName::onAborting(RTC::UniqueId ec_id)
 {
   return RTC::RTC_OK;
 }
 */
-
 /*
 RTC::ReturnCode_t ModuleName::onError(RTC::UniqueId ec_id)
 {
   return RTC::RTC_OK;
 }
 */
-
 /*
 RTC::ReturnCode_t ModuleName::onReset(RTC::UniqueId ec_id)
 {
   return RTC::RTC_OK;
 }
 */
-
 /*
 RTC::ReturnCode_t ModuleName::onStateUpdate(RTC::UniqueId ec_id)
 {
   return RTC::RTC_OK;
 }
 */
-
 /*
 RTC::ReturnCode_t ModuleName::onRateChanged(RTC::UniqueId ec_id)
 {
   return RTC::RTC_OK;
 }
 */
-
-
-
 extern "C"
 {
- 
   void ModuleNameInit(RTC::Manager* manager)
   {
     coil::Properties profile(modulename_spec);
@@ -164,7 +135,4 @@ extern "C"
                              RTC::Create<ModuleName>,
                              RTC::Delete<ModuleName>);
   }
-  
 };
-
-

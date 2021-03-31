@@ -1,4 +1,5 @@
 // -*- C++ -*-
+// <rtc-template block="description">
 /*!
  * @file  ModuleName.h
  * @brief ModuleDescription
@@ -6,6 +7,7 @@
  *
  * $Id$
  */
+// </rtc-template>
 
 #ifndef MODULENAME_H
 #define MODULENAME_H

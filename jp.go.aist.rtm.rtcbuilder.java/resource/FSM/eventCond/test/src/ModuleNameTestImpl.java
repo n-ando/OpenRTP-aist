@@ -1,4 +1,5 @@
 // -*- Java -*-
+// <rtc-template block="description">
 /*!
  * @file  ModuleNameTestImpl.java
  * @brief ModuleDescription
@@ -6,6 +7,7 @@
  *
  * $Id$
  */
+// </rtc-template>
 import jp.go.aist.rtm.RTC.DataFlowComponentBase;
 import jp.go.aist.rtm.RTC.Manager;
 import RTC.ReturnCode_t;
@@ -20,11 +22,13 @@ import java.io.InputStreamReader;
 import jp.go.aist.rtm.RTC.port.OutPort;
 import jp.go.aist.rtm.RTC.util.DataRef;
 import RTC.TimedLong;
-/*!
+// <rtc-template block="component_description">
+/**
  * @class ModuleNameTestImpl
  * @brief ModuleDescription
  *
  */
+// </rtc-template>
 public class ModuleNameTestImpl extends DataFlowComponentBase {
   /*!
    * @brief constructor

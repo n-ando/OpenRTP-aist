@@ -1,4 +1,5 @@
 // -*- C++ -*-
+// <rtc-template block="description">
 /*!
  * @file  foo.cpp
  * @brief MDesc
@@ -6,6 +7,7 @@
  *
  * $Id$
  */
+// </rtc-template>
 
 #include "foo.h"
 
@@ -166,5 +168,4 @@ extern "C"
   }
   
 };
-
 

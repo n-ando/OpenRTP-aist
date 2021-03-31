@@ -1,4 +1,5 @@
 // -*- C++ -*-
+// <rtc-template block="description">
 /*!
  * @file  Sample.cpp
  * @brief Sample Comp
@@ -6,6 +7,7 @@
  *
  * $Id$
  */
+// </rtc-template>
 
 #include "Sample.h"
 
@@ -163,5 +165,4 @@ extern "C"
   }
   
 };
-
 

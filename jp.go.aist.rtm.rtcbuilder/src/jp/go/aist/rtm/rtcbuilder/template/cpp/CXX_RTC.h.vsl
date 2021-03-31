@@ -1,4 +1,5 @@
 // -*- C++ -*-
+// <rtc-template block="description">
 #if( ${rtcParam.docDescription.length()} > 0 || ${rtcParam.docInOut.length()} > 0 || ${rtcParam.docAlgorithm.length()} > 0 || ${rtcParam.docReference.length()} > 0 || ${rtcParam.docCreator.length()} > 0 || ${rtcParam.docLicense.length()} > 0)
 /*! \mainpage
 #if( ${rtcParam.docDescription.length()} > 0 )
@@ -28,6 +29,7 @@
  *
  * ${dol}Id${dol}
  */
+// </rtc-template>
 
 ${sharp}ifndef ${rtcParam.name.toUpperCase()}_H
 ${sharp}define ${rtcParam.name.toUpperCase()}_H

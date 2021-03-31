@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # -*- Python -*-
+# <rtc-template block="description">
 """
  @file foo.py
  @brief MDesc
@@ -8,6 +9,7 @@
  @author Noriaki Ando <n-ando@aist.go.jp>
  Copyright (C) 2006-2008 ライセンス
 """
+# </rtc-template>
 import sys
 import time
 sys.path.append(".")
@@ -38,6 +40,7 @@ foo_spec = ["implementation_id", "foo",
          "lang_type",         "SCRIPT",
          ""]
 # </rtc-template>
+# <rtc-template block="component_description">
 ##
 # @class foo
 # @brief MDesc
@@ -51,6 +54,7 @@ foo_spec = ["implementation_id", "foo",
 # 参考文献の情報
 # 
 # 
+# </rtc-template>
 class foo(OpenRTM_aist.DataFlowComponentBase):
 	
     ##

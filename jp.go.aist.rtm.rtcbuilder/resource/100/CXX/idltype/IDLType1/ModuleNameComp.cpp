@@ -1,4 +1,5 @@
 // -*- C++ -*-
+// <rtc-template block="description">
 /*!
  * @file ModuleNameComp.cpp
  * @brief Standalone component
@@ -6,6 +7,7 @@
  *
  * $Id$
  */
+// </rtc-template>
 
 #include <rtm/Manager.h>
 #include <iostream>

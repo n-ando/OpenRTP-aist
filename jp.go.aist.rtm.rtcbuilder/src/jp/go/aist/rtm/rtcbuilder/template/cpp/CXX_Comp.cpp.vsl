@@ -1,4 +1,5 @@
 // -*- C++ -*-
+// <rtc-template block="description">
 /*!
  * @file ${rtcParam.name}Comp.cpp
  * @brief Standalone component
@@ -6,6 +7,7 @@
 #parse("${template}/cpp/_doc.vsl")
  * ${dol}Id${dol}
  */
+// </rtc-template>
 
 ${sharp}include <rtm/Manager.h>
 ${sharp}include <iostream>

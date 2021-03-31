@@ -1,4 +1,5 @@
 // -*- Java -*-
+// <rtc-template block="description">
 /*!
  * @file  fooImpl.java
  * @brief MDesc
@@ -6,6 +7,7 @@
  *
  * $Id$
  */
+// </rtc-template>
 import jp.go.aist.rtm.RTC.DataFlowComponentBase;
 import jp.go.aist.rtm.RTC.Manager;
 import jp.go.aist.rtm.RTC.util.ShortHolder;
@@ -15,12 +17,14 @@ import jp.go.aist.rtm.RTC.util.FloatHolder;
 import jp.go.aist.rtm.RTC.util.DoubleHolder;
 import jp.go.aist.rtm.RTC.util.StringHolder;
 import RTC.ReturnCode_t;
+// <rtc-template block="component_description">
 /**
  * fooImpl
  * <p>
  * MDesc
  *
  */
+// </rtc-template>
 public class fooImpl extends DataFlowComponentBase {
   /**
    * constructor
