@@ -52,7 +52,7 @@ import org.eclipse.swt.widgets.Text;
  */
 public class ConfigurationDialog extends TitleAreaDialog {
 
-	private static final int NAME_WIDTH = 100;
+	private static final int NAME_WIDTH = 150;
 
 	private static final String NORMAL_COLOR = "NORMAL_COLOR"; // @jve:decl-index=0: //$NON-NLS-1$
 	private static final String MODIFY_COLOR = "MODIFY_COLOR"; // @jve:decl-index=0: //$NON-NLS-1$
@@ -295,7 +295,8 @@ public class ConfigurationDialog extends TitleAreaDialog {
 			final NamedValueConfigurationWrapper namedValue) {
 		GridLayout gl;
 		gl = new GridLayout(2, false);
-		gl.marginHeight = 1;
+		gl.marginTop = 2;
+		gl.marginBottom = 4;
 
 		GridData gd;
 		gd = new GridData();
@@ -303,24 +304,22 @@ public class ConfigurationDialog extends TitleAreaDialog {
 		gd.horizontalSpan = 2;
 		gd.grabExcessHorizontalSpace = true;
 
-		Composite namedValueComposite = new Composite(parent, SWT.NONE);
-		namedValueComposite.setLayout(gl);
-		namedValueComposite.setLayoutData(gd);
+		Group namedValueGroup = new Group(parent, SWT.NONE);
+		namedValueGroup.setLayout(gl);
+		namedValueGroup.setLayoutData(gd);
 
 		gd = new GridData();
 		gd.widthHint = NAME_WIDTH;
 
-		Label keyLabel = new Label(namedValueComposite, SWT.NONE);
+		Label keyLabel = new Label(namedValueGroup, SWT.WRAP | SWT.CENTER);
 		keyLabel.setText(namedValue.getKey());
-		if (namedValue.getKey().length() * 6 <= NAME_WIDTH) {
-			keyLabel.setLayoutData(gd);
-		}
+		keyLabel.setLayoutData(gd);
 
 		gl = new GridLayout(1, false);
 		gl.marginHeight = 0;
 		gl.marginWidth = 0;
 
-		Composite valueComposite = new Composite(namedValueComposite, SWT.NONE);
+		Composite valueComposite = new Composite(namedValueGroup, SWT.NONE);
 		valueComposite.setLayout(gl);
 		valueComposite.setLayoutData(createGridData());
 
@@ -397,7 +396,8 @@ public class ConfigurationDialog extends TitleAreaDialog {
 		Group group = new Group(parent, SWT.NONE);
 		
 		GridLayout gl = new GridLayout(3, false);
-		gl.marginHeight = 1;
+		gl.marginHeight = 0;
+		gl.marginBottom = 5;
 		group.setLayout(gl);
 		
 		group.setLayoutData(createGridData());
