@@ -26,11 +26,13 @@
 #include <rtm/CorbaPort.h>
 #include <rtm/DataInPort.h>
 #include <rtm/DataOutPort.h>
+// <rtc-template block="component_description">
 /*!
  * @class MarkerPosition
  * @brief ModuleDescription
  *
  */
+// </rtc-template>
 class MarkerPosition
   : public RTC::DataFlowComponentBase
 {

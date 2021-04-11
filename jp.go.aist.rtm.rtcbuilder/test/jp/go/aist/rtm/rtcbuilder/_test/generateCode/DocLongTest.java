@@ -225,7 +225,7 @@ public class DocLongTest extends TestBase {
 		Generator generator = new Generator();
 		List<GeneratedResult> result = generator.generateTemplateCode(genParam);
 
-		String resourceDir = rootPath + "/resource/100/CXX/Doc/fullLong/";
+		String resourceDir = rootPath + "/resource/100/CXX/Doc/";
 
 		assertEquals(default_file_num + 4, result.size());
 		checkCode(result, resourceDir, "fooComp.cpp");
