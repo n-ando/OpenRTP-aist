@@ -109,6 +109,11 @@ public class BasicEditorFormPage extends AbstractEditorFormPage {
 
 	private Text rtcTypeText;
 
+	private List<GenerateManager> managerList = null;
+	private Group LangGroup;
+	private Button cppRadio;
+	private List<Button> buttonList = new ArrayList<Button>();
+	
 	private Button generateButton;
 
 	private Button profileLoadButton;
@@ -159,8 +164,21 @@ public class BasicEditorFormPage extends AbstractEditorFormPage {
 		});
 		//
 		createHintSection(toolkit, form);
+		createLanguageSection(toolkit, form);
 		createGenerateSection(toolkit, form);
 		createExportImportSection(toolkit, form);
+		//
+		managerList = RtcBuilderPlugin.getDefault().getLoader()
+				.getManagerList();
+		if (managerList != null) {
+			for (String key : RtcBuilderPlugin.getDefault().getLoader()
+					.getManagerKeyList()) {
+				Button extRadio = createRadioCheckButton(toolkit, LangGroup,
+						key, SWT.RADIO);
+				extRadio.addSelectionListener(createLanguageRadioListner());
+				buttonList.add(extRadio);
+			}
+		}
 		//
 		// 言語・環境ページより先にこのページが表示された場合、ここで言語を判断する
 		editor.setEnabledInfoByLang();
@@ -256,6 +274,17 @@ public class BasicEditorFormPage extends AbstractEditorFormPage {
 				 editor.getRtcParam().getServicePorts().size()>0) ) {
 			result = "Cannot add any Ports to Composite Component.";
 		}
+		//
+		//Language
+		RtcParam rtcParam = editor.getRtcParam();
+
+		if( rtcParam.getLangList()==null || rtcParam.getLangList().size()==0 ) {
+			result = IMessageConstants.LANGUAGE_SELECTION_CAUTION;
+		}
+
+		if(rtcParam.isChoreonoid() && rtcParam.getLangList().contains(IRtcBuilderConstants.LANG_CPP)==false ) {
+			result = IMessageConstants.LANGUAGE_CHOREONOID_CAUTION;
+		}
 
 		return result;
 	}
@@ -334,7 +363,9 @@ public class BasicEditorFormPage extends AbstractEditorFormPage {
 		createHintLabel(Messages.getString("IMC.BASIC_HINT_RTCTYPE_TITLE"), IMessageConstants.BASIC_HINT_RTCTYPE_DESC, toolkit, composite);
 		//
 		createHintSpace(toolkit, composite);
+		createHintLabel(IMessageConstants.LANGUAGE_HINT_LANG_TITLE, IMessageConstants.LANGUAGE_HINT_LANG_DESC, toolkit, composite);
 		//
+		createHintSpace(toolkit, composite);
 		createHintLabel(Messages.getString("IMC.BASIC_HINT_GENERATE_TITLE"), Messages.getString("IMC.BASIC_HINT_GENERATE_DESC"), toolkit, composite);
 		//
 		createHintSpace(toolkit, composite);
@@ -343,6 +374,19 @@ public class BasicEditorFormPage extends AbstractEditorFormPage {
 		createHintLabel(Messages.getString("IMC.BASIC_HINT_EXPORT_TITLE"), Messages.getString("IMC.BASIC_HINT_EXPORT_DESC"), toolkit, composite);
 	}
 
+	private void createLanguageSection(FormToolkit toolkit, ScrolledForm form) {
+		Composite composite = createSectionBaseWithLabel(toolkit, form,
+				IMessageConstants.LANGUAGE_LANG_TITLE, IMessageConstants.LANGUAGE_LANG_EXPL, 2);
+		//
+		LangGroup = new Group(composite, SWT.NONE);
+		LangGroup.setLayout(new GridLayout(1, false));
+		GridData gd = new GridData();
+		LangGroup.setLayoutData(gd);
+		//
+		cppRadio = createRadioCheckButton(toolkit, LangGroup, "C++", SWT.RADIO);
+		cppRadio.addSelectionListener(createLanguageRadioListner());
+	}
+	
 	private void createGenerateSection(FormToolkit toolkit, ScrolledForm form) {
 		generateSection = createSectionBaseWithLabel(toolkit, form,
 				Messages.getString("IMC.BASIC_GENERATE_TITLE"), Messages.getString("IMC.BASIC_GENERATE_EXPL"), 2);
@@ -914,6 +958,43 @@ public class BasicEditorFormPage extends AbstractEditorFormPage {
 			multiModeBtn.setEnabled(true);
 			compGroup.setEnabled(true);
 		}
+		// 以下、cppRadioが有効な場合のみ実行する
+		// →この画面が表示される前にこの処理が呼ばれた場合は、なにもしない
+		// ∵rtcParamが画面に反映される前にクリアしてしまうとまずいため
+		List<String> langList = new ArrayList<String>();
+		List<String> langArgList = new ArrayList<String>();
+		String rtmVersion = null;
+
+		if (cppRadio.getSelection()) {
+			langList.add(IRtcBuilderConstants.LANG_CPP);
+			langArgList.add(IRtcBuilderConstants.LANG_CPP_ARG);
+			rtmVersion = IRtcBuilderConstants.DEFAULT_RTM_VERSION;
+		}
+		if (buttonList != null) {
+			for (Button extButton : buttonList) {
+				if (!extButton.getSelection()) {
+					continue;
+				}
+				for (GenerateManager manager : managerList) {
+					if (!extButton.getText().trim().equals(
+							manager.getManagerKey())) {
+						continue;
+					}
+					langList.add(manager.getManagerKey());
+					langArgList.add(manager.getManagerKey());
+					rtmVersion = manager.getTargetVersion();
+					break;
+				}
+				break;
+			}
+		}
+		if (!rtcParam.getLangList().equals(langList)) {
+			rtcParam.getLangList().clear();
+			rtcParam.getLangList().addAll(langList);
+			rtcParam.getLangArgList().clear();
+			rtcParam.getLangArgList().addAll(langArgList);
+			rtcParam.setRtmVersion(rtmVersion);
+		}
 
 		editor.updateEMFModuleName(getText(nameText.getText()));
 		editor.updateDirty();
@@ -940,6 +1021,25 @@ public class BasicEditorFormPage extends AbstractEditorFormPage {
 		rtcTypeText.setText(getValue(rtcParam.getRtcType()));
 		//
 		editor.updateEMFModuleName(rtcParam.getName());
+		//
+		if (rtcParam.getLangList().contains(IRtcBuilderConstants.LANG_CPP)
+				|| rtcParam.getLangList().contains(
+						IRtcBuilderConstants.LANG_CPPWIN)) {
+			cppRadio.setSelection(true);
+		} else {
+			// rtcParam.getLangList()に含まれない場合は選択解除
+			cppRadio.setSelection(false);
+		}
+		if (buttonList != null) {
+			for (Button chkButton : buttonList) {
+				if (rtcParam.getLangList().contains(chkButton.getText().trim())) {
+					chkButton.setSelection(true);
+				} else {
+					// rtcParam.getLangList()に含まれない場合は選択解除
+					chkButton.setSelection(false);
+				}
+			}
+		}
 	}
 
 	/**
@@ -1080,5 +1180,17 @@ public class BasicEditorFormPage extends AbstractEditorFormPage {
 				setEnableBackground(profileSection,	getBackgroundByEnabled(profEnable));
 			}
 		}
+	}
+	
+	private org.eclipse.swt.events.SelectionAdapter createLanguageRadioListner(){
+		return new org.eclipse.swt.events.SelectionAdapter(){
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				// eventからボタン名称を取得
+				String btnName = ((Button)e.widget).getText();
+				// 選択言語による活性状態の制御
+				editor.setEnabledInfoByLang(btnName);
+			}
+		};
 	}
 }

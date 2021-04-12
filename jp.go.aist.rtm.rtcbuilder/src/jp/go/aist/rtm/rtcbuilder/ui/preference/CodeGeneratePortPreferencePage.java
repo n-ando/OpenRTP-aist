@@ -1,9 +1,5 @@
 package jp.go.aist.rtm.rtcbuilder.ui.preference;
 
-import jp.go.aist.rtm.rtcbuilder.RtcBuilderPlugin;
-import jp.go.aist.rtm.rtcbuilder.nl.Messages;
-import jp.go.aist.rtm.rtcbuilder.ui.editors.IMessageConstants;
-
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.swt.SWT;
@@ -12,6 +8,9 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
+
+import jp.go.aist.rtm.rtcbuilder.RtcBuilderPlugin;
+import jp.go.aist.rtm.rtcbuilder.nl.Messages;
 
 public class CodeGeneratePortPreferencePage extends AbstarctFieldEditorPreferencePage implements
 	IWorkbenchPreferencePage {
@@ -58,7 +57,8 @@ public class CodeGeneratePortPreferencePage extends AbstarctFieldEditorPreferenc
 		addField(eventPortSuffixEditor);
 	}
 	private void createServiceInterfacePart(Composite composite) {
-		Composite serviceIFGroup = createGroup(composite, IPreferenceMessageConstants.PORT_TITLE_SERVICE_INTERFACE);
+		Composite serviceIFGroup = createGroup(composite,
+				Messages.getString("IPreferenceMessageConstants.PORT_TITLE_SERVICE_INTERFACE"));
 		DigitAlphabetStringFieldEditor serviceIFNameEditor = 
 			new DigitAlphabetStringFieldEditor(ComponentPreferenceManager.Generate_ServiceIF_Name,
 					Messages.getString("IMC.SERVICEPORT_LBL_IFNAME"), serviceIFGroup);
@@ -81,7 +81,8 @@ public class CodeGeneratePortPreferencePage extends AbstarctFieldEditorPreferenc
 		addField(serviceIFSuffixEditor);
 	}
 	private void createServicePortPart(Composite composite) {
-		Composite serviceportGroup = createGroup(composite, IPreferenceMessageConstants.PORT_TITLE_SERVICE_PORT);
+		Composite serviceportGroup = createGroup(composite, 
+				Messages.getString("IPreferenceMessageConstants.PORT_TITLE_SERVICE_PORT"));
 		DigitAlphabetStringFieldEditor servicePortNameEditor = 
 			new DigitAlphabetStringFieldEditor(ComponentPreferenceManager.Generate_ServicePort_Name,
 					Messages.getString("IMC.SERVICEPORT_LBL_PORTNAME"), serviceportGroup);
@@ -96,7 +97,8 @@ public class CodeGeneratePortPreferencePage extends AbstarctFieldEditorPreferenc
 		addField(servicePortSuffixEditor);
 	}
 	private void createDataPortPart(Composite composite) {
-		Composite dataportGroup = createGroup(composite, IPreferenceMessageConstants.PORT_TITLE_DATA_PORT);
+		Composite dataportGroup = createGroup(composite, 
+				Messages.getString("IPreferenceMessageConstants.PORT_TITLE_DATA_PORT"));
 		DigitAlphabetStringFieldEditor dataPortNameEditor = 
 			new DigitAlphabetStringFieldEditor(ComponentPreferenceManager.Generate_DataPort_Name,
 					Messages.getString("IMC.DATAPORT_LBL_DESCRIPTION"), dataportGroup);

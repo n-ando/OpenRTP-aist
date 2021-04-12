@@ -10,6 +10,7 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
 import jp.go.aist.rtm.rtcbuilder.RtcBuilderPlugin;
+import jp.go.aist.rtm.rtcbuilder.nl.Messages;
 import jp.go.aist.rtm.rtcbuilder.ui.editors.IMessageConstants;
 
 public class RtcBuilderPreferencePage extends AbstarctFieldEditorPreferencePage implements
@@ -35,7 +36,8 @@ public class RtcBuilderPreferencePage extends AbstarctFieldEditorPreferencePage 
 	}
 	
 	private void createBackupParts(Composite composite) {
-		Composite backupGroup = createGroup(composite, IPreferenceMessageConstants.CODE_GEN_TITLE_BACKUP);
+		Composite backupGroup = createGroup(composite, 
+				Messages.getString("IPreferenceMessageConstants.CODE_GEN_TITLE_BACKUP"));
 		IntegerFieldEditor moduleMaxInstanceTextEditor = new IntegerFieldEditor(ComponentPreferenceManager.Generate_Backup_Num,
 				IMessageConstants.BACKUP_FILE_NUM, backupGroup);
 		addField(moduleMaxInstanceTextEditor);

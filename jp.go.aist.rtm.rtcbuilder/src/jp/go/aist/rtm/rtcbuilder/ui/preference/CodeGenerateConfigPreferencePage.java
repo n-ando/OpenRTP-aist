@@ -35,7 +35,8 @@ public class CodeGenerateConfigPreferencePage extends AbstarctFieldEditorPrefere
 	}
 
 	private void createConfigurationSetParts(Composite composite) {
-		Composite configGroup = createGroup(composite, IPreferenceMessageConstants.CODE_GEN_TITLE_CONFIG);
+		Composite configGroup = createGroup(composite,
+				Messages.getString("IPreferenceMessageConstants.CODE_GEN_TITLE_CONFIG"));
 		DigitAlphabetStringFieldEditor configurationNameEditor = 
 			new DigitAlphabetStringFieldEditor(ComponentPreferenceManager.Generate_Configuration_Name,
 					Messages.getString("IMC.CONFIGURATION_TBLLBL_NAME"), configGroup);

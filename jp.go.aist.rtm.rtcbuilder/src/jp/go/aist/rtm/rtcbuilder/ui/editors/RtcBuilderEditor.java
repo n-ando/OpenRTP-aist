@@ -92,7 +92,6 @@ public class RtcBuilderEditor extends FormEditor implements IActionFilter {
 	private DataPortEditorFormPage dataPortFormPage;
 	private ServicePortEditorFormPage servicePortFormPage;
 	private ConfigurationEditorFormPage configurationFormPage;
-	private LanguageEditorFormPage languageFormPage;
 	private RtcXmlEditorFormPage rtcXmlFormPage;
 	private DocumentEditorFormPage documentFormPage;
 	private ActivityEditorFormPage activityFormPage;
@@ -257,7 +256,7 @@ public class RtcBuilderEditor extends FormEditor implements IActionFilter {
 	@Override
 	protected void addPages() {
 		try {
-			AbstractEditorFormPage[] defaultPages = new AbstractEditorFormPage[9];
+			AbstractEditorFormPage[] defaultPages = new AbstractEditorFormPage[8];
 			//
 			basicFormPage = new BasicEditorFormPage(this);
 			defaultPages[0] = basicFormPage;
@@ -274,10 +273,8 @@ public class RtcBuilderEditor extends FormEditor implements IActionFilter {
 			defaultPages[5] = configurationFormPage;
 			documentFormPage = new DocumentEditorFormPage(this);
 			defaultPages[6] = documentFormPage;
-			languageFormPage = new LanguageEditorFormPage(this);
-			defaultPages[7] = languageFormPage;
 			rtcXmlFormPage = new RtcXmlEditorFormPage(this);
-			defaultPages[8] = rtcXmlFormPage;
+			defaultPages[7] = rtcXmlFormPage;
 			//
 			List<List<AbstractEditorFormPage>> forms = new ArrayList<List<AbstractEditorFormPage>>();
 			forms.add(new ArrayList<AbstractEditorFormPage>());
@@ -363,7 +360,6 @@ public class RtcBuilderEditor extends FormEditor implements IActionFilter {
 		if( dataPortFormPage != null ) dataPortFormPage.load();
 		if( servicePortFormPage != null ) servicePortFormPage.load();
 		if( configurationFormPage != null ) configurationFormPage.load();
-		if( languageFormPage != null ) languageFormPage.load();
 		if( rtcXmlFormPage != null ) rtcXmlFormPage.load();
 		if( documentFormPage != null ) documentFormPage.load();
 		if( activityFormPage != null ) activityFormPage.load();
@@ -377,7 +373,6 @@ public class RtcBuilderEditor extends FormEditor implements IActionFilter {
 		dataPortFormPage.updateForOutput();
 		servicePortFormPage.update();
 		configurationFormPage.updateForOutput();
-		languageFormPage.update();
 		documentFormPage.update();
 		activityFormPage.update();
 		fsmFormPage.update();
@@ -596,7 +591,6 @@ public class RtcBuilderEditor extends FormEditor implements IActionFilter {
 		if (dataPortFormPage != null) dataPortFormPage.load();
 		if (servicePortFormPage != null) servicePortFormPage.load();
 		if (configurationFormPage != null) configurationFormPage.load();
-		if (languageFormPage != null) languageFormPage.load();
 		if (documentFormPage != null) documentFormPage.load();
 		if (activityFormPage != null) activityFormPage.load();
 		if (fsmFormPage != null) fsmFormPage.load();

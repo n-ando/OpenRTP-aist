@@ -22,10 +22,10 @@ public class DocumentEditorFormPage extends AbstractEditorFormPage {
 	private Text descriptionText;
 	private Text inoutText;
 	private Text algorithmText;
+	private Text referenceText;
 	//
 	private Text creatorText;
 	private Text licenseText;
-	private Text referenceText;
 	//
 	private Text versionUpLogText;
 	private List versionUpLogList;
@@ -93,6 +93,9 @@ public class DocumentEditorFormPage extends AbstractEditorFormPage {
 		algorithmText = createLabelAndText(toolkit, composite,
 				IMessageConstants.DOCUMENT_LBL_ALGORITHM, SWT.MULTI | SWT.V_SCROLL | SWT.WRAP);
 		algorithmText.setLayoutData(gridData);
+		referenceText = createLabelAndText(toolkit, composite,
+				IMessageConstants.DOCUMENT_LBL_REFERENCE, SWT.MULTI | SWT.V_SCROLL | SWT.WRAP);
+		referenceText.setLayoutData(gridData);
 	}
 
 	private void createEtcSection(FormToolkit toolkit, ScrolledForm form) {
@@ -122,9 +125,6 @@ public class DocumentEditorFormPage extends AbstractEditorFormPage {
 		licenseText = createLabelAndText(toolkit, composite,
 				IMessageConstants.DOCUMENT_LBL_LICENSE, SWT.MULTI | SWT.V_SCROLL | SWT.WRAP);
 		licenseText.setLayoutData(gridData);
-		referenceText = createLabelAndText(toolkit, composite,
-				IMessageConstants.DOCUMENT_LBL_REFERENCE, SWT.MULTI | SWT.V_SCROLL | SWT.WRAP);
-		referenceText.setLayoutData(gridData);
 	}
 
 	private void createVersionUpLogsSection(FormToolkit toolkit, ScrolledForm form) {
