@@ -59,7 +59,8 @@ public class CodeGeneratePreferencePage extends AbstarctFieldEditorPreferencePag
 
 	private void createComponentPart(Composite composite) {
 		//Basic Page
-		Composite basicGroup = createGroup(composite, IPreferenceMessageConstants.CODE_GEN_TITLE_BASIC);
+		Composite basicGroup = createGroup(composite, 
+				Messages.getString("IPreferenceMessageConstants.CODE_GEN_TITLE_BASIC"));
 		DigitAlphabetStringFieldEditor moduleNameEditor = 
 			new DigitAlphabetStringFieldEditor(ComponentPreferenceManager.Generate_Basic_Name,
 					Messages.getString("IMC.BASIC_LBL_MODULENAME"), basicGroup);
