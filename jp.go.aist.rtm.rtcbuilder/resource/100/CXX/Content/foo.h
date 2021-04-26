@@ -24,11 +24,13 @@
 #include <rtm/CorbaPort.h>
 #include <rtm/DataInPort.h>
 #include <rtm/DataOutPort.h>
+// <rtc-template block="component_description">
 /*!
  * @class foo
  * @brief MDesc
  *
  */
+// </rtc-template>
 class foo
   : public RTC::DataFlowComponentBase
 {

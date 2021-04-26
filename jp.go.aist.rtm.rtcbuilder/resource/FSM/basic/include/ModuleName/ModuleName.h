@@ -29,11 +29,13 @@
 // <rtc-template block="fsm_h">
 #include "ModuleNameFSM.h"
 // </rtc-template>
+// <rtc-template block="component_description">
 /*!
  * @class ModuleName
  * @brief ModuleDescription
  *
  */
+// </rtc-template>
 class ModuleName
   : public RTC::DataFlowComponentBase
 {

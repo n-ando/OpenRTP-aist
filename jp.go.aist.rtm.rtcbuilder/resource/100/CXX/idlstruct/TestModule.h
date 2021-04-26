@@ -25,11 +25,13 @@
 #include <rtm/CorbaPort.h>
 #include <rtm/DataInPort.h>
 #include <rtm/DataOutPort.h>
+// <rtc-template block="component_description">
 /*!
  * @class TestModule
  * @brief ModuleDescription
  *
  */
+// </rtc-template>
 class TestModule
   : public RTC::DataFlowComponentBase
 {
