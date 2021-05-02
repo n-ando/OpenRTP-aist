@@ -318,9 +318,6 @@ public interface IMessageConstants {
 	public static final String DOCUMENT_LBL_CREATOR = Messages.getString("IMessageConstants.DOCUMENT_LBL_CREATOR"); //$NON-NLS-1$
 	public static final String DOCUMENT_LBL_LICENSE = Messages.getString("IMessageConstants.DOCUMENT_LBL_LICENSE"); //$NON-NLS-1$
 	public static final String DOCUMENT_LBL_REFERENCE = Messages.getString("IMessageConstants.DOCUMENT_LBL_REFERENCE"); //$NON-NLS-1$
-	public static final String DOCUMENT_LBL_VERSIONUPLOG = Messages.getString("IMessageConstants.DOCUMENT_LBL_VERSIONUPLOG"); //$NON-NLS-1$
-	public static final String DOCUMENT_LBL_VUHISTORY = Messages.getString("IMessageConstants.DOCUMENT_LBL_VUHISTORY"); //$NON-NLS-1$
-
 
 	public static final String ACTIVITY_SECTION = Messages.getString("IMessageConstants.ACTIVITY_SECTION"); //$NON-NLS-1$
 	public static final String ACTIVITY_ACTIVITY_TITLE = Messages.getString("IMessageConstants.ACTIVITY_ACTIVITY_TITLE"); //$NON-NLS-1$

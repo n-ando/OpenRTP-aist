@@ -26,9 +26,6 @@ public class DocumentEditorFormPage extends AbstractEditorFormPage {
 	//
 	private Text creatorText;
 	private Text licenseText;
-	//
-	private Text versionUpLogText;
-	private List versionUpLogList;
 
 	/**
 	 * コンストラクタ
@@ -50,7 +47,6 @@ public class DocumentEditorFormPage extends AbstractEditorFormPage {
 		createOverViewSection(toolkit, form);
 		createHintSection(toolkit, form);
 		createEtcSection(toolkit, form);
-		createVersionUpLogsSection(toolkit, form);
 
 		load();
 	}
@@ -127,34 +123,6 @@ public class DocumentEditorFormPage extends AbstractEditorFormPage {
 		licenseText.setLayoutData(gridData);
 	}
 
-	private void createVersionUpLogsSection(FormToolkit toolkit, ScrolledForm form) {
-		Section sctEtc = toolkit.createSection(form.getBody(),
-				Section.TITLE_BAR | Section.EXPANDED | Section.TWISTIE);
-		sctEtc.setText(IMessageConstants.DOCUMENT_VERSIONUP_LOGS);
-		GridData gridData = new GridData();
-		gridData.horizontalAlignment = GridData.FILL;
-		gridData.verticalAlignment = GridData.BEGINNING;
-		sctEtc.setLayoutData(gridData);
-		//
-		Composite composite = toolkit.createComposite(sctEtc, SWT.NULL);
-		composite.setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER);
-		toolkit.paintBordersFor(composite);
-		GridLayout gl = new GridLayout(2, false);
-		composite.setLayout(gl);
-		GridData gd = new GridData(GridData.FILL_BOTH);
-		composite.setLayoutData(gd);
-		sctEtc.setClient(composite);
-		//
-		versionUpLogText = createLabelAndText(toolkit, composite,
-				IMessageConstants.DOCUMENT_LBL_VERSIONUPLOG);
-		toolkit.createLabel(composite, IMessageConstants.DOCUMENT_LBL_VUHISTORY);
-		versionUpLogList = new List(composite, SWT.BORDER | SWT.V_SCROLL | SWT.READ_ONLY);
-		gridData = new GridData(GridData.FILL_BOTH);
-		gridData.heightHint = 60;
-		gridData.widthHint = 100;
-		versionUpLogList.setLayoutData(gridData);
-	}
-
 	public void update() {
 		RtcParam rtcParam = editor.getRtcParam();
 
@@ -166,8 +134,6 @@ public class DocumentEditorFormPage extends AbstractEditorFormPage {
 			rtcParam.setDocCreator(StringUtil.getDocText(creatorText.getText()));
 			rtcParam.setDocLicense(StringUtil.getDocText(licenseText.getText()));
 			rtcParam.setDocReference(StringUtil.getDocText(referenceText.getText()));
-			//
-			rtcParam.setCurrentVersionUpLog(StringUtil.getDocText(versionUpLogText.getText()));
 		}
 
 		editor.updateDirty();
@@ -188,11 +154,6 @@ public class DocumentEditorFormPage extends AbstractEditorFormPage {
 			licenseText.setText(StringUtil.getDisplayDocText(getValue(rtcParam.getDocLicense())));
 			
 			referenceText.setText(StringUtil.getDisplayDocText(getValue(rtcParam.getDocReference())));
-			//
-			versionUpLogList.removeAll();
-			for(String vuLog : rtcParam.getVersionUpLog() ) {
-				versionUpLogList.add(vuLog);
-			}
 		}
 	}
 
