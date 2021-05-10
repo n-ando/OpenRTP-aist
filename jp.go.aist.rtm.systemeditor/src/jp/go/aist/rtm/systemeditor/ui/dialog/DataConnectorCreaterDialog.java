@@ -1,35 +1,50 @@
 package jp.go.aist.rtm.systemeditor.ui.dialog;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.TreeSet;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Slider;
+import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Text;
+import org.omg.CORBA.NamedValue;
 
 import jp.go.aist.rtm.systemeditor.manager.SystemEditorPreferenceManager;
 import jp.go.aist.rtm.systemeditor.nl.Messages;
+import jp.go.aist.rtm.systemeditor.ui.dialog.ConfigurationDialog.Checkbox;
+import jp.go.aist.rtm.systemeditor.ui.dialog.ConfigurationDialog.OrderedList;
+import jp.go.aist.rtm.systemeditor.ui.views.configurationview.configurationwrapper.ConfigurationWidget;
+import jp.go.aist.rtm.systemeditor.ui.views.configurationview.configurationwrapper.NamedValueConfigurationWrapper;
 import jp.go.aist.rtm.toolscommon.model.component.ComponentFactory;
 import jp.go.aist.rtm.toolscommon.model.component.ComponentSpecification;
 import jp.go.aist.rtm.toolscommon.model.component.ConnectorProfile;
 import jp.go.aist.rtm.toolscommon.model.component.InPort;
+import jp.go.aist.rtm.toolscommon.model.component.NameValue;
 import jp.go.aist.rtm.toolscommon.model.component.OutPort;
 import jp.go.aist.rtm.toolscommon.util.ConnectorUtil;
 import jp.go.aist.rtm.toolscommon.util.ConnectorUtil.SerializerInfo;
@@ -45,6 +60,7 @@ import jp.go.aist.rtm.toolscommon.util.ConnectorUtil.SerializerInfo;
  * PushRateは、サブスクリプションタイプが「Periodic」であり、かつデータフロータイプが「Push」の時のみ表示される<br>
  */
 public class DataConnectorCreaterDialog extends ConnectorDialogBase {
+	private static final int NAME_WIDTH = 150;
 
 	static final String LABEL_DETAIL = Messages.getString("DataConnectorCreaterDialog.22");
 
@@ -76,6 +92,8 @@ public class DataConnectorCreaterDialog extends ConnectorDialogBase {
 
 	TableViewer additionalTableViewer;
 	boolean disableNotify;
+	
+	private List<PropertyElem> propertyList = new ArrayList<PropertyElem>();
 
 	static class BufferPackage {
 		Text lengthText;
@@ -631,28 +649,279 @@ public class DataConnectorCreaterDialog extends ConnectorDialogBase {
 		return composite;
 	}
 
+	private class PropertyElem {
+		private String name;
+		private int type;
+		private List<String> elemList;
+		
+		private List<String> selectedValue = new ArrayList<String>();
+		
+		private String getSelectedValue() {
+			StringBuilder builder = new StringBuilder();
+			
+			for(String each : selectedValue) {
+				if(0 < builder.length()) {
+					builder.append(", ");
+				}
+				builder.append(each);
+			}
+			
+			return builder.toString();
+		}
+	}
+
 	private Composite createPropertyTab(Composite parent) {
+		
 		GridLayout gl;
 		GridData gd;
 
 		Composite propertyComposite = new Composite(parent, SWT.NONE);
-		gl = new GridLayout(2, false);
+		gl = new GridLayout(1, false);
 		gd = new GridData(GridData.FILL_BOTH);
 		propertyComposite.setLayout(gl);
 		propertyComposite.setLayoutData(gd);
-		propertyComposite.setVisible(false);
+		propertyComposite.setVisible(true);
+		/////
+		parseProperty();
+		if(0 < propertyList.size()) {
+			ScrolledComposite scroll = new ScrolledComposite(propertyComposite, SWT.V_SCROLL);
+			scroll.setLayout(new FillLayout());
+			scroll.setExpandHorizontal(true);
+			scroll.setExpandVertical(true);
+			scroll.setLayoutData(gd);
+			
+			Composite proprtyComposite = new Composite(scroll, SWT.NONE);
+			proprtyComposite.setLayout(gl);
+			proprtyComposite.setLayoutData(gd);
+			
+			scroll.setMinHeight(400);
+			scroll.setContent(proprtyComposite);
+			
+			for(PropertyElem prop : propertyList) {
+				createProprtyListComposite(proprtyComposite, prop);
+			}
+		}
 		/////
 		additionalTableViewer = createAdditionalTableViewer(propertyComposite);
 		
 		return propertyComposite;
 	}
 	
+	private void parseProperty() {
+		propertyList.clear();
+		List<NameValue> outPropList = outport.getProperties();
+		for(NameValue each : outPropList) {
+			String outProp = each.getValue().trim();
+			if(outProp == null || outProp.length() == 0) continue;
+			String inProp = inport.getProperty(each.getName()).trim();
+			if(inProp == null || inProp.length() == 0) continue;
+			
+			if(outProp.equals("Any") && inProp.equals("Any")) continue;
+			
+			String propName = each.getName();
+			List<String> elemList = new ArrayList<String>();
+			int propType;
+			boolean outPAny = false;
+			boolean inPAny = false;
+			if(outProp.startsWith("[") && outProp.endsWith("]")) {
+				propType = 2;
+				outProp = outProp.substring(1, outProp.length() -2);
+			} else if(outProp.startsWith("(") && outProp.endsWith(")")) {
+				propType = 3;
+				outProp = outProp.substring(1, outProp.length() -2);
+			} else {
+				propType = 1;
+				if(outProp.equals("Any")) outPAny = true;
+			}
+
+			if(inProp.startsWith("[") && inProp.endsWith("]")) {
+				inProp = inProp.substring(1, inProp.length() -2);
+			} else if(inProp.startsWith("(") && inProp.endsWith(")")) {
+				inProp = inProp.substring(1, inProp.length() -2);
+			} else {
+				if(inProp.equals("Any")) inPAny = true;
+			}
+			
+			String[] outPropElems = outProp.split(",");
+			outPropElems = StringUtils.stripAll(outPropElems);
+			String[] inPropElems = inProp.split(",");
+			inPropElems = StringUtils.stripAll(inPropElems);
+			if(outPAny) {
+				elemList = Arrays.asList(inPropElems);
+			} else if(inPAny) {
+				elemList = Arrays.asList(outPropElems);
+			} else {
+				List<String> outElemList = Arrays.asList(outPropElems);
+				List<String> inElemList = Arrays.asList(inPropElems);
+				for(String elem : outElemList) {
+					if(inElemList.contains(elem)) {
+						elemList.add(elem);
+					}
+				}
+			}
+			if(elemList.size() == 0) continue; 
+			
+			PropertyElem propElem = new PropertyElem();
+			propElem.name = propName;
+			propElem.type = propType;
+			propElem.elemList = elemList;
+			propertyList.add(propElem);
+		}
+	}
+	
+	private void createProprtyListComposite(Composite parent, PropertyElem prop) {
+		GridLayout gl;
+		gl = new GridLayout(2, false);
+		gl.marginTop = 2;
+		gl.marginBottom = 4;
+
+		GridData gd;
+		gd = new GridData();
+		gd.horizontalAlignment = GridData.FILL;
+		gd.grabExcessHorizontalSpace = true;
+
+		Group namedValueGroup = new Group(parent, SWT.NONE);
+		namedValueGroup.setLayout(gl);
+		namedValueGroup.setLayoutData(gd);
+
+		gd = new GridData();
+		gd.widthHint = NAME_WIDTH;
+
+		Label keyLabel = new Label(namedValueGroup, SWT.WRAP | SWT.CENTER);
+		keyLabel.setText(prop.name);
+		keyLabel.setLayoutData(gd);
+
+		gl = new GridLayout(1, false);
+		gl.marginHeight = 0;
+		gl.marginWidth = 0;
+
+		Composite proprtyComposite = new Composite(namedValueGroup, SWT.NONE);
+		proprtyComposite.setLayout(gl);
+		proprtyComposite.setLayoutData(createGridData());
+
+		createProprtyComposite(proprtyComposite, prop);
+	}
+	
+	private void createProprtyComposite(final Composite parent, PropertyElem prop) {
+
+		if (prop.type == 1) {
+			// widget種別がcomboboxの場合
+			Combo valueCombo = createCombo(parent);
+			valueCombo.addSelectionListener(new SelectionListener() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					prop.selectedValue.clear();
+					prop.selectedValue.add(valueCombo.getText());
+				}
+				@Override
+				public void widgetDefaultSelected(SelectionEvent e) {
+				}
+			});
+			valueCombo.add("");
+			for (String s : prop.elemList) {
+				valueCombo.add(s);
+			}
+			
+		} else if(prop.type == 2) {
+			// widget種別がCheckBoxの場合
+			Group valueCheckBoxGroup = createGroup(parent);
+			SelectionListener sl = createCheckBoxSelectionListner(prop);
+			for (String s : prop.elemList) {
+				Button vb = createButton(valueCheckBoxGroup, SWT.CHECK);
+				vb.setText(s);
+				vb.addSelectionListener(sl);
+			}
+			
+		} else if(prop.type == 3) {
+			// widget種別がradioの場合
+			Group valueRadioGroup = createGroup(parent);
+			SelectionListener sl = createRadioSelectionListner(prop);
+			for (String s : prop.elemList) {
+				Button vb = createButton(valueRadioGroup, SWT.RADIO);
+				vb.setText(s);
+				vb.addSelectionListener(sl);
+			}
+		}
+	}
+	
+	private GridData createGridData() {
+		GridData gd = new GridData();
+		gd.horizontalAlignment = GridData.FILL;
+		gd.grabExcessHorizontalSpace = true;
+		return gd;
+	}
+	
+	private Group createGroup(final Composite parent) {
+		Group group = new Group(parent, SWT.NONE);
+		
+		GridLayout gl = new GridLayout(3, false);
+		gl.marginHeight = 0;
+		gl.marginBottom = 5;
+		group.setLayout(gl);
+		
+		group.setLayoutData(createGridData());
+		
+		return group;
+	}
+	private Button createButton(final Composite parent, int style) {
+		Button button = new Button(parent, style);
+		
+		button.setLayoutData(createGridData());
+		
+		return button;
+	}
+	private Combo createCombo(final Composite parent) {
+		Combo result = new Combo(parent, SWT.READ_ONLY);
+		
+		result.setLayoutData(createGridData());
+		
+		return result;
+	}
 	private Label createLabel(Composite parent, String label) {
 		Label l = new Label(parent, SWT.NONE);
 		l.setText(label);
 		return l;
 	}
 
+	private SelectionListener createRadioSelectionListner(PropertyElem prop) {
+		return new SelectionListener() {
+			PropertyElem wd = prop;
+
+			public void widgetDefaultSelected(SelectionEvent e) {
+			}
+
+			public void widgetSelected(SelectionEvent e) {
+				Button b = (Button) e.widget;
+				if (b.getSelection()) {
+					String value = b.getText();
+					wd.selectedValue.clear();
+					wd.selectedValue.add(value);
+				}
+			}
+		};
+	}
+	
+	private SelectionListener createCheckBoxSelectionListner(PropertyElem prop) {
+		return new SelectionListener() {
+			PropertyElem wd = prop;
+
+			public void widgetDefaultSelected(SelectionEvent e) {
+			}
+
+			public void widgetSelected(SelectionEvent e) {
+				Button b = (Button) e.widget;
+				String value = b.getText();
+				if (b.getSelection()) {
+					if( wd.selectedValue.contains(value)==false) {
+						wd.selectedValue.add(value);
+					}
+				} else {
+					wd.selectedValue.remove(value);
+				}
+			}
+		};
+	}
+	
 	private boolean isOffline() {
 		if (inport != null) {
 			return inport.eContainer() instanceof ComponentSpecification;
@@ -823,7 +1092,7 @@ public class DataConnectorCreaterDialog extends ConnectorDialogBase {
 			ib.readTimeoutText.setText(value);
 		}
 	}
-
+	
 	String loadCombo(Combo combo, List<String> types, String value,
 			boolean isAllowAny) {
 		combo.setItems(types.toArray(new String[0]));
@@ -873,6 +1142,12 @@ public class DataConnectorCreaterDialog extends ConnectorDialogBase {
 	@SuppressWarnings("unchecked")
 	@Override
 	protected void okPressed() {
+		for(PropertyElem each : propertyList) {
+			String selected = each.getSelectedValue();
+			if(selected != null && 0 < selected.length()) {
+				connectorProfile.setProperty(each.name, each.getSelectedValue());
+			}
+		}
 		if (additionalTableViewer != null) {
 			List<AdditionalEntry> additional = (List<AdditionalEntry>) additionalTableViewer
 					.getInput();
