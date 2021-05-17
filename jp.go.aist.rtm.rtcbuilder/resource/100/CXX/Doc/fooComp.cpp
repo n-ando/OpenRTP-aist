@@ -26,7 +26,7 @@ public:
   OverwriteInstanceName(int argc, char** argv)
     : m_name(""), m_count(0)
   {
-    for (size_t i = 0; i < argc; ++i)
+    for (size_t i = 0; i < (size_t)argc; ++i)
       {
         std::string opt = argv[i];
         if (opt.find("--instance_name=") == std::string::npos) { continue; }
