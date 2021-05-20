@@ -46,6 +46,7 @@ import jp.go.aist.rtm.toolscommon.model.component.ConnectorProfile;
 import jp.go.aist.rtm.toolscommon.model.component.InPort;
 import jp.go.aist.rtm.toolscommon.model.component.NameValue;
 import jp.go.aist.rtm.toolscommon.model.component.OutPort;
+import jp.go.aist.rtm.toolscommon.model.component.Port;
 import jp.go.aist.rtm.toolscommon.util.ConnectorUtil;
 import jp.go.aist.rtm.toolscommon.util.ConnectorUtil.SerializerInfo;
 
@@ -251,9 +252,11 @@ public class DataConnectorCreaterDialog extends ConnectorDialogBase {
 		gd.horizontalAlignment = GridData.FILL;
 		gd.grabExcessHorizontalSpace = true;
 		dataTypeOutCombo.setLayoutData(gd);
-		List<String> outportTypes = outport.getDataTypes();
-		dataTypeOutCombo.setItems(outportTypes.toArray(new String[0]));
-		if(0<outportTypes.size()) dataTypeOutCombo.select(0);
+		if(outport != null) {
+			List<String> outportTypes = outport.getDataTypes();
+			dataTypeOutCombo.setItems(outportTypes.toArray(new String[0]));
+			if(0<outportTypes.size()) dataTypeOutCombo.select(0);
+		}
 		
 		Label dataTypeInLabel = new Label(portDataTypeComposite, SWT.NONE);
 		dataTypeInLabel.setText("InPort :"); //$NON-NLS-1$
@@ -262,9 +265,11 @@ public class DataConnectorCreaterDialog extends ConnectorDialogBase {
 		gd.horizontalAlignment = GridData.FILL;
 		gd.grabExcessHorizontalSpace = true;
 		dataTypeInCombo.setLayoutData(gd);
-		List<String> inportTypes = inport.getDataTypes();
-		dataTypeInCombo.setItems(inportTypes.toArray(new String[0]));
-		if(0<inportTypes.size()) dataTypeInCombo.select(0);
+		if(inport != null) {
+			List<String> inportTypes = inport.getDataTypes();
+			dataTypeInCombo.setItems(inportTypes.toArray(new String[0]));
+			if(0<inportTypes.size()) dataTypeInCombo.select(0);
+		}
 		/////
 		Label interfaceTypeLabel = new Label(portProfileEditComposite, SWT.NONE);
 		interfaceTypeLabel.setText("Interface Type :"); //$NON-NLS-1$
@@ -709,42 +714,53 @@ public class DataConnectorCreaterDialog extends ConnectorDialogBase {
 	
 	private void parseProperty() {
 		propertyList.clear();
-		List<NameValue> outPropList = outport.getProperties();
-		for(NameValue each : outPropList) {
-			String outProp = each.getValue().trim();
-			if(outProp == null || outProp.length() == 0) continue;
-			String inProp = inport.getProperty(each.getName()).trim();
-			if(inProp == null || inProp.length() == 0) continue;
+		List<NameValue> basePropList;
+		Port targetPort;
+		if( outport != null ) {
+			basePropList = outport.getProperties();
+			targetPort = inport;
+		} else {
+			basePropList = inport.getProperties();
+			targetPort = outport;
+		}
+		for(NameValue each : basePropList) {
+			String baseProp = each.getValue().trim();
+			if(baseProp == null || baseProp.length() == 0) continue;
 			
-			if(outProp.equals("Any") && inProp.equals("Any")) continue;
+			String targetProp = "Any";
+			if(targetPort!=null) {
+				targetProp = targetPort.getProperty(each.getName()).trim();
+				if(targetProp == null || targetProp.length() == 0) continue;
+			}
+			if(baseProp.equals("Any") && targetProp.equals("Any")) continue;
 			
 			String propName = each.getName();
 			List<String> elemList = new ArrayList<String>();
 			int propType;
 			boolean outPAny = false;
 			boolean inPAny = false;
-			if(outProp.startsWith("[") && outProp.endsWith("]")) {
+			if(baseProp.startsWith("[") && baseProp.endsWith("]")) {
 				propType = 2;
-				outProp = outProp.substring(1, outProp.length() -2);
-			} else if(outProp.startsWith("(") && outProp.endsWith(")")) {
+				baseProp = baseProp.substring(1, baseProp.length() -2);
+			} else if(baseProp.startsWith("(") && baseProp.endsWith(")")) {
 				propType = 3;
-				outProp = outProp.substring(1, outProp.length() -2);
+				baseProp = baseProp.substring(1, baseProp.length() -2);
 			} else {
 				propType = 1;
-				if(outProp.equals("Any")) outPAny = true;
+				if(baseProp.equals("Any")) outPAny = true;
 			}
 
-			if(inProp.startsWith("[") && inProp.endsWith("]")) {
-				inProp = inProp.substring(1, inProp.length() -2);
-			} else if(inProp.startsWith("(") && inProp.endsWith(")")) {
-				inProp = inProp.substring(1, inProp.length() -2);
+			if(targetProp.startsWith("[") && targetProp.endsWith("]")) {
+				targetProp = targetProp.substring(1, targetProp.length() -2);
+			} else if(targetProp.startsWith("(") && targetProp.endsWith(")")) {
+				targetProp = targetProp.substring(1, targetProp.length() -2);
 			} else {
-				if(inProp.equals("Any")) inPAny = true;
+				if(targetProp.equals("Any")) inPAny = true;
 			}
 			
-			String[] outPropElems = outProp.split(",");
+			String[] outPropElems = baseProp.split(",");
 			outPropElems = StringUtils.stripAll(outPropElems);
-			String[] inPropElems = inProp.split(",");
+			String[] inPropElems = targetProp.split(",");
 			inPropElems = StringUtils.stripAll(inPropElems);
 			if(outPAny) {
 				elemList = Arrays.asList(inPropElems);
