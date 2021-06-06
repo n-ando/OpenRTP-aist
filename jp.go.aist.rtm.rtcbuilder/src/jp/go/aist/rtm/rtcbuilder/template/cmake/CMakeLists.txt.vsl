@@ -102,16 +102,15 @@ endif (${dol}{CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 
 ${sharp} Set up installation directories
 if(WIN32)
-   set(OPENRTM_SHARE_PREFIX "OpenRTM-aist/${dol}{RTM_VER}/Components/${dol}{PROJECT_TYPE}")
-   set(INSTALL_PREFIX ${dol}{PROJECT_NAME})
+   set(OPENRTM_SHARE_PREFIX "Components/${dol}{PROJECT_TYPE}/${dol}{RTM_VC_VER}")
    if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
-      set(CMAKE_INSTALL_PREFIX "${dol}{OPENRTM_DIR}Components/${dol}{PROJECT_TYPE}/${dol}{PROJECT_NAME}" CACHE PATH "..." FORCE)
+      set(CMAKE_INSTALL_PREFIX "${dol}{OPENRTM_DIR}/${dol}{OPENRTM_SHARE_PREFIX}" CACHE PATH "..." FORCE)
+   else()
+      set(CMAKE_INSTALL_PREFIX "${dol}{CMAKE_INSTALL_PREFIX}/${dol}{RTM_VER}/${dol}{OPENRTM_SHARE_PREFIX}")
    endif()
+   set(INSTALL_PREFIX ${dol}{CMAKE_INSTALL_PREFIX}/${PROJECT_NAME})
 else(WIN32)
-   set(OPENRTM_SHARE_PREFIX "share/openrtm-${dol}{OPENRTM_VERSION_MAJOR}.${dol}{OPENRTM_VERSION_MINOR}")
-   set(INSTALL_PREFIX "${dol}{OPENRTM_SHARE_PREFIX}/components/${dol}{PROJECT_TYPE}/${dol}{PROJECT_NAME}")
-endif(WIN32)
-       
+
 ${sharp} Subdirectories
 add_subdirectory(cmake)
 if(BUILD_DOCUMENTATION)
@@ -152,11 +151,8 @@ if(BUILD_SOURCES)
 endif(BUILD_SOURCES)
 
 ${sharp} Package creation
-${sharp} By default, do not warn when built on machines using only VS Express:
-IF(NOT DEFINED CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_NO_WARNINGS)
-SET(CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_NO_WARNINGS ON)
-ENDIF()
-include(InstallRequiredSystemLibraries)
+${sharp} By default, do not include the system runtime library.
+${sharp}include(InstallRequiredSystemLibraries)
 set(PROJECT_EXECUTABLES ${dol}{PROJECT_NAME}Comp
     "${dol}{PROJECT_NAME}Comp.exe")
 
