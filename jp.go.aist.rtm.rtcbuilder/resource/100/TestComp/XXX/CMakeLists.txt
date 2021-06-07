@@ -94,6 +94,10 @@ if(WIN32)
    endif()
    set(INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX}/${PROJECT_NAME})
 else(WIN32)
+   set(OPENRTM_SHARE_PREFIX "share/openrtm-${OPENRTM_VERSION_MAJOR}.${OPENRTM_VERSION_MINOR}")
+   set(INSTALL_PREFIX "${OPENRTM_SHARE_PREFIX}/components/${PROJECT_TYPE}/${PROJECT_NAME}")
+endif(WIN32)
+
 # Subdirectories
 add_subdirectory(cmake)
 if(BUILD_DOCUMENTATION)
