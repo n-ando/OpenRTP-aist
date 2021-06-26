@@ -1,11 +1,11 @@
 // -*- C++ -*-
+// <rtc-template block="description">
 /*!
  * @file ${rtcParam.name}TestComp.cpp
- * @brief Standalone component
- * @date ${dol}Date${dol}
+ * @brief Standalone component (test code)
 #parse("${template}/cpp/_doc.vsl")
- * ${dol}Id${dol}
  */
+// </rtc-template>
 
 ${sharp}include <rtm/Manager.h>
 ${sharp}include <iostream>

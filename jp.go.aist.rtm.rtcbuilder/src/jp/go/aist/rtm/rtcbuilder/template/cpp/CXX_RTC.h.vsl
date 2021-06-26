@@ -1,17 +1,9 @@
 // -*- C++ -*-
 // <rtc-template block="description">
-#if( ${rtcParam.docDescription.length()} > 0 || ${rtcParam.docInOut.length()} > 0 || ${rtcParam.docAlgorithm.length()} > 0 || ${rtcParam.docReference.length()} > 0 || ${rtcParam.docCreator.length()} > 0 || ${rtcParam.docLicense.length()} > 0)
 /*! \mainpage
-#parse("${template}/cpp/_doc.vsl")
- */
- 
- #end
-/*!
  * @file  ${rtcParam.name}.h
  * @brief ${rtcParam.description}
- * @date  ${dol}Date${dol}
- *
- * ${dol}Id${dol}
+#parse("${template}/cpp/_doc.vsl")
  */
 // </rtc-template>
 
