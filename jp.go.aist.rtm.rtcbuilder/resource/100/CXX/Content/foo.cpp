@@ -3,9 +3,7 @@
 /*!
  * @file  foo.cpp
  * @brief MDesc
- * @date $Date$
  *
- * $Id$
  */
 // </rtc-template>
 #include "foo.h"

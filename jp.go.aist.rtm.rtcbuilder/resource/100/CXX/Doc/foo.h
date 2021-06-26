@@ -1,6 +1,8 @@
 // -*- C++ -*-
 // <rtc-template block="description">
 /*! \mainpage
+ * @file  foo.h
+ * @brief MDesc
  *
  * @author Noriaki Ando <n-ando@aist.go.jp> one two three four
  * five six seven eight nine ten
@@ -8,13 +10,6 @@
  * Copyright (C) 2006-2008
  * ライセンス12345678901234567890123456789012345678901234567890
  *
- */
- /*!
- * @file  foo.h
- * @brief MDesc
- * @date  $Date$
- *
- * $Id$
  */
 // </rtc-template>
 #ifndef FOO_H

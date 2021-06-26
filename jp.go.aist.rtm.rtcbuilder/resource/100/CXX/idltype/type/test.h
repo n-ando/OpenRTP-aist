@@ -1,11 +1,9 @@
 // -*- C++ -*-
 // <rtc-template block="description">
-/*!
+/*! \mainpage
  * @file  test.h
  * @brief test component
- * @date  $Date$
  *
- * $Id$
  */
 // </rtc-template>
 #ifndef TEST_H

@@ -1,11 +1,9 @@
 // -*- C++ -*-
 // <rtc-template block="description">
-/*!
+/*! \mainpage
  * @file  MarkerPosition.h
  * @brief ModuleDescription
- * @date  $Date$
  *
- * $Id$
  */
 // </rtc-template>
 #ifndef MARKERPOSITION_H

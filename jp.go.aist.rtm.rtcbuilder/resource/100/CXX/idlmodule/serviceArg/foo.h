@@ -1,11 +1,9 @@
 // -*- C++ -*-
 // <rtc-template block="description">
-/*!
+/*! \mainpage
  * @file  foo.h
  * @brief ModuleDescription
- * @date  $Date$
  *
- * $Id$
  */
 // </rtc-template>
 #ifndef FOO_H

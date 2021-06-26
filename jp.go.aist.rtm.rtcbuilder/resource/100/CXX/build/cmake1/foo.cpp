@@ -2,9 +2,6 @@
 /*!
  * @file  foo.cpp
  * @brief test module
- * @date $Date$
- *
- * $Id$
  */
 
 #include "foo.h"

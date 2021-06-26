@@ -157,50 +157,6 @@ public class BasicTest extends TestBase {
 		checkCode(result, resourceDir, "MyServiceSVC_impl.cpp");
 	}
 
-	public void testServicePort1() throws Exception {
-		rtcParam.setName("foo");
-		rtcParam.setDescription("MDesc");
-		rtcParam.setVersion("1.0.1");
-		rtcParam.setVender("TA");
-		rtcParam.setCategory("Manip");
-		rtcParam.setComponentType("STATIC2");
-		rtcParam.setActivityType("PERIODIC2");
-		rtcParam.setMaxInstance(5);
-		rtcParam.setComponentKind("DataFlowComponent");
-
-		List<DataPortParam> dataport = new ArrayList<DataPortParam>();
-		dataport.add(new DataPortParam("InP1", "RTC::TimedShort", "", 0));
-		dataport.add(new DataPortParam("InP2", "RTC::TimedLong", "", 0));
-		rtcParam.getInports().addAll(dataport);
-		List<DataPortParam> outport = new ArrayList<DataPortParam>();
-		outport.add(new DataPortParam("OutP1", "RTC::TimedInt", "", 0));
-		outport.add(new DataPortParam("OutP2", "RTC::TimedFloat", "", 0));
-		rtcParam.getOutports().addAll(outport);
-
-		ServicePortParam service1 = new ServicePortParam("svPort", 0);
-		List<ServicePortInterfaceParam> srvinterts = new ArrayList<ServicePortInterfaceParam>();
-		ServicePortInterfaceParam int1 = new ServicePortInterfaceParam(
-				service1, "acc", "", "", rootPath + "/resource/MyService.idl",
-				"MyService", 0);
-		srvinterts.add(int1);
-		service1.getServicePortInterfaces().addAll(srvinterts);
-		List<ServicePortParam> srvports = new ArrayList<ServicePortParam>();
-		srvports.add(service1);
-		rtcParam.getServicePorts().addAll(srvports);
-
-		Generator generator = new Generator();
-		List<GeneratedResult> result = generator.generateTemplateCode(genParam);
-
-		String resourceDir = rootPath + "/resource/100/CXX/basic/service1/";
-
-		assertEquals(default_file_num+2, result.size());
-		checkCode(result, resourceDir, "fooComp.cpp");
-		checkCode(result, resourceDir, "foo.h");
-		checkCode(result, resourceDir, "foo.cpp");
-		checkCode(result, resourceDir, "MyServiceSVC_impl.h");
-		checkCode(result, resourceDir, "MyServiceSVC_impl.cpp");
-	}
-
 	public void testOutPort2() throws Exception {
 		rtcParam.setName("foo");
 		rtcParam.setDescription("MDesc");
@@ -225,36 +181,6 @@ public class BasicTest extends TestBase {
 		List<GeneratedResult> result = generator.generateTemplateCode(genParam);
 
 		String resourceDir = rootPath + "/resource/100/CXX/basic/outport2/";
-
-		assertEquals(default_file_num, result.size());
-		checkCode(result, resourceDir, "fooComp.cpp");
-		checkCode(result, resourceDir, "foo.h");
-		checkCode(result, resourceDir, "foo.cpp");
-	}
-
-	public void testOutPort1() throws Exception {
-		rtcParam.setName("foo");
-		rtcParam.setDescription("MDesc");
-		rtcParam.setVersion("1.0.1");
-		rtcParam.setVender("TA");
-		rtcParam.setCategory("Manip");
-		rtcParam.setComponentType("STATIC2");
-		rtcParam.setActivityType("PERIODIC2");
-		rtcParam.setMaxInstance(5);
-		rtcParam.setComponentKind("DataFlowComponent");
-
-		List<DataPortParam> dataport = new ArrayList<DataPortParam>();
-		dataport.add(new DataPortParam("InP1", "RTC::TimedShort", "", 0));
-		dataport.add(new DataPortParam("InP2", "RTC::TimedLong", "", 0));
-		rtcParam.getInports().addAll(dataport);
-		List<DataPortParam> outport = new ArrayList<DataPortParam>();
-		outport.add(new DataPortParam("OutP1", "RTC::TimedInt", "", 0));
-		rtcParam.getOutports().addAll(outport);
-
-		Generator generator = new Generator();
-		List<GeneratedResult> result = generator.generateTemplateCode(genParam);
-
-		String resourceDir = rootPath + "/resource/100/CXX/basic/outport1/";
 
 		assertEquals(default_file_num, result.size());
 		checkCode(result, resourceDir, "fooComp.cpp");
@@ -288,53 +214,4 @@ public class BasicTest extends TestBase {
 		checkCode(result, resourceDir, "foo.h");
 		checkCode(result, resourceDir, "foo.cpp");
 	}
-
-	public void testInPort() throws Exception {
-		rtcParam.setName("test");
-		rtcParam.setDescription("MDesc");
-		rtcParam.setVersion("1.0.1");
-		rtcParam.setVender("TA");
-		rtcParam.setCategory("Manip");
-		rtcParam.setComponentType("STATIC2");
-		rtcParam.setComponentKind("DataFlowComponent");
-		rtcParam.setActivityType("PERIODIC2");
-		rtcParam.setMaxInstance(5);
-
-		List<DataPortParam> dataport = new ArrayList<DataPortParam>();
-		dataport.add(new DataPortParam("InP1", "RTC::TimedShort", "", 0));
-		rtcParam.getInports().addAll(dataport);
-
-		Generator generator = new Generator();
-		List<GeneratedResult> result = generator.generateTemplateCode(genParam);
-
-		String resourceDir = rootPath + "/resource/100/CXX/basic/inport1/";
-
-		assertEquals(default_file_num, result.size());
-		checkCode(result, resourceDir, "testComp.cpp");
-		checkCode(result, resourceDir, "test.h");
-		checkCode(result, resourceDir, "test.cpp");
-	}
-
-	public void testBasic() throws Exception {
-		rtcParam.setName("foo");
-		rtcParam.setDescription("MDesc");
-		rtcParam.setVersion("1.0.1");
-		rtcParam.setVender("TA");
-		rtcParam.setCategory("Manip");
-		rtcParam.setComponentType("STATIC2");
-		rtcParam.setComponentKind("DataFlowComponent");
-		rtcParam.setActivityType("PERIODIC2");
-		rtcParam.setMaxInstance(5);
-
-		Generator generator = new Generator();
-		List<GeneratedResult> result = generator.generateTemplateCode(genParam);
-
-		String resourceDir = rootPath + "/resource/100/CXX/basic/name/";
-
-		assertEquals(default_file_num, result.size());
-		checkCode(result, resourceDir, "fooComp.cpp");
-		checkCode(result, resourceDir, "foo.h");
-		checkCode(result, resourceDir, "foo.cpp");
-	}
-
 }

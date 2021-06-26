@@ -3,9 +3,7 @@
 /*!
  * @file  foo.cpp
  * @brief test module
- * @date $Date$
  *
- * $Id$
  */
 // </rtc-template>
 #include "foo.h"

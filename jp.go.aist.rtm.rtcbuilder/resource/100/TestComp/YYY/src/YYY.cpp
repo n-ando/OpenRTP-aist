@@ -3,9 +3,7 @@
 /*!
  * @file  YYY.cpp
  * @brief ModuleDescription
- * @date $Date$
  *
- * $Id$
  */
 // </rtc-template>
 #include "YYY.h"
