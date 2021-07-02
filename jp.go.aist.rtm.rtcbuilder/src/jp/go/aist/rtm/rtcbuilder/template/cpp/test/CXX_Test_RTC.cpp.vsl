@@ -2,7 +2,7 @@
 // <rtc-template block="description">
 /*!
  * @file  ${rtcParam.name}Test.cpp
- * @brief ${rtcParam.description}
+ * @brief ${rtcParam.description} (test code)
 #parse("${template}/cpp/_doc.vsl")
  */
 // </rtc-template>

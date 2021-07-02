@@ -2,7 +2,7 @@
 // <rtc-template block="description">
 /*!
  * @file  ${rtcParam.name}Test.h
- * @brief ${rtcParam.description}
+ * @brief ${rtcParam.description} (test code)
  */
 // </rtc-template>
 
