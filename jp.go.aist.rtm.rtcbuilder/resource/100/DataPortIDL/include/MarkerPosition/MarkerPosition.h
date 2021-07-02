@@ -1,6 +1,6 @@
 // -*- C++ -*-
 // <rtc-template block="description">
-/*! \mainpage
+/*!
  * @file  MarkerPosition.h
  * @brief ModuleDescription
  *

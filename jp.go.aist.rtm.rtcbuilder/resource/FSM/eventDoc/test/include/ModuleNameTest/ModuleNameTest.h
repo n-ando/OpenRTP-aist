@@ -2,7 +2,7 @@
 // <rtc-template block="description">
 /*!
  * @file  ModuleNameTest.h
- * @brief ModuleDescription
+ * @brief ModuleDescription (test code)
  */
 // </rtc-template>
 #ifndef MODULENAME_TEST__H

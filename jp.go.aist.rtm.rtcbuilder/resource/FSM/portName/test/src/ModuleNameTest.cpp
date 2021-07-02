@@ -2,7 +2,7 @@
 // <rtc-template block="description">
 /*!
  * @file  ModuleNameTest.cpp
- * @brief ModuleDescription
+ * @brief ModuleDescription (test code)
  *
  */
 // </rtc-template>

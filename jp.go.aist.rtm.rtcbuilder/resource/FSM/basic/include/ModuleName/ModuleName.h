@@ -1,6 +1,6 @@
 ﻿// -*- C++ -*-
 // <rtc-template block="description">
-/*! \mainpage
+/*!
  * @file  ModuleName.h
  * @brief ModuleDescription
  *

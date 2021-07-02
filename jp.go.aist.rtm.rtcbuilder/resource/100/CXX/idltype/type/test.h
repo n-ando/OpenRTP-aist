@@ -1,6 +1,6 @@
 // -*- C++ -*-
 // <rtc-template block="description">
-/*! \mainpage
+/*!
  * @file  test.h
  * @brief test component
  *
