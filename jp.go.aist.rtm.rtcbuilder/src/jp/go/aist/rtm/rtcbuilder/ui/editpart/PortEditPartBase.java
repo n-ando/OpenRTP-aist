@@ -25,7 +25,7 @@ public abstract class PortEditPartBase extends AbstractEditPart {
 		if(direction == PortDirection.RIGHT) {
 			maxNum = ((ComponentEditPart)this.getParent()).getModel().getRightMaxNum();
 			posX = parentBound.x + parentBound.width - result.getSize().width + PortFigureBase.SIZE;
-			posY = parentBound.y + (parentBound.height-PortFigureBase.SIZE) - (parentBound.height-PortFigureBase.SIZE)*(index+1)/(maxNum+1);
+			posY = parentBound.y + (parentBound.height-PortFigureBase.SIZE)*(index+1)/(maxNum+1);
 		} else if(direction == PortDirection.TOP) {
 			maxNum = ((ComponentEditPart)this.getParent()).getModel().getTopMaxNum();
 			posX = parentBound.x - result.getSize().width/2 + (parentBound.width-PortFigureBase.SIZE)*(index+1)/(maxNum+1);
@@ -37,7 +37,7 @@ public abstract class PortEditPartBase extends AbstractEditPart {
 		} else {
 			maxNum = ((ComponentEditPart)this.getParent()).getModel().getLeftMaxNum();
 			posX = parentBound.x - PortFigureBase.SIZE;
-			posY = parentBound.y + (parentBound.height-PortFigureBase.SIZE) - (parentBound.height-PortFigureBase.SIZE)*(index+1)/(maxNum+1);
+			posY = parentBound.y + (parentBound.height-PortFigureBase.SIZE)*(index+1)/(maxNum+1);
 		}
 		result.setLocation(new Point(posX, posY));
 		return result;
