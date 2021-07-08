@@ -3,6 +3,7 @@
 /*!
  * @file  ${rtcParam.name}Test.h
  * @brief ${rtcParam.description} (test code)
+#parse("${template}/cpp/_doc.vsl")
  */
 // </rtc-template>
 
