@@ -3,6 +3,7 @@
 /*!
  * @file  ModuleNameTest.h
  * @brief ModuleDescription (test code)
+ *
  */
 // </rtc-template>
 #ifndef MODULENAME_TEST__H
