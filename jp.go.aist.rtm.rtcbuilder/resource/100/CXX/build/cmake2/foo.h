@@ -2,9 +2,6 @@
 /*!
  * @file  foo.h
  * @brief test module
- * @date  $Date$
- *
- * $Id$
  */
 
 #ifndef FOO_H

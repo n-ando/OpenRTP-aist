@@ -1,7 +1,7 @@
 // -*-C++-*-
 /*!
  * @file  ${idlFileParam.idlFileNoExt}${tmpltHelper.serviceImplSuffix}.cpp
- * @brief Service implementation code of ${idlFileParam.idlFile}
+ * @brief Service implementation code of ${idlFileParam.idlFile} (test code)
 #parse("${template}/cpp/_doc.vsl")
  */
 

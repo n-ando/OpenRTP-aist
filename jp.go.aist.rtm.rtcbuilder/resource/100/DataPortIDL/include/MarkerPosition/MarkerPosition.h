@@ -3,9 +3,7 @@
 /*!
  * @file  MarkerPosition.h
  * @brief ModuleDescription
- * @date  $Date$
  *
- * $Id$
  */
 // </rtc-template>
 #ifndef MARKERPOSITION_H

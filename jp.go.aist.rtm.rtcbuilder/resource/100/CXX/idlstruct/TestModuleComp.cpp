@@ -3,9 +3,7 @@
 /*!
  * @file TestModuleComp.cpp
  * @brief Standalone component
- * @date $Date$
  *
- * $Id$
  */
 // </rtc-template>
 #include <rtm/Manager.h>

@@ -1,11 +1,11 @@
 // -*- C++ -*-
+// <rtc-template block="description">
 /*!
  * @file  ${rtcParam.name}Test.h
- * @brief ${rtcParam.description}
- * @date  ${dol}Date${dol}
- *
- * ${dol}Id${dol}
+ * @brief ${rtcParam.description} (test code)
+#parse("${template}/cpp/_doc.vsl")
  */
+// </rtc-template>
 
 ${sharp}ifndef ${rtcParam.name.toUpperCase()}_TEST__H
 ${sharp}define ${rtcParam.name.toUpperCase()}_TEST_H

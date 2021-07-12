@@ -3,9 +3,7 @@
 /*!
  * @file  ModuleName.h
  * @brief ModuleDescription
- * @date  $Date$
  *
- * $Id$
  */
 // </rtc-template>
 #ifndef MODULENAME_H

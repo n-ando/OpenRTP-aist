@@ -1,7 +1,7 @@
 // -*-C++-*-
 /*!
  * @file  ${tmpltHelper.getBasename2(${idlFileParam.idlFileNoExt})}${tmpltHelper.serviceImplSuffix}.h
- * @brief Service implementation header of ${idlFileParam.idlFile}
+ * @brief Service implementation header of ${idlFileParam.idlFile} (test code)
 #parse("${template}/cpp/_doc.vsl")
  */
 

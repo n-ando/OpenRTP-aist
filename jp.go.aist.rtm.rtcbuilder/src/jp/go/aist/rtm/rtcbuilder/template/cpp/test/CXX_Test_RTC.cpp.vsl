@@ -1,11 +1,11 @@
 // -*- C++ -*-
+// <rtc-template block="description">
 /*!
  * @file  ${rtcParam.name}Test.cpp
- * @brief ${rtcParam.description}
- * @date ${dol}Date${dol}
+ * @brief ${rtcParam.description} (test code)
 #parse("${template}/cpp/_doc.vsl")
- * ${dol}Id${dol}
  */
+// </rtc-template>
 
 ${sharp}include "${rtcParam.name}Test.h"
 

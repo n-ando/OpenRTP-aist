@@ -3,9 +3,7 @@
 /*!
  * @file ${rtcParam.name}Comp.cpp
  * @brief Standalone component
- * @date ${dol}Date${dol}
 #parse("${template}/cpp/_doc.vsl")
- * ${dol}Id${dol}
  */
 // </rtc-template>
 
