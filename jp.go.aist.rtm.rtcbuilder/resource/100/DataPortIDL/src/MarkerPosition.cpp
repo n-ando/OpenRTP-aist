@@ -66,55 +66,55 @@ RTC::ReturnCode_t MarkerPosition::onFinalize()
 }
 */
 /*
-RTC::ReturnCode_t MarkerPosition::onStartup(RTC::UniqueId ec_id)
+RTC::ReturnCode_t MarkerPosition::onStartup(RTC::UniqueId /*ec_id*/)
 {
   return RTC::RTC_OK;
 }
 */
 /*
-RTC::ReturnCode_t MarkerPosition::onShutdown(RTC::UniqueId ec_id)
+RTC::ReturnCode_t MarkerPosition::onShutdown(RTC::UniqueId /*ec_id*/)
 {
   return RTC::RTC_OK;
 }
 */
-RTC::ReturnCode_t MarkerPosition::onActivated(RTC::UniqueId ec_id)
+RTC::ReturnCode_t MarkerPosition::onActivated(RTC::UniqueId /*ec_id*/)
 {
   return RTC::RTC_OK;
 }
-RTC::ReturnCode_t MarkerPosition::onDeactivated(RTC::UniqueId ec_id)
+RTC::ReturnCode_t MarkerPosition::onDeactivated(RTC::UniqueId /*ec_id*/)
 {
   return RTC::RTC_OK;
 }
-RTC::ReturnCode_t MarkerPosition::onExecute(RTC::UniqueId ec_id)
+RTC::ReturnCode_t MarkerPosition::onExecute(RTC::UniqueId /*ec_id*/)
 {
   return RTC::RTC_OK;
 }
 /*
-RTC::ReturnCode_t MarkerPosition::onAborting(RTC::UniqueId ec_id)
-{
-  return RTC::RTC_OK;
-}
-*/
-/*
-RTC::ReturnCode_t MarkerPosition::onError(RTC::UniqueId ec_id)
+RTC::ReturnCode_t MarkerPosition::onAborting(RTC::UniqueId /*ec_id*/)
 {
   return RTC::RTC_OK;
 }
 */
 /*
-RTC::ReturnCode_t MarkerPosition::onReset(RTC::UniqueId ec_id)
+RTC::ReturnCode_t MarkerPosition::onError(RTC::UniqueId /*ec_id*/)
 {
   return RTC::RTC_OK;
 }
 */
 /*
-RTC::ReturnCode_t MarkerPosition::onStateUpdate(RTC::UniqueId ec_id)
+RTC::ReturnCode_t MarkerPosition::onReset(RTC::UniqueId /*ec_id*/)
 {
   return RTC::RTC_OK;
 }
 */
 /*
-RTC::ReturnCode_t MarkerPosition::onRateChanged(RTC::UniqueId ec_id)
+RTC::ReturnCode_t MarkerPosition::onStateUpdate(RTC::UniqueId /*ec_id*/)
+{
+  return RTC::RTC_OK;
+}
+*/
+/*
+RTC::ReturnCode_t MarkerPosition::onRateChanged(RTC::UniqueId /*ec_id*/)
 {
   return RTC::RTC_OK;
 }
@@ -128,4 +128,4 @@ extern "C"
                              RTC::Create<MarkerPosition>,
                              RTC::Delete<MarkerPosition>);
   }
-};
+}
