@@ -189,7 +189,7 @@ RTC::ReturnCode_t ${rtcParam.name}::onFinalize()
 #end
 #if(${rtcParam.IsNotImplemented(2)})/*#end
 
-RTC::ReturnCode_t ${rtcParam.name}::onStartup(RTC::UniqueId ec_id)
+RTC::ReturnCode_t ${rtcParam.name}::onStartup(RTC::UniqueId /*ec_id*/)
 {
 #if(${tmpltHelper.checkDetailContent(2,${rtcParam})})${rtcParam.getDetailContent(2)}
 #end
@@ -204,7 +204,7 @@ RTC::ReturnCode_t ${rtcParam.name}::onStartup(RTC::UniqueId ec_id)
 #end
 #if(${rtcParam.IsNotImplemented(3)})/*#end
 
-RTC::ReturnCode_t ${rtcParam.name}::onShutdown(RTC::UniqueId ec_id)
+RTC::ReturnCode_t ${rtcParam.name}::onShutdown(RTC::UniqueId /*ec_id*/)
 {
 #if(${tmpltHelper.checkDetailContent(3,${rtcParam})})${rtcParam.getDetailContent(3)}
 #end
@@ -219,7 +219,7 @@ RTC::ReturnCode_t ${rtcParam.name}::onShutdown(RTC::UniqueId ec_id)
 #end
 #if(${rtcParam.IsNotImplemented(4)})/*#end
 
-RTC::ReturnCode_t ${rtcParam.name}::onActivated(RTC::UniqueId ec_id)
+RTC::ReturnCode_t ${rtcParam.name}::onActivated(RTC::UniqueId /*ec_id*/)
 {
 #if(${tmpltHelper.checkDetailContent(4,${rtcParam})})${rtcParam.getDetailContent(4)}
 #end
@@ -234,7 +234,7 @@ RTC::ReturnCode_t ${rtcParam.name}::onActivated(RTC::UniqueId ec_id)
 #end
 #if(${rtcParam.IsNotImplemented(5)})/*#end
 
-RTC::ReturnCode_t ${rtcParam.name}::onDeactivated(RTC::UniqueId ec_id)
+RTC::ReturnCode_t ${rtcParam.name}::onDeactivated(RTC::UniqueId /*ec_id*/)
 {
 #if(${tmpltHelper.checkDetailContent(5,${rtcParam})})${rtcParam.getDetailContent(5)}
 #end
@@ -249,7 +249,7 @@ RTC::ReturnCode_t ${rtcParam.name}::onDeactivated(RTC::UniqueId ec_id)
 #end
 #if(${rtcParam.IsNotImplemented(9)})/*#end
 
-RTC::ReturnCode_t ${rtcParam.name}::onExecute(RTC::UniqueId ec_id)
+RTC::ReturnCode_t ${rtcParam.name}::onExecute(RTC::UniqueId /*ec_id*/)
 {
 #if(${tmpltHelper.checkDetailContent(9,${rtcParam})})${rtcParam.getDetailContent(9)}
 #end
@@ -266,7 +266,7 @@ RTC::ReturnCode_t ${rtcParam.name}::onExecute(RTC::UniqueId ec_id)
 #end
 #if(${rtcParam.IsNotImplemented(6)})/*#end
 
-RTC::ReturnCode_t ${rtcParam.name}::onAborting(RTC::UniqueId ec_id)
+RTC::ReturnCode_t ${rtcParam.name}::onAborting(RTC::UniqueId /*ec_id*/)
 {
 #if(${tmpltHelper.checkDetailContent(6,${rtcParam})})${rtcParam.getDetailContent(6)}
 #end
@@ -281,7 +281,7 @@ RTC::ReturnCode_t ${rtcParam.name}::onAborting(RTC::UniqueId ec_id)
 #end
 #if(${rtcParam.IsNotImplemented(7)})/*#end
 
-RTC::ReturnCode_t ${rtcParam.name}::onError(RTC::UniqueId ec_id)
+RTC::ReturnCode_t ${rtcParam.name}::onError(RTC::UniqueId /*ec_id*/)
 {
 #if(${tmpltHelper.checkDetailContent(7,${rtcParam})})${rtcParam.getDetailContent(7)}
 #end
@@ -296,7 +296,7 @@ RTC::ReturnCode_t ${rtcParam.name}::onError(RTC::UniqueId ec_id)
 #end
 #if(${rtcParam.IsNotImplemented(8)})/*#end
 
-RTC::ReturnCode_t ${rtcParam.name}::onReset(RTC::UniqueId ec_id)
+RTC::ReturnCode_t ${rtcParam.name}::onReset(RTC::UniqueId /*ec_id*/)
 {
 #if(${tmpltHelper.checkDetailContent(8,${rtcParam})})${rtcParam.getDetailContent(8)}
 #end
@@ -311,7 +311,7 @@ RTC::ReturnCode_t ${rtcParam.name}::onReset(RTC::UniqueId ec_id)
 #end
 #if(${rtcParam.IsNotImplemented(10)})/*#end
 
-RTC::ReturnCode_t ${rtcParam.name}::onStateUpdate(RTC::UniqueId ec_id)
+RTC::ReturnCode_t ${rtcParam.name}::onStateUpdate(RTC::UniqueId /*ec_id*/)
 {
 #if(${tmpltHelper.checkDetailContent(10,${rtcParam})})${rtcParam.getDetailContent(10)}
 #end
@@ -326,7 +326,7 @@ RTC::ReturnCode_t ${rtcParam.name}::onStateUpdate(RTC::UniqueId ec_id)
 #end
 #if(${rtcParam.IsNotImplemented(11)})/*#end
 
-RTC::ReturnCode_t ${rtcParam.name}::onRateChanged(RTC::UniqueId ec_id)
+RTC::ReturnCode_t ${rtcParam.name}::onRateChanged(RTC::UniqueId /*ec_id*/)
 {
 #if(${tmpltHelper.checkDetailContent(11,${rtcParam})})${rtcParam.getDetailContent(11)}
 #end
@@ -354,6 +354,4 @@ extern "C"
                              RTC::Delete<${rtcParam.name}>);
   }
   
-};
-
-
+}
