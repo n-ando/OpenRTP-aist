@@ -39,7 +39,7 @@ public:
     if (m_count != 0 || m_name.empty()) { return; }
     args = args + "?instance_name=" + m_name;
     ++m_count;
-  };
+  }
   virtual void postCreate(RTC::RTObject_impl*) override {}
   virtual void preConfigure(coil::Properties&) override {}
   virtual void postConfigure(coil::Properties&) override {}
