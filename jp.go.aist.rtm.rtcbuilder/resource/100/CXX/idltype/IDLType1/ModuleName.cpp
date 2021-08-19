@@ -64,66 +64,46 @@ RTC::ReturnCode_t ModuleName::onFinalize()
   return RTC::RTC_OK;
 }
 */
-/*
-RTC::ReturnCode_t ModuleName::onStartup(RTC::UniqueId /*ec_id*/)
-{
-  return RTC::RTC_OK;
-}
-*/
-/*
-RTC::ReturnCode_t ModuleName::onShutdown(RTC::UniqueId /*ec_id*/)
-{
-  return RTC::RTC_OK;
-}
-*/
-/*
-RTC::ReturnCode_t ModuleName::onActivated(RTC::UniqueId /*ec_id*/)
-{
-  return RTC::RTC_OK;
-}
-*/
-/*
-RTC::ReturnCode_t ModuleName::onDeactivated(RTC::UniqueId /*ec_id*/)
-{
-  return RTC::RTC_OK;
-}
-*/
-/*
-RTC::ReturnCode_t ModuleName::onExecute(RTC::UniqueId /*ec_id*/)
-{
-  return RTC::RTC_OK;
-}
-*/
-/*
-RTC::ReturnCode_t ModuleName::onAborting(RTC::UniqueId /*ec_id*/)
-{
-  return RTC::RTC_OK;
-}
-*/
-/*
-RTC::ReturnCode_t ModuleName::onError(RTC::UniqueId /*ec_id*/)
-{
-  return RTC::RTC_OK;
-}
-*/
-/*
-RTC::ReturnCode_t ModuleName::onReset(RTC::UniqueId /*ec_id*/)
-{
-  return RTC::RTC_OK;
-}
-*/
-/*
-RTC::ReturnCode_t ModuleName::onStateUpdate(RTC::UniqueId /*ec_id*/)
-{
-  return RTC::RTC_OK;
-}
-*/
-/*
-RTC::ReturnCode_t ModuleName::onRateChanged(RTC::UniqueId /*ec_id*/)
-{
-  return RTC::RTC_OK;
-}
-*/
+//RTC::ReturnCode_t ModuleName::onStartup(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
+//RTC::ReturnCode_t ModuleName::onShutdown(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
+//RTC::ReturnCode_t ModuleName::onActivated(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
+//RTC::ReturnCode_t ModuleName::onDeactivated(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
+//RTC::ReturnCode_t ModuleName::onExecute(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
+//RTC::ReturnCode_t ModuleName::onAborting(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
+//RTC::ReturnCode_t ModuleName::onError(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
+//RTC::ReturnCode_t ModuleName::onReset(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
+//RTC::ReturnCode_t ModuleName::onStateUpdate(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
+//RTC::ReturnCode_t ModuleName::onRateChanged(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
 extern "C"
 {
   void ModuleNameInit(RTC::Manager* manager)

@@ -68,18 +68,14 @@ RTC::ReturnCode_t XXX::onFinalize()
   return RTC::RTC_OK;
 }
 */
-/*
-RTC::ReturnCode_t XXX::onStartup(RTC::UniqueId /*ec_id*/)
-{
-  return RTC::RTC_OK;
-}
-*/
-/*
-RTC::ReturnCode_t XXX::onShutdown(RTC::UniqueId /*ec_id*/)
-{
-  return RTC::RTC_OK;
-}
-*/
+//RTC::ReturnCode_t XXX::onStartup(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
+//RTC::ReturnCode_t XXX::onShutdown(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
 RTC::ReturnCode_t XXX::onActivated(RTC::UniqueId /*ec_id*/)
 {
   return RTC::RTC_OK;
@@ -92,36 +88,26 @@ RTC::ReturnCode_t XXX::onExecute(RTC::UniqueId /*ec_id*/)
 {
   return RTC::RTC_OK;
 }
-/*
-RTC::ReturnCode_t XXX::onAborting(RTC::UniqueId /*ec_id*/)
-{
-  return RTC::RTC_OK;
-}
-*/
-/*
-RTC::ReturnCode_t XXX::onError(RTC::UniqueId /*ec_id*/)
-{
-  return RTC::RTC_OK;
-}
-*/
-/*
-RTC::ReturnCode_t XXX::onReset(RTC::UniqueId /*ec_id*/)
-{
-  return RTC::RTC_OK;
-}
-*/
-/*
-RTC::ReturnCode_t XXX::onStateUpdate(RTC::UniqueId /*ec_id*/)
-{
-  return RTC::RTC_OK;
-}
-*/
-/*
-RTC::ReturnCode_t XXX::onRateChanged(RTC::UniqueId /*ec_id*/)
-{
-  return RTC::RTC_OK;
-}
-*/
+//RTC::ReturnCode_t XXX::onAborting(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
+//RTC::ReturnCode_t XXX::onError(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
+//RTC::ReturnCode_t XXX::onReset(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
+//RTC::ReturnCode_t XXX::onStateUpdate(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
+//RTC::ReturnCode_t XXX::onRateChanged(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
 extern "C"
 {
   void XXXInit(RTC::Manager* manager)
