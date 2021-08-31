@@ -64,66 +64,46 @@ RTC::ReturnCode_t test::onFinalize()
   return RTC::RTC_OK;
 }
 */
-/*
-RTC::ReturnCode_t test::onStartup(RTC::UniqueId ec_id)
-{
-  return RTC::RTC_OK;
-}
-*/
-/*
-RTC::ReturnCode_t test::onShutdown(RTC::UniqueId ec_id)
-{
-  return RTC::RTC_OK;
-}
-*/
-/*
-RTC::ReturnCode_t test::onActivated(RTC::UniqueId ec_id)
-{
-  return RTC::RTC_OK;
-}
-*/
-/*
-RTC::ReturnCode_t test::onDeactivated(RTC::UniqueId ec_id)
-{
-  return RTC::RTC_OK;
-}
-*/
-/*
-RTC::ReturnCode_t test::onExecute(RTC::UniqueId ec_id)
-{
-  return RTC::RTC_OK;
-}
-*/
-/*
-RTC::ReturnCode_t test::onAborting(RTC::UniqueId ec_id)
-{
-  return RTC::RTC_OK;
-}
-*/
-/*
-RTC::ReturnCode_t test::onError(RTC::UniqueId ec_id)
-{
-  return RTC::RTC_OK;
-}
-*/
-/*
-RTC::ReturnCode_t test::onReset(RTC::UniqueId ec_id)
-{
-  return RTC::RTC_OK;
-}
-*/
-/*
-RTC::ReturnCode_t test::onStateUpdate(RTC::UniqueId ec_id)
-{
-  return RTC::RTC_OK;
-}
-*/
-/*
-RTC::ReturnCode_t test::onRateChanged(RTC::UniqueId ec_id)
-{
-  return RTC::RTC_OK;
-}
-*/
+//RTC::ReturnCode_t test::onStartup(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
+//RTC::ReturnCode_t test::onShutdown(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
+//RTC::ReturnCode_t test::onActivated(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
+//RTC::ReturnCode_t test::onDeactivated(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
+//RTC::ReturnCode_t test::onExecute(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
+//RTC::ReturnCode_t test::onAborting(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
+//RTC::ReturnCode_t test::onError(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
+//RTC::ReturnCode_t test::onReset(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
+//RTC::ReturnCode_t test::onStateUpdate(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
+//RTC::ReturnCode_t test::onRateChanged(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
 extern "C"
 {
   void testInit(RTC::Manager* manager)
@@ -133,4 +113,4 @@ extern "C"
                              RTC::Create<test>,
                              RTC::Delete<test>);
   }
-};
+}

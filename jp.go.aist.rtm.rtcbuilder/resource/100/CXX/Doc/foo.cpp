@@ -112,102 +112,82 @@ RTC::ReturnCode_t foo::onFinalize()
  * on_startup概要説明123456789012345678901234567890123456789012345
  * 6789012345678901234567890
  */
-/*
-RTC::ReturnCode_t foo::onStartup(RTC::UniqueId ec_id)
-{
-  return RTC::RTC_OK;
-}
-*/
+//RTC::ReturnCode_t foo::onStartup(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
 /*!
  * on_shutdown概要説明12345678901234567890123456789012345678901234
  * 56789012345678901234567890
  */
-/*
-RTC::ReturnCode_t foo::onShutdown(RTC::UniqueId ec_id)
-{
-  return RTC::RTC_OK;
-}
-*/
+//RTC::ReturnCode_t foo::onShutdown(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
 /*!
  * on_activated概要説明1234567890123456789012345678901234567890123
  * 456789012345678901234567890
  */
-/*
-RTC::ReturnCode_t foo::onActivated(RTC::UniqueId ec_id)
-{
-  return RTC::RTC_OK;
-}
-*/
+//RTC::ReturnCode_t foo::onActivated(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
 /*!
  * on_deactivated概要説明12345678901234567890123456789012345678901
  * 23456789012345678901234567890
  */
-/*
-RTC::ReturnCode_t foo::onDeactivated(RTC::UniqueId ec_id)
-{
-  return RTC::RTC_OK;
-}
-*/
+//RTC::ReturnCode_t foo::onDeactivated(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
 /*!
  * on_execute概要説明123456789012345678901234567890123456789012345
  * 6789012345678901234567890
  */
-/*
-RTC::ReturnCode_t foo::onExecute(RTC::UniqueId ec_id)
-{
-  return RTC::RTC_OK;
-}
-*/
+//RTC::ReturnCode_t foo::onExecute(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
 /*!
  * on_aborting概要説明12345678901234567890123456789012345678901234
  * 56789012345678901234567890
  */
-/*
-RTC::ReturnCode_t foo::onAborting(RTC::UniqueId ec_id)
-{
-  return RTC::RTC_OK;
-}
-*/
+//RTC::ReturnCode_t foo::onAborting(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
 /*!
  * on_error概要説明12345678901234567890123456789012345678901234567
  * 89012345678901234567890
  */
-/*
-RTC::ReturnCode_t foo::onError(RTC::UniqueId ec_id)
-{
-  return RTC::RTC_OK;
-}
-*/
+//RTC::ReturnCode_t foo::onError(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
 /*!
  * on_reset概要説明12345678901234567890123456789012345678901234567
  * 89012345678901234567890
  */
-/*
-RTC::ReturnCode_t foo::onReset(RTC::UniqueId ec_id)
-{
-  return RTC::RTC_OK;
-}
-*/
+//RTC::ReturnCode_t foo::onReset(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
 /*!
  * on_state_update概要説明1234567890123456789012345678901234567890
  * 123456789012345678901234567890
  */
-/*
-RTC::ReturnCode_t foo::onStateUpdate(RTC::UniqueId ec_id)
-{
-  return RTC::RTC_OK;
-}
-*/
+//RTC::ReturnCode_t foo::onStateUpdate(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
 /*!
  * on_rate_changed概要説明1234567890123456789012345678901234567890
  * 123456789012345678901234567890
  */
-/*
-RTC::ReturnCode_t foo::onRateChanged(RTC::UniqueId ec_id)
-{
-  return RTC::RTC_OK;
-}
-*/
+//RTC::ReturnCode_t foo::onRateChanged(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
 extern "C"
 {
   void fooInit(RTC::Manager* manager)
@@ -217,4 +197,4 @@ extern "C"
                              RTC::Create<foo>,
                              RTC::Delete<foo>);
   }
-};
+}

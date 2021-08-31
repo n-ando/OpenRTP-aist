@@ -66,66 +66,46 @@ RTC::ReturnCode_t ModuleNameTest::onFinalize()
   return RTC::RTC_OK;
 }
 */
-/*
-RTC::ReturnCode_t ModuleNameTest::onStartup(RTC::UniqueId ec_id)
-{
-  return RTC::RTC_OK;
-}
-*/
-/*
-RTC::ReturnCode_t ModuleNameTest::onShutdown(RTC::UniqueId ec_id)
-{
-  return RTC::RTC_OK;
-}
-*/
-/*
-RTC::ReturnCode_t ModuleNameTest::onActivated(RTC::UniqueId ec_id)
-{
-  return RTC::RTC_OK;
-}
-*/
-/*
-RTC::ReturnCode_t ModuleNameTest::onDeactivated(RTC::UniqueId ec_id)
-{
-  return RTC::RTC_OK;
-}
-*/
-/*
-RTC::ReturnCode_t ModuleNameTest::onExecute(RTC::UniqueId ec_id)
-{
-  return RTC::RTC_OK;
-}
-*/
-/*
-RTC::ReturnCode_t ModuleNameTest::onAborting(RTC::UniqueId ec_id)
-{
-  return RTC::RTC_OK;
-}
-*/
-/*
-RTC::ReturnCode_t ModuleNameTest::onError(RTC::UniqueId ec_id)
-{
-  return RTC::RTC_OK;
-}
-*/
-/*
-RTC::ReturnCode_t ModuleNameTest::onReset(RTC::UniqueId ec_id)
-{
-  return RTC::RTC_OK;
-}
-*/
-/*
-RTC::ReturnCode_t ModuleNameTest::onStateUpdate(RTC::UniqueId ec_id)
-{
-  return RTC::RTC_OK;
-}
-*/
-/*
-RTC::ReturnCode_t ModuleNameTest::onRateChanged(RTC::UniqueId ec_id)
-{
-  return RTC::RTC_OK;
-}
-*/
+//RTC::ReturnCode_t ModuleNameTest::onStartup(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
+//RTC::ReturnCode_t ModuleNameTest::onShutdown(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
+//RTC::ReturnCode_t ModuleNameTest::onActivated(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
+//RTC::ReturnCode_t ModuleNameTest::onDeactivated(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
+//RTC::ReturnCode_t ModuleNameTest::onExecute(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
+//RTC::ReturnCode_t ModuleNameTest::onAborting(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
+//RTC::ReturnCode_t ModuleNameTest::onError(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
+//RTC::ReturnCode_t ModuleNameTest::onReset(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
+//RTC::ReturnCode_t ModuleNameTest::onStateUpdate(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
+//RTC::ReturnCode_t ModuleNameTest::onRateChanged(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
 bool ModuleNameTest::runTest()
 {
     return true;
@@ -139,4 +119,4 @@ extern "C"
                              RTC::Create<ModuleNameTest>,
                              RTC::Delete<ModuleNameTest>);
   }
-};
+}
