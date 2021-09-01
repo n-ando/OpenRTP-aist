@@ -215,7 +215,7 @@ public class RtcBuilderEditor extends FormEditor implements IActionFilter {
 		rtcParam.setVender(ComponentPreferenceManager.getInstance().getBasic_VendorName());
 		rtcParam.setComponentType(ComponentPreferenceManager.getInstance().getBasic_ComponentType());
 		rtcParam.setActivityType(ComponentPreferenceManager.getInstance().getBasic_ActivityType());
-		rtcParam.setComponentKind(ComponentPreferenceManager.getInstance().getBasic_ComponentKind());
+		rtcParam.setComponentKind("DataFlowComponent");
 		rtcParam.setMaxInstance(ComponentPreferenceManager.getInstance().getBasic_MaxInstances());
 		rtcParam.setExecutionType(ComponentPreferenceManager.getInstance().getBasic_ExecutionType());
 		rtcParam.setExecutionRate(ComponentPreferenceManager.getInstance().getBasic_ExecutionRate());
