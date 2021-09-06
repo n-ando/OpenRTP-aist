@@ -43,8 +43,6 @@ public class ActivityEditorFormPage extends AbstractEditorFormPage {
 	private static final String ACTIVITY_EXECUTE = "onExecute";
 	private static final String ACTIVITY_STATE_UPDATE = "onStateUpdate";
 	private static final String ACTIVITY_RATE_CHANGED = "onRateChanged";
-	private static final String ACTIVITY_ACTION = "onAction";
-	private static final String ACTIVITY_MODE_CHANGED = "onModeChanged";
 
 	private List<Label> implChk;
 	private Text actionNameText;
@@ -93,12 +91,6 @@ public class ActivityEditorFormPage extends AbstractEditorFormPage {
 		createStartShutSection(toolkit, composite);
 		createAliveSection(toolkit, composite);
 		createDataFlowSection(toolkit, composite);
-		createModeSection(toolkit, composite);
-	}
-
-	private void createModeSection(FormToolkit toolkit, Composite parent) {
-		createSectionTitle(toolkit, parent, IMessageConstants.ACTIVITY_LBL_MODE);
-		createActionSelection(parent, ACTIVITY_MODE_CHANGED);
 	}
 
 	private void createDataFlowSection(FormToolkit toolkit, Composite parent) {
@@ -106,12 +98,6 @@ public class ActivityEditorFormPage extends AbstractEditorFormPage {
 		createActionSelection(parent,ACTIVITY_EXECUTE);
 		createActionSelection(parent, ACTIVITY_STATE_UPDATE);
 		createActionSelection(parent, ACTIVITY_RATE_CHANGED);
-		createFsmSection(toolkit, parent);
-	}
-
-	private void createFsmSection(FormToolkit toolkit, Composite parent) {
-		createSectionTitle(toolkit, parent, IMessageConstants.ACTIVITY_LBL_FSM);
-		createActionSelection(parent, ACTIVITY_ACTION);
 	}
 
 	private void createAliveSection(FormToolkit toolkit, Composite parent) {
@@ -246,8 +232,6 @@ public class ActivityEditorFormPage extends AbstractEditorFormPage {
 		createHintLabel(ACTIVITY_EXECUTE, IMessageConstants.ACTIVITY_HINT_ONEXECUTE_DESC, toolkit, composite);
 		createHintLabel(ACTIVITY_STATE_UPDATE, IMessageConstants.ACTIVITY_HINT_ONSTATEUPDATE_DESC, toolkit, composite);
 		createHintLabel(ACTIVITY_RATE_CHANGED, IMessageConstants.ACTIVITY_HINT_ONRATECHANGED_DESC, toolkit, composite);
-		createHintLabel(ACTIVITY_ACTION, IMessageConstants.ACTIVITY_HINT_ONACTION_DESC, toolkit, composite);
-		createHintLabel(ACTIVITY_MODE_CHANGED, IMessageConstants.ACTIVITY_HINT_ONMODECHANGED_DESC, toolkit, composite);
 		//
 		createHintSpace(toolkit, composite);
 		//
@@ -370,9 +354,7 @@ public class ActivityEditorFormPage extends AbstractEditorFormPage {
 				if (widgetInfo.matchWidget("onExecute"))     index = IRtcBuilderConstants.ACTIVITY_EXECUTE;
 				if (widgetInfo.matchWidget("onStateUpdate")) index = IRtcBuilderConstants.ACTIVITY_STATE_UPDATE;
 				if (widgetInfo.matchWidget("onRateChanged")) index = IRtcBuilderConstants.ACTIVITY_RATE_CHANGED;
-				if (widgetInfo.matchWidget("onAction"))      index = IRtcBuilderConstants.ACTIVITY_ACTION;
-				if (widgetInfo.matchWidget("onModeChanged")) index = IRtcBuilderConstants.ACTIVITY_MODE_CHANGED;
-				if(index>=IRtcBuilderConstants.ACTIVITY_INITIALIZE && index<=IRtcBuilderConstants.ACTIVITY_MODE_CHANGED) {
+				if(index>=IRtcBuilderConstants.ACTIVITY_INITIALIZE && index<=IRtcBuilderConstants.ACTIVITY_RATE_CHANGED) {
 					setControlEnabled(implChk.get(index), enabled);
 				}
 			}

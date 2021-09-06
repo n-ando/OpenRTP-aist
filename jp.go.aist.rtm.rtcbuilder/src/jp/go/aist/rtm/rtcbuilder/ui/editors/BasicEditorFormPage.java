@@ -42,6 +42,7 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
@@ -101,10 +102,6 @@ public class BasicEditorFormPage extends AbstractEditorFormPage {
 	private Combo executionTypeCombo;
 	private Text executionRateText;
 	private Text abstractText;
-	private Button dataFlowBtn;
-	private Button fsmBtn;
-	private Button multiModeBtn;
-	private Group compGroup;
 	private Button choreonoidBtn;
 
 	private Text rtcTypeText;
@@ -261,13 +258,6 @@ public class BasicEditorFormPage extends AbstractEditorFormPage {
 		if (parseDbl != null && parseDbl.intValue() < 0) {
 			result = Messages.getString("IMC.BASIC_VALIDATE_ECRATE2");
 		}
-		//Component Kind
-		if( !dataFlowBtn.getSelection() &&
-				!fsmBtn.getSelection() &&
-				!multiModeBtn.getSelection() &&
-				!choreonoidBtn.getSelection() ) {
-			result = "Please Select Component Kind.";
-		}
 		//Composite Component
 		if( categoryCombo.getText().startsWith(CATEGORY_COMPOSITE) &&
 				(editor.getRtcParam().getInports().size()>0 || editor.getRtcParam().getOutports().size()>0 ||
@@ -310,19 +300,6 @@ public class BasicEditorFormPage extends AbstractEditorFormPage {
 				Messages.getString("IMC.BASIC_LBL_ACTIVITY_TYPE"),
 				IRtcBuilderConstants.ACTIVITY_TYPE_ITEMS, SWT.COLOR_BLACK, 2);
 		//
-		toolkit.createLabel(composite, Messages.getString("IMC.BASIC_LBL_COMPONENT_KIND"));
-		compGroup = new Group(composite, SWT.NONE);
-		compGroup.setLayout(new GridLayout(3, false));
-		GridData gd = new GridData();
-		compGroup.setLayoutData(gd);
-		dataFlowBtn = createRadioCheckButton(toolkit, compGroup, "DataFlow", SWT.CHECK);
-		fsmBtn = createRadioCheckButton(toolkit, compGroup, "FSM", SWT.CHECK);
-		multiModeBtn = createRadioCheckButton(toolkit, compGroup, "MultiMode", SWT.CHECK);
-
-		Group dummyGroup = new Group(composite, SWT.SHADOW_NONE);
-		dummyGroup.setLayout(new GridLayout(1, false));
-		choreonoidBtn = createRadioCheckButton(toolkit, dummyGroup, "Choreonoid", SWT.CHECK);
-		//
 		maxInstanceText = createLabelAndText(toolkit, composite,
 				Messages.getString("IMC.BASIC_LBL_MAX_INSTANCES"),
 				SWT.NONE, SWT.COLOR_BLACK, 2);
@@ -355,7 +332,6 @@ public class BasicEditorFormPage extends AbstractEditorFormPage {
 		createHintLabel(Messages.getString("IMC.BASIC_HINT_CATEGORY_TITLE"), IMessageConstants.BASIC_HINT_CATEGORY_DESC, toolkit, composite);
 		createHintLabel(Messages.getString("IMC.BASIC_HINT_COMPTYPE_TITLE"), IMessageConstants.BASIC_HINT_COMPTYPE_DESC, toolkit, composite);
 		createHintLabel(Messages.getString("IMC.BASIC_HINT_ACTIVITYTYPE_TITLE"), IMessageConstants.BASIC_HINT_ACTIVITYTYPE_DESC, toolkit, composite);
-		createHintLabel(Messages.getString("IMC.BASIC_HINT_COMPKIND_TITLE"), IMessageConstants.BASIC_HINT_COMPKIND_DESC, toolkit, composite);
 		createHintLabel(IMessageConstants.BASIC_HINT_MAXINST_TITLE, IMessageConstants.BASIC_HINT_MAXINST_DESC, toolkit, composite);
 		createHintLabel(Messages.getString("IMC.BASIC_HINT_EXECUTIONTYPE_TITLE"), Messages.getString("IMC.BASIC_HINT_EXECUTIONTYPE_DESC"), toolkit, composite);
 		createHintLabel(Messages.getString("IMC.BASIC_HINT_EXECUTIONRATE_TITLE"), IMessageConstants.BASIC_HINT_EXECUTIONRATE_DESC, toolkit, composite);
@@ -366,8 +342,11 @@ public class BasicEditorFormPage extends AbstractEditorFormPage {
 		createHintLabel(IMessageConstants.LANGUAGE_HINT_LANG_TITLE, IMessageConstants.LANGUAGE_HINT_LANG_DESC, toolkit, composite);
 		//
 		createHintSpace(toolkit, composite);
+		createHintSpace(toolkit, composite);
 		createHintLabel(Messages.getString("IMC.BASIC_HINT_GENERATE_TITLE"), Messages.getString("IMC.BASIC_HINT_GENERATE_DESC"), toolkit, composite);
 		//
+		createHintSpace(toolkit, composite);
+		createHintSpace(toolkit, composite);
 		createHintSpace(toolkit, composite);
 		//
 		createHintLabel(Messages.getString("IMC.BASIC_HINT_IMPORT_TITLE"), Messages.getString("IMC.BASIC_HINT_IMPORT_DESC"), toolkit, composite);
@@ -389,8 +368,12 @@ public class BasicEditorFormPage extends AbstractEditorFormPage {
 	
 	private void createGenerateSection(FormToolkit toolkit, ScrolledForm form) {
 		generateSection = createSectionBaseWithLabel(toolkit, form,
-				Messages.getString("IMC.BASIC_GENERATE_TITLE"), Messages.getString("IMC.BASIC_GENERATE_EXPL"), 2);
+				Messages.getString("IMC.BASIC_GENERATE_TITLE"), Messages.getString("IMC.BASIC_GENERATE_EXPL"), 3);
 		createGenerateButton(toolkit);
+		//
+		Label sep = toolkit.createLabel(generateSection, "          ");
+		choreonoidBtn = createRadioCheckButton(toolkit, generateSection,
+				Messages.getString("IMC.BASIC_BTN_CHOREONOID"), SWT.CHECK);
 	}
 
 	private void createGenerateButton(FormToolkit toolkit) {
@@ -562,7 +545,7 @@ public class BasicEditorFormPage extends AbstractEditorFormPage {
 				targetRtc.setVender(ComponentPreferenceManager.getInstance().getBasic_VendorName());
 				targetRtc.setComponentType(ComponentPreferenceManager.getInstance().getBasic_ComponentType());
 				targetRtc.setActivityType(ComponentPreferenceManager.getInstance().getBasic_ActivityType());
-				targetRtc.setComponentKind(ComponentPreferenceManager.getInstance().getBasic_ComponentKind());
+				targetRtc.setComponentKind("DataFlowComponent");
 				targetRtc.setMaxInstance(ComponentPreferenceManager.getInstance().getBasic_MaxInstances());
 				targetRtc.setExecutionType(ComponentPreferenceManager.getInstance().getBasic_ExecutionType());
 				targetRtc.setExecutionRate(ComponentPreferenceManager.getInstance().getBasic_ExecutionRate());
@@ -925,7 +908,7 @@ public class BasicEditorFormPage extends AbstractEditorFormPage {
 		if(choreonoidBtn.getSelection()) {
 			rtcParam.setComponentKind(KIND_CHOREONOID);
 		} else {
-			rtcParam.setComponentKind(getSelectedCompKind());
+			rtcParam.setComponentKind("DataFlowComponent");
 		}
 		rtcParam.setAbstract(getText(abstractText.getText()));
 		rtcParam.setRtcType(getText(rtcTypeText.getText()));
@@ -945,18 +928,6 @@ public class BasicEditorFormPage extends AbstractEditorFormPage {
 					.getText()));
 			rtcParam.setExecutionRate(exec_rate);
 		} catch (Exception e) {
-		}
-
-		if(choreonoidBtn.getSelection()) {
-			dataFlowBtn.setEnabled(false);
-			fsmBtn.setEnabled(false);
-			multiModeBtn.setEnabled(false);
-			compGroup.setEnabled(false);
-		} else {
-			dataFlowBtn.setEnabled(true);
-			fsmBtn.setEnabled(true);
-			multiModeBtn.setEnabled(true);
-			compGroup.setEnabled(true);
 		}
 		// 以下、cppRadioが有効な場合のみ実行する
 		// →この画面が表示される前にこの処理が呼ばれた場合は、なにもしない
@@ -1011,7 +982,9 @@ public class BasicEditorFormPage extends AbstractEditorFormPage {
 		versionText.setText(getValue(rtcParam.getVersion()));
 		venderText.setText(getValue(rtcParam.getVender()));
 		categoryCombo.setText(getValue(rtcParam.getCategory()));
-		loadSelectedCompKind(rtcParam.getComponentKind());
+		if( rtcParam.getComponentKind().contains(KIND_CHOREONOID) ) {
+			choreonoidBtn.setSelection(true);
+		}
 		activityTypeCombo.setText(getValue(rtcParam.getActivityType()));
 		typeCombo.setText(getValue(rtcParam.getComponentType()));
 		maxInstanceText.setText(getValue(String.valueOf(rtcParam.getMaxInstance())));
@@ -1073,23 +1046,6 @@ public class BasicEditorFormPage extends AbstractEditorFormPage {
 		categoryCombo.add(value);
 	}
 
-	private void loadSelectedCompKind(String type) {
-		if( type.contains("DataFlow") )           dataFlowBtn.setSelection(true);
-		if( type.contains("FiniteStateMachine") ) fsmBtn.setSelection(true);
-		if( type.contains("MultiMode") )          multiModeBtn.setSelection(true);
-		if( type.contains(KIND_CHOREONOID) )      choreonoidBtn.setSelection(true);
-	}
-	private String getSelectedCompKind() {
-		StringBuffer result = new StringBuffer();
-
-		if(dataFlowBtn.getSelection())  result.append("DataFlow");
-		if(fsmBtn.getSelection())       result.append("FiniteStateMachine");
-		if(multiModeBtn.getSelection()) result.append("MultiMode");
-		if( result.length() > 0 ) result.append("Component");
-
-		return result.toString();
-	}
-
 	@Override
 	protected Text createLabelAndText(FormToolkit toolkit, Composite composite, String labelString) {
 		Text text = super.createLabelAndText(toolkit, composite, labelString);
@@ -1141,9 +1097,6 @@ public class BasicEditorFormPage extends AbstractEditorFormPage {
 				if (widgetInfo.matchWidget("moduleCategory"))    setControlEnabled(categoryCombo, enabled);
 				if (widgetInfo.matchWidget("componentType"))     setControlEnabled(typeCombo, enabled);
 				if (widgetInfo.matchWidget("activityType"))      setControlEnabled(activityTypeCombo, enabled);
-				if (widgetInfo.matchWidget("dataFlow"))          setControlEnabled(dataFlowBtn, enabled);
-				if (widgetInfo.matchWidget("fsm"))               setControlEnabled(fsmBtn, enabled);
-				if (widgetInfo.matchWidget("multiMode"))         setControlEnabled(multiModeBtn, enabled);
 				if (widgetInfo.matchWidget("maxInstances"))      setControlEnabled(maxInstanceText, enabled);
 				if (widgetInfo.matchWidget("executionType"))     setControlEnabled(executionTypeCombo, enabled);
 				if (widgetInfo.matchWidget("executionRate"))     setControlEnabled(executionRateText, enabled);

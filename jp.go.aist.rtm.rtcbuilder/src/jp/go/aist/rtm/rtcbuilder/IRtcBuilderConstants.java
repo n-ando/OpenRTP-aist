@@ -51,22 +51,13 @@ public interface IRtcBuilderConstants {
 	public static final String[] ACTIVITY_TYPE_ITEMS = new String[] {
 			"PERIODIC", "SPORADIC", "EVENTDRIVEN" };
 
-	public static final String[] COMPONENT_KIND_ITEMS = new String[] {
-		"DataFlowComponent", 
-		"FiniteStateMachineComponent",
-		"DataFlowFiniteStateMachineComponent",
-		"FiniteStateMachineMultiModeComponent",
-		"DataFlowMultiModeComponent",
-		"DataFlowFiniteStateMachineMultiModeComponent"};
-
 	public static final String[] EXECUTIONCONTEXT_TYPE_ITEMS = new String[] {
 		"PeriodicExecutionContext", "ExtTrigExecutionContext" };
 
 	public static final String[] ACTION_TYPE_ITEMS = new String[] {
 		"onInitialize", "onFinalize", "onStartup", "onShutdown", "onActivated",
 		"onDeactivated", "onAborting", "onError", "onReset",
-		"onExecute", "onStateUpdate", "onRateChanged",
-		"onAction", "onModeChanged"};
+		"onExecute", "onStateUpdate", "onRateChanged"};
 	
 	public static final String TAG_BACKEND = "backend";
 	public static final String TAG_SVC_IDL = "svc-idl";
@@ -144,9 +135,7 @@ public interface IRtcBuilderConstants {
 	public static final int ACTIVITY_EXECUTE = 9;
 	public static final int ACTIVITY_STATE_UPDATE = 10;
 	public static final int ACTIVITY_RATE_CHANGED = 11;
-	public static final int ACTIVITY_ACTION = 12;
-	public static final int ACTIVITY_MODE_CHANGED = 13;
-	public static final int ACTIVITY_DUMMY = 14;
+	public static final int ACTIVITY_DUMMY = 12;
 	//
 	public static final int PORT_SPACE_HEIGHT = 60;
 	public static final int PORT_SPACE_WIDTH = 150;

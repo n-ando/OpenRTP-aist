@@ -40,7 +40,7 @@ public class RtcParam extends AbstractRecordedParam implements Serializable {
 	private String vender;
 	private String componentType;
 	private String activityType;
-	private String componentKind;
+	private String componentKind = "DataFlowComponent";
 	private int maxInstance;
 	private String updateDate;
 	private RecordedList<String> versionUpLog = new RecordedList<String>();

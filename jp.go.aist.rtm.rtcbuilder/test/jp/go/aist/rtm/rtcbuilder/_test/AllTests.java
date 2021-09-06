@@ -4,7 +4,6 @@ import jp.go.aist.rtm.rtcbuilder._test.etc.MergeBlockParserTest;
 import jp.go.aist.rtm.rtcbuilder._test.etc.PreProcessorTest;
 import jp.go.aist.rtm.rtcbuilder._test.etc.StringUtilTest;
 import jp.go.aist.rtm.rtcbuilder._test.etc.TemplateHelperTest;
-import jp.go.aist.rtm.rtcbuilder._test.generateCode.BaseClass;
 import jp.go.aist.rtm.rtcbuilder._test.generateCode.BasicTest;
 import jp.go.aist.rtm.rtcbuilder._test.generateCode.BuildTest;
 import jp.go.aist.rtm.rtcbuilder._test.generateCode.CheckIDLTest;
@@ -89,7 +88,6 @@ public class AllTests {
 		suite.addTestSuite(ImplTest.class);
 		suite.addTestSuite(MultiTest.class);
 		suite.addTestSuite(VariableTest.class);
-		suite.addTestSuite(BaseClass.class);
 		suite.addTestSuite(LibraryTest.class);
 		suite.addTestSuite(ConfigSetTest.class);
 		suite.addTestSuite(IDLStructTest.class);
