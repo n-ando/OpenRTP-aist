@@ -31,6 +31,9 @@ public class PreProcessor {
 	private static final Pattern SPACE_PATTERN = Pattern
 			.compile("^ +", Pattern.MULTILINE);
 	
+	private static final Pattern TAO_PATTERN = Pattern
+			.compile("(#ifdef TAO_IDL)[\\s\\S]*?(#endif)", Pattern.MULTILINE);
+	
 	private static final int INCLUDE_FILE_INDEX = 2;
 
 	/**
@@ -85,6 +88,16 @@ public class PreProcessor {
 		return result.toString();
 	}
 
+	private static String eraseTAO(String target) {
+		StringBuffer result = new StringBuffer();
+		Matcher matcher = TAO_PATTERN.matcher(target);
+		while (matcher.find()) {
+			matcher.appendReplacement(result, Matcher.quoteReplacement(""));
+		}
+		matcher.appendTail(result);
+
+		return result.toString();
+	}
 	/**
 	 * 対象文字列に対してプリプロセッサを実行する。
 	 * 
@@ -96,9 +109,10 @@ public class PreProcessor {
 	public static String parse(String target, List<String> includeBaseDirs, List<String> includeFilesOut, boolean isCheck) throws IOException, HeaderException {
 		String targetNoCmt = eraseComments(target);
 		String targetNoPgm = erasePragma(targetNoCmt);
+		String targetNoTao = eraseTAO(targetNoPgm);
 		/////
 		StringBuffer result = new StringBuffer();
-		Matcher matcher = PREPROSESSOR_PATTERN.matcher(targetNoPgm);
+		Matcher matcher = PREPROSESSOR_PATTERN.matcher(targetNoTao);
 		while (matcher.find()) {
 			String replateString = "";
 			String includeFileContent = getIncludeFileContentThoroughgoing(
