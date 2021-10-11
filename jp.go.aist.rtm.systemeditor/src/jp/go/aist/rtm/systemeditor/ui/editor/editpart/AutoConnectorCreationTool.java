@@ -4,8 +4,6 @@ import static jp.go.aist.rtm.systemeditor.ui.util.RTMixin.to_cid;
 
 import java.util.List;
 
-import jp.go.aist.rtm.toolscommon.model.component.impl.PortConnectorImpl;
-
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.MouseEvent;
 import org.eclipse.draw2d.MouseListener;
@@ -15,11 +13,16 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.requests.SimpleFactory;
 import org.eclipse.gef.tools.ConnectionDragCreationTool;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.TraverseEvent;
+import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import jp.go.aist.rtm.systemeditor.RTSystemEditorPlugin;
+import jp.go.aist.rtm.toolscommon.model.component.impl.PortConnectorImpl;
 
 /**
  * コネクタを作成するツール
@@ -38,6 +41,30 @@ public class AutoConnectorCreationTool extends ConnectionDragCreationTool {
 		}
 		return instance;
 	};
+	
+	public AutoConnectorCreationTool() {
+		String targetOS = System.getProperty("os.name").toLowerCase();
+		String targetVersion = System.getProperty("os.version").toLowerCase();
+		Cursor CURSOR_PLUG = null;
+		Cursor CURSOR_PLUG_NOT= null;
+		if(targetOS.toLowerCase().startsWith("linux")) {
+			CURSOR_PLUG = createCursor("icons/plug.bmp", "icons/plugmask.png");
+			CURSOR_PLUG_NOT= createCursor("icons/plugnot.bmp", "icons/plugmasknot.png");
+		} else {
+			CURSOR_PLUG = createCursor("icons/plugmask.png", "icons/plug.bmp");
+			CURSOR_PLUG_NOT= createCursor("icons/plugmasknot.png", "icons/plugnot.bmp");
+		}
+		
+		setDefaultCursor(CURSOR_PLUG);
+		setDisabledCursor(CURSOR_PLUG_NOT);
+	}
+		
+	private static Cursor createCursor(String sourceName, String maskName) {
+		ImageDescriptor src = RTSystemEditorPlugin.getImageDescriptor(sourceName);
+		ImageDescriptor mask = RTSystemEditorPlugin.getImageDescriptor(maskName);
+		
+		return new Cursor(null, src.getImageData(), mask.getImageData(), 0, 0);
+	}
 
 	/**
 	 * ポートの Figureへコネクションツールを割り当てます。
