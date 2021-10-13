@@ -1161,18 +1161,22 @@ public class ConfigurationDialog extends TitleAreaDialog {
 					// ハッシュの場合
 					for (String key : nv.widgetKeySet()) {
 						ConfigurationWidget wd = nv.widget(key);
-						String paramName = cs.getId() + "." + nv.getKey() + "["	+ key + "]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-						validateParam(validateErrors, wd, paramName);
+						if(wd.isValueModified()) {
+							String paramName = cs.getId() + "." + nv.getKey() + "["	+ key + "]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+							validateParam(validateErrors, wd, paramName);
+						}
 					}
 				} else {
 					// 配列、単体の場合
 					for (int i = 0; i < nv.widgetSize(); i++) {
 						ConfigurationWidget wd = nv.widget(i);
-						String paramName = cs.getId() + "." + nv.getKey(); //$NON-NLS-1$
-						if (nv.widgetSize() > 1) {
-							paramName += "[" + i + "]"; //$NON-NLS-1$ //$NON-NLS-2$
+						if(wd.isValueModified()) {
+							String paramName = cs.getId() + "." + nv.getKey(); //$NON-NLS-1$
+							if (nv.widgetSize() > 1) {
+								paramName += "[" + i + "]"; //$NON-NLS-1$ //$NON-NLS-2$
+							}
+							validateParam(validateErrors, wd, paramName);
 						}
-						validateParam(validateErrors, wd, paramName);
 					}
 				}
 			}
