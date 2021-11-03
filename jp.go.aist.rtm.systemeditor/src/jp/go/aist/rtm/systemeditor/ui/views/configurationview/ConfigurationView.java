@@ -269,9 +269,6 @@ public class ConfigurationView extends ViewPart {
 	 */
 	public void applyConfiguration(boolean first) {
 		LOGGER.trace("applyConfiguration START: first=<{}>", first);
-		if (first && !confirmActiveApply())
-			return;
-		
 		int selectionIndex = leftTable.getSelectionIndex();
 
 		List<ConfigurationSet> newConfigurationSetList = createNewConfigurationSetList(copiedComponent);
