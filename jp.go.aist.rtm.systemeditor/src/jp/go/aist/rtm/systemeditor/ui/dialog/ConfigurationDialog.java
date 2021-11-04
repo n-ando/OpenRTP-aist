@@ -102,12 +102,6 @@ public class ConfigurationDialog extends TitleAreaDialog {
 		this.firstApply = true;
 	}
 
-	// 編集ダイアログ内でapplyを実行する 2009.11.16
-//	/** 即時保存が指定されていたらtrue */
-//	public boolean isApply() {
-//		return this.isApply;
-//	}
-
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		Composite mainComposite = (Composite) super.createDialogArea(parent);
@@ -147,7 +141,7 @@ public class ConfigurationDialog extends TitleAreaDialog {
 				Button source = (Button) e.getSource();
 				isApply = source.getSelection();
 				if (!isApply) return;
-				if (firstApply) firstApply = !view.confirmActiveApply();
+				if (firstApply) firstApply = false;
 				if (firstApply) {
 					isApply = false;
 					source.setSelection(false);
