@@ -267,33 +267,34 @@ public class ConfigurationView extends ViewPart {
 	/**
 	 * Configurationの変更を反映します。
 	 */
-	public void applyConfiguration(boolean first) {
-		LOGGER.trace("applyConfiguration START: first=<{}>", first);
+	public void applyConfiguration(boolean checkConstraint) {
 		int selectionIndex = leftTable.getSelectionIndex();
 
 		List<ConfigurationSet> newConfigurationSetList = createNewConfigurationSetList(copiedComponent);
 		List<ConfigurationSet> originalConfigurationSetList = createNewConfigurationSetList(originalComponent);
-
-		List<String> validateErrors = new ArrayList<String>();
-		for(ConfigurationSetConfigurationWrapper cs : this.copiedComponent.getConfigurationSetList()) {
-			if(cs.isSecret()) continue;
-			for (NamedValueConfigurationWrapper nv : cs.getNamedValueList()) {
-				List<String> result = nv.checkConstraints(cs.getId());
-				validateErrors.addAll(result);
+		
+		if(checkConstraint) {
+			List<String> validateErrors = new ArrayList<String>();
+			for(ConfigurationSetConfigurationWrapper cs : this.copiedComponent.getConfigurationSetList()) {
+				if(cs.isSecret()) continue;
+				for (NamedValueConfigurationWrapper nv : cs.getNamedValueList()) {
+					List<String> result = nv.checkConstraints(cs.getId());
+					validateErrors.addAll(result);
+				}
 			}
-		}
-		if(0 < validateErrors.size()) {
-			StringBuilder builder = new StringBuilder();
-			builder.append(Messages.getString("ConfigurationView.condition_error.1")).append(System.getProperty("line.separator"));
-			builder.append(Messages.getString("ConfigurationView.condition_error.2")).append(System.getProperty("line.separator"));
-			builder.append(System.getProperty("line.separator"));
-			for(String each : validateErrors) {
-				builder.append(each).append(System.getProperty("line.separator"));
+			if(0 < validateErrors.size()) {
+				StringBuilder builder = new StringBuilder();
+				builder.append(Messages.getString("ConfigurationView.condition_error.1")).append(System.getProperty("line.separator"));
+				builder.append(Messages.getString("ConfigurationView.condition_error.2")).append(System.getProperty("line.separator"));
+				builder.append(System.getProperty("line.separator"));
+				for(String each : validateErrors) {
+					builder.append(each).append(System.getProperty("line.separator"));
+				}
+				boolean ret = MessageDialog.openConfirm(getSite().getShell(),
+														Messages.getString("Common.dialog.confirm_title"),
+														builder.toString());
+				if(ret == false) return;
 			}
-			boolean ret = MessageDialog.openConfirm(getSite().getShell(),
-													Messages.getString("Common.dialog.confirm_title"),
-													builder.toString());
-			if(ret == false) return;
 		}
 		
 		int activeConfigurationIndex = copiedComponent

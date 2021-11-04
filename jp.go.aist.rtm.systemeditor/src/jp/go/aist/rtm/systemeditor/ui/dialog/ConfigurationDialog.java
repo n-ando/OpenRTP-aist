@@ -129,6 +129,8 @@ public class ConfigurationDialog extends TitleAreaDialog {
 		gd.grabExcessHorizontalSpace = true;
 		gd.heightHint = 50;
 		errorText.setLayoutData(gd);
+		//Check Constraint
+		checkConstraint();
 
 		gd = new GridData();
 		gd.horizontalAlignment = GridData.END;
@@ -160,6 +162,21 @@ public class ConfigurationDialog extends TitleAreaDialog {
 		applyCheckBox.setSelection(isApply);
 
 		return mainComposite;
+	}
+
+	private void checkConstraint() {
+		List<String> validateErrors = new ArrayList<String>();
+		for (NamedValueConfigurationWrapper nv : selectedConfigSet.getNamedValueList()) {
+			List<String> result = nv.checkConstraints(selectedConfigSet.getId());
+			validateErrors.addAll(result);
+		}
+		if (validateErrors.size() > 0) {
+			String msg = "";
+			for (String s : validateErrors) {
+				msg += "- " + s + "\n";
+			}
+			errorText.setText(Messages.getString("ConfigurationDialog.21") + msg);
+		}
 	}
 	
 	protected void refreshTabItem() {
@@ -283,7 +300,7 @@ public class ConfigurationDialog extends TitleAreaDialog {
 				}
 			}
 		}
-
+		
 		// スクロールの初期サイズ
 		scroll.setMinHeight(configSetComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT).y + 50);
 
@@ -443,6 +460,12 @@ public class ConfigurationDialog extends TitleAreaDialog {
 			if (widget.isValueModified()) {
 				valueSliderText.setBackground(colorRegistry.get(MODIFY_COLOR));
 			}
+			String value = valueSliderText.getText();
+			ConfigurationCondition condition = widget.getCondition();
+			if (!condition.validate(value)) {
+				valueSliderText.setToolTipText(Messages.getString("ConfigurationDialog.6") + condition + Messages.getString("ConfigurationDialog.7")); //$NON-NLS-1$ //$NON-NLS-2$
+				valueSliderText.setBackground(colorRegistry.get(ERROR_COLOR));
+			}
 
 			valueSliderText.addModifyListener(createSliderModifyListner(widget, valueSliderText, valueSlider));
 			valueSlider.addSelectionListener(createSliderSelectionListner(widget, valueSliderText, valueSlider));
@@ -520,6 +543,12 @@ public class ConfigurationDialog extends TitleAreaDialog {
 			valueText.setText(widget.getValue());
 			if (widget.isValueModified()) {
 				valueText.setBackground(colorRegistry.get(MODIFY_COLOR));
+			}
+			String value = valueText.getText();
+			ConfigurationCondition condition = widget.getCondition();
+			if (!condition.validate(value)) {
+				valueText.setToolTipText(Messages.getString("ConfigurationDialog.6") + condition + Messages.getString("ConfigurationDialog.7")); //$NON-NLS-1$ //$NON-NLS-2$
+				valueText.setBackground(colorRegistry.get(ERROR_COLOR));
 			}
 
 			valueText.addModifyListener(createTextModifyListner(widget, valueText));
@@ -1054,6 +1083,10 @@ public class ConfigurationDialog extends TitleAreaDialog {
 		if (selectedConfigSet != null) {
 			if (currentTabItem.getControl() == null) {
 				currentTabItem.setControl(createConfigSetComposite(selectedConfigSet));
+			}
+			//check Constraint
+			if(errorText!=null) {
+				checkConstraint();
 			}
 		}
 	}
