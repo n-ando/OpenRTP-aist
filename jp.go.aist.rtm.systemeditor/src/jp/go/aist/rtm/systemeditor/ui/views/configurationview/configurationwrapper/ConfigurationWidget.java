@@ -15,12 +15,12 @@ public class ConfigurationWidget {
 	public static final String RADIO = "radio";
 	public static final String CHECKBOX = "checkbox";
 	public static final String ORDERED_LIST = "ordered_list";
-
+	
 	private String type;
 	private ConfigurationCondition condition;
 	private String value = null;
 	private boolean valueModified = false;
-
+	
 	double sliderStep = 1.0;
 	String sliderStepStr = "";
 	double spinStep = 0.0;
@@ -156,7 +156,7 @@ public class ConfigurationWidget {
 		} catch (Throwable t) {
 		}
 	}
-
+	
 	public String getType() {
 		return this.type;
 	}

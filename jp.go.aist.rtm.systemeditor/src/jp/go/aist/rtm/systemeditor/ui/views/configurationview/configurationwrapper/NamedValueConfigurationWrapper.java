@@ -382,7 +382,6 @@ public class NamedValueConfigurationWrapper implements Comparable<NamedValueConf
 	
 	public List<String> checkConstraints(String csId) {
 		List<String> validateErrors = new ArrayList<String>();
-		this.widget().setValue(this.value);
 		if (this.widgetKeySet().size() > 0) {
 			// ハッシュの場合
 			for (String key : this.widgetKeySet()) {
