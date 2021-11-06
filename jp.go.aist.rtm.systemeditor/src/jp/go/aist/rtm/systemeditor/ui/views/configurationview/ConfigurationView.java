@@ -146,7 +146,6 @@ public class ConfigurationView extends ViewPart {
 	private static final String MSG_UPDATE_FAILURE = Messages.getString("ConfigurationView.13");
 
 	private static final String MSG_CONFIRM = Messages.getString("Common.dialog.confirm_title");
-	private static final String MSG_CHECK_APPLY_CHANGE = Messages.getString("ConfigurationView.11");
 
 	private static final String MSG_WARNING = Messages.getString("ConfigurationView.39");
 	private static final String MSG_NAME_ALREADY_EXIST = Messages.getString("ConfigurationView.40");
@@ -328,19 +327,6 @@ public class ConfigurationView extends ViewPart {
 
 		leftTable.setSelection(selectionIndex);
 		refreshRightData();
-	}
-
-	/** ActiveなRTCのコンフィグを変更するかを確認する */
-	public boolean confirmActiveApply() {
-		LOGGER.trace("confirmActiveApply START");
-		if (targetComponent instanceof CorbaComponent) {
-			if (((CorbaComponent) targetComponent).getComponentState() == ExecutionContext.RTC_ACTIVE
-					&& isActiveConfigurationSetModified()) {
-				return MessageDialog.openConfirm(getViewSite().getShell(),
-						MSG_CONFIRM, MSG_CHECK_APPLY_CHANGE);
-			}
-		}
-		return true;
 	}
 
 	private void setDirty() {
