@@ -277,6 +277,9 @@ public class ConfigurationView extends ViewPart {
 			for(ConfigurationSetConfigurationWrapper cs : this.copiedComponent.getConfigurationSetList()) {
 				if(cs.isSecret()) continue;
 				for (NamedValueConfigurationWrapper nv : cs.getNamedValueList()) {
+					if(nv.isLoadedWidgetValue() == false) {
+						nv.loadWidgetValue();
+					}
 					List<String> result = nv.checkConstraints(cs.getId());
 					validateErrors.addAll(result);
 				}

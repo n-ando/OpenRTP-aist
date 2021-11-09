@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.TreeSet;
 
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.jface.resource.ColorRegistry;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -1160,25 +1161,52 @@ public class ConfigurationDialog extends TitleAreaDialog {
 			}
 		}
 	}
-
-	@Override
+    private List<String> checkConstraints() {
+        List<String> validateErrors = new ArrayList<String>();
+        for (ConfigurationSetConfigurationWrapper cs : this.copiedConfig
+                .getConfigurationSetList()) {
+            for (NamedValueConfigurationWrapper nv : cs.getNamedValueList()) {
+				if(nv.isLoadedWidgetValue() == false) {
+					nv.loadWidgetValue();
+				}
+				List<String> result = nv.checkConstraints(cs.getId());
+				validateErrors.addAll(result);
+            }
+        }
+        return validateErrors;
+    }
+    
+    @Override
 	protected void configureShell(Shell shell) {
 		super.configureShell(shell);
 		shell.setText("Configuration"); //$NON-NLS-1$
 	}
 
 	@Override
-    protected void createButtonsForButtonBar(Composite parent) {
-        createButton(parent, IDialogConstants.CANCEL_ID, IDialogConstants.CLOSE_LABEL, true);
-    }
-	
-//	@Override
-//	protected void okPressed() {
-//		if (saveData()) {
-//			super.okPressed();
-//		}
-//	}
-//
+	protected void okPressed() {
+        List<String> validateErrors = checkConstraints();
+		if(0 < validateErrors.size()) {
+			StringBuilder builder = new StringBuilder();
+			builder.append(Messages.getString("ConfigurationView.condition_error.1")).append(System.getProperty("line.separator"));
+			builder.append(Messages.getString("ConfigurationView.condition_error.2")).append(System.getProperty("line.separator"));
+			builder.append(System.getProperty("line.separator"));
+			for(String each : validateErrors) {
+				builder.append(each).append(System.getProperty("line.separator"));
+			}
+			boolean ret = MessageDialog.openConfirm(getShell(),
+													Messages.getString("Common.dialog.confirm_title"),
+													builder.toString());
+			if(ret == false) return;
+		}
+		
+		this.isValueModified = true;
+		
+		if (saveData()) {
+			view.applyConfiguration(false);
+			super.okPressed();
+		}
+	}
+
 	/** コンフィグ値を再描画する */
 	private void selectConfigSet() {
 		int index = tabFolder.getSelectionIndex();
