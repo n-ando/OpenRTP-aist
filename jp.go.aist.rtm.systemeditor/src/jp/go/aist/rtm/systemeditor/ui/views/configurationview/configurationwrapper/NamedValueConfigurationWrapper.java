@@ -380,12 +380,15 @@ public class NamedValueConfigurationWrapper implements Comparable<NamedValueConf
 		return typeName == null;
 	}
 	
-	public List<String> checkConstraints(String csId) {
+	public List<String> checkConstraints(String csId, boolean onlyUpdated) {
 		List<String> validateErrors = new ArrayList<String>();
 		if (this.widgetKeySet().size() > 0) {
 			// ハッシュの場合
 			for (String key : this.widgetKeySet()) {
 				ConfigurationWidget wd = this.widget(key);
+				if(onlyUpdated) {
+					if(this.value == wd.getValue()) continue;
+				}
 				String paramName = csId + "." + this.getKey() + "["	+ key + "]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				validateParam(validateErrors, wd, paramName);
 			}
@@ -393,6 +396,9 @@ public class NamedValueConfigurationWrapper implements Comparable<NamedValueConf
 			// 配列、単体の場合
 			for (int i = 0; i < this.widgetSize(); i++) {
 				ConfigurationWidget wd = this.widget(i);
+				if(onlyUpdated) {
+					if(this.value == wd.getValue()) continue;
+				}
 				String paramName = csId + "." + this.getKey(); //$NON-NLS-1$
 				if (this.widgetSize() > 1) {
 					paramName += "[" + i + "]"; //$NON-NLS-1$ //$NON-NLS-2$

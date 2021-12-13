@@ -125,7 +125,7 @@ public class ConfigurationDialog extends TitleAreaDialog {
 		gd.heightHint = 50;
 		errorText.setLayoutData(gd);
 		//Check Constraint
-		checkConstraint();
+		checkConstraint(false);
 
 		gd = new GridData();
 		gd.horizontalAlignment = GridData.END;
@@ -149,7 +149,7 @@ public class ConfigurationDialog extends TitleAreaDialog {
 					return;
 				}
 				
-				if(checkConstraint()==false) return;
+				if(checkConstraint(false)==false) return;
 				if (saveData()) {
 					view.applyConfiguration(false);
 					refreshTabItem();
@@ -161,10 +161,10 @@ public class ConfigurationDialog extends TitleAreaDialog {
 		return mainComposite;
 	}
 
-	private boolean checkConstraint() {
+	private boolean checkConstraint(boolean onlyUpdated) {
 		List<String> validateErrors = new ArrayList<String>();
 		for (NamedValueConfigurationWrapper nv : selectedConfigSet.getNamedValueList()) {
-			List<String> result = nv.checkConstraints(selectedConfigSet.getId());
+			List<String> result = nv.checkConstraints(selectedConfigSet.getId(), onlyUpdated);
 			validateErrors.addAll(result);
 		}
 		if (validateErrors.size() > 0) {
@@ -935,7 +935,7 @@ public class ConfigurationDialog extends TitleAreaDialog {
 						valueText.setBackground(colorRegistry.get(NORMAL_COLOR));
 					}
 				}
-				checkConstraint();
+				checkConstraint(false);
 			}
 		};
 	}
@@ -967,7 +967,7 @@ public class ConfigurationDialog extends TitleAreaDialog {
 					String value = b.getText();
 					wd.setValue(value);
 					doModify(null);
-					checkConstraint();
+					checkConstraint(false);
 				}
 			}
 		};
@@ -997,7 +997,7 @@ public class ConfigurationDialog extends TitleAreaDialog {
 								.get(NORMAL_COLOR));
 					}
 				}
-				checkConstraint();
+				checkConstraint(false);
 			}
 		};
 	}
@@ -1052,7 +1052,7 @@ public class ConfigurationDialog extends TitleAreaDialog {
 						valueSliderText.setBackground(colorRegistry.get(NORMAL_COLOR));
 					}
 				}
-				checkConstraint();
+				checkConstraint(false);
 			}
 		};
 	}
@@ -1085,7 +1085,7 @@ public class ConfigurationDialog extends TitleAreaDialog {
 			}
 			//check Constraint
 			if(errorText!=null) {
-				checkConstraint();
+				checkConstraint(false);
 			}
 		}
 	}
@@ -1169,7 +1169,7 @@ public class ConfigurationDialog extends TitleAreaDialog {
 				if(nv.isLoadedWidgetValue() == false) {
 					nv.loadWidgetValue();
 				}
-				List<String> result = nv.checkConstraints(cs.getId());
+				List<String> result = nv.checkConstraints(cs.getId(), true);
 				validateErrors.addAll(result);
             }
         }
