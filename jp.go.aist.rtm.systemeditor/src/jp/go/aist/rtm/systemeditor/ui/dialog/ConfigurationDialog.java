@@ -552,7 +552,6 @@ public class ConfigurationDialog extends TitleAreaDialog {
 				valueText.setBackground(colorRegistry.get(ERROR_COLOR));
 			}
 
-			valueText.addModifyListener(createTextModifyListner(widget, valueText));
 			valueText.addFocusListener(createFocusListner(widget, valueText));
 		}
 	}
@@ -907,20 +906,6 @@ public class ConfigurationDialog extends TitleAreaDialog {
 
 			public void focusLost(FocusEvent e) {
 				String value = valueText.getText();
-				ConfigurationCondition condition = wd.getCondition();
-				if (condition.validate(value)) {
-					doModify(valueText);
-				}
-			}};
-	}
-
-	private ModifyListener createTextModifyListner(
-			final ConfigurationWidget widget, final Text valueText) {
-		return new ModifyListener() {
-			ConfigurationWidget wd = widget;
-
-			public void modifyText(ModifyEvent e) {
-				String value = valueText.getText();
 				wd.setValue(value);
 				ConfigurationCondition condition = wd.getCondition();
 				if (!condition.validate(value)) {
@@ -934,10 +919,10 @@ public class ConfigurationDialog extends TitleAreaDialog {
 					} else {
 						valueText.setBackground(colorRegistry.get(NORMAL_COLOR));
 					}
+					doModify(valueText);
 				}
 				checkConstraint(false);
-			}
-		};
+			}};
 	}
 
 	/** Applyが押されていたら即時更新する */
