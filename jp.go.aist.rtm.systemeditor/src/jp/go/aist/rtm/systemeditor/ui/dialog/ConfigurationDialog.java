@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeSet;
 
-import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.jface.resource.ColorRegistry;
@@ -56,6 +55,7 @@ public class ConfigurationDialog extends TitleAreaDialog {
 	private static final int NAME_WIDTH = 150;
 
 	private static final String NORMAL_COLOR = "NORMAL_COLOR"; // @jve:decl-index=0: //$NON-NLS-1$
+	private static final String SPINNER_NORMAL_COLOR = "NORMAL_COLOR"; // @jve:decl-index=0: //$NON-NLS-1$
 	private static final String MODIFY_COLOR = "MODIFY_COLOR"; // @jve:decl-index=0: //$NON-NLS-1$
 
 	private static final String CANT_MODIFY_COLOR = "CANT_MODIFY_COLOR"; // @jve:decl-index=0: //$NON-NLS-1$
@@ -92,6 +92,7 @@ public class ConfigurationDialog extends TitleAreaDialog {
 		if (colorRegistry == null) {
 			colorRegistry = new ColorRegistry();
 			colorRegistry.put(NORMAL_COLOR, new RGB(255, 255, 255));
+			colorRegistry.put(SPINNER_NORMAL_COLOR, new RGB(230, 230, 230));
 			colorRegistry.put(MODIFY_COLOR, new RGB(255, 192, 192));
 			colorRegistry.put(CANT_MODIFY_COLOR, new RGB(198, 198, 198));
 			colorRegistry.put(ERROR_COLOR, new RGB(255, 0, 0));
@@ -403,7 +404,7 @@ public class ConfigurationDialog extends TitleAreaDialog {
 	}
 
 	private Spinner createSpinner(final Composite parent) {
-		Spinner spinner = new Spinner(parent, SWT.BORDER);
+		Spinner spinner = new Spinner(parent, SWT.BORDER | SWT.READ_ONLY);
 		
 		spinner.setLayoutData(createGridData());
 		
@@ -469,6 +470,7 @@ public class ConfigurationDialog extends TitleAreaDialog {
 			}
 
 			valueSliderText.addModifyListener(createSliderModifyListner(widget, valueSliderText, valueSlider));
+			valueSliderText.addFocusListener(createFocusListner(widget, valueSliderText));
 			valueSlider.addSelectionListener(createSliderSelectionListner(widget, valueSliderText, valueSlider));
 
 		} else if (widget != null && widget.isSpinner()) {
@@ -498,8 +500,11 @@ public class ConfigurationDialog extends TitleAreaDialog {
 			} catch (NumberFormatException e) {
 				valueSpinner.setSelection(0);
 			}
+			
 			if (widget.isValueModified()) {
 				valueSpinner.setBackground(colorRegistry.get(MODIFY_COLOR));
+			} else {
+				valueSpinner.setBackground(colorRegistry.get(SPINNER_NORMAL_COLOR));
 			}
 
 			valueSpinner.addModifyListener(createSpinnerModifyListner(widget, valueSpinner));
@@ -979,7 +984,7 @@ public class ConfigurationDialog extends TitleAreaDialog {
 						doModify(valueSpinner);
 					} else {
 						valueSpinner.setBackground(colorRegistry
-								.get(NORMAL_COLOR));
+								.get(SPINNER_NORMAL_COLOR));
 					}
 				}
 				checkConstraint(false);
@@ -1002,6 +1007,9 @@ public class ConfigurationDialog extends TitleAreaDialog {
 					wd.setValue(value);
 				}
 				valueSliderText.setText(value);
+				if (wd.isValueModified()) {
+					doModify(valueSliderText);
+				}
 			}
 		};
 	}
@@ -1031,11 +1039,7 @@ public class ConfigurationDialog extends TitleAreaDialog {
 				} else {
 					valueSliderText.setToolTipText(null);
 					wd.setValue(value);
-					if (wd.isValueModified()) {
-						doModify(valueSliderText);
-					} else {
-						valueSliderText.setBackground(colorRegistry.get(NORMAL_COLOR));
-					}
+					valueSliderText.setBackground(colorRegistry.get(NORMAL_COLOR));
 				}
 				checkConstraint(false);
 			}
