@@ -17,6 +17,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -404,7 +406,7 @@ public class ConfigurationDialog extends TitleAreaDialog {
 	}
 
 	private Spinner createSpinner(final Composite parent) {
-		Spinner spinner = new Spinner(parent, SWT.BORDER | SWT.READ_ONLY);
+		Spinner spinner = new Spinner(parent, SWT.BORDER);
 		
 		spinner.setLayoutData(createGridData());
 		
@@ -508,6 +510,8 @@ public class ConfigurationDialog extends TitleAreaDialog {
 			}
 
 			valueSpinner.addModifyListener(createSpinnerModifyListner(widget, valueSpinner));
+			valueSpinner.addKeyListener(createSpinnerKeyListner(widget, valueSpinner));
+			valueSpinner.addFocusListener(createSpinnerFocusListner(widget, valueSpinner));
 
 		} else if (widget != null && widget.isRadio()) {
 			// widget種別がradioの場合
@@ -969,6 +973,7 @@ public class ConfigurationDialog extends TitleAreaDialog {
 			ConfigurationWidget wd = widget;
 
 			public void modifyText(ModifyEvent e) {
+				if(wd.isCancel()) return;
 				String value = valueSpinner.getText();
 				ConfigurationCondition condition = wd.getCondition();
 				if (!condition.validate(value)) {
@@ -990,6 +995,52 @@ public class ConfigurationDialog extends TitleAreaDialog {
 				checkConstraint(false);
 			}
 		};
+	}
+
+	private KeyListener createSpinnerKeyListner(
+			final ConfigurationWidget widget, final Spinner valueSpinner) {
+		return new KeyListener() {
+			ConfigurationWidget wd = widget;
+			@Override
+			public void keyReleased(KeyEvent e) {
+				wd.setCancel(false);
+			}
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+				wd.setCancel(true);
+			}
+		};
+	}
+
+	private FocusListener createSpinnerFocusListner(final ConfigurationWidget widget, final Spinner valueSpinner) {
+		return new FocusListener(){
+			ConfigurationWidget wd = widget;
+			
+			public void focusGained(FocusEvent e) {
+			}
+
+			public void focusLost(FocusEvent e) {
+				String value = valueSpinner.getText();
+				ConfigurationCondition condition = wd.getCondition();
+				if (!condition.validate(value)) {
+					valueSpinner.setToolTipText(Messages.getString("ConfigurationDialog.6") + condition + Messages.getString("ConfigurationDialog.7")); //$NON-NLS-1$ //$NON-NLS-2$
+					// 最小/最大値を超える値を丸める
+//					wd.setValue(condition.adjustMinMaxValue(value));
+                    wd.setValue(value);
+					valueSpinner.setBackground(colorRegistry.get(ERROR_COLOR));
+				} else {
+					valueSpinner.setToolTipText(null);
+					wd.setValue(value);
+					if (wd.isValueModified()) {
+						doModify(valueSpinner);
+					} else {
+						valueSpinner.setBackground(colorRegistry
+								.get(SPINNER_NORMAL_COLOR));
+					}
+				}
+				checkConstraint(false);
+			}};
 	}
 
 	private SelectionAdapter createSliderSelectionListner(

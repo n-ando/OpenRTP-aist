@@ -20,10 +20,18 @@ public class ConfigurationWidget {
 	private ConfigurationCondition condition;
 	private String value = null;
 	private boolean valueModified = false;
+	private boolean isCancel = false;
 	
 	double sliderStep = 1.0;
 	String sliderStepStr = "";
 	double spinStep = 0.0;
+
+	public void setCancel(boolean isCancel) {
+		this.isCancel = isCancel;
+	}
+	public boolean isCancel() {
+		return isCancel;
+	}
 
 	/**
 	 * @param widgets	ウィジェット文字列（配列用）
