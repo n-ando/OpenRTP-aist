@@ -87,7 +87,7 @@ public class ConfigurationDialog extends TitleAreaDialog {
 	private List<String> tabbedIdList;
 
 	Text errorText;
-
+	
 	public ConfigurationDialog(ConfigurationView view) {
 		super(view.getSite().getShell());
 		setShellStyle(getShellStyle() | SWT.RESIZE);
@@ -487,10 +487,8 @@ public class ConfigurationDialog extends TitleAreaDialog {
 				// 小数の場合は桁数を設定
 				valueSpinner.setDigits(widget.getCondition().getDigits());
 			}
-			valueSpinner.setMaximum(widget.getCondition().getMaxByInteger()
-					.intValue());
-			valueSpinner.setMinimum(widget.getCondition().getMinByInteger()
-					.intValue());
+			valueSpinner.setMaximum(Integer.MAX_VALUE);
+			valueSpinner.setMinimum(Integer.MIN_VALUE);
 			valueSpinner.setIncrement(widget.getSpinIncrement());
 
 			// spinnerに初期値設定
@@ -979,8 +977,13 @@ public class ConfigurationDialog extends TitleAreaDialog {
 				if (!condition.validate(value)) {
 					valueSpinner.setToolTipText(Messages.getString("ConfigurationDialog.6") + condition + Messages.getString("ConfigurationDialog.7")); //$NON-NLS-1$ //$NON-NLS-2$
 					// 最小/最大値を超える値を丸める
-//					wd.setValue(condition.adjustMinMaxValue(value));
-                    wd.setValue(value);
+					wd.setValue(condition.adjustMinMaxValue(value));
+					// 丸めた値に更新する
+					Double d = Double.valueOf(widget.getValue());
+					Integer i = widget.getCondition().getIntegerByDigits(
+							d.doubleValue());
+					valueSpinner.setSelection(i.intValue());
+					
 					valueSpinner.setBackground(colorRegistry.get(ERROR_COLOR));
 				} else {
 					valueSpinner.setToolTipText(null);
