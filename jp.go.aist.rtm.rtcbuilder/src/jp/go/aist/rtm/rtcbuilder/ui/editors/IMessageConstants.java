@@ -36,12 +36,6 @@ public interface IMessageConstants {
 			Messages.getString("IMC.BASIC_HINT_ACTIVITYTYPE_DESC_P2"),
 			Messages.getString("IMC.BASIC_HINT_ACTIVITYTYPE_DESC_P3"),
 			Messages.getString("IMC.BASIC_HINT_ACTIVITYTYPE_DESC_P4")});
-	public static final String BASIC_HINT_COMPKIND_DESC = StringUtil.connectMessageWithSepalator( new String[]{
-			Messages.getString("IMC.BASIC_HINT_COMPKIND_DESC_P1"),
-			Messages.getString("IMC.BASIC_HINT_COMPKIND_DESC_P2"),
-			Messages.getString("IMC.BASIC_HINT_COMPKIND_DESC_P3"),
-			Messages.getString("IMC.BASIC_HINT_COMPKIND_DESC_P4"),
-			Messages.getString("IMC.BASIC_HINT_COMPKIND_DESC_P5")});
 	public static final String BASIC_HINT_MAXINST_TITLE = StringUtil.connectMessageWithSepalator( new String[]{
 			Messages.getString("IMC.BASIC_HINT_MAXINST_TITLE_P1"),
 			Messages.getString("IMC.BASIC_HINT_MAXINST_TITLE_P2")});
@@ -318,9 +312,6 @@ public interface IMessageConstants {
 	public static final String DOCUMENT_LBL_CREATOR = Messages.getString("IMessageConstants.DOCUMENT_LBL_CREATOR"); //$NON-NLS-1$
 	public static final String DOCUMENT_LBL_LICENSE = Messages.getString("IMessageConstants.DOCUMENT_LBL_LICENSE"); //$NON-NLS-1$
 	public static final String DOCUMENT_LBL_REFERENCE = Messages.getString("IMessageConstants.DOCUMENT_LBL_REFERENCE"); //$NON-NLS-1$
-	public static final String DOCUMENT_LBL_VERSIONUPLOG = Messages.getString("IMessageConstants.DOCUMENT_LBL_VERSIONUPLOG"); //$NON-NLS-1$
-	public static final String DOCUMENT_LBL_VUHISTORY = Messages.getString("IMessageConstants.DOCUMENT_LBL_VUHISTORY"); //$NON-NLS-1$
-
 
 	public static final String ACTIVITY_SECTION = Messages.getString("IMessageConstants.ACTIVITY_SECTION"); //$NON-NLS-1$
 	public static final String ACTIVITY_ACTIVITY_TITLE = Messages.getString("IMessageConstants.ACTIVITY_ACTIVITY_TITLE"); //$NON-NLS-1$
@@ -334,8 +325,6 @@ public interface IMessageConstants {
 	public static final String ACTIVITY_LBL_START_END = Messages.getString("IMessageConstants.ACTIVITY_LBL_START_END"); //$NON-NLS-1$
 	public static final String ACTIVITY_LBL_ALIVE = Messages.getString("IMessageConstants.ACTIVITY_LBL_ALIVE"); //$NON-NLS-1$
 	public static final String ACTIVITY_LBL_DATAFLOW = Messages.getString("IMessageConstants.ACTIVITY_LBL_DATAFLOW"); //$NON-NLS-1$
-	public static final String ACTIVITY_LBL_FSM = Messages.getString("IMessageConstants.ACTIVITY_LBL_FSM"); //$NON-NLS-1$
-	public static final String ACTIVITY_LBL_MODE = Messages.getString("IMessageConstants.ACTIVITY_LBL_MODE"); //$NON-NLS-1$
 	public static final String ACTIVITY_LBL_ACTIVITYNAME = Messages.getString("IMessageConstants.ACTIVITY_LBL_ACTIVITYNAME"); //$NON-NLS-1$
 	public static final String ACTIVITY_LBL_DESCRIPTION = Messages.getString("IMessageConstants.ACTIVITY_LBL_DESCRIPTION"); //$NON-NLS-1$
 	public static final String ACTIVITY_LBL_PRECONDITION = Messages.getString("IMessageConstants.ACTIVITY_LBL_PRECONDITION"); //$NON-NLS-1$
@@ -355,8 +344,6 @@ public interface IMessageConstants {
 	public static final String ACTIVITY_HINT_ONEXECUTE_DESC = Messages.getString("IMessageConstants.ACTIVITY_HINT_ONEXECUTE_DESC"); //$NON-NLS-1$
 	public static final String ACTIVITY_HINT_ONSTATEUPDATE_DESC = Messages.getString("IMessageConstants.ACTIVITY_HINT_ONSTATEUPDATE_DESC"); //$NON-NLS-1$
 	public static final String ACTIVITY_HINT_ONRATECHANGED_DESC = Messages.getString("IMessageConstants.ACTIVITY_HINT_ONRATECHANGED_DESC"); //$NON-NLS-1$
-	public static final String ACTIVITY_HINT_ONACTION_DESC = Messages.getString("IMessageConstants.ACTIVITY_HINT_ONACTION_DESC"); //$NON-NLS-1$
-	public static final String ACTIVITY_HINT_ONMODECHANGED_DESC = Messages.getString("IMessageConstants.ACTIVITY_HINT_ONMODECHANGED_DESC"); //$NON-NLS-1$
 	public static final String ACTIVITY_HINT_INITIALIZE_IO_DESC = Messages.getString("IMessageConstants.ACTIVITY_HINT_INITIALIZE_IO_DESC"); //$NON-NLS-1$
 	public static final String ACTIVITY_HINT_INITIALIZE_SIMULATION_DESC = Messages.getString("IMessageConstants.ACTIVITY_HINT_INITIALIZE_SIMULATION_DESC"); //$NON-NLS-1$
 	public static final String ACTIVITY_HINT_START_SIMULATION_DESC = Messages.getString("IMessageConstants.ACTIVITY_HINT_START_SIMULATION_DESC"); //$NON-NLS-1$

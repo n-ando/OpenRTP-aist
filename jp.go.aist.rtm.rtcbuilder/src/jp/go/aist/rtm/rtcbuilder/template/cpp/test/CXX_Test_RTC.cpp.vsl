@@ -1,11 +1,11 @@
 // -*- C++ -*-
+// <rtc-template block="description">
 /*!
  * @file  ${rtcParam.name}Test.cpp
- * @brief ${rtcParam.description}
- * @date ${dol}Date${dol}
+ * @brief ${rtcParam.description} (test code)
 #parse("${template}/cpp/_doc.vsl")
- * ${dol}Id${dol}
  */
+// </rtc-template>
 
 ${sharp}include "${rtcParam.name}Test.h"
 
@@ -174,151 +174,121 @@ RTC::ReturnCode_t ${rtcParam.name}Test::onFinalize()
  * ${tmpltHelper.convertDoc(${rtcParam.getDocActionOverView(2)})}
  */
 #end
-#if(${rtcParam.IsNotImplemented(2)})/*#end
 
-RTC::ReturnCode_t ${rtcParam.name}Test::onStartup(RTC::UniqueId ec_id)
-{
+${rtcParam.IsComment(2)}RTC::ReturnCode_t ${rtcParam.name}Test::onStartup(RTC::UniqueId /*ec_id*/)
+${rtcParam.IsComment(2)}{
 #if(${tmpltHelper.checkDetailContent(2,${rtcParam})})${rtcParam.getDetailContent(2)}
 #end
-  return RTC::RTC_OK;
-}
-#if(${rtcParam.IsNotImplemented(2)})*/
-#end
+${rtcParam.IsComment(2)}  return RTC::RTC_OK;
+${rtcParam.IsComment(2)}}
 
 #if(${rtcParam.getDocActionOverView(3).length()}>0)/*!
  * ${tmpltHelper.convertDoc(${rtcParam.getDocActionOverView(3)})}
  */
 #end
-#if(${rtcParam.IsNotImplemented(3)})/*#end
 
-RTC::ReturnCode_t ${rtcParam.name}Test::onShutdown(RTC::UniqueId ec_id)
-{
+${rtcParam.IsComment(3)}RTC::ReturnCode_t ${rtcParam.name}Test::onShutdown(RTC::UniqueId /*ec_id*/)
+${rtcParam.IsComment(3)}{
 #if(${tmpltHelper.checkDetailContent(3,${rtcParam})})${rtcParam.getDetailContent(3)}
 #end
-  return RTC::RTC_OK;
-}
-#if(${rtcParam.IsNotImplemented(3)})*/
-#end
+${rtcParam.IsComment(3)}  return RTC::RTC_OK;
+${rtcParam.IsComment(3)}}
 
 #if(${rtcParam.getDocActionOverView(4).length()}>0)/*!
  * ${tmpltHelper.convertDoc(${rtcParam.getDocActionOverView(4)})}
  */
 #end
-#if(${rtcParam.IsNotImplemented(4)})/*#end
 
-RTC::ReturnCode_t ${rtcParam.name}Test::onActivated(RTC::UniqueId ec_id)
-{
+${rtcParam.IsComment(4)}RTC::ReturnCode_t ${rtcParam.name}Test::onActivated(RTC::UniqueId /*ec_id*/)
+${rtcParam.IsComment(4)}{
 #if(${tmpltHelper.checkDetailContent(4,${rtcParam})})${rtcParam.getDetailContent(4)}
 #end
-  return RTC::RTC_OK;
-}
-#if(${rtcParam.IsNotImplemented(4)})*/
-#end
+${rtcParam.IsComment(4)}  return RTC::RTC_OK;
+${rtcParam.IsComment(4)}}
 
 #if(${rtcParam.getDocActionOverView(5).length()}>0)/*!
  * ${tmpltHelper.convertDoc(${rtcParam.getDocActionOverView(5)})}
  */
 #end
-#if(${rtcParam.IsNotImplemented(5)})/*#end
 
-RTC::ReturnCode_t ${rtcParam.name}Test::onDeactivated(RTC::UniqueId ec_id)
-{
+${rtcParam.IsComment(5)}RTC::ReturnCode_t ${rtcParam.name}Test::onDeactivated(RTC::UniqueId /*ec_id*/)
+${rtcParam.IsComment(5)}{
 #if(${tmpltHelper.checkDetailContent(5,${rtcParam})})${rtcParam.getDetailContent(5)}
 #end
-  return RTC::RTC_OK;
-}
-#if(${rtcParam.IsNotImplemented(5)})*/
-#end
+${rtcParam.IsComment(5)}  return RTC::RTC_OK;
+${rtcParam.IsComment(5)}}
 
 #if(${rtcParam.getDocActionOverView(9).length()}>0)/*!
  * ${tmpltHelper.convertDoc(${rtcParam.getDocActionOverView(9)})}
  */
 #end
-#if(${rtcParam.IsNotImplemented(9)})/*#end
 
-RTC::ReturnCode_t ${rtcParam.name}Test::onExecute(RTC::UniqueId ec_id)
-{
+${rtcParam.IsComment(9)}RTC::ReturnCode_t ${rtcParam.name}Test::onExecute(RTC::UniqueId /*ec_id*/)
+${rtcParam.IsComment(9)}{
 #if(${tmpltHelper.checkDetailContent(9,${rtcParam})})${rtcParam.getDetailContent(9)}
 #end
-  return RTC::RTC_OK;
-}
-#if(${rtcParam.IsNotImplemented(9)})*/
-#end
+${rtcParam.IsComment(9)}  return RTC::RTC_OK;
+${rtcParam.IsComment(9)}}
 
 #if(${rtcParam.getDocActionOverView(6).length()}>0)/*!
  * ${tmpltHelper.convertDoc(${rtcParam.getDocActionOverView(6)})}
  */
 #end
-#if(${rtcParam.IsNotImplemented(6)})/*#end
 
-RTC::ReturnCode_t ${rtcParam.name}Test::onAborting(RTC::UniqueId ec_id)
-{
+${rtcParam.IsComment(6)}RTC::ReturnCode_t ${rtcParam.name}Test::onAborting(RTC::UniqueId /*ec_id*/)
+${rtcParam.IsComment(6)}{
 #if(${tmpltHelper.checkDetailContent(6,${rtcParam})})${rtcParam.getDetailContent(6)}
 #end
-  return RTC::RTC_OK;
-}
-#if(${rtcParam.IsNotImplemented(6)})*/
-#end
+${rtcParam.IsComment(6)}  return RTC::RTC_OK;
+${rtcParam.IsComment(6)}}
 
 #if(${rtcParam.getDocActionOverView(7).length()}>0)/*!
  * ${tmpltHelper.convertDoc(${rtcParam.getDocActionOverView(7)})}
  */
 #end
-#if(${rtcParam.IsNotImplemented(7)})/*#end
 
-RTC::ReturnCode_t ${rtcParam.name}Test::onError(RTC::UniqueId ec_id)
-{
+${rtcParam.IsComment(7)}RTC::ReturnCode_t ${rtcParam.name}Test::onError(RTC::UniqueId /*ec_id*/)
+${rtcParam.IsComment(7)}{
 #if(${tmpltHelper.checkDetailContent(7,${rtcParam})})${rtcParam.getDetailContent(7)}
 #end
-  return RTC::RTC_OK;
-}
-#if(${rtcParam.IsNotImplemented(7)})*/
-#end
+${rtcParam.IsComment(7)}  return RTC::RTC_OK;
+${rtcParam.IsComment(7)}}
 
 #if(${rtcParam.getDocActionOverView(8).length()}>0)/*!
  * ${tmpltHelper.convertDoc(${rtcParam.getDocActionOverView(8)})}
  */
 #end
-#if(${rtcParam.IsNotImplemented(8)})/*#end
 
-RTC::ReturnCode_t ${rtcParam.name}Test::onReset(RTC::UniqueId ec_id)
-{
+${rtcParam.IsComment(8)}RTC::ReturnCode_t ${rtcParam.name}Test::onReset(RTC::UniqueId /*ec_id*/)
+${rtcParam.IsComment(8)}{
 #if(${tmpltHelper.checkDetailContent(8,${rtcParam})})${rtcParam.getDetailContent(8)}
 #end
-  return RTC::RTC_OK;
-}
-#if(${rtcParam.IsNotImplemented(8)})*/
-#end
+${rtcParam.IsComment(8)}  return RTC::RTC_OK;
+${rtcParam.IsComment(8)}}
 
 #if(${rtcParam.getDocActionOverView(10).length()}>0)/*!
  * ${tmpltHelper.convertDoc(${rtcParam.getDocActionOverView(10)})}
  */
 #end
-#if(${rtcParam.IsNotImplemented(10)})/*#end
 
-RTC::ReturnCode_t ${rtcParam.name}Test::onStateUpdate(RTC::UniqueId ec_id)
-{
+${rtcParam.IsComment(10)}RTC::ReturnCode_t ${rtcParam.name}Test::onStateUpdate(RTC::UniqueId /*ec_id*/)
+${rtcParam.IsComment(10)}{
 #if(${tmpltHelper.checkDetailContent(10,${rtcParam})})${rtcParam.getDetailContent(10)}
 #end
-  return RTC::RTC_OK;
-}
-#if(${rtcParam.IsNotImplemented(10)})*/
-#end
+${rtcParam.IsComment(10)}  return RTC::RTC_OK;
+${rtcParam.IsComment(10)}}
 
 #if(${rtcParam.getDocActionOverView(11).length()}>0)/*!
  * ${tmpltHelper.convertDoc(${rtcParam.getDocActionOverView(11)})}
  */
 #end
-#if(${rtcParam.IsNotImplemented(11)})/*#end
 
-RTC::ReturnCode_t ${rtcParam.name}Test::onRateChanged(RTC::UniqueId ec_id)
-{
+${rtcParam.IsComment(11)}RTC::ReturnCode_t ${rtcParam.name}Test::onRateChanged(RTC::UniqueId /*ec_id*/)
+${rtcParam.IsComment(11)}{
 #if(${tmpltHelper.checkDetailContent(11,${rtcParam})})${rtcParam.getDetailContent(11)}
 #end
-  return RTC::RTC_OK;
-}
-#if(${rtcParam.IsNotImplemented(11)})*/
-#end
+${rtcParam.IsComment(11)}  return RTC::RTC_OK;
+${rtcParam.IsComment(11)}}
 
 #if(${tmpltHelper.checkContents(${rtcParam.publicOpeSource})})${rtcParam.publicOpeSource}
 #end
@@ -344,6 +314,4 @@ extern "C"
                              RTC::Delete<${rtcParam.name}Test>);
   }
   
-};
-
-
+}

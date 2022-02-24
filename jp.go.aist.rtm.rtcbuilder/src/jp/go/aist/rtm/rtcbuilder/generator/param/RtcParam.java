@@ -40,7 +40,7 @@ public class RtcParam extends AbstractRecordedParam implements Serializable {
 	private String vender;
 	private String componentType;
 	private String activityType;
-	private String componentKind;
+	private String componentKind = "DataFlowComponent";
 	private int maxInstance;
 	private String updateDate;
 	private RecordedList<String> versionUpLog = new RecordedList<String>();
@@ -444,6 +444,13 @@ public class RtcParam extends AbstractRecordedParam implements Serializable {
 	}
 	public boolean IsNotImplemented(int actionId) {
 		return !actions.get(actionId).getImplemented();
+	}
+	public String IsComment(int actionId) {
+		if(actions.get(actionId).getImplemented()) {
+			return "";
+		} else {
+			return "//";
+		}
 	}
 	public boolean getActionImplemented(int actionId) {
 		return actions.get(actionId).getImplemented();

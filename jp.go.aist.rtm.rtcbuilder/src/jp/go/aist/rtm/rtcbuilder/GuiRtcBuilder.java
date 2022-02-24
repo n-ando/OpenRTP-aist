@@ -16,8 +16,10 @@ import jp.go.aist.rtm.rtcbuilder.generator.param.GeneratorParam;
 import jp.go.aist.rtm.rtcbuilder.generator.param.idl.IdlPathParam;
 import jp.go.aist.rtm.rtcbuilder.generator.parser.MergeBlockParser;
 import jp.go.aist.rtm.rtcbuilder.manager.GenerateManager;
+import jp.go.aist.rtm.rtcbuilder.nl.Messages;
 import jp.go.aist.rtm.rtcbuilder.ui.compare.CompareResultDialog;
 import jp.go.aist.rtm.rtcbuilder.ui.compare.CompareTarget;
+import static jp.go.aist.rtm.rtcbuilder.util.RTCUtil.form;
 
 /**
  * GUIのRtcBuilderを実行する際のメインとなるクラス
@@ -66,9 +68,13 @@ public class GuiRtcBuilder {
 				generator.validateIDLDef(generatorParam, idlDirs);
 			} catch (HeaderException ex1) {
 				String[] buttons = new String[] { IDialogConstants.YES_LABEL, IDialogConstants.NO_LABEL };
+				String msg = form(Messages.getString("IMC.IDL_ERROR_1") + System.getProperty("line.separator")
+								+ Messages.getString("IMC.IDL_ERROR_2") + System.getProperty("line.separator")
+								+ Messages.getString("IMC.IDL_ERROR_3") + System.getProperty("line.separator")
+								+ Messages.getString("IMC.IDL_ERROR_4"),
+								new String[] {ex1.getMessage()});
 				MessageDialog dialog = new MessageDialog(PlatformUI.getWorkbench().getDisplay().getActiveShell(),
-						"IDL Error", null, "Warning: Included IDL [" + ex1.getMessage() + "] not found. Generated code might be incomplete. Continue?",
-						MessageDialog.QUESTION, buttons, 0);
+						"IDL Error", null, msg,	MessageDialog.QUESTION, buttons, 0);
 					if(dialog.open() == RETURN_NO) return false;
 			}
 			//

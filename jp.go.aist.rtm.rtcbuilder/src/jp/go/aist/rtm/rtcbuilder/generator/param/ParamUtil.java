@@ -151,18 +151,6 @@ public class ParamUtil {
 			actionStatus.setImplementedbln(Boolean.valueOf(docs.get(IRtcBuilderConstants.ACTIVITY_RATE_CHANGED)).booleanValue());
 			actionType.setOnRateChanged(actionStatus);
 		}
-
-		if( Boolean.valueOf(docs.get(IRtcBuilderConstants.ACTIVITY_ACTION)).booleanValue() ) {
-			actionStatus = factory.createActionStatusDoc();
-			actionStatus.setImplementedbln(Boolean.valueOf(docs.get(IRtcBuilderConstants.ACTIVITY_ACTION)).booleanValue());
-			actionType.setOnAction(actionStatus);
-		}
-
-		if( Boolean.valueOf(docs.get(IRtcBuilderConstants.ACTIVITY_MODE_CHANGED)).booleanValue() ) {
-			actionStatus = factory.createActionStatusDoc();
-			actionStatus.setImplementedbln(Boolean.valueOf(docs.get(IRtcBuilderConstants.ACTIVITY_MODE_CHANGED)).booleanValue());
-			actionType.setOnModeChanged(actionStatus);
-		}
 		return actionType;
 	}
 
@@ -176,7 +164,7 @@ public class ParamUtil {
 		basic.setCategory(ComponentPreferenceManager.getInstance().getBasic_Category());
 		basic.setComponentType(ComponentPreferenceManager.getInstance().getBasic_ComponentType());
 		basic.setActivityType(ComponentPreferenceManager.getInstance().getBasic_ActivityType());
-		basic.setComponentKind(ComponentPreferenceManager.getInstance().getBasic_ComponentKind());
+		basic.setComponentKind("DataFlowComponent");
 		basic.setMaxInstances(BigInteger.valueOf(ComponentPreferenceManager.getInstance().getBasic_MaxInstances()));
 		basic.setExecutionType(ComponentPreferenceManager.getInstance().getBasic_ExecutionType());
 		basic.setExecutionRate(Double.valueOf(ComponentPreferenceManager.getInstance().getBasic_ExecutionRate()));
@@ -253,10 +241,6 @@ public class ParamUtil {
 				setActions( rtcParam, IRtcBuilderConstants.ACTIVITY_STATE_UPDATE, (ActionStatusDoc)actions.getOnStateUpdate());
 			if( actions.getOnRateChanged() != null )
 				setActions( rtcParam, IRtcBuilderConstants.ACTIVITY_RATE_CHANGED, (ActionStatusDoc)actions.getOnRateChanged());
-			if( actions.getOnAction() != null )
-				setActions( rtcParam, IRtcBuilderConstants.ACTIVITY_ACTION, (ActionStatusDoc)actions.getOnAction());
-			if( actions.getOnModeChanged() != null )
-				setActions( rtcParam, IRtcBuilderConstants.ACTIVITY_MODE_CHANGED, (ActionStatusDoc)actions.getOnModeChanged());
 		}
 	}
 
@@ -716,8 +700,6 @@ public class ParamUtil {
 		actions.setOnReset(createActions(IRtcBuilderConstants.ACTIVITY_RESET, rtcParam));
 		actions.setOnStateUpdate(createActions(IRtcBuilderConstants.ACTIVITY_STATE_UPDATE, rtcParam));
 		actions.setOnRateChanged(createActions(IRtcBuilderConstants.ACTIVITY_RATE_CHANGED, rtcParam));
-		actions.setOnAction(createActions(IRtcBuilderConstants.ACTIVITY_ACTION, rtcParam));
-		actions.setOnModeChanged(createActions(IRtcBuilderConstants.ACTIVITY_MODE_CHANGED, rtcParam));
 		profile.setActions(actions);
 	}
 

@@ -1,14 +1,12 @@
 ﻿// -*- C++ -*-
+// <rtc-template block="description">
 /*!
  * @file  ModuleNameTest.cpp
- * @brief ModuleDescription
- * @date $Date$
+ * @brief ModuleDescription (test code)
  *
- * $Id$
  */
-
+// </rtc-template>
 #include "ModuleNameTest.h"
-
 // Module specification
 // <rtc-template block="module_spec">
 static const char* const modulename_spec[] =
@@ -27,7 +25,6 @@ static const char* const modulename_spec[] =
     ""
   };
 // </rtc-template>
-
 /*!
  * @brief constructor
  * @param manager Maneger Object
@@ -35,129 +32,81 @@ static const char* const modulename_spec[] =
 ModuleNameTest::ModuleNameTest(RTC::Manager* manager)
     // <rtc-template block="initializer">
   : RTC::DataFlowComponentBase(manager)
-
     // </rtc-template>
 {
 }
-
 /*!
  * @brief destructor
  */
 ModuleNameTest::~ModuleNameTest()
 {
 }
-
-
-
 RTC::ReturnCode_t ModuleNameTest::onInitialize()
 {
   // Registration: InPort/OutPort/Service
   // <rtc-template block="registration">
   // Set InPort buffers
-  
   // Set OutPort buffer
-  
   // Set service provider to Ports
-  
   // Set service consumers to Ports
-  
   // Set CORBA Service Ports
-  
   // </rtc-template>
-
   // <rtc-template block="bind_config">
   // </rtc-template>
-  
   return RTC::RTC_OK;
 }
-
 /*
 RTC::ReturnCode_t ModuleNameTest::onFinalize()
 {
   return RTC::RTC_OK;
 }
 */
-
-/*
-RTC::ReturnCode_t ModuleNameTest::onStartup(RTC::UniqueId ec_id)
-{
-  return RTC::RTC_OK;
-}
-*/
-
-/*
-RTC::ReturnCode_t ModuleNameTest::onShutdown(RTC::UniqueId ec_id)
-{
-  return RTC::RTC_OK;
-}
-*/
-
-/*
-RTC::ReturnCode_t ModuleNameTest::onActivated(RTC::UniqueId ec_id)
-{
-  return RTC::RTC_OK;
-}
-*/
-
-/*
-RTC::ReturnCode_t ModuleNameTest::onDeactivated(RTC::UniqueId ec_id)
-{
-  return RTC::RTC_OK;
-}
-*/
-
-/*
-RTC::ReturnCode_t ModuleNameTest::onExecute(RTC::UniqueId ec_id)
-{
-  return RTC::RTC_OK;
-}
-*/
-
-/*
-RTC::ReturnCode_t ModuleNameTest::onAborting(RTC::UniqueId ec_id)
-{
-  return RTC::RTC_OK;
-}
-*/
-
-/*
-RTC::ReturnCode_t ModuleNameTest::onError(RTC::UniqueId ec_id)
-{
-  return RTC::RTC_OK;
-}
-*/
-
-/*
-RTC::ReturnCode_t ModuleNameTest::onReset(RTC::UniqueId ec_id)
-{
-  return RTC::RTC_OK;
-}
-*/
-
-/*
-RTC::ReturnCode_t ModuleNameTest::onStateUpdate(RTC::UniqueId ec_id)
-{
-  return RTC::RTC_OK;
-}
-*/
-
-/*
-RTC::ReturnCode_t ModuleNameTest::onRateChanged(RTC::UniqueId ec_id)
-{
-  return RTC::RTC_OK;
-}
-*/
-
-
+//RTC::ReturnCode_t ModuleNameTest::onStartup(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
+//RTC::ReturnCode_t ModuleNameTest::onShutdown(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
+//RTC::ReturnCode_t ModuleNameTest::onActivated(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
+//RTC::ReturnCode_t ModuleNameTest::onDeactivated(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
+//RTC::ReturnCode_t ModuleNameTest::onExecute(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
+//RTC::ReturnCode_t ModuleNameTest::onAborting(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
+//RTC::ReturnCode_t ModuleNameTest::onError(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
+//RTC::ReturnCode_t ModuleNameTest::onReset(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
+//RTC::ReturnCode_t ModuleNameTest::onStateUpdate(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
+//RTC::ReturnCode_t ModuleNameTest::onRateChanged(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
 bool ModuleNameTest::runTest()
 {
     return true;
 }
-
-
 extern "C"
 {
- 
   void ModuleNameTestInit(RTC::Manager* manager)
   {
     coil::Properties profile(modulename_spec);
@@ -165,7 +114,4 @@ extern "C"
                              RTC::Create<ModuleNameTest>,
                              RTC::Delete<ModuleNameTest>);
   }
-  
-};
-
-
+}

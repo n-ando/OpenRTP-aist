@@ -15,15 +15,23 @@ public class ConfigurationWidget {
 	public static final String RADIO = "radio";
 	public static final String CHECKBOX = "checkbox";
 	public static final String ORDERED_LIST = "ordered_list";
-
+	
 	private String type;
 	private ConfigurationCondition condition;
 	private String value = null;
 	private boolean valueModified = false;
-
+	private boolean isCancel = false;
+	
 	double sliderStep = 1.0;
 	String sliderStepStr = "";
 	double spinStep = 0.0;
+
+	public void setCancel(boolean isCancel) {
+		this.isCancel = isCancel;
+	}
+	public boolean isCancel() {
+		return isCancel;
+	}
 
 	/**
 	 * @param widgets	ウィジェット文字列（配列用）
@@ -156,7 +164,7 @@ public class ConfigurationWidget {
 		} catch (Throwable t) {
 		}
 	}
-
+	
 	public String getType() {
 		return this.type;
 	}

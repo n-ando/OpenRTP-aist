@@ -3,9 +3,7 @@
 /*!
  * @file  foo.h
  * @brief MDesc
- * @date  $Date$
  *
- * $Id$
  */
 // </rtc-template>
 #ifndef FOO_H

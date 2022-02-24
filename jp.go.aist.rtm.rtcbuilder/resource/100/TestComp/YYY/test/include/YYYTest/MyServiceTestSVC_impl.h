@@ -1,7 +1,7 @@
 ﻿// -*-C++-*-
 /*!
  * @file  MyServiceTestSVC_impl.h
- * @brief Service implementation header of MyServiceTest.idl
+ * @brief Service implementation header of MyServiceTest.idl (test code)
  *
  */
 

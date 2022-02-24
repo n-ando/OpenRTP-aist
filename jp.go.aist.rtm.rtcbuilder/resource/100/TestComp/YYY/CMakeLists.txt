@@ -1,5 +1,4 @@
 cmake_minimum_required(VERSION 3.5.1)
-
 project(YYY)
 string(TOLOWER ${PROJECT_NAME} PROJECT_NAME_LOWER)
 include("${PROJECT_SOURCE_DIR}/cmake/utils.cmake")
@@ -11,11 +10,9 @@ set(PROJECT_DESCRIPTION "ModuleDescription")
 set(PROJECT_VENDOR "VenderName")
 set(PROJECT_MAINTAINER "unknown")
 set(PROJECT_TYPE "c++/Category")
-
 find_package(OpenRTM REQUIRED)
 set(RTM_VER ${OPENRTM_VERSION})
 set(RTM_SHORT_VER ${OPENRTM_VERSION_MAJOR}${OPENRTM_VERSION_MINOR}${OPENRTM_VERSION_PATCH})
-
 function(get_dist ARG0)
  if(NOT ${CMAKE_SYSTEM_NAME} MATCHES "Linux")
    set(${ARG0} ${CMAKE_SYSTEM_NAME} PARENT_SCOPE)
@@ -32,7 +29,6 @@ function(get_dist ARG0)
    endif()
  endforeach()
 endfunction(get_dist)
-
 function(get_pkgmgr ARG0)
  get_dist(DIST_NAME)
  if(${DIST_NAME} MATCHES "Debian" OR
@@ -48,10 +44,8 @@ function(get_pkgmgr ARG0)
     return()
  endif()
 endfunction(get_pkgmgr)
-
 get_dist(DIST_NAME)
 MESSAGE(STATUS "Distribution is ${DIST_NAME}")
-
 get_pkgmgr(PKGMGR)
 if(PKGMGR AND NOT LINUX_PACKAGE_GENERATOR)
  set(LINUX_PACKAGE_GENERATOR ${PKGMGR})
@@ -68,99 +62,82 @@ if(PKGMGR AND NOT LINUX_PACKAGE_GENERATOR)
    message(STATUS "Package manager is ${PKGMGR}. Arch is ${CPACK_RPM_PACKAGE_ARCHITECTURE}.")
  endif()
 endif()
-
 # Add an "uninstall" target
 CONFIGURE_FILE ("${PROJECT_SOURCE_DIR}/cmake/uninstall_target.cmake.in"
     "${PROJECT_BINARY_DIR}/uninstall_target.cmake" IMMEDIATE @ONLY)
 ADD_CUSTOM_TARGET (${PROJECT_NAME}_uninstall "${CMAKE_COMMAND}" -P
     "${PROJECT_BINARY_DIR}/uninstall_target.cmake")
-
 #option(BUILD_EXAMPLES "Build and install examples" OFF)
 option(BUILD_DOCUMENTATION "Build the documentation" OFF)
 option(BUILD_TESTS "Build the tests" OFF)
 #option(BUILD_TOOLS "Build the tools" OFF)
 option(BUILD_IDL "Build and install idl" ON)
 option(BUILD_SOURCES "Build and install sources" OFF)
-
 option(STATIC_LIBS "Build static libraries" OFF)
 if(STATIC_LIBS)
     set(LIB_TYPE STATIC)
 else(STATIC_LIBS)
     set(LIB_TYPE SHARED)
 endif(STATIC_LIBS)
-
 if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
    # Mac OS X specific code
    SET(CMAKE_CXX_COMPILER "g++")
    SET(CMAKE_MACOSX_RPATH 1)
 endif (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-
-
 # Set up installation directories
 if(WIN32)
-   set(OPENRTM_SHARE_PREFIX "OpenRTM-aist/${RTM_VER}/Components/${PROJECT_TYPE}")
+   set(RTM_COMPONENT_PREFIX "Components/${PROJECT_TYPE}")
+   set(OPENRTM_SHARE_PREFIX "OpenRTM-aist/${RTM_VER}/${RTM_COMPONENT_PREFIX}")
    set(INSTALL_PREFIX ${PROJECT_NAME})
    if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
-      set(CMAKE_INSTALL_PREFIX "${OPENRTM_DIR}Components/${PROJECT_TYPE}/${PROJECT_NAME}" CACHE PATH "..." FORCE)
+      set(CMAKE_INSTALL_PREFIX "${OPENRTM_DIR}/${RTM_COMPONENT_PREFIX}" CACHE PATH "..." FORCE)
+   else()
+      set(CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}/${OPENRTM_SHARE_PREFIX}")
    endif()
 else(WIN32)
    set(OPENRTM_SHARE_PREFIX "share/openrtm-${OPENRTM_VERSION_MAJOR}.${OPENRTM_VERSION_MINOR}")
    set(INSTALL_PREFIX "${OPENRTM_SHARE_PREFIX}/components/${PROJECT_TYPE}/${PROJECT_NAME}")
 endif(WIN32)
-       
+
 # Subdirectories
 add_subdirectory(cmake)
 if(BUILD_DOCUMENTATION)
     add_subdirectory(doc)
 endif(BUILD_DOCUMENTATION)
-
 #if(BUILD_EXAMPLES)
 #    add_subdirectory(examples)
 #endif(BUILD_EXAMPLES)
-
 if(BUILD_IDL)
     add_subdirectory(idl)
 endif(BUILD_IDL)
-
 file(GLOB IDL_FILES "${CMAKE_CURRENT_SOURCE_DIR}/idl/*.idl")
 if(IDL_FILES)
     install(FILES ${IDL_FILES} DESTINATION ${INSTALL_PREFIX}/idl
         COMPONENT component)
 endif(IDL_FILES)
-
 add_subdirectory(include)
 MAP_ADD_STR(headers  "include/" comp_hdrs)
 add_subdirectory(src)
-
 if(BUILD_TESTS)
     # Universal settings
     enable_testing()
     add_subdirectory(test)
 endif(BUILD_TESTS)
-
 #if(BUILD_TOOLS)
 #    add_subdirectory(tools)
 #endif(BUILD_TOOLS)
-
 if(BUILD_SOURCES)
     add_subdirectory(include)
     add_subdirectory(src)
 endif(BUILD_SOURCES)
-
 # Package creation
-# By default, do not warn when built on machines using only VS Express:
-IF(NOT DEFINED CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_NO_WARNINGS)
-SET(CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_NO_WARNINGS ON)
-ENDIF()
-include(InstallRequiredSystemLibraries)
+# By default, do not include the system runtime library.
+#include(InstallRequiredSystemLibraries)
 set(PROJECT_EXECUTABLES ${PROJECT_NAME}Comp
     "${PROJECT_NAME}Comp.exe")
-
 set(cpack_options "${PROJECT_BINARY_DIR}/cpack_options.cmake")
-
 configure_file("${PROJECT_SOURCE_DIR}/cmake/cpack_options.cmake.in"
     ${cpack_options} @ONLY)
-
 set(CPACK_PROJECT_CONFIG_FILE ${cpack_options})
 include(${CPACK_PROJECT_CONFIG_FILE})
 include(CPack)

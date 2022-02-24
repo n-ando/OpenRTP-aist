@@ -25,13 +25,6 @@ public class CodeGeneratePreferencePage extends AbstarctFieldEditorPreferencePag
 						{"PERIODIC", "PERIODIC"},
 						{"SPORADIC", "SPORADIC"},
 						{"EVENTDRIVEN","EVENTDRIVEN"}};
-	static private String[][] componentKindItems = {
-						{"DataFlowComponent", "DataFlowComponent"}, 
-						{"FiniteStateMachineComponent","FiniteStateMachineComponent"},
-						{"DataFlowFiniteStateMachineComponent","DataFlowFiniteStateMachineComponent"},
-						{"FiniteStateMachineMultiModeComponent","FiniteStateMachineMultiModeComponent"},
-						{"DataFlowMultiModeComponent","DataFlowMultiModeComponent"},
-						{"DataFlowFiniteStateMachineMultiModeComponent", "DataFlowFiniteStateMachineMultiModeComponent"}};
 	//
 	static private String[][] executionContextTypeItems = {
 						{"PeriodicExecutionContext", "PeriodicExecutionContext"},
@@ -89,10 +82,6 @@ public class CodeGeneratePreferencePage extends AbstarctFieldEditorPreferencePag
 				Messages.getString("IMC.BASIC_LBL_ACTIVITY_TYPE"), activityTypeItems, basicGroup);
 		addField(activityTypeComboEditor);
 		//
-		ComboFieldEditor componentKindCombo = new ComboFieldEditor(ComponentPreferenceManager.Generate_Basic_ComponentKind,
-				Messages.getString("IMC.BASIC_LBL_COMPONENT_KIND"), componentKindItems, basicGroup);
-		addField(componentKindCombo);
-		//
 		IntegerFieldEditor moduleMaxInstanceTextEditor = new IntegerFieldEditor(ComponentPreferenceManager.Generate_Basic_Max_Instance,
 				Messages.getString("IMC.BASIC_LBL_MAX_INSTANCES"), basicGroup);
 		addField(moduleMaxInstanceTextEditor);
@@ -124,7 +113,6 @@ public class CodeGeneratePreferencePage extends AbstarctFieldEditorPreferencePag
 		store.setDefault(ComponentPreferenceManager.Generate_Basic_Category, ComponentPreferenceManager.DEFAULT_CATEGORY);
 		store.setDefault(ComponentPreferenceManager.Generate_Basic_ComponentType, ComponentPreferenceManager.DEFAULT_COMPONENT_TYPE);
 		store.setDefault(ComponentPreferenceManager.Generate_Basic_ActivityType, ComponentPreferenceManager.DEFAULT_ACTIVITY_TYPE);
-		store.setDefault(ComponentPreferenceManager.Generate_Basic_ComponentKind, ComponentPreferenceManager.DEFAULT_COMPONENT_KIND);
 		store.setDefault(ComponentPreferenceManager.Generate_Basic_ExecutionType, ComponentPreferenceManager.DEFAULT_EXECUTION_TYPE);
 		store.setDefault(ComponentPreferenceManager.Generate_Basic_Max_Instance, ComponentPreferenceManager.DEFAULT_MAXINST);
 		store.setDefault(ComponentPreferenceManager.Generate_Basic_Execution_Rate, ComponentPreferenceManager.DEFAULT_EXECUTION_RATE);

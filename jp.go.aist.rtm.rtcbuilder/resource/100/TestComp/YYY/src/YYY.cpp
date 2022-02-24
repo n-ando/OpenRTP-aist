@@ -3,9 +3,7 @@
 /*!
  * @file  YYY.cpp
  * @brief ModuleDescription
- * @date $Date$
  *
- * $Id$
  */
 // </rtc-template>
 #include "YYY.h"
@@ -66,66 +64,46 @@ RTC::ReturnCode_t YYY::onFinalize()
   return RTC::RTC_OK;
 }
 */
-/*
-RTC::ReturnCode_t YYY::onStartup(RTC::UniqueId ec_id)
-{
-  return RTC::RTC_OK;
-}
-*/
-/*
-RTC::ReturnCode_t YYY::onShutdown(RTC::UniqueId ec_id)
-{
-  return RTC::RTC_OK;
-}
-*/
-/*
-RTC::ReturnCode_t YYY::onActivated(RTC::UniqueId ec_id)
-{
-  return RTC::RTC_OK;
-}
-*/
-/*
-RTC::ReturnCode_t YYY::onDeactivated(RTC::UniqueId ec_id)
-{
-  return RTC::RTC_OK;
-}
-*/
-/*
-RTC::ReturnCode_t YYY::onExecute(RTC::UniqueId ec_id)
-{
-  return RTC::RTC_OK;
-}
-*/
-/*
-RTC::ReturnCode_t YYY::onAborting(RTC::UniqueId ec_id)
-{
-  return RTC::RTC_OK;
-}
-*/
-/*
-RTC::ReturnCode_t YYY::onError(RTC::UniqueId ec_id)
-{
-  return RTC::RTC_OK;
-}
-*/
-/*
-RTC::ReturnCode_t YYY::onReset(RTC::UniqueId ec_id)
-{
-  return RTC::RTC_OK;
-}
-*/
-/*
-RTC::ReturnCode_t YYY::onStateUpdate(RTC::UniqueId ec_id)
-{
-  return RTC::RTC_OK;
-}
-*/
-/*
-RTC::ReturnCode_t YYY::onRateChanged(RTC::UniqueId ec_id)
-{
-  return RTC::RTC_OK;
-}
-*/
+//RTC::ReturnCode_t YYY::onStartup(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
+//RTC::ReturnCode_t YYY::onShutdown(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
+//RTC::ReturnCode_t YYY::onActivated(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
+//RTC::ReturnCode_t YYY::onDeactivated(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
+//RTC::ReturnCode_t YYY::onExecute(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
+//RTC::ReturnCode_t YYY::onAborting(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
+//RTC::ReturnCode_t YYY::onError(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
+//RTC::ReturnCode_t YYY::onReset(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
+//RTC::ReturnCode_t YYY::onStateUpdate(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
+//RTC::ReturnCode_t YYY::onRateChanged(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
 extern "C"
 {
   void YYYInit(RTC::Manager* manager)
@@ -135,4 +113,4 @@ extern "C"
                              RTC::Create<YYY>,
                              RTC::Delete<YYY>);
   }
-};
+}
