@@ -12,7 +12,8 @@ Require-Bundle: org.eclipse.gef;visibility:=reexport,
  jp.go.aist.rtm.nameserviceview,
  jp.go.aist.rtm.toolscommon.profiles,
  jp.go.aist.rtm.repositoryView,
- org.eclipse.core.expressions
+ org.eclipse.core.expressions,
+ org.eclipse.ui.forms;bundle-version="3.9.100"
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .,
  lib/influent.jar,
