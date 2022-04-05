@@ -2,6 +2,8 @@ package jp.go.aist.rtm.systemeditor.ui.dialog;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -685,6 +687,7 @@ public class DataConnectorCreaterDialog extends ConnectorDialogBase {
 
 	private class PropertyElem {
 		private String name;
+		private List<String> portType;
 		private int type;
 		private List<String> elemList;
 		private List<String> constraints;
@@ -799,6 +802,11 @@ public class DataConnectorCreaterDialog extends ConnectorDialogBase {
 					Composite composite = createOptionSection(proprtyComposite, section);
 
 					List<PropertyElem> propListLc = localPropertyList.get(section);
+					Collections.sort(propListLc, new Comparator<PropertyElem>() {
+						public int compare(PropertyElem a, PropertyElem b) {
+							return a.name.compareTo(b.name);
+						}
+					});
 					for(PropertyElem prop : propListLc) {
 						createProprtyListComposite(composite, prop, nameIdx);
 					}
@@ -879,6 +887,9 @@ public class DataConnectorCreaterDialog extends ConnectorDialogBase {
 				builder.append(elems[index]);
 			}
 			strName = builder.toString();
+			if(strName.length() == 0) {
+				strName = elems[elems.length-1];
+			}
 		}
 		Label keyLabel = new Label(namedValueGroup, SWT.WRAP | SWT.CENTER);
 		keyLabel.setText(strName);
@@ -927,6 +938,8 @@ public class DataConnectorCreaterDialog extends ConnectorDialogBase {
 				}
 			}
 			valueCombo.select(selectedIndex);
+			prop.selectedValue.clear();
+			prop.selectedValue.add(valueCombo.getText());
 			break;
 		}
 		case 2: {
@@ -941,6 +954,9 @@ public class DataConnectorCreaterDialog extends ConnectorDialogBase {
 					if( prop.elemList != null ) {
 						if(prop.elemList.contains(s)) {
 							vb.setSelection(true);
+							if( prop.selectedValue.contains(s)==false) {
+								prop.selectedValue.add(s);
+							}
 						}
 					}
 				}
@@ -959,6 +975,7 @@ public class DataConnectorCreaterDialog extends ConnectorDialogBase {
 					if( prop.elemList != null ) {
 						if(prop.elemList.contains(s)) {
 							vb.setSelection(true);
+							prop.selectedValue.add(s);
 						}
 					}
 				}
@@ -971,36 +988,38 @@ public class DataConnectorCreaterDialog extends ConnectorDialogBase {
 			valueText.setTextLimit(255);
 			valueText.setEnabled(true);
 			StringBuilder builder = new StringBuilder();
-			if(prop.elemList != null) {
-				for(String each : prop.elemList) {
-					if(0 < builder.length()) {
-						builder.append(",");
-					}
-					builder.append(each);
+			if(prop.elemList == null) {
+				prop.elemList = new ArrayList<String>();
+			}
+			for(String each : prop.elemList) {
+				if(0 < builder.length()) {
+					builder.append(",");
 				}
-				valueText.setText(builder.toString());
+				builder.append(each);
+			}
+			valueText.setText(builder.toString());
+			prop.selectedValue.add(builder.toString());
 				
-				if(prop.constraints != null && 0 < prop.constraints.size()) {
-					String cond = prop.constraints.get(0);
-					if(cond != null && 0 < cond.trim().length()) {
-						try {
-							prop.condition = ConfigurationCondition.parse(cond);
-							if (!prop.condition.validate(valueText.getText())) {
-								valueText.setToolTipText(Messages.getString("ConfigurationDialog.6") + prop.condition + Messages.getString("ConfigurationDialog.7")); //$NON-NLS-1$ //$NON-NLS-2$
-								valueText.setBackground(colorRegistry.get(ERROR_COLOR));
-								prop.isError = true;
-							} else {
-								if(prop.condition.toString().equals("null") == false) {
-									valueText.setToolTipText(prop.condition.toString()); //$NON-NLS-1$ //$NON-NLS-2$
-								}
+			if(prop.constraints != null && 0 < prop.constraints.size()) {
+				String cond = prop.constraints.get(0);
+				if(cond != null && 0 < cond.trim().length()) {
+					try {
+						prop.condition = ConfigurationCondition.parse(cond);
+						if (!prop.condition.validate(valueText.getText())) {
+							valueText.setToolTipText(Messages.getString("ConfigurationDialog.6") + prop.condition + Messages.getString("ConfigurationDialog.7")); //$NON-NLS-1$ //$NON-NLS-2$
+							valueText.setBackground(colorRegistry.get(ERROR_COLOR));
+							prop.isError = true;
+						} else {
+							if(prop.condition.toString().equals("null") == false) {
+								valueText.setToolTipText(prop.condition.toString()); //$NON-NLS-1$ //$NON-NLS-2$
 							}
-						} catch (ConfigurationCondition.NumberException e) {
-						} catch (ConfigurationCondition.FormatException e) {
 						}
-						valueText.addFocusListener(createFocusListner(prop, valueText));
+					} catch (ConfigurationCondition.NumberException e) {
+					} catch (ConfigurationCondition.FormatException e) {
 					}
 				}
 			}
+			valueText.addFocusListener(createFocusListner(prop, valueText));
 			break;
 		}
 		}
@@ -1014,18 +1033,22 @@ public class DataConnectorCreaterDialog extends ConnectorDialogBase {
 			public void focusLost(FocusEvent e) {
 				ConfigurationCondition condition = prop.condition;
 				String value = valueText.getText();
-				if (!condition.validate(value)) {
-					valueText.setToolTipText(Messages.getString("ConfigurationDialog.6") + condition + Messages.getString("ConfigurationDialog.7")); //$NON-NLS-1$ //$NON-NLS-2$
-					valueText.setBackground(colorRegistry.get(ERROR_COLOR));
-					prop.isError = true;
-				} else {
-					if(prop.condition.toString().equals("null") == false) {
-						valueText.setToolTipText(prop.condition.toString()); //$NON-NLS-1$ //$NON-NLS-2$
+				prop.selectedValue.add(value);
+				if(condition!=null) {
+					if (!condition.validate(value)) {
+						valueText.setToolTipText(Messages.getString("ConfigurationDialog.6") + condition + Messages.getString("ConfigurationDialog.7")); //$NON-NLS-1$ //$NON-NLS-2$
+						valueText.setBackground(colorRegistry.get(ERROR_COLOR));
+						prop.isError = true;
+						prop.selectedValue.clear();
 					} else {
-						valueText.setToolTipText(null);
+						if(prop.condition.toString().equals("null") == false) {
+							valueText.setToolTipText(prop.condition.toString()); //$NON-NLS-1$ //$NON-NLS-2$
+						} else {
+							valueText.setToolTipText(null);
+						}
+						valueText.setBackground(colorRegistry.get(NORMAL_COLOR));
+						prop.isError = false;
 					}
-					valueText.setBackground(colorRegistry.get(NORMAL_COLOR));
-					prop.isError = false;
 				}
 				checkConstraint();
 			}};
@@ -1141,19 +1164,25 @@ public class DataConnectorCreaterDialog extends ConnectorDialogBase {
 		List<NameValue> basePropList;
 		Port targetPort;
 		Port basePort;
+		String targetPortStr = "";
+		String basePortStr = "";
 		if( outport != null ) {
 			basePropList = outport.getProperties();
 			basePort = outport;
+			basePortStr = "outport";
 			if(inport!=null) {
 				targetPort = inport;
+				targetPortStr = "inport";
 			} else {
 				targetPort = outport;
 			}
 		} else {
 			basePropList = inport.getProperties();
 			basePort = inport;
+			basePortStr = "inport";
 			if(outport!=null) {
 				targetPort = outport;
+				targetPortStr = "outport";
 			} else {
 				targetPort = inport;
 			}
@@ -1165,21 +1194,24 @@ public class DataConnectorCreaterDialog extends ConnectorDialogBase {
 			propertyList.put(each, new ArrayList<DataConnectorCreaterDialog.PropertyElem>());
 		}
 		
+		List<String> portType = new ArrayList<String>();
 		for(NameValue each : basePropList) {
+			portType.clear();
 			String propName = each.getName();
 			if(propName.startsWith("dataport.interface_option") == false) continue;
 
 			String baseProp = each.getValue().trim();
 			if(baseProp == null || baseProp.length() == 0) continue;
 			
+			portType.add(basePortStr);
+			
 			String targetProp = "Any";
-			if(targetPort!=null) {
-				targetProp = targetPort.getProperty(each.getName());
-				if(targetProp != null && 0 < targetProp.length()) {
-					targetProp = targetProp.trim();
-				} else {
-					targetProp = "Any";
-				}
+			targetProp = targetPort.getProperty(each.getName());
+			if(targetProp != null && 0 < targetProp.length()) {
+				targetProp = targetProp.trim();
+				portType.add(targetPortStr);
+			} else {
+				targetProp = "Any";
 			}
 			if(baseProp.equals("Any") && targetProp.equals("Any")) continue;
 			
@@ -1223,12 +1255,12 @@ public class DataConnectorCreaterDialog extends ConnectorDialogBase {
 
 			String[] elems = propName.split("\\.");
 			if(elems.length < 5) continue;
-			setPropertyInfo(elems, elemList);
+			setPropertyInfo(portType, elems, elemList);
 		}
-		if(targetPort == null) return;
 		
 		for(NameValue each : targetPort.getProperties()) {
 			String propName = each.getName();
+			portType.clear();
 			if(propName.startsWith("dataport.interface_option") == false) continue;
 
 			String baseProp = each.getValue().trim();
@@ -1237,6 +1269,8 @@ public class DataConnectorCreaterDialog extends ConnectorDialogBase {
 			if(basePort.getProperty(each.getName()) != null) continue;
 			String targetProp = "Any";
 			if(baseProp.equals("Any") && targetProp.equals("Any")) continue;
+			
+			portType.add(targetPortStr);
 			
 			List<String> elemList = new ArrayList<String>();
 			if(baseProp.startsWith("[") && baseProp.endsWith("]")) {
@@ -1253,11 +1287,11 @@ public class DataConnectorCreaterDialog extends ConnectorDialogBase {
 
 			String[] elems = propName.split("\\.");
 			if(elems.length < 5) continue;
-			setPropertyInfo(elems, elemList);
+			setPropertyInfo(portType, elems, elemList);
 		}
 	}
 	
-	private void setPropertyInfo(String[] elems, List<String> elemList) {
+	private void setPropertyInfo(List<String> portType, String[] elems, List<String> elemList) {
 		List<PropertyElem> eachPropList = propertyList.get(elems[2]);
 		StringBuilder builder = new StringBuilder();
 		for(int index=3; index<elems.length; index++ ) {
@@ -1279,6 +1313,7 @@ public class DataConnectorCreaterDialog extends ConnectorDialogBase {
 		if(eachProp == null) {
 			eachProp = new PropertyElem();
 			eachProp.name = name;
+			eachProp.portType = new ArrayList<String>(portType);
 			eachProp.isError = false;
 			eachPropList.add(eachProp);
 		}
@@ -1292,6 +1327,8 @@ public class DataConnectorCreaterDialog extends ConnectorDialogBase {
 				eachProp.type = 3;
 			} else if(widget.equals("checkbox")) {
 				eachProp.type = 2;
+			} else if(widget.equals("combobox")) {
+				eachProp.type = 1;
 			} else {
 				eachProp.type = 0;
 			}
@@ -1526,7 +1563,10 @@ public class DataConnectorCreaterDialog extends ConnectorDialogBase {
 		for(PropertyElem each : propList) {
 			String selected = each.getSelectedValue();
 			if(selected != null && 0 < selected.length()) {
-				connectorProfile.setProperty(each.name, each.getSelectedValue());
+				for(String portTypeStr : each.portType) {
+					String propName = "dataport." + portTypeStr + "." + each.name; 
+					connectorProfile.setProperty(propName, each.getSelectedValue());
+				}
 			}
 		}
 		if (additionalTableViewer != null) {
