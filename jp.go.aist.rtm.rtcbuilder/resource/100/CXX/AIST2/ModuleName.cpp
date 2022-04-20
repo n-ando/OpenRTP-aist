@@ -9,7 +9,11 @@
 #include "ModuleName.h"
 // Module specification
 // <rtc-template block="module_spec">
+#if RTM_MAJOR_VERSION >= 2
 static const char* const modulename_spec[] =
+#else
+static const char* modulename_spec[] =
+#endif
   {
     "implementation_id", "ModuleName",
     "type_name",         "ModuleName",

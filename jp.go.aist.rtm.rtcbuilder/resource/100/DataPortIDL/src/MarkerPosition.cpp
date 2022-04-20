@@ -9,7 +9,11 @@
 #include "MarkerPosition.h"
 // Module specification
 // <rtc-template block="module_spec">
+#if RTM_MAJOR_VERSION >= 2
 static const char* const markerposition_spec[] =
+#else
+static const char* markerposition_spec[] =
+#endif
   {
     "implementation_id", "MarkerPosition",
     "type_name",         "MarkerPosition",

@@ -9,7 +9,11 @@
 #include "YYYTest.h"
 // Module specification
 // <rtc-template block="module_spec">
+#if RTM_MAJOR_VERSION >= 2
 static const char* const yyy_spec[] =
+#else
+static const char* yyy_spec[] =
+#endif
   {
     "implementation_id", "YYYTest",
     "type_name",         "YYYTest",
