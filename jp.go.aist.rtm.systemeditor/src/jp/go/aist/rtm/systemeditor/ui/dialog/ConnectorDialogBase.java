@@ -54,6 +54,7 @@ public class ConnectorDialogBase extends TitleAreaDialog {
 		gd.grabExcessVerticalSpace = true;
 		gd.grabExcessHorizontalSpace = true;
 		gd.horizontalSpan = 2;
+		gd.minimumHeight = 200;
 		baseComposite.setLayout(gl);
 		baseComposite.setLayoutData(gd);
 		

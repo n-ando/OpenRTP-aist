@@ -316,8 +316,10 @@ public class ConfigurationDialog extends TitleAreaDialog {
 			final NamedValueConfigurationWrapper namedValue) {
 		GridLayout gl;
 		gl = new GridLayout(2, false);
-		gl.marginTop = 2;
+		gl.marginTop = 4;
 		gl.marginBottom = 4;
+		gl.marginHeight = 0;
+		gl.verticalSpacing = 0;
 
 		GridData gd;
 		gd = new GridData();
@@ -325,7 +327,7 @@ public class ConfigurationDialog extends TitleAreaDialog {
 		gd.horizontalSpan = 2;
 		gd.grabExcessHorizontalSpace = true;
 
-		Group namedValueGroup = new Group(parent, SWT.NONE);
+		Composite namedValueGroup = new Composite(parent, SWT.BORDER);
 		namedValueGroup.setLayout(gl);
 		namedValueGroup.setLayoutData(gd);
 
@@ -469,6 +471,10 @@ public class ConfigurationDialog extends TitleAreaDialog {
 			if (!condition.validate(value)) {
 				valueSliderText.setToolTipText(Messages.getString("ConfigurationDialog.6") + condition + Messages.getString("ConfigurationDialog.7")); //$NON-NLS-1$ //$NON-NLS-2$
 				valueSliderText.setBackground(colorRegistry.get(ERROR_COLOR));
+			} else {
+				if(condition.toString().equals("null") == false) {
+					valueSliderText.setToolTipText(condition.toString()); //$NON-NLS-1$ //$NON-NLS-2$
+				}
 			}
 
 			valueSliderText.addModifyListener(createSliderModifyListner(widget, valueSliderText, valueSlider));
@@ -505,6 +511,10 @@ public class ConfigurationDialog extends TitleAreaDialog {
 				valueSpinner.setBackground(colorRegistry.get(MODIFY_COLOR));
 			} else {
 				valueSpinner.setBackground(colorRegistry.get(SPINNER_NORMAL_COLOR));
+			}
+			ConfigurationCondition condition = widget.getCondition();
+			if(condition.toString().equals("null") == false) {
+				valueSpinner.setToolTipText(condition.toString()); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 
 			valueSpinner.addModifyListener(createSpinnerModifyListner(widget, valueSpinner));
@@ -557,6 +567,10 @@ public class ConfigurationDialog extends TitleAreaDialog {
 			if (!condition.validate(value)) {
 				valueText.setToolTipText(Messages.getString("ConfigurationDialog.6") + condition + Messages.getString("ConfigurationDialog.7")); //$NON-NLS-1$ //$NON-NLS-2$
 				valueText.setBackground(colorRegistry.get(ERROR_COLOR));
+			} else {
+				if(condition.toString().equals("null") == false) {
+					valueText.setToolTipText(condition.toString()); //$NON-NLS-1$ //$NON-NLS-2$
+				}
 			}
 
 			valueText.addFocusListener(createFocusListner(widget, valueText));
@@ -919,7 +933,11 @@ public class ConfigurationDialog extends TitleAreaDialog {
 					valueText.setToolTipText(Messages.getString("ConfigurationDialog.6") + condition + Messages.getString("ConfigurationDialog.7")); //$NON-NLS-1$ //$NON-NLS-2$
 					valueText.setBackground(colorRegistry.get(ERROR_COLOR));
 				} else {
-					valueText.setToolTipText(null);
+					if(condition.toString().equals("null") == false) {
+						valueText.setToolTipText(condition.toString()); //$NON-NLS-1$ //$NON-NLS-2$
+					} else {
+						valueText.setToolTipText(null);
+					}
 					if (wd.isValueModified()) {
 						valueText.setBackground(colorRegistry.get(MODIFY_COLOR));
 						isValueModified = true;
@@ -986,7 +1004,11 @@ public class ConfigurationDialog extends TitleAreaDialog {
 					
 					valueSpinner.setBackground(colorRegistry.get(ERROR_COLOR));
 				} else {
-					valueSpinner.setToolTipText(null);
+					if(condition.toString().equals("null") == false) {
+						valueSpinner.setToolTipText(condition.toString()); //$NON-NLS-1$ //$NON-NLS-2$
+					} else {
+						valueSpinner.setToolTipText(null);
+					}
 					wd.setValue(value);
 					if (wd.isValueModified()) {
 						doModify(valueSpinner);
@@ -1033,7 +1055,11 @@ public class ConfigurationDialog extends TitleAreaDialog {
                     wd.setValue(value);
 					valueSpinner.setBackground(colorRegistry.get(ERROR_COLOR));
 				} else {
-					valueSpinner.setToolTipText(null);
+					if(condition.toString().equals("null") == false) {
+						valueSpinner.setToolTipText(condition.toString()); //$NON-NLS-1$ //$NON-NLS-2$
+					} else {
+						valueSpinner.setToolTipText(null);
+					}
 					wd.setValue(value);
 					if (wd.isValueModified()) {
 						doModify(valueSpinner);
@@ -1091,7 +1117,11 @@ public class ConfigurationDialog extends TitleAreaDialog {
                     wd.setValue(value);
 					valueSliderText.setBackground(colorRegistry.get(ERROR_COLOR));
 				} else {
-					valueSliderText.setToolTipText(null);
+					if(condition.toString().equals("null") == false) {
+						valueSliderText.setToolTipText(condition.toString()); //$NON-NLS-1$ //$NON-NLS-2$
+					} else {
+						valueSliderText.setToolTipText(null);
+					}
 					wd.setValue(value);
 					valueSliderText.setBackground(colorRegistry.get(NORMAL_COLOR));
 				}

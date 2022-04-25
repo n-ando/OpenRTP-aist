@@ -41,7 +41,7 @@ public class DisconnectDialog extends TitleAreaDialog {
 	static final String COLUMN_LABEL_CONN_ID = "Connector Id";
 	static final String COLUMN_LABEL_CONN_NAME = "Connector name";
 
-	static final String BUTTON_LABEL_DELETE = getString("Common.button.delete");
+	static final String BUTTON_LABEL_DELETE = getString("ConnectPortActionDelegate.disconnect");
 
 	static final int EXEC_BUTTON_WIDTH = 70;
 
