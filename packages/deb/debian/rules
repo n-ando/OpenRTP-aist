@@ -91,7 +91,6 @@ install-arch:
 	(cd $(CURDIR) ; cp -R dropins $(CURDIR)/debian/openrtp2/usr/lib/$(DEB_HOST_MULTIARCH)/openrtm-$(SHORT_VER)/openrtp)
 	(cd $(CURDIR) ; rm -rf $(CURDIR)/debian/openrtp2/usr/lib/$(DEB_HOST_MULTIARCH)/openrtm-$(SHORT_VER)/openrtp/packages)
 	#(cd $(CURDIR) ; cp openrtp $(CURDIR)/debian/openrtp2/usr/bin/openrtp2 ; chmod 755 $(CURDIR)/debian/openrtp/usr/bin/openrtp2)
-	(cd $(CURDIR) ; cp openrtp openrtp2)
 	(cd $(CURDIR) ; cp openrtp2 $(CURDIR)/debian/openrtp2/usr/bin/ ; chmod 755 $(CURDIR)/debian/openrtp2/usr/bin/openrtp2)
 
 	dh_install -s
