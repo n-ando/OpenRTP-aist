@@ -13,8 +13,11 @@ public class NameServiceProcessHandler {
 	public static String SCRIPT_WINDOWS = System.getenv("RTM_ROOT") + "bin" + Path.SEPARATOR + "rtm-naming.bat";
 	public static String SCRIPT_WINDOWS_STOP = System.getenv("RTM_ROOT") + "bin" + Path.SEPARATOR + "kill-rtm-naming.bat";
 
-	public static String SCRIPT_UNIX = "/usr/bin/rtm-naming";
-	private String[] UNIX_CANDIDATE_LIST = {"/usr/bin/rtm-naming",
+	public static String SCRIPT_UNIX = "/usr/bin/rtm2-naming";
+	private String[] UNIX_CANDIDATE_LIST = {"/usr/bin/rtm2-naming",
+											"/usr/local/bin/rtm2-naming",
+											System.getenv("RTM_ROOT") + "bin" + Path.SEPARATOR + "rtm2-naming",
+											"/usr/bin/rtm-naming",
 											"/usr/local/bin/rtm-naming",
 											System.getenv("RTM_ROOT") + "bin" + Path.SEPARATOR + "rtm-naming"};
 	
