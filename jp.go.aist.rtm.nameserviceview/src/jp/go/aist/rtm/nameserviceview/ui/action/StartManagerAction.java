@@ -21,10 +21,21 @@ public class StartManagerAction implements IViewActionDelegate {
 	private NameServiceView view;
 
 	private static String SCRIPT_WINDOWS = System.getenv("RTM_ROOT") + "bin" + Path.SEPARATOR + "rtcd-cxx-daemon.bat";
-	private static String SCRIPT_LINUX = "/usr/bin/rtcd";
+	
+	private static String SCRIPT_LINUX = "/usr/bin/rtcd2";
+	private String[] UNIX_CANDIDATE_LIST = {"/usr/bin/rtcd2",
+									"/usr/bin/rtcd"};
 
 	public void init(IViewPart view) {
 		this.view = (NameServiceView) view;
+		// find rtcd
+		for(String each :  UNIX_CANDIDATE_LIST) {
+			File targetFile = new File(each);
+			if(targetFile.exists() == true) {
+				SCRIPT_LINUX = each;
+				break;
+			}
+		}
 	}
 
 	public void run(IAction action) {
