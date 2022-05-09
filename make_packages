@@ -349,11 +349,11 @@ install_rtmtools()
         fi
     done
 
-    chmod 755 openrtp
+    chmod 755 openrtp2
     if test "x$os" = "xLINUX" ; then
-        cp openrtp $WORK_DIR/eclipse/
+        cp openrtp2 $WORK_DIR/eclipse/
     elif test "x$os" = "xMACOS" ; then
-        cp openrtp $WORK_DIR/Eclipse.app/Contents/MacOS/
+        cp openrtp2 $WORK_DIR/Eclipse.app/Contents/MacOS/
         info="$WORK_DIR/Eclipse.app/Contents/Info.plist"
         sed -i -e 's/<string>eclipse<\/string>/<string>openrtp<\/string>/g' $info
     fi
