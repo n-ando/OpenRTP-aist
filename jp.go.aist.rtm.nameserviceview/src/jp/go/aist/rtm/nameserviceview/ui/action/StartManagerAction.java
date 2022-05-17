@@ -24,7 +24,12 @@ public class StartManagerAction implements IViewActionDelegate {
 	
 	private static String SCRIPT_LINUX = "/usr/bin/rtcd2";
 	private String[] UNIX_CANDIDATE_LIST = {"/usr/bin/rtcd2",
-									"/usr/bin/rtcd"};
+											"/usr/local/bin/rtcd2",
+											System.getenv("RTM_ROOT") + "bin" + Path.SEPARATOR + "rtcd2",
+									"/usr/bin/rtcd",
+									"/usr/local/bin/rtcd",
+									System.getenv("RTM_ROOT") + "bin" + Path.SEPARATOR + "rtcd"};
+
 
 	public void init(IViewPart view) {
 		this.view = (NameServiceView) view;
