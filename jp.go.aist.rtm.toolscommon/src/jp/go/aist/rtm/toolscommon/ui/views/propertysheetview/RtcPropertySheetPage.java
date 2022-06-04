@@ -206,6 +206,7 @@ public class RtcPropertySheetPage implements IPropertySheetPage,
 			if (c.isCompositeComponent()) {
 				kind = "composite";
 			}
+			componentView.setVisible(false);
 			componentViewer.setInput(new ComponentWrapper(component));
 			componentViewer.reveal(component);// 表示後、上にスクロールする
 
