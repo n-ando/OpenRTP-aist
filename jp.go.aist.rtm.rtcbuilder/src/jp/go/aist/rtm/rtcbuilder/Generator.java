@@ -399,6 +399,14 @@ public class Generator {
 			try {
 				String idlContent = FileUtil.readFile(sv.getName());
 				if (idlContent == null) continue;
+				
+				String[] eachLines = idlContent.split("\r\n");
+				StringBuffer tmpBuf= new StringBuffer();
+				for(String eachLine : eachLines) {
+					tmpBuf.append(eachLine.trim()  + "\r\n");
+			    }
+				idlContent = tmpBuf.toString();
+				
 				List<String> pathList = new ArrayList<String>();
 				for(IdlPathParam path : rtcParam.getIdlSearchPathList()) {
 					pathList.add(path.getPath());

@@ -102,6 +102,10 @@ public class GuiRtcBuilder {
 			MessageDialog.openError(PlatformUI.getWorkbench().getDisplay()
 					.getActiveShell(), "Error", e.getMessage());
 			return false;
+		} catch (Error e) {
+			MessageDialog.openError(PlatformUI.getWorkbench().getDisplay()
+					.getActiveShell(), "Error", e.getMessage());
+			return false;
 		}
 	}
 
