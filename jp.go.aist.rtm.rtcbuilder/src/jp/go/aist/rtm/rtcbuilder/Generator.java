@@ -391,6 +391,7 @@ public class Generator {
 		List<ServiceClassParam> result = new ArrayList<ServiceClassParam>();
 		List<String> includeFiles = new ArrayList<String>();
 
+		String lineSeparator = System.getProperty("line.separator");
 		for (int intIdx = 0; intIdx < IDLPathes.size(); intIdx++) {
 			ServiceClassParam sv = IDLPathes.get(intIdx);
 			if (sv == null) continue;
@@ -400,10 +401,10 @@ public class Generator {
 				String idlContent = FileUtil.readFile(sv.getName());
 				if (idlContent == null) continue;
 				
-				String[] eachLines = idlContent.split("\r\n");
+				String[] eachLines = idlContent.split(lineSeparator);
 				StringBuffer tmpBuf= new StringBuffer();
 				for(String eachLine : eachLines) {
-					tmpBuf.append(eachLine.trim()  + "\r\n");
+					tmpBuf.append(eachLine.trim()  + lineSeparator);
 			    }
 				idlContent = tmpBuf.toString();
 				
