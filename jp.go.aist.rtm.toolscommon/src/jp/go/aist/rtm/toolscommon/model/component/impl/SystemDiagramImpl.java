@@ -8,10 +8,15 @@ package jp.go.aist.rtm.toolscommon.model.component.impl;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.net.Inet6Address;
 import java.net.InetAddress;
+import java.net.InterfaceAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -105,8 +110,6 @@ public class SystemDiagramImpl extends ModelElementImpl implements SystemDiagram
 
 	protected IPropertyMap properties;
 	
-	private String currentIP = null;
-
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -839,31 +842,30 @@ public class SystemDiagramImpl extends ModelElementImpl implements SystemDiagram
 			syncRemoteThread = null;
 		}
 	}
-
+	
+	private String currentIP = null;
+	private boolean useIP = false;
+	private List<String> IPList = new ArrayList<String>(); 
+	private MessageDialog msgDialog = null;
+	
 	void synchronizeRemote() {
 		if (getParentSystemDiagram() == null) {
 			try {
-				InetAddress addr = InetAddress.getLocalHost();
-				String address = addr.getHostAddress();
-				if(currentIP==null) {
-					currentIP = address;
-				} else {
-					if(currentIP.equals(address)==false) {
-						String oldAddress = currentIP;
-						currentIP = address;
-						if( 0 < PlatformUI.getWorkbench().getWorkbenchWindowCount() ) {
-							Shell shell = PlatformUI.getWorkbench().getWorkbenchWindows()[0].getShell();
-							shell.getDisplay().asyncExec(new Runnable() {
-							    public void run() {
-						            MessageDialog.openError(shell,
-						            		Messages.getString("IPCaution.title"),
-						            		Messages.getString("IPCaution.message01") + " (" + oldAddress + " -> " + currentIP + ")" + System.lineSeparator()
-						            		+ Messages.getString("IPCaution.message02"));
-							    }
-							});
-						}
+				if(currentIP == null) {
+					InetAddress addr = InetAddress.getLocalHost();
+					if(addr.getHostAddress().equals(InetAddress.getLoopbackAddress().getHostAddress())) {
+						useIP = false;
+					} else {
+						useIP = true;
 					}
 				}
+				if(useIP) {
+					checkByIPAddress();
+				} else {
+					checkByList();
+				}
+			} catch (SocketException e) {
+				e.printStackTrace();
 			} catch (UnknownHostException e) {
 				e.printStackTrace();
 			}
@@ -882,6 +884,115 @@ public class SystemDiagramImpl extends ModelElementImpl implements SystemDiagram
 					continue;
 				}
 				support.synchronizeRemote();
+			}
+		}
+	}
+
+	private void checkByList() throws SocketException {
+		List<String> ips = new ArrayList<String>();
+		Enumeration<NetworkInterface> netSet;
+		netSet = NetworkInterface.getNetworkInterfaces();
+		while(netSet.hasMoreElements()){
+			NetworkInterface nInterface = (NetworkInterface) netSet.nextElement();
+			List<InterfaceAddress>list = nInterface.getInterfaceAddresses();
+			if( list.size() == 0 ) continue;
+			for (InterfaceAddress interfaceAdr : list){
+				InetAddress inet = interfaceAdr.getAddress();
+				if(inet instanceof Inet6Address) continue;
+				String address = inet.getHostAddress();
+				ips.add(address);
+			}
+		}
+		if(currentIP == null) {
+			if(0 <ips.size()) {
+				currentIP = ips.get(0);
+			} else {
+				currentIP = "checked";
+			}
+			IPList.addAll(ips);
+		} else {
+			int preSize = IPList.size();
+			int curSize = ips.size();
+
+			String removed = "";
+			for(String each : IPList) {
+				if(ips.contains(each) == false) {
+					removed =  each;
+					break;
+				}
+			}
+
+			String added = "";
+			for(String each : ips) {
+				if(IPList.contains(each) == false) {
+					added = each;
+					break;
+				}
+			}
+			
+			String errMsg = "";
+			if(curSize < preSize) {
+				if( 0 < removed.length()) {
+					errMsg = " ( " + removed + " " + Messages.getString("IPCaution.message03");
+				}
+			} else if(preSize < curSize) {
+				if( 0 < added.length() ) {
+					errMsg = " ( " + added + " " + Messages.getString("IPCaution.message04");
+				}
+			} else {
+				if( 0 < removed.length() && 0 < added.length() ) {
+					errMsg = " ( " + removed + " -> " + added + " )";
+				}
+			}
+			IPList.clear();
+			IPList.addAll(ips);
+			
+			if( 0 < errMsg.length() ) {
+				String errMsgl = errMsg;
+				if( 0 < PlatformUI.getWorkbench().getWorkbenchWindowCount() ) {
+					Shell shell = PlatformUI.getWorkbench().getWorkbenchWindows()[0].getShell();
+					shell.getDisplay().asyncExec(new Runnable() {
+					    public void run() {
+					    	if(msgDialog != null) {
+					    		msgDialog.close();
+					    	}
+					    	String title = Messages.getString("IPCaution.title");
+					    	String message = Messages.getString("IPCaution.message01") + errMsgl + System.lineSeparator()
+		            							+ Messages.getString("IPCaution.message02");
+					    	String[] buttonLabels = new String[] { "OK" };
+					    	msgDialog = new MessageDialog(shell, title, null, message, MessageDialog.ERROR, buttonLabels, 0);
+					    	msgDialog.open();
+					    }
+				    });
+				}
+			}
+		}
+	}
+
+	private void checkByIPAddress() throws UnknownHostException {
+		InetAddress addr = InetAddress.getLocalHost();
+		String address = addr.getHostAddress();
+		if(currentIP==null) {
+			currentIP = address;
+		} else {
+			if(currentIP.equals(address)==false) {
+				String oldAddress = currentIP;
+				currentIP = address;
+				if( 0 < PlatformUI.getWorkbench().getWorkbenchWindowCount() ) {
+					Shell shell = PlatformUI.getWorkbench().getWorkbenchWindows()[0].getShell();
+					shell.getDisplay().asyncExec(new Runnable() {
+					    public void run() {
+					    	if(msgDialog != null) {
+					    		msgDialog.close();
+					    	}
+					    	String title = Messages.getString("IPCaution.title");
+					    	String message = Messages.getString("IPCaution.message01") + " (" + oldAddress + " -> " + currentIP + ")" + System.lineSeparator()
+		            							+ Messages.getString("IPCaution.message02");
+					    	String[] buttonLabels = new String[] { "OK" };
+					    	msgDialog = new MessageDialog(shell, title, null, message, MessageDialog.ERROR, buttonLabels, 0);
+					    	msgDialog.open();					    }
+					});
+				}
 			}
 		}
 	}
