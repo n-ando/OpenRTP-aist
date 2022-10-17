@@ -162,7 +162,7 @@ public class RestoreComponentDialog extends Dialog {
 				ComponentInfo target = new ComponentInfo(comp, targetComp);
 				if(target.getCompRawId() != null && 0 < target.getCompRawId().length()) {
 					for(RTCInfo rtc : rtcList) {
-						if(rtc.compId.equals(target.getCompRawId())) {
+						if(rtc.compId.equals(target.getCompRawId()) && rtc.instanceName.equals(target.getCompName())) {
 							target.setSelectedRTC(rtc.component);
 							break;
 						}
@@ -759,12 +759,14 @@ public class RestoreComponentDialog extends Dialog {
 	public static class RTCInfo {
 		private String compName;
 		private String compId;
+		private String instanceName;
 
 		private CorbaComponent component;
 		
 		public RTCInfo(CorbaComponent comp) {
 			this.component = comp;
 			
+			this.instanceName = comp.getInstanceNameL();
 			this.compId = comp.getComponentId();
 			this.compName = comp.getInstanceNameL();
 		}
