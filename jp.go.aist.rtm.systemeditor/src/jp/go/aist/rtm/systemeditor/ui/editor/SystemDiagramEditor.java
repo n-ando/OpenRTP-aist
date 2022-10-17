@@ -169,7 +169,7 @@ public class SystemDiagramEditor extends AbstractSystemDiagramEditor {
 								isSkip = true;
 								break;
 							}
-							compIdMap.put(c.getComponentId(), targetComp);
+							compIdMap.put(c.getComponentId() + "_" + c.getInstanceNameL(), targetComp);
 							targetComp = info.getSelectedRTC();
 							if(targetComp == null) {
 								errMsg = info.getStatus();
@@ -301,8 +301,8 @@ public class SystemDiagramEditor extends AbstractSystemDiagramEditor {
 	}
 
 	private void replacePortInfo(Map<String, Component> compIdMap, TargetPortExt port) {
-		if(compIdMap.containsKey(port.getComponentId())) {
-			Component comp = compIdMap.get(port.getComponentId());
+		if(compIdMap.containsKey(port.getComponentId() + "_" + port.getInstanceName())) {
+			Component comp = compIdMap.get(port.getComponentId() + "_" + port.getInstanceName());
 			port.setComponentId(comp.getComponentId());
 			String portName = port.getPortName();
 			portName = portName.replace(port.getInstanceName(), comp.getInstanceNameL());
