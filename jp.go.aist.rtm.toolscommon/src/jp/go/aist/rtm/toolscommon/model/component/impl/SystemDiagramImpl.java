@@ -847,12 +847,14 @@ public class SystemDiagramImpl extends ModelElementImpl implements SystemDiagram
 	private boolean useIP = false;
 	private List<String> IPList = new ArrayList<String>(); 
 	private MessageDialog msgDialog = null;
+	private String bad_address = "127.0.1.1";
+	private boolean shownBadWarning = false;
 	
 	void synchronizeRemote() {
 		if (getParentSystemDiagram() == null) {
 			try {
+				InetAddress addr = InetAddress.getLocalHost();
 				if(currentIP == null) {
-					InetAddress addr = InetAddress.getLocalHost();
 					if(addr.getHostAddress().equals(InetAddress.getLoopbackAddress().getHostAddress())) {
 						useIP = false;
 					} else {
@@ -889,6 +891,8 @@ public class SystemDiagramImpl extends ModelElementImpl implements SystemDiagram
 	}
 
 	private void checkByList() throws SocketException {
+		boolean showBadAddress = false;
+		
 		List<String> ips = new ArrayList<String>();
 		Enumeration<NetworkInterface> netSet;
 		netSet = NetworkInterface.getNetworkInterfaces();
@@ -903,6 +907,15 @@ public class SystemDiagramImpl extends ModelElementImpl implements SystemDiagram
 				ips.add(address);
 			}
 		}
+
+		String address = "";
+		try {
+			InetAddress addr = InetAddress.getLocalHost();
+			address = addr.getHostAddress();
+//			address = "127.0.1.1";
+		} catch (UnknownHostException ex) {
+		}
+
 		if(currentIP == null) {
 			if(0 <ips.size()) {
 				currentIP = ips.get(0);
@@ -910,7 +923,22 @@ public class SystemDiagramImpl extends ModelElementImpl implements SystemDiagram
 				currentIP = "checked";
 			}
 			IPList.addAll(ips);
+			
+			if(address.equals(bad_address)) {
+				shownBadWarning = true;
+				showBadAddress = true;
+			}
+
 		} else {
+			if(address.equals(bad_address)) {
+				if(shownBadWarning == false) {
+					shownBadWarning = true;
+					showBadAddress = true;
+				}
+			} else {
+				shownBadWarning = false;
+			}
+
 			int preSize = IPList.size();
 			int curSize = ips.size();
 
@@ -947,8 +975,21 @@ public class SystemDiagramImpl extends ModelElementImpl implements SystemDiagram
 			IPList.clear();
 			IPList.addAll(ips);
 			
-			if( 0 < errMsg.length() ) {
-				String errMsgl = errMsg;
+			if( 0 < errMsg.length() || showBadAddress ) {
+		    	StringBuilder builder = new StringBuilder();
+		    	if(0 < errMsg.length()) {
+			    	builder.append(Messages.getString("IPCaution.message01")).append(errMsg).append(System.lineSeparator());
+			    	builder.append(Messages.getString("IPCaution.message02"));
+		    	}
+		    	if(showBadAddress) {
+		    		if( 0< builder.length() ) {
+		    			builder.append(System.lineSeparator()).append(System.lineSeparator());
+		    		}
+		    		builder.append(Messages.getString("IPCaution.badIp01")).append(System.lineSeparator());
+		    		builder.append(Messages.getString("IPCaution.badIp02"));
+		    		showBadAddress = false;
+		    	}
+		    	
 				if( 0 < PlatformUI.getWorkbench().getWorkbenchWindowCount() ) {
 					Shell shell = PlatformUI.getWorkbench().getWorkbenchWindows()[0].getShell();
 					shell.getDisplay().asyncExec(new Runnable() {
@@ -957,10 +998,8 @@ public class SystemDiagramImpl extends ModelElementImpl implements SystemDiagram
 					    		msgDialog.close();
 					    	}
 					    	String title = Messages.getString("IPCaution.title");
-					    	String message = Messages.getString("IPCaution.message01") + errMsgl + System.lineSeparator()
-		            							+ Messages.getString("IPCaution.message02");
 					    	String[] buttonLabels = new String[] { "OK" };
-					    	msgDialog = new MessageDialog(shell, title, null, message, MessageDialog.ERROR, buttonLabels, 0);
+					    	msgDialog = new MessageDialog(shell, title, null, builder.toString(), MessageDialog.ERROR, buttonLabels, 0);
 					    	msgDialog.open();
 					    }
 				    });
@@ -970,14 +1009,48 @@ public class SystemDiagramImpl extends ModelElementImpl implements SystemDiagram
 	}
 
 	private void checkByIPAddress() throws UnknownHostException {
+		boolean showBadAddress = false;
+
 		InetAddress addr = InetAddress.getLocalHost();
 		String address = addr.getHostAddress();
+//		address = "127.0.1.1";
 		if(currentIP==null) {
 			currentIP = address;
+			if(address.equals(bad_address)) {
+				shownBadWarning = true;
+				showBadAddress = true;
+			}
 		} else {
-			if(currentIP.equals(address)==false) {
+			if(address.equals(bad_address)) {
+				if(shownBadWarning == false) {
+					shownBadWarning = true;
+					showBadAddress = true;
+				}
+			} else {
+				shownBadWarning = false;
+			}
+		}
+		if(currentIP.equals(address)==false || showBadAddress) {
+			
+	    	StringBuilder builder = new StringBuilder();
+	    	if(currentIP.equals(address)==false) {
 				String oldAddress = currentIP;
 				currentIP = address;
+	    		builder.append(Messages.getString("IPCaution.message01")).append(" (").append(oldAddress);
+	    		builder.append(" -> ").append(currentIP).append(")").append(System.lineSeparator());
+	    		builder.append(Messages.getString("IPCaution.message02"));
+	    	}
+
+			if(showBadAddress) {
+	    		if( 0< builder.length() ) {
+	    			builder.append(System.lineSeparator()).append(System.lineSeparator());
+	    		}
+	    		builder.append(Messages.getString("IPCaution.badIp01")).append(System.lineSeparator());
+	    		builder.append(Messages.getString("IPCaution.badIp02"));
+	    		showBadAddress = false;
+	    	}
+	    	
+	    	if(0<builder.length()) {
 				if( 0 < PlatformUI.getWorkbench().getWorkbenchWindowCount() ) {
 					Shell shell = PlatformUI.getWorkbench().getWorkbenchWindows()[0].getShell();
 					shell.getDisplay().asyncExec(new Runnable() {
@@ -986,10 +1059,8 @@ public class SystemDiagramImpl extends ModelElementImpl implements SystemDiagram
 					    		msgDialog.close();
 					    	}
 					    	String title = Messages.getString("IPCaution.title");
-					    	String message = Messages.getString("IPCaution.message01") + " (" + oldAddress + " -> " + currentIP + ")" + System.lineSeparator()
-		            							+ Messages.getString("IPCaution.message02");
 					    	String[] buttonLabels = new String[] { "OK" };
-					    	msgDialog = new MessageDialog(shell, title, null, message, MessageDialog.ERROR, buttonLabels, 0);
+					    	msgDialog = new MessageDialog(shell, title, null, builder.toString(), MessageDialog.ERROR, buttonLabels, 0);
 					    	msgDialog.open();					    }
 					});
 				}
