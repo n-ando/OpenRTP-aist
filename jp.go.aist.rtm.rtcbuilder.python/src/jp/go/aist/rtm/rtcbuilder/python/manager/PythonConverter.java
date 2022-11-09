@@ -288,7 +288,9 @@ public class PythonConverter {
 		
 		//module名が付いていないデータ型（::が付いていない）は、
 		//文字列に()を付けてデフォルトコンストラクタ扱いにする
-		if(!rtcType.matches(".*::.*")) return rtcType + "()";
+		if(!rtcType.matches(".*::.*")) {
+			return "_GlobalIDL." + rtcType + "()";
+		}
 		String methodName = rtcType.replace("::", ".");
 
 		//module名が「RTC」のときは親データ型である「Time」のコンストラクタを引数に入れた
