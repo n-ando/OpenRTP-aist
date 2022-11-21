@@ -289,7 +289,7 @@ public class PythonConverter {
 		//module名が付いていないデータ型（::が付いていない）は、
 		//文字列に()を付けてデフォルトコンストラクタ扱いにする
 		if(!rtcType.matches(".*::.*")) {
-			return "_GlobalIDL." + rtcType + "()";
+			return "_GlobalIDL." + rtcType;
 		}
 		String methodName = rtcType.replace("::", ".");
 
