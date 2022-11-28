@@ -286,9 +286,10 @@ public class PythonConverter {
 	 */
 	public String getDataportInitMethodName(String rtcType) {
 		
-		//module名が付いていないデータ型（::が付いていない）は、
-		//文字列に()を付けてデフォルトコンストラクタ扱いにする
-		if(!rtcType.matches(".*::.*")) return rtcType + "()";
+		//module名が付いていないデータ型（::が付いていない）の場合
+		if(!rtcType.matches(".*::.*")) {
+			return "_GlobalIDL." + rtcType;
+		}
 		String methodName = rtcType.replace("::", ".");
 
 		//module名が「RTC」のときは親データ型である「Time」のコンストラクタを引数に入れた
