@@ -45,11 +45,11 @@
 		<echo message="idlj.path : ${idlj.path}"/>
 #foreach($idlPath in ${rtcParam.providerIdlPathes})
 #if( ${idlPath.checkDefault()} == false )
-		<exec executable="${idlj.path}">
+		<exec executable="${dollarStr}{idlj.path}">
 			<arg line="-td 'src/temp' -i '${rtm.idl.path}' #foreach($idlSearchPath in ${idlPath.idlSearchPathes})-i '${idlSearchPath}' #end-fall 'idl/${tmpltHelper.getFileName(${idlPath.idlFile})}'"/>
 		</exec>
 #foreach ($idl in ${idlPath.includeIdlParamsWithoutDefault})
-		<exec executable="${dollarStr}{java.home}/../bin/idlj">
+		<exec executable="${dollarStr}{idlj.path}">
 			<arg line="-td 'src/temp' -i '${rtm.idl.path}' #foreach($idlSearchPath in ${idlPath.idlSearchPathes})-i '${idlSearchPath}' #end-fall 'idl/${tmpltHelper.getFileName(${idl.idlFile})}'"/>
 		</exec>
 #end
@@ -57,11 +57,11 @@
 #end
 #foreach($idlPath in ${rtcParam.consumerIdlPathes})
 #if( ${idlPath.checkDefault()} == false )
-		<exec executable="${dollarStr}{java.home}/../bin/idlj">
+		<exec executable="${dollarStr}{idlj.path}">
 			<arg line="-td 'src' -i '${rtm.idl.path}' #foreach($idlSearchPath in ${idlPath.idlSearchPathes})-i '${idlSearchPath}' #end-fall 'idl/${tmpltHelper.getFileName(${idlPath.idlFile})}'"/>
 		</exec>
 #foreach ($idl in ${idlPath.includeIdlParamsWithoutDefault})
-		<exec executable="${dollarStr}{java.home}/../bin/idlj">
+		<exec executable="${dollarStr}{idlj.path}">
 			<arg line="-td 'src' -i '${rtm.idl.path}' #foreach($idlSearchPath in ${idlPath.idlSearchPathes})-i '${idlSearchPath}' #end-fall 'idl/${tmpltHelper.getFileName(${idl.idlFile})}'"/>
 		</exec>
 #end
