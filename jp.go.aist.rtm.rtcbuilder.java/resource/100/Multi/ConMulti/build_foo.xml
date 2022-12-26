@@ -32,10 +32,10 @@
 	</target>
 	<target name="idlcompile"  depends="mkdir, setWindows, setUnix">
 		<echo message="idlj.path : ${idlj.path}"/>
-		<exec executable="${java.home}/../bin/idlj">
+		<exec executable="${idlj.path}">
 			<arg line="-td 'src' -i '${rtm.idl.path}' -fall 'idl/MyService.idl'"/>
 		</exec>
-		<exec executable="${java.home}/../bin/idlj">
+		<exec executable="${idlj.path}">
 			<arg line="-td 'src' -i '${rtm.idl.path}' -fall 'idl/DAQService.idl'"/>
 		</exec>
 		<native2ascii src="src/temp" dest="src"/>
