@@ -13,5 +13,5 @@ if test "x$RTM_CONFIG_CMD" = "x" ; then
     echo "rtm-config/rtm-config2/rtm2-config command not found."
     exit 1
 fi
-IDL_PATH=`rtm-config --rtm-idldir`
+IDL_PATH=`$RTM_CONFIG_CMD --rtm-idldir`
 omniidl -bpython -I$IDL_PATH idl/CalibrationService.idl idl/InterfaceDataTypes.idl idl/BasicDataType.idl idl/ExtendedDataTypes.idl 
