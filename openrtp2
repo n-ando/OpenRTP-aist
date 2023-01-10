@@ -108,24 +108,24 @@ set_RTM_ROOT()
 find_RTM_ROOT()
 {
     debug_echo "TRACE: find_RTM_ROOT"
-    # find RTM_ROOT by rtm-config2
-    rtm_config=`which rtm-config2`
+    # find RTM_ROOT by rtm2-config
+    rtm_config=`which rtm2-config`
     if test "x$rtm_config" = "x" ; then
-        # rtm-config2 not found
+        # rtm2-config not found
         return 1
     fi
-    debug_echo "rtm_config2: " $rtm_config
+    debug_echo "rtm2_config: " $rtm_config
 
     # check rtm-config version
     ver=`grep rtm-idldir $rtm_config`
     if test "x$var" = "x" ; then
         # old version: no --rtm-idldir option
-        RTM_ROOT=`rtm-config2 --cflags | sed -e 's/.*\-I\(\/.*\)\/rtm\/idl/\1/'`
+        RTM_ROOT=`rtm2-config --cflags | sed -e 's/.*\-I\(\/.*\)\/rtm\/idl/\1/'`
         debug_echo "RTM_ROOT: " $RTM_ROOT
         return 0
     else
         # new version: --rtm-idldir available
-        RTM_ROOT=`rtm-config2 --rtm-idldir | sed -e 's/\/rtm\/idl$//'`
+        RTM_ROOT=`rtm2-config --rtm-idldir | sed -e 's/\/rtm\/idl$//'`
         debug_echo "RTM_ROOT: " $RTM_ROOT
         return 0
     fi
@@ -267,9 +267,9 @@ check_RTM_JAVA_ROOT()
 
 find_OPENRTP_DIR()
 {
-    rtm_config=`which rtm-config2`
+    rtm_config=`which rtm2-config`
     if test "x$rtm_config" != "x" ; then
-        OPENRTP_DIR=`rtm-config2 --libdir`/openrtp
+        OPENRTP_DIR=`rtm2-config --libdir`/openrtp
         debug_echo "OPENRTP_DIR: $OPENRTP_DIR"
         if test -f $OPENRTP_DIR/eclipse ; then
             OPENRTP_EXECUTABLE=$OPENRTP_DIR/eclipse
