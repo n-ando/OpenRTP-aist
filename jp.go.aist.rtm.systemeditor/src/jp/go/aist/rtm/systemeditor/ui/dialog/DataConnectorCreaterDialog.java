@@ -1191,7 +1191,7 @@ public class DataConnectorCreaterDialog extends ConnectorDialogBase {
 		String interfaceType = targetPort.getInterfaceType();
 		String[] ifTypes = interfaceType.split(",");
 		for(String each : ifTypes) {
-			propertyList.put(each, new ArrayList<DataConnectorCreaterDialog.PropertyElem>());
+			propertyList.put(each.trim(), new ArrayList<DataConnectorCreaterDialog.PropertyElem>());
 		}
 		
 		List<String> portType = new ArrayList<String>();
