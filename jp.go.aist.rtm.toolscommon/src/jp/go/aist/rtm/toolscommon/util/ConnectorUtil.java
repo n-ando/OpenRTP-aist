@@ -208,7 +208,8 @@ public class ConnectorUtil {
 		String serializers = target.getProperty("dataport.marshaling_types");
 		if(serializers!=null && 0<serializers.length()) {
 			String[] serArray = serializers.split(",");
-			result = Arrays.asList(serArray);
+			result = new ArrayList<String>(serArray.length);
+			for (String item : serArray) result.add(item.trim());
 			result.sort( (a, b) -> a.length() == b.length() ? a.compareTo(b) : b.length() - a.length());
 		}
 		return result;
