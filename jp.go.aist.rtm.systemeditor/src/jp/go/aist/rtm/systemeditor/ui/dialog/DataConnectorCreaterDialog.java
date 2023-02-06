@@ -323,7 +323,7 @@ public class DataConnectorCreaterDialog extends ConnectorDialogBase {
 				.isAllowAnyInterfaceType(outport, inport) ? Messages.getString("DataConnectorCreaterDialog.2") : ""); //$NON-NLS-1$ //$NON-NLS-2$
 		
 		Label serializerTypeLabel = new Label(portProfileEditComposite, SWT.NONE);
-		serializerTypeLabel.setText("marshaling Type :"); //$NON-NLS-1$
+		serializerTypeLabel.setText("Marshaling Type :"); //$NON-NLS-1$
 		style = ConnectorUtil.isAllowAnyDataType(outport, inport) ? SWT.DROP_DOWN
 				: SWT.DROP_DOWN | SWT.READ_ONLY;
 		serializerTypeCombo = new Combo(portProfileEditComposite, style);
@@ -1191,7 +1191,7 @@ public class DataConnectorCreaterDialog extends ConnectorDialogBase {
 		String interfaceType = targetPort.getInterfaceType();
 		String[] ifTypes = interfaceType.split(",");
 		for(String each : ifTypes) {
-			propertyList.put(each, new ArrayList<DataConnectorCreaterDialog.PropertyElem>());
+			propertyList.put(each.trim(), new ArrayList<DataConnectorCreaterDialog.PropertyElem>());
 		}
 		
 		List<String> portType = new ArrayList<String>();
