@@ -1,3 +1,9 @@
+openrtp2 (2.0.1-1) experimental; urgency=low
+
+  * Removed leading whitespace from serializer names.
+
+ -- Noriaki Ando <n-ando@aist.go.jp>  Wed, 26 Apr 2023 14:28:12 +0900
+
 openrtp2 (2.0.1-0) experimental; urgency=low
 
   * 2.0.1-0 (2.0.1-RELEASE). OpenRTP-2.0.1-RELEASE
