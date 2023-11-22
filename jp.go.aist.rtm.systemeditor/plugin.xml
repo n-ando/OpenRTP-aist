@@ -395,6 +395,21 @@
 				id="org.eclipse.ui.commands.toggleState">
 			</state>
 		</command>
+
+		<command
+			categoryId="jp.go.aist.rtm.systemeditor.command.category"
+			id="rtse.command.connectionchain.Manual"
+			name="%Connection_Chain_Manual">
+		</command>
+		<command
+			categoryId="jp.go.aist.rtm.systemeditor.command.category"
+			id="rtse.command.connectionchain.Auto"
+			name="%Connection_Chain_Auto">
+			<state
+				class="org.eclipse.ui.handlers.RegistryToggleState:false"
+				id="org.eclipse.ui.commands.toggleState">
+			</state>
+		</command>
 	</extension>
 
 	<extension
@@ -576,6 +591,21 @@
 					<reference definitionId="rtse.definition.activeSystemDiagramEditor"/>
 					<reference definitionId="rtse.definition.checkCorbaStatusObserverGlobal"/>
 				</and>
+			</activeWhen>
+		</handler>
+		
+		<handler
+			class="jp.go.aist.rtm.systemeditor.ui.handler.ConnectionChainManualCommandHandler"
+			commandId="rtse.command.connectionchain.Manual">
+			<activeWhen>
+				<reference definitionId="rtse.definition.activeSystemDiagramEditor"/>
+			</activeWhen>
+		</handler>
+		<handler
+			class="jp.go.aist.rtm.systemeditor.ui.handler.ConnectionChainAutoCommandHandler"
+			commandId="rtse.command.connectionchain.Auto">
+			<activeWhen>
+				<reference definitionId="rtse.definition.activeSystemDiagramEditor"/>
 			</activeWhen>
 		</handler>
 	</extension>
@@ -841,6 +871,28 @@
 				</command>
 				<separator
 					name="rtse.menus.toolbar.observer.status.additions"
+					visible="true">
+				</separator>
+			</toolbar>
+			<toolbar
+				id="rtse.menus.toolbar.connectionchain"
+				label="ConnectionChain">
+				<command
+					commandId="rtse.command.connectionchain.Manual"
+					id="rtse.menus.toolbar.Connection_Chain_Manual"
+					label="%Connection_Chain_Manual"
+					icon="icons/connection_chain_manual.png"
+					style="push">
+				</command>
+				<command
+					commandId="rtse.command.connectionchain.Auto"
+					id="rtse.menus.toolbar.Connection_Chain_Auto"
+					label="%Connection_Chain_Auto"
+					icon="icons/connection_chain_auto.png"
+					style="toggle">
+				</command>
+				<separator
+					name="rtse.menus.toolbar.connectionchain.additions"
 					visible="true">
 				</separator>
 			</toolbar>
@@ -1208,6 +1260,12 @@
 			id="jp.go.aist.rtm.systemeditor.ui.preference.OnlineEditorPreferencePage"
 			class="jp.go.aist.rtm.systemeditor.ui.preference.OnlineEditorPreferencePage"
 			name="%OnlineEditor"
+			category="jp.go.aist.rtm.systemeditor.ui.preference.MainPreferencePage">
+		</page>
+		<page
+			id="jp.go.aist.rtm.systemeditor.ui.preference.ConnectionChainPreferencePage"
+			class="jp.go.aist.rtm.systemeditor.ui.preference.ConnectionChainPreferencePage"
+			name="%ConnectionChain"
 			category="jp.go.aist.rtm.systemeditor.ui.preference.MainPreferencePage">
 		</page>
 	</extension>
