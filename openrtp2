@@ -1,20 +1,5 @@
 #!/bin/bash
 
-# RTM_ROOT
-#
-# This is used to find IDL files. Default IDL file directory is
-# $RTM_ROOT/rtm/idl (in Windows)
-# In the generic Linux environment, IDL directory is
-# $prefix/include/openrtm-x.y/rtm/idl
-# Therefore RTM_ROOT should be $prefix/include/openrtm-x.y
-#
-# RTM_JAVA_ROOT
-#
-# This is used to find OpenRTM-aist-Java jar files. No generic
-# rules exist.
-#
-
-
 cd $(cd $(dirname $(readlink -f $0 || echo $0));pwd -P)
 
 debug_echo () {
@@ -61,224 +46,17 @@ done
 debug_echo "Debug mode enable."
 debug_echo "ECLIPSE_ARGS: $ECLIPSE_ARGS"
 
-
-#------------------------------------------------------------
-# set_RTM_ROOT
-#
-# This functions set RTM_ROOT environmental variable
-# 1. If RTM_ROOT is set, it checks RTM_ROOT validity.
-# 2. If it is not set, find IDL file by using rtm-config
-#    and set valid RTM_ROOT.
-#------------------------------------------------------------
-set_RTM_ROOT()
-{
-    if test "x$RTM_ROOT" = "x"; then
-        debug_echo "RTM_ROOT is not set."
-        find_RTM_ROOT
-        if test "x$RTM_ROOT" = "x" ; then
-            debug_echo "No OpenRTM-aist (C++) installed found."
-            debug_echo "Please install OpenRTM-aist (C++) and set RTM_ROOT"
-            debug_echo "  ex. export RTM_ROOT=/usr/include/openrtm-1.1/"
-            debug_echo ""
-            return 1
-        fi
-    fi
-
-    # Now RTM_ROOT is set
-    check_RTM_ROOT
-    if test $? != 0 ; then
-        debug_echo ""
-        debug_echo "WARNING: Invalid RTM_ROOT"
-        debug_echo "    Environmental variable RTM_ROOT = $RTM_ROOT is invalid."
-        debug_echo "    Please check OpenRTM-aist C++ installation."
-        debug_echo "  ex."
-        debug_echo "    If BasicDataType.idl exists under:"
-        debug_echo "                       /usr/include/openrtm-1.1/rtm/idl/"
-        debug_echo "    RTM_ROOT should be /usr/include/openrtm-1.1"
-        debug_echo ""
-        return 1
-    fi
-    debug_echo "Result: RTM_ROOT = " $RTM_ROOT
-    export RTM_ROOT=$RTM_ROOT
-}
-
-#------------------------------------------------------------
-# find_RTM_ROOT
-#------------------------------------------------------------
-find_RTM_ROOT()
-{
-    debug_echo "TRACE: find_RTM_ROOT"
-    # find RTM_ROOT by rtm2-config
-    rtm_config=`which rtm2-config`
-    if test "x$rtm_config" = "x" ; then
-        # rtm2-config not found
-        return 1
-    fi
-    debug_echo "rtm2_config: " $rtm_config
-
-    # check rtm-config version
-    ver=`grep rtm-idldir $rtm_config`
-    if test "x$var" = "x" ; then
-        # old version: no --rtm-idldir option
-        RTM_ROOT=`rtm2-config --cflags | sed -e 's/.*\-I\(\/.*\)\/rtm\/idl/\1/'`
-        debug_echo "RTM_ROOT: " $RTM_ROOT
-        return 0
-    else
-        # new version: --rtm-idldir available
-        RTM_ROOT=`rtm2-config --rtm-idldir | sed -e 's/\/rtm\/idl$//'`
-        debug_echo "RTM_ROOT: " $RTM_ROOT
-        return 0
-    fi
-}
-
-#------------------------------------------------------------
-# check_RTM_ROOT
-#
-# This function check if RTM_ROOT environmental variable is valid.
-#
-#------------------------------------------------------------
-check_RTM_ROOT()
-{
-    debug_echo "TRACE: check_RTM_ROOT"
-    idl_files="BasicDataType.idl ExtendedDataTypes.idl InterfaceDataTypes.idl"
-    idl_dir=$RTM_ROOT/
-
-    debug_echo "Finding IDL files under: " $idl_dir
-    for idl in $idl_files; do
-        idl_path=`find $RTM_ROOT -name $idl`
-        debug_echo "idl_path: " $idl_path
-        if test "x$idl_path" = "x" ; then
-            debug_echo "IDL file: " $idl " not found under \$RTM_ROOT"
-            debug_echo "\$RTM_ROOT = " $RTM_ROOT
-            return 1
-        fi
-    done
-    return 0
-}
-
-#------------------------------------------------------------
-# set_RTM_JAVA_ROOT
-#
-# This functions set RTM_JAVA_ROOT environmental variable
-# 1. If RTM_JAVA_ROOT is set, it checks RTM_ROOT validity.
-# 2. If it is not set, find jar file and set valid RTM_JAVA_ROOT.
-#------------------------------------------------------------
-set_RTM_JAVA_ROOT ()
-{
-    debug_echo "TRACE: set_RTM_JAVA_ROOT"
-    if test "x$RTM_JAVA_ROOT" = "x"; then
-        debug_echo "RTM_JAVA_ROOT is not set."
-        find_RTM_JAVA_ROOT
-        if test $? != 0 ; then
-            debug_echo "No OpenRTM-aist (Java) installed found."
-            debug_echo "Please install OpenRTM-aist (Java) and set RTM_JAVA_ROOT"
-            debug_echo "  ex. export RTM_JAVA_ROOT=/usr/include/openrtm-1.1/"
-            debug_echo ""
-            return 1
-        fi
-    fi
-
-    # Now RTM_JAVA_ROOT is set
-    check_RTM_JAVA_ROOT
-    if test $? != 0 ; then
-        debug_echo "env RTM_JAVA_ROOT is invalid"
-        debug_echo "Please set RTM_JAVA_ROOT correctly."
-        debug_echo "  ex. export RTM_JAVA_ROOT=/usr/include/openrtm-1.1/"
-        debug_echo ""
-        return 1
-    fi
-    debug_echo "Result: RTM_JAVA_ROOT = " $RTM_JAVA_ROOT
-    export RTM_JAVA_ROOT=$RTM_JAVA_ROOT
-    return 0
-}
-
-#------------------------------------------------------------
-# get_openrtm_dirs
-#
-# This function gets possible OpenRTM-aist-Java installation
-# directories.
-#------------------------------------------------------------
-get_openrtm_dirs()
-{
-    usr_lib=`ls -d /usr/lib/[oO]pen[rR][tT][mM]* 2> /dev/null`
-    usr_local_lib=`ls -d /usr/local/lib/[oO]pen[rR][tT][mM]* 2> /dev/null`
-    opt_lib=`ls -d /opt/lib/[oO]pen[rR][tT][mM]* 2> /dev/null`
-    opt_local_lib=`ls -d /opt/local/lib/[oO]pen[rR][tT][mM]* 2> /dev/null`
-
-    echo $usr_lib $usr_local_lib $opt_lib $opt_local_lib
-}
-
-
-#------------------------------------------------------------
-# find_RTM_JAVA_ROOT
-#------------------------------------------------------------
-find_RTM_JAVA_ROOT()
-{
-    debug_echo "TRACE: find_RTM_JAVA_ROOT"
-    # find RTM_JAVA_ROOT
-    openrtm_dirs=`get_openrtm_dirs`
-    debug_echo "OpenRTM dirs: " $openrtm_dirs
-
-    for d in $openrtm_dirs ; do
-        openrtm_jar=`find $d -name '[oO]pen[rR][tT][mM]*.jar'`
-        if test ! "x$openrtm_jar" = "x" ; then
-            break
-        fi
-    done
-
-    if test "x$openrtm_jar" = "x" ; then
-        debug_echo "jar file not found"
-        debug_echo "No OpenRTM-aist (Java) installation found."
-        return 1
-    fi
-    debug_echo "jar file found: " $openrtm_jar
-
-    RTM_JAVA_ROOT=`dirname $openrtm_jar | sed -e 's/\/jar$//'`
-    debug_echo "RTM_JAVA_ROOT: " $RTM_JAVA_ROOT
-    return 0
-}
-
-#------------------------------------------------------------
-# check_RTM_JAVA_ROOT
-#
-# This function check if RTM_JAVA_ROOT environmental variable is valid.
-#
-#------------------------------------------------------------
-check_RTM_JAVA_ROOT()
-{
-    debug_echo "TRACE: check_RTM_JAVA_ROOT"
-    jar_file=`ls $RTM_JAVA_ROOT/jar/[oO]pen[rR][tT][mM]-*.jar 2> /dev/null`
-    debug_echo "jar_file: " $jar_file
-
-    if test "x$jar_file" = "x" ; then
-        debug_echo ""
-        debug_echo "WARNING: Environmental variable RTM_JAVA_ROOT is invalid."
-        debug_echo "    RTM_JAVA_ROOT = $RTM_JAVA_ROOT"
-        debug_echo "    Please check OpenRTM-aist Java installation."
-        debug_echo "  ex."
-        debug_echo "    If /OpenRTM-1.0.0.jar exists under:"
-        debug_echo "                        /usr/lib/OpenRTM-aist/1.0/jar"
-        debug_echo "    RTM_JAVA_ROOT should be /usr/lib/OpenRTM-aist/1.0"
-        debug_echo ""
-        return 1
-    fi
-    return 0
-}
-
 find_OPENRTP_DIR()
 {
-    rtm_config=`which rtm2-config`
-    if test "x$rtm_config" != "x" ; then
-        OPENRTP_DIR=`rtm2-config --libdir`/openrtp
-        debug_echo "OPENRTP_DIR: $OPENRTP_DIR"
-        if test -f $OPENRTP_DIR/eclipse ; then
-            OPENRTP_EXECUTABLE=$OPENRTP_DIR/eclipse
-            debug_echo "OPENRTP_EXECUTABLE: $OPENRTP_EXECUTABLE"
-        else
-            echo "WARNING: No OpenRTP installation under OpenRTM libdir."
-        fi
+    openrtp_dir=`find /usr/lib /usr/lib64 -name 'openrtp'  2>/dev/null`
+    OPENRTP_DIR=$openrtp_dir
+    debug_echo "OPENRTP_DIR: $OPENRTP_DIR"
+    if test -f $OPENRTP_DIR/eclipse ; then
+        OPENRTP_EXECUTABLE=$OPENRTP_DIR/eclipse
+        debug_echo "OPENRTP_EXECUTABLE: $OPENRTP_EXECUTABLE"
+    else
+        echo "WARNING: No OpenRTP installation under OpenRTM libdir."
     fi
-    openrtp_dir=`find /usr/lib $OPENRTP_DIR /usr/lib64 -name 'openrtp'  2>/dev/null`
     eclipse_dir=`find ./ -name 'eclipse'  2>/dev/null`
 
     if test "x$eclipse_dir" != "x" ; then
@@ -295,28 +73,6 @@ find_OPENRTP_DIR()
 #------------------------------
 # main
 #------------------------------
-
-set_RTM_ROOT
-if test $? != 0 ; then
-    echo "WARNING: RTM_ROOT not set."
-    echo "    This might cause failure of data type acquisition for"
-    echo "    data ports definition in RTCBuilder."
-    echo "    If you want use RTCBuilder, please install C++ version"
-    echo "    of OpenRTM-aist on this system."
-else
-    debug_echo "  RTM_ROOT     : " $RTM_ROOT
-fi
-
-set_RTM_JAVA_ROOT
-if test $? != 0 ; then
-    echo "WARNING: RTM_JAVA_ROOT not set."
-    echo "    This might cause failure of data type acquisition for"
-    echo "    data ports definition in RTCBuilder."
-    echo "    If you want use RTCBuilder, please install C++ version"
-    echo "    of OpenRTM-aist on this system."
-else
-    debug_echo "  RTM_JAVA_ROOT     : " $RTM_JAVA_ROOT
-fi
 
 find_OPENRTP_DIR
 

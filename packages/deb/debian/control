@@ -10,7 +10,7 @@ Package: openrtp2
 Architecture: any
 Multi-Arch: same
 Pre-Depends: ${misc:Pre-Depends}
-Depends: ${shlibs:Depends}, ${misc:Depends}, openjdk-8-jre, openrtm2-dev
+Depends: ${shlibs:Depends}, ${misc:Depends}, openjdk-8-jre, openrtm2-naming, openrtm2-idl
 Description: OpenRTP, Open RT Platform distributed by AIST
  OpenRTP is tool package for OpenRTM-aist and its interoperable
  RT-Middleware implementations. OpenRTP is being developed and
