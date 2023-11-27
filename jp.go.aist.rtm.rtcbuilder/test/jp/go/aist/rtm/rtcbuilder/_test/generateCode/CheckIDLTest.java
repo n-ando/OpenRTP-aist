@@ -105,8 +105,8 @@ public class CheckIDLTest extends TestBase {
 		
 		try {
 			generator.validateIDLDef(genParam, idlDirs);
-		} catch (HeaderException ex) {
 			assertTrue(false);
+		} catch (HeaderException ex) {
 		}
 	}
 
