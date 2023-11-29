@@ -103,7 +103,7 @@ set(OTHER_SRCS CMakeLists.txt
                RTC.xml ${rtcParam.name}.conf rtc.conf)
 
 ${sharp} check python installed
-find_package(PythonInterp 3)
+find_package(Python 3)
 
 if(WIN32)
    set(OPENRTM_SHARE_PREFIX "OpenRTM-aist/${dol}{RTM_VER}/Components/${dol}{PROJECT_TYPE}")
@@ -133,13 +133,6 @@ add_custom_target( ${dol}{PROJECT_NAME} ALL
       ${dol}{PROJECT_SOURCE_DIR}/idl ${dol}{PROJECT_BINARY_DIR}/idl
 )
 #end
-
-foreach(target ${dol}{EXEC_FILES})
-  add_custom_command( TARGET ${dol}{PROJECT_NAME} POST_BUILD
-    COMMAND ${dol}{CMAKE_COMMAND} -E copy
-        ${dol}{PROJECT_SOURCE_DIR}/${dol}{target} ${dol}{PROJECT_BINARY_DIR}
-  )
-endforeach()          
 
 install(PROGRAMS ${dol}{EXEC_FILES} DESTINATION "${dol}{INSTALL_PREFIX}"
         COMPONENT component)
