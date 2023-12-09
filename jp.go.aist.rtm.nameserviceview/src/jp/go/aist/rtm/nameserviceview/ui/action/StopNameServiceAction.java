@@ -40,6 +40,10 @@ public class StopNameServiceAction implements IViewActionDelegate {
 			target = NameServiceProcessHandler.SCRIPT_WINDOWS_STOP; 
 		} else {
 			target = NameServiceProcessHandler.SCRIPT_UNIX;
+			if(target == null || target.length() == 0) {
+				action.setEnabled(false);
+				return;
+			}
 		}
 		File targetFile = new File(target);
 		if(targetFile.exists()==false) {

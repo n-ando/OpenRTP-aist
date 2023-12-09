@@ -1,7 +1,8 @@
 package jp.go.aist.rtm.nameserviceview.util;
 
-import java.io.File;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.dialogs.Dialog;
@@ -13,23 +14,11 @@ public class NameServiceProcessHandler {
 	public static String SCRIPT_WINDOWS = System.getenv("RTM_ROOT") + "bin" + Path.SEPARATOR + "rtm-naming.bat";
 	public static String SCRIPT_WINDOWS_STOP = System.getenv("RTM_ROOT") + "bin" + Path.SEPARATOR + "kill-rtm-naming.bat";
 
-	public static String SCRIPT_UNIX = "/usr/bin/rtm2-naming";
-	private String[] UNIX_CANDIDATE_LIST = {"/usr/bin/rtm2-naming",
-											"/usr/local/bin/rtm2-naming",
-											System.getenv("RTM_ROOT") + "bin" + Path.SEPARATOR + "rtm2-naming",
-											"/usr/bin/rtm-naming",
-											"/usr/local/bin/rtm-naming",
-											System.getenv("RTM_ROOT") + "bin" + Path.SEPARATOR + "rtm-naming"};
+	public static String SCRIPT_UNIX = "";
 	
 	public void initialize() {
 		// find rtm-naming
-		for(String each :  UNIX_CANDIDATE_LIST) {
-			File targetFile = new File(each);
-			if(targetFile.exists() == true) {
-				SCRIPT_UNIX = each;
-				break;
-			}
-		}
+		SCRIPT_UNIX = searchCommand("rtm2-naming");
 	}
 	
 	public String stopNameService(NameServiceView view, boolean isWindows) {
@@ -74,6 +63,20 @@ public class NameServiceProcessHandler {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public static String searchCommand(String target) {
+		String result = "";
+		try {
+			String command = "which " + target;
+			Process process = Runtime.getRuntime().exec(command);
+			
+			BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+			result = reader.readLine();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
 
 }
