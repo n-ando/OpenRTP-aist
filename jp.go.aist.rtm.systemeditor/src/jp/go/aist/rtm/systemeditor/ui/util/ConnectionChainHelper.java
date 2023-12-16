@@ -42,24 +42,6 @@ public class ConnectionChainHelper {
 		ServicePort
 	}
 
-//	class CheckThread extends Thread {
-//	    public void run() {
-//			ConnectionChainHelper handler = new ConnectionChainHelper();
-//			while(true) {
-//				try {
-//					Thread.sleep(1000);
-//				} catch (InterruptedException e) {
-//					e.printStackTrace();
-//				}
-//				if(compCheck==false) {
-//					break;
-//				}
-//				handler.checkConnectionChain(targetEditor);
-////				targetEditor.refresh();
-//			}
-//	    }
-//	}
-	
 	public static void autoCheckConnectionChain(SystemDiagramEditor editor, boolean doCheck) {
 		if (editor.getSystemDiagram() == null) {
 			return;
@@ -241,7 +223,8 @@ public class ConnectionChainHelper {
 				}
 			} else {
 				EList nscomps = ((NamingContextNode)target.get(index)).getNodes();
-				return searchComponent(nscomps, targetPort);
+				CorbaComponent result = searchComponent(nscomps, targetPort);
+				if(result != null ) return result;
 			}
 		}
 		return null;
