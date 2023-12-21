@@ -542,4 +542,20 @@ public class TemplateHelper {
 		
 		return builder.toString();
 	}
+	public boolean checkUserDefined(RtcParam rtcParam) {
+		boolean result = false;
+		for(IdlFileParam target : rtcParam.getProviderIdlPathes()) {
+			if(RTCUtil.checkDefault(target.getIdlPath(), rtcParam.getParent().getDataTypeParams())) continue;
+			result = true;
+			break;
+		}
+		if(result == false) {
+			for(IdlFileParam target : rtcParam.getConsumerIdlPathes()) {
+				if(RTCUtil.checkDefault(target.getIdlPath(), rtcParam.getParent().getDataTypeParams())) continue;
+				result = true;
+				break;
+			}
+		}
+		return result;
+	}
 }
