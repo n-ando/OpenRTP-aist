@@ -167,6 +167,10 @@ public class SystemEditorPreferenceManager {
 			.getName()
 			+ ".COMPONENT_ICONS";
 
+	public static final String CHECK_INTERVAL = SystemEditorPreferenceManager.class
+			.getName()
+			+ ".CHECK_INTERVAL";
+
 	/**
 	 * デフォルトの色を管理するマップ
 	 */
@@ -585,4 +589,16 @@ public class SystemEditorPreferenceManager {
 		store.setValue(COMPONENT_ICONS, "");
 	}
 
+	public int getCheckInterval() {
+		store.setDefault(CHECK_INTERVAL, 1);
+		return store.getInt(CHECK_INTERVAL);
+	}
+
+	public void setCheckInterval(int val) {
+		store.setValue(CHECK_INTERVAL, val);
+	}
+
+	public void resetCheckInterval() {
+		setCheckInterval(1);
+	}
 }
