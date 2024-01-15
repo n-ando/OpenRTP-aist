@@ -73,6 +73,10 @@ public class StartNameServiceAction implements IViewActionDelegate {
 			}
 
 		} else {
+			if(NameServiceProcessHandler.SCRIPT_UNIX == null || NameServiceProcessHandler.SCRIPT_UNIX.length() == 0) {
+				action.setEnabled(false);
+				return;
+			}
 			File targetFile = new File(NameServiceProcessHandler.SCRIPT_UNIX);
 			if(targetFile.exists()==false) {
 				action.setEnabled(false);

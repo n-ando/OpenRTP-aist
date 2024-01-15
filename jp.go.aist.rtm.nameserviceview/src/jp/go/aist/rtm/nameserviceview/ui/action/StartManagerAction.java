@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jp.go.aist.rtm.nameserviceview.ui.views.nameserviceview.NameServiceView;
+import jp.go.aist.rtm.nameserviceview.util.NameServiceProcessHandler;
 import jp.go.aist.rtm.toolscommon.model.manager.RTCManager;
 import jp.go.aist.rtm.toolscommon.util.AdapterUtil;
 
@@ -22,25 +23,12 @@ public class StartManagerAction implements IViewActionDelegate {
 
 	private static String SCRIPT_WINDOWS = System.getenv("RTM_ROOT") + "bin" + Path.SEPARATOR + "rtcd-cxx-daemon.bat";
 	
-	private static String SCRIPT_LINUX = "/usr/bin/rtcd2";
-	private String[] UNIX_CANDIDATE_LIST = {"/usr/bin/rtcd2",
-											"/usr/local/bin/rtcd2",
-											System.getenv("RTM_ROOT") + "bin" + Path.SEPARATOR + "rtcd2",
-									"/usr/bin/rtcd",
-									"/usr/local/bin/rtcd",
-									System.getenv("RTM_ROOT") + "bin" + Path.SEPARATOR + "rtcd"};
-
+	private static String SCRIPT_LINUX = "";
 
 	public void init(IViewPart view) {
 		this.view = (NameServiceView) view;
 		// find rtcd
-		for(String each :  UNIX_CANDIDATE_LIST) {
-			File targetFile = new File(each);
-			if(targetFile.exists() == true) {
-				SCRIPT_LINUX = each;
-				break;
-			}
-		}
+		SCRIPT_LINUX = NameServiceProcessHandler.searchCommand("rtcd2");
 	}
 
 	public void run(IAction action) {
@@ -92,6 +80,10 @@ public class StartManagerAction implements IViewActionDelegate {
 			target = SCRIPT_WINDOWS;
 		} else {
 			target = SCRIPT_LINUX;
+			if(target == null || target.length()==0) {
+				action.setEnabled(false);
+				return;
+			}
 		}
 		File targetFile = new File(target);
 		if(targetFile.exists()==false) {
