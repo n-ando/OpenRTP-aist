@@ -9,7 +9,6 @@
  */
 // </rtc-template>
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import jp.go.aist.rtm.RTC.Manager;
 import jp.go.aist.rtm.RTC.ModuleInitProc;
@@ -85,7 +84,7 @@ public class ModuleNameComp implements ModuleInitProc {
     }
     public static void main(String[] args) {
         // store instance_name to static and removed args created
-        List<String> mgrargs = new ArrayList();
+        List<String> mgrargs = new ArrayList<String>();
         for (int i = 0; i < args.length; ++i) {
             if (args[i].indexOf("--instance_name=") == -1) {
                 mgrargs.add(args[i]);
