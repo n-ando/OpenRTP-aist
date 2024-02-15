@@ -41,7 +41,7 @@ import jp.go.aist.rtm.RTC.port.OutPort;
 #if( ${rtcParam.inports.size()} > 0 || ${rtcParam.outports.size()} > 0 )
 import jp.go.aist.rtm.RTC.util.DataRef;
 #end
-#if( ${rtcParam.originalConsumerIdls.size()} > 0 )
+#if( ${rtcParam.originalProviderIdls.size()} > 0 )
 import jp.go.aist.rtm.RTC.port.CorbaConsumer;
 #end
 #if( ${rtcParam.originalProviderIdls.size()} > 0 || ${rtcParam.originalConsumerIdls.size()} > 0 )
@@ -181,7 +181,7 @@ public class ${rtcParam.name}TestImpl extends DataFlowComponentBase {
         addOutPort("${port.name}", m_${port.name}Out);
 #end
 #end
-#if( ${rtcParam.providerIdlPathes.size()} > 0 )
+#if( ${rtcParam.consumerIdlPathes.size()} > 0 )
         
         // Set service provider to Ports
 #if(${rtcParam.servicePorts.size()}>0)
