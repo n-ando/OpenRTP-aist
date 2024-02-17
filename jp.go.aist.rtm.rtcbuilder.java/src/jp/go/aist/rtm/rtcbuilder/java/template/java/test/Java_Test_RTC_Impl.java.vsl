@@ -191,7 +191,7 @@ public class ${rtcParam.name}TestImpl extends DataFlowComponentBase {
 #foreach($serviceInterface in ${servicePort.servicePortInterfaces})
 #if(${serviceInterface.index}==1)
         	m_${servicePort.name}Port.registerProvider("${serviceInterface.name}", "${tmpltHelper.convFormat(${serviceInterface.interfaceType})}", m_${serviceInterface.tmplVarName});
-#end#end#end#end#end
+#end#end#end#end
         } catch (ServantAlreadyActive e) {
             e.printStackTrace();
         } catch (WrongPolicy e) {
@@ -199,7 +199,7 @@ public class ${rtcParam.name}TestImpl extends DataFlowComponentBase {
         } catch (ObjectNotActive e) {
             e.printStackTrace();
         }
-#end
+#end#end
 #if(${rtcParam.servicePorts.size()}>0)
         
         // Set service consumers to Ports
