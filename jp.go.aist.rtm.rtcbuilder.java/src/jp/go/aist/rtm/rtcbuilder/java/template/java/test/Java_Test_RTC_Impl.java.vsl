@@ -47,7 +47,7 @@ import jp.go.aist.rtm.RTC.port.CorbaConsumer;
 #if( ${rtcParam.originalProviderIdls.size()} > 0 || ${rtcParam.originalConsumerIdls.size()} > 0 )
 import jp.go.aist.rtm.RTC.port.CorbaPort;
 #end
-#if( ${rtcParam.originalProviderIdls.size()} > 0 )
+#if( ${rtcParam.originalConsumerIdls.size()} > 0 )
 import org.omg.PortableServer.POAPackage.ObjectNotActive;
 import org.omg.PortableServer.POAPackage.ServantAlreadyActive;
 import org.omg.PortableServer.POAPackage.WrongPolicy;
