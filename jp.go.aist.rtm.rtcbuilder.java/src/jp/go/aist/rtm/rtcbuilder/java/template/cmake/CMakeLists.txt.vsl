@@ -86,6 +86,7 @@ set(EXEC_FILES ""
     ${dol}{CLASS_FILES_DIR}/${dol}{PROJECT_NAME}Comp.class 
     ${dol}{CLASS_FILES_DIR}/${dol}{PROJECT_NAME}Impl.class
 )
+file(GLOB IDL_FILES "${dol}{CMAKE_CURRENT_SOURCE_DIR}/idl/*.idl")
 
 if(WIN32)
     set(SCRIPT_FILE ""
@@ -125,6 +126,11 @@ install(PROGRAMS ${dol}{SCRIPT_FILE} DESTINATION "${dol}{INSTALL_PREFIX}"
 
 install(FILES ${dol}{OTHER_SRCS} DESTINATION ${dol}{INSTALL_PREFIX}
         COMPONENT component)
+
+if(IDL_FILES)
+    install(FILES ${dol}{IDL_FILES} DESTINATION ${dol}{INSTALL_PREFIX}/idl
+        COMPONENT component)
+endif(IDL_FILES) 
 
 ${sharp} add uninstall target
 configure_file(
