@@ -3,36 +3,37 @@ package jp.go.aist.rtm.rtcbuilder.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.ResourcesPlugin;
+
 import jp.go.aist.rtm.rtcbuilder.generator.param.ConfigSetParam;
 import jp.go.aist.rtm.rtcbuilder.generator.param.DataPortParam;
 import jp.go.aist.rtm.rtcbuilder.generator.param.ServicePortInterfaceParam;
 import jp.go.aist.rtm.rtcbuilder.generator.param.ServicePortParam;
+import jp.go.aist.rtm.rtcbuilder.generator.param.idl.IdlPathParam;
 import jp.go.aist.rtm.rtcbuilder.ui.editors.IMessageConstants;
 
 public class ValidationUtil {
 	
 	public static String validateDataPort(DataPortParam dataport) {
-		String result = null;
 		//DataPort Name
 		if( dataport.getName()==null || dataport.getName().length()==0 ) {
-			result = IMessageConstants.DATAPORT_VALIDATE_PORTNAME1;
-			return result;
+			return IMessageConstants.DATAPORT_VALIDATE_PORTNAME1;
 		}
 		if( !StringUtil.checkDigitAlphabet(dataport.getName()) ) {
-			result = IMessageConstants.DATAPORT_VALIDATE_PORTNAME2;
-			return result;
+			return IMessageConstants.DATAPORT_VALIDATE_PORTNAME2;
 		}
 		//DataPort type
 		if( dataport.getType()==null || dataport.getType().length()==0 ) {
-			result = IMessageConstants.DATAPORT_VALIDATE_PORTTYPE;
-			return result;
+			return IMessageConstants.DATAPORT_VALIDATE_PORTTYPE;
 		}
 		//DataPort VarName
 		if( !StringUtil.checkDigitAlphabet(dataport.getVarName()) ) {
-			result = IMessageConstants.DATAPORT_VALIDATE_PORTVARNAME;
-			return result;
+			return IMessageConstants.DATAPORT_VALIDATE_PORTVARNAME;
 		}
-		return result;
+		return null;
 	}
 	
 	public static String validateServicePort(ServicePortParam serviceport) {
@@ -49,7 +50,7 @@ public class ValidationUtil {
 		return result;
 	}
 	
-	public static String validateServiceInterface(ServicePortInterfaceParam ifparam) {
+	public static String validateServiceInterface(ServicePortInterfaceParam ifparam, String outputProject) {
 		String result = null;
 		//ServiceInterface name
 		if( ifparam.getName()==null || ifparam.getName().length()==0 ) {
@@ -82,6 +83,29 @@ public class ValidationUtil {
 		if( !StringUtil.checkDigitAlphabet(ifparam.getInterfaceType()) ) {
 			result = IMessageConstants.SERVICEPORT_VALIDATE_IFTYPE2;
 			return result;
+		}
+		
+		if(ifparam.getIdlFile().length()==0) {
+			if(0<ifparam.getIdlDispFile().length()) {
+				String dispFile = ifparam.getIdlDispFile();
+				if(dispFile.startsWith("<RTM_ROOT>")) {
+					String idlFile = dispFile.replace("<RTM_ROOT>", System.getenv("RTM_ROOT"));
+					ifparam.setIdlFile(idlFile);
+				} else {
+					if(outputProject!=null && 0<outputProject.length()) {
+						try {
+							IWorkspaceRoot workspaceHandle = ResourcesPlugin.getWorkspace().getRoot();
+							IProject project = workspaceHandle.getProject(outputProject);
+							IFolder path = project.getFolder("idl");
+							String idlFile = dispFile.replace("idl" + System.getProperty("file.separator"), System.getProperty("file.separator"));
+							if(path!=null && path.exists()) {
+								ifparam.setIdlFile(path.getLocation().toOSString() + idlFile);
+							}
+						} catch (Exception ex) {
+						}
+					}
+				}
+			}
 		}
 		return result;
 	}

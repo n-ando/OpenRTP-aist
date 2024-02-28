@@ -1,25 +1,24 @@
-openrtp (1.2.0-1) experimental; urgency=low
+openrtp2 (2.0.2-0) experimental; urgency=low
 
-  * The character code was modified.
-  * Modified the shell script, batch file and Ant build file.
+  * 2.0.2-0 (2.0.2-RELEASE). OpenRTP-2.0.2-RELEASE
 
- -- Noriaki Ando <n-ando@aist.go.jp>  Wed, 06 Dec 2017 11:34:42 +0900
+ -- Noriaki Ando <n-ando@aist.go.jp>  Mon, 13 Nov 2023 15:38:30 +0900
 
-openrtp (1.2.0-0) experimental; urgency=low
+openrtp2 (2.0.1-1) experimental; urgency=low
 
-  * 1.2.0-0 (1.2.0-RELEASE). OpenRTP-1.2.0-RELEASE
+  * Removed leading whitespace from serializer names.
 
- -- Noriaki Ando <n-ando@aist.go.jp>  Mon, 12 Dec 2016 18:36:29 +0900
+ -- Noriaki Ando <n-ando@aist.go.jp>  Wed, 26 Apr 2023 14:28:12 +0900
 
-openrtp (1.1.2-0) experimental; urgency=low
+openrtp2 (2.0.1-0) experimental; urgency=low
 
-  * 1.1.2-0 (1.1.2-RELEASE). OpenRTP-1.1.2-RELEASE
+  * 2.0.1-0 (2.0.1-RELEASE). OpenRTP-2.0.1-RELEASE
 
- -- Noriaki Ando <n-ando@aist.go.jp>  Mon, 25 Apr 2016 16:21:52 +0900
+ -- Noriaki Ando <n-ando@aist.go.jp>  Thu, 15 Dec 2022 16:24:46 +0900
 
-openrtp (1.1.0-0) experimental; urgency=low
+openrtp2 (2.0.0-0) experimental; urgency=low
 
-  * 1.1.0-0 (1.1.0-RELEASE). OpenRTP-1.1.1-RELEASE
+  * 2.0.0-0 (2.0.0-RELEASE). OpenRTP-2.0.0-RELEASE 
 
- -- Noriaki Ando <n-ando@aist.go.jp>  Sun, 7 Jun 2015 10:21:33 +0900
+ -- Noriaki Ando <n-ando@aist.go.jp>  Tue, 09 Jul 2019 11:02:57 +0900
 

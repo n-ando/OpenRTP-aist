@@ -1,8 +1,6 @@
 handlers:
   org.openrtp.namespaces.rtc.version02.ActionStatusDoc: jp.go.aist.rtm.toolscommon.profiles.handlers.ActionStatusHandler
-
-  org.openrtp.namespaces.rtc.version02.ActionStatusDoc: jp.go.aist.rtm.toolscommon.profiles.handlers.ActionStatusHandler
-  org.openrtp.namespaces.rtc.version02.BasicInfoDoc: jp.go.aist.rtm.toolscommon.profiles.handlers.CommonDocHandler
+  org.openrtp.namespaces.rtc.version02.BasicInfoExt: jp.go.aist.rtm.toolscommon.profiles.handlers.BasicInfoExtHandler
   org.openrtp.namespaces.rtc.version02.ConfigurationDoc: jp.go.aist.rtm.toolscommon.profiles.handlers.CommonDocHandler
   org.openrtp.namespaces.rtc.version02.DataportDoc: jp.go.aist.rtm.toolscommon.profiles.handlers.CommonDocHandler
   org.openrtp.namespaces.rtc.version02.ServiceportDoc: jp.go.aist.rtm.toolscommon.profiles.handlers.CommonDocHandler
@@ -14,3 +12,17 @@ handlers:
   org.openrtp.namespaces.rtc.version02.LanguageExt: jp.go.aist.rtm.toolscommon.profiles.handlers.LanguageExtHandler
   org.openrtp.namespaces.rtc.version02.ServiceportExt: jp.go.aist.rtm.toolscommon.profiles.handlers.CommonExtHandler
   org.openrtp.namespaces.rtc.version02.ServiceinterfaceExt: jp.go.aist.rtm.toolscommon.profiles.handlers.DataportExtHandler
+
+  org.openrtp.namespaces.rtc.version03.ActionStatusDoc: jp.go.aist.rtm.toolscommon.profiles.handlers.ActionStatusHandler
+  org.openrtp.namespaces.rtc.version03.BasicInfoDoc: jp.go.aist.rtm.toolscommon.profiles.handlers.CommonDocHandler
+  org.openrtp.namespaces.rtc.version03.ConfigurationDoc: jp.go.aist.rtm.toolscommon.profiles.handlers.CommonDocHandler
+  org.openrtp.namespaces.rtc.version03.DataportDoc: jp.go.aist.rtm.toolscommon.profiles.handlers.CommonDocHandler
+  org.openrtp.namespaces.rtc.version03.ServiceportDoc: jp.go.aist.rtm.toolscommon.profiles.handlers.CommonDocHandler
+  org.openrtp.namespaces.rtc.version03.ServiceinterfaceDoc: jp.go.aist.rtm.toolscommon.profiles.handlers.CommonDocHandler
+
+  org.openrtp.namespaces.rtc.version03.BasicInfoExt: jp.go.aist.rtm.toolscommon.profiles.handlers.BasicInfoExtHandler
+  org.openrtp.namespaces.rtc.version03.ConfigurationExt: jp.go.aist.rtm.toolscommon.profiles.handlers.DataportExtHandler
+  org.openrtp.namespaces.rtc.version03.DataportExt: jp.go.aist.rtm.toolscommon.profiles.handlers.DataportExtHandler
+  org.openrtp.namespaces.rtc.version03.LanguageExt: jp.go.aist.rtm.toolscommon.profiles.handlers.LanguageExtHandler
+  org.openrtp.namespaces.rtc.version03.ServiceportExt: jp.go.aist.rtm.toolscommon.profiles.handlers.CommonExtHandler
+  org.openrtp.namespaces.rtc.version03.ServiceinterfaceExt: jp.go.aist.rtm.toolscommon.profiles.handlers.DataportExtHandler

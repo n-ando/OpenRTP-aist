@@ -18,11 +18,11 @@ import org.omg.PortableServer.Servant;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link jp.go.aist.rtm.toolscommon.model.component.CorbaObserver#getServiceProfile <em>Service Profile</em>}</li>
  *   <li>{@link jp.go.aist.rtm.toolscommon.model.component.CorbaObserver#getServant <em>Servant</em>}</li>
  * </ul>
- * </p>
  *
  * @see jp.go.aist.rtm.toolscommon.model.component.ComponentPackage#getCorbaObserver()
  * @model superTypes="jp.go.aist.rtm.toolscommon.model.component.IPropertyMap jp.go.aist.rtm.toolscommon.model.core.IAdaptable"

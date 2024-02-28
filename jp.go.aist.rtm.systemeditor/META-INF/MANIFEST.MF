@@ -4,7 +4,7 @@ Created-By: 20.0-b12 (Sun Microsystems Inc.)
 Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: jp.go.aist.rtm.systemeditor;singleton:=true
-Bundle-Version: 1.2.0
+Bundle-Version: 2.0.0
 Bundle-Activator: jp.go.aist.rtm.systemeditor.RTSystemEditorPlugin
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.gef;visibility:=reexport,
@@ -12,10 +12,19 @@ Require-Bundle: org.eclipse.gef;visibility:=reexport,
  jp.go.aist.rtm.nameserviceview,
  jp.go.aist.rtm.toolscommon.profiles,
  jp.go.aist.rtm.repositoryView,
- org.eclipse.core.expressions
+ org.eclipse.core.expressions,
+ org.eclipse.ui.forms
 Bundle-ActivationPolicy: lazy
-Bundle-ClassPath: .
-Export-Package: jp.go.aist.rtm.systemeditor,
+Bundle-ClassPath: .,
+ lib/influent.jar,
+ lib/org.msgpack.jar,
+ lib/slf4j-api-1.7.13.jar,
+ lib/jackson-annotations-2.10.2.jar,
+ lib/jackson-core-2.10.2.jar,
+ lib/jackson-databind-2.10.2.jar,
+ lib/commons-csv-1.8.jar
+Export-Package: influent,
+ jp.go.aist.rtm.systemeditor,
  jp.go.aist.rtm.systemeditor._debug,
  jp.go.aist.rtm.systemeditor._test,
  jp.go.aist.rtm.systemeditor.adapterfactory,

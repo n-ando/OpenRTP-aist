@@ -1971,13 +1971,31 @@ public interface ComponentPackage extends EPackage {
 	int CONNECTOR_PROFILE__IS_REVERSE = CorePackage.WRAPPER_OBJECT_FEATURE_COUNT + 26;
 
 	/**
+	 * The feature id for the '<em><b>Outport Serializer Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONNECTOR_PROFILE__OUTPORT_SERIALIZER_TYPE = CorePackage.WRAPPER_OBJECT_FEATURE_COUNT + 27;
+
+	/**
+	 * The feature id for the '<em><b>Inport Serializer Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONNECTOR_PROFILE__INPORT_SERIALIZER_TYPE = CorePackage.WRAPPER_OBJECT_FEATURE_COUNT + 28;
+
+	/**
 	 * The number of structural features of the '<em>Connector Profile</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CONNECTOR_PROFILE_FEATURE_COUNT = CorePackage.WRAPPER_OBJECT_FEATURE_COUNT + 27;
+	int CONNECTOR_PROFILE_FEATURE_COUNT = CorePackage.WRAPPER_OBJECT_FEATURE_COUNT + 29;
 
 	/**
 	 * The feature id for the '<em><b>Key</b></em>' attribute.
@@ -2718,6 +2736,24 @@ public interface ComponentPackage extends EPackage {
 	 * @ordered
 	 */
 	int CORBA_CONNECTOR_PROFILE__IS_REVERSE = CONNECTOR_PROFILE__IS_REVERSE;
+
+	/**
+	 * The feature id for the '<em><b>Outport Serializer Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CORBA_CONNECTOR_PROFILE__OUTPORT_SERIALIZER_TYPE = CONNECTOR_PROFILE__OUTPORT_SERIALIZER_TYPE;
+
+	/**
+	 * The feature id for the '<em><b>Inport Serializer Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CORBA_CONNECTOR_PROFILE__INPORT_SERIALIZER_TYPE = CONNECTOR_PROFILE__INPORT_SERIALIZER_TYPE;
 
 	/**
 	 * The feature id for the '<em><b>Rtc Connector Profile</b></em>' attribute.
@@ -4319,6 +4355,17 @@ public interface ComponentPackage extends EPackage {
 	EAttribute getConnectorProfile_TargetString();
 
 	/**
+	 * Returns the meta object for the attribute '{@link jp.go.aist.rtm.toolscommon.model.component.ConnectorProfile#getOutportSerializerType <em>Outport Serializer Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Outport Serializer Type</em>'.
+	 * @see jp.go.aist.rtm.toolscommon.model.component.ConnectorProfile#getOutportSerializerType()
+	 * @see #getConnectorProfile()
+	 * @generated
+	 */
+	EAttribute getConnectorProfile_OutportSerializerType();
+
+	/**
 	 * Returns the meta object for the attribute '{@link jp.go.aist.rtm.toolscommon.model.component.ConnectorProfile#getOutportBufferLength <em>Outport Buffer Length</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4427,6 +4474,17 @@ public interface ComponentPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getConnectorProfile_InportBufferReadTimeout();
+
+	/**
+	 * Returns the meta object for the attribute '{@link jp.go.aist.rtm.toolscommon.model.component.ConnectorProfile#getInportSerializerType <em>Inport Serializer Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Inport Serializer Type</em>'.
+	 * @see jp.go.aist.rtm.toolscommon.model.component.ConnectorProfile#getInportSerializerType()
+	 * @see #getConnectorProfile()
+	 * @generated
+	 */
+	EAttribute getConnectorProfile_InportSerializerType();
 
 	/**
 	 * Returns the meta object for the attribute '{@link jp.go.aist.rtm.toolscommon.model.component.ConnectorProfile#getTimestampPolicy <em>Timestamp Policy</em>}'.
@@ -5757,6 +5815,14 @@ public interface ComponentPackage extends EPackage {
 		EAttribute CONNECTOR_PROFILE__TARGET_STRING = eINSTANCE.getConnectorProfile_TargetString();
 
 		/**
+		 * The meta object literal for the '<em><b>Outport Serializer Type</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CONNECTOR_PROFILE__OUTPORT_SERIALIZER_TYPE = eINSTANCE.getConnectorProfile_OutportSerializerType();
+
+		/**
 		 * The meta object literal for the '<em><b>Outport Buffer Length</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -5835,6 +5901,14 @@ public interface ComponentPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute CONNECTOR_PROFILE__INPORT_BUFFER_READ_TIMEOUT = eINSTANCE.getConnectorProfile_InportBufferReadTimeout();
+
+		/**
+		 * The meta object literal for the '<em><b>Inport Serializer Type</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CONNECTOR_PROFILE__INPORT_SERIALIZER_TYPE = eINSTANCE.getConnectorProfile_InportSerializerType();
 
 		/**
 		 * The meta object literal for the '<em><b>Timestamp Policy</b></em>' attribute feature.

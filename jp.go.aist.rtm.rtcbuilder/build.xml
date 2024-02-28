@@ -92,6 +92,13 @@
 				<include name="cmake/**/**.vsl" />
 				<include name="common/**.vsl" />
 				<include name="cpp/**/**.vsl" />
+				<include name="fsm/**.vsl" />
+			</fileset>
+		</copy>
+		<copy todir="${build.dir}/jp/go/aist/rtm/rtcbuilder/fsm/editor">
+			<fileset dir="${source}/jp/go/aist/rtm/rtcbuilder/fsm/editor">
+				<include name="images/**.**" />
+				<include name="resources/**.**" />
 			</fileset>
 		</copy>
 		<mkdir dir="${dist.dir}" />

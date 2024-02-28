@@ -29,8 +29,6 @@ import org.eclipse.ui.views.properties.IPropertySource;
  * <!-- begin-user-doc -->
  * An implementation of the model object '<em><b>Context Handler</b></em>'.
  * <!-- end-user-doc -->
- * <p>
- * </p>
  *
  * @generated
  */
@@ -176,7 +174,7 @@ public class ContextHandlerImpl extends EObjectImpl implements ContextHandler {
 		int featureId = eContainerFeatureID();
 		if (featureId == EOPPOSITE_FEATURE_BASE
 				- ComponentPackage.COMPONENT__EXECUTION_CONTEXT_HANDLER) {
-			return "owned";
+			return "";
 		} else if (featureId == EOPPOSITE_FEATURE_BASE
 				- ComponentPackage.COMPONENT__PARTICIPATION_CONTEXT_HANDLER) {
 			return "participate";

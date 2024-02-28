@@ -16,7 +16,7 @@ public class TestBase extends TestCase {
 	protected String expContent;
 	protected int index;
 	protected String[] ignore_row_phrases = {"--service-idl=", "--consumer-idl"};
-	protected final int default_file_num = 25;
+	protected final int default_file_num = 27;
 	protected final int service_file_num = 7;
 
 	public TestBase () {
@@ -57,6 +57,10 @@ public class TestBase extends TestCase {
 
 	protected String getGeneratedString(String source) {
 		String sep = System.getProperty( "line.separator" );
+		return getGeneratedString(source, sep);
+	}
+	
+	protected String getGeneratedString(String source, String sep) {
 		String[] target = source.split(sep);
 		StringBuffer stbRet = new StringBuffer();
 
@@ -68,7 +72,7 @@ public class TestBase extends TestCase {
 					break;
 				}
 			}
-			if(!isIgnore) stbRet.append(target[index] + sep);
+			if(!isIgnore) stbRet.append(target[index] + System.getProperty( "line.separator" ));
 		}
 		return stbRet.toString();
 	}
@@ -80,12 +84,21 @@ public class TestBase extends TestCase {
 		return result;
 	}
 
-	protected void checkCode(List<GeneratedResult> result, String resourceDir,
-			String fileName) {
+	protected void checkCode(List<GeneratedResult> result, String resourceDir, String fileName, String sep) {
 		index = getFileIndex(fileName, result);
 		expPath = resourceDir + fileName;
 		expContent = readFile(expPath);
 		expContent = replaceRootPath(expContent);
+		assertEquals(expContent,
+				getGeneratedString(result.get(index).getCode(), sep));
+	}
+	
+	protected void checkCode(List<GeneratedResult> result, String resourceDir, String fileName) {
+		index = getFileIndex(fileName, result);
+		expPath = resourceDir + fileName;
+		expContent = readFile(expPath);
+		expContent = replaceRootPath(expContent);
+		expContent = expContent.replace("\uFEFF", "");
 		assertEquals(expContent,
 				getGeneratedString(result.get(index).getCode()));
 	}

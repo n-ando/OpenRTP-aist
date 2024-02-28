@@ -5,13 +5,13 @@ import java.util.EventObject;
 import java.util.List;
 import java.util.Stack;
 
-import jp.go.aist.rtm.systemeditor.ui.editor.command.CreateConnectorCommand;
-import jp.go.aist.rtm.systemeditor.ui.editor.command.ReconnectConnectorCommand;
-
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CommandStackEventListener;
 import org.eclipse.gef.commands.CommandStackListener;
+
+import jp.go.aist.rtm.systemeditor.ui.editor.command.CreateConnectorCommand;
+import jp.go.aist.rtm.systemeditor.ui.editor.command.ReconnectConnectorCommand;
 
 /**
  * コネクタ作成のキャンセルを認識するコマンドスタック

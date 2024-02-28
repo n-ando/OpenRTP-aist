@@ -53,7 +53,7 @@ public class PyModuleTest extends TestBase {
 		ServicePortInterfaceParam int1 = new ServicePortInterfaceParam(
 				service1, "if_name", "", "", rootPath
 						+ "/resource/100/module/serviceM/MyService.idl",
-				"SimpleService::MyService", "", 0);
+				"SimpleService::MyService", 0);
 		srvinterts.add(int1);
 		service1.getServicePortInterfaces().addAll(srvinterts);
 		List<ServicePortParam> srvports = new ArrayList<ServicePortParam>();
@@ -88,12 +88,12 @@ public class PyModuleTest extends TestBase {
 		ServicePortInterfaceParam int1 = new ServicePortInterfaceParam(
 				service1, "if_name1", "", "", rootPath
 						+ "/resource/100/module/serviceM2/MyService.idl",
-				"SimpleService::MyService", "", 0);
+				"SimpleService::MyService", 0);
 		srvinterts.add(int1);
 		ServicePortInterfaceParam int2 = new ServicePortInterfaceParam(
 				service1, "if_name2", "", "", rootPath
 						+ "/resource/100/module/serviceM2/DAQService.idl",
-				"DAQService", "", 0);
+				"DAQService", 0);
 		srvinterts.add(int2);
 		service1.getServicePortInterfaces().addAll(srvinterts);
 		List<ServicePortParam> srvports = new ArrayList<ServicePortParam>();
@@ -129,7 +129,7 @@ public class PyModuleTest extends TestBase {
 		ServicePortInterfaceParam int1 = new ServicePortInterfaceParam(
 				service1, "if_name", "", "", rootPath
 						+ "/resource/100/module/serviceMC/MyService.idl",
-				"SimpleService::MyService", "", 1);
+				"SimpleService::MyService", 1);
 		srvinterts.add(int1);
 		service1.getServicePortInterfaces().addAll(srvinterts);
 		List<ServicePortParam> srvports = new ArrayList<ServicePortParam>();
@@ -161,12 +161,12 @@ public class PyModuleTest extends TestBase {
 		ServicePortInterfaceParam int1 = new ServicePortInterfaceParam(
 				service1, "if_name1", "", "", rootPath
 						+ "/resource/100/module/serviceMC2/MyService.idl",
-				"SimpleService::MyService", "", 1);
+				"SimpleService::MyService", 1);
 		srvinterts.add(int1);
 		ServicePortInterfaceParam int2 = new ServicePortInterfaceParam(
 				service1, "if_name2", "", "", rootPath
 						+ "/resource/100/module/serviceMC2/DAQService.idl",
-				"DAQService", "", 1);
+				"DAQService", 1);
 		srvinterts.add(int2);
 		service1.getServicePortInterfaces().addAll(srvinterts);
 		List<ServicePortParam> srvports = new ArrayList<ServicePortParam>();

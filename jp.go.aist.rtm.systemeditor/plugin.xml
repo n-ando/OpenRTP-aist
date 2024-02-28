@@ -99,13 +99,13 @@
 			class="jp.go.aist.rtm.systemeditor.ui.views.executioncontextview.ExecutionContextView"
 			id="jp.go.aist.rtm.systemeditor.ui.views.executioncontextview.ExecutionContextView">
 		</view>
-<!--		<view
+		<view
 			name="%RT_Log_View"
 			icon="icons/RT_icon.png"
 			category="rtse"
 			class="jp.go.aist.rtm.systemeditor.ui.views.logview.LogView"
 			id="jp.go.aist.rtm.systemeditor.ui.views.logview.LogView">
-		</view>-->
+		</view>
 		<view
 			name="%Action_Order_View"
 			icon="icons/RT_icon.png"
@@ -129,28 +129,6 @@
 				class="jp.go.aist.rtm.systemeditor.ui.action.CombineActionDelegate">
 			</action>
 		</viewerContribution>
-  <viewerContribution
-        id="jp.go.aist.rtm.systemeditor.ui.editor.OfflineSystemDiagramEditor.deploy"
-        targetID="jp.go.aist.rtm.systemeditor.ui.editor.OfflineSystemDiagramEditor">
-     <action
-           class="jp.go.aist.rtm.systemeditor.ui.action.DeployLoadActionDelegate"
-           id="jp.go.aist.rtm.systemeditor.ui.action.DeployLoadActionDelegate"
-           label="%Deploy_Load"
-           menubarPath="deploy">
-     </action>
-     <action
-           class="jp.go.aist.rtm.systemeditor.ui.action.DeploySaveActionDelegate"
-           id="jp.go.aist.rtm.systemeditor.ui.action.DeploySaveActionDelegate"
-           label="%Deploy_Save"
-           menubarPath="deploy">
-     </action>
-     <action
-           class="jp.go.aist.rtm.systemeditor.ui.action.DeployActionDelegate"
-           id="jp.go.aist.rtm.systemeditor.ui.action.DeployActionDelegate"
-           label="%Deploy_System"
-           menubarPath="deploy">
-     </action>
-  </viewerContribution>
 		<viewerContribution
 			id="jp.go.aist.rtm.systemeditor.ui.editor.OfflineSystemDiagramEditor.combine" 
 			targetID="jp.go.aist.rtm.systemeditor.ui.editor.OfflineSystemDiagramEditor">
@@ -162,12 +140,6 @@
 				menubarPath="composite"
 				class="jp.go.aist.rtm.systemeditor.ui.action.CombineActionDelegate">
 			</action>
-		   <action
-		         class="jp.go.aist.rtm.systemeditor.ui.action.DeploySettingActionDelegate"
-		         id="jp.go.aist.rtm.systemeditor.ui.action.DeploySettingActionDelegate"
-		         label="%Set_Deploy_Info"
-		         menubarPath="deploy">
-		   </action>
 		</viewerContribution>
 		<!--
 		<viewerContribution
@@ -224,18 +196,6 @@
 		           label="%Export">
 		     </action>
 		  </objectContribution>
-		<objectContribution
-			adaptable="true"
-			id="jp.go.aist.rtm.systemeditor.ui.objectContribution.Component"
-			objectClass="jp.go.aist.rtm.systemeditor.ui.editor.editpart.ComponentEditPart">
-			<action
-				class="jp.go.aist.rtm.systemeditor.ui.action.StartLoggingActionDelegate"
-				id="jp.go.aist.rtm.systemeditor.ui.action.StartLoggingAction"
-				label="%StartLogging.label"
-				enablesFor="1"
-				menubarPath="additions">
-			</action>
-		</objectContribution>
 		<objectContribution
 			adaptable="true"
 			id="jp.go.aist.rtm.systemeditor.ui.objectContribution.Component"
@@ -416,6 +376,40 @@
 			id="rtse.command.direction.Vertical"
 			name="%Direction_Vertical">
 		</command>
+
+		<command
+			categoryId="jp.go.aist.rtm.systemeditor.command.category"
+			id="rtse.command.observer.status.Attach"
+			name="%Observer_Status_Attach">
+			<state
+				class="org.eclipse.ui.handlers.RegistryToggleState:false"
+				id="org.eclipse.ui.commands.toggleState">
+			</state>
+		</command>
+		<command
+			categoryId="jp.go.aist.rtm.systemeditor.command.category"
+			id="rtse.command.observer.status.Attach_GLOBAL"
+			name="%Observer_Status_Attach_GLOBAL">
+			<state
+				class="org.eclipse.ui.handlers.RegistryToggleState:false"
+				id="org.eclipse.ui.commands.toggleState">
+			</state>
+		</command>
+
+		<command
+			categoryId="jp.go.aist.rtm.systemeditor.command.category"
+			id="rtse.command.connectionchain.Manual"
+			name="%Connection_Chain_Manual">
+		</command>
+		<command
+			categoryId="jp.go.aist.rtm.systemeditor.command.category"
+			id="rtse.command.connectionchain.Auto"
+			name="%Connection_Chain_Auto">
+			<state
+				class="org.eclipse.ui.handlers.RegistryToggleState:false"
+				id="org.eclipse.ui.commands.toggleState">
+			</state>
+		</command>
 	</extension>
 
 	<extension
@@ -578,6 +572,42 @@
 				</and>
 			</activeWhen>
 		</handler>
+
+		<handler
+			class="jp.go.aist.rtm.systemeditor.ui.handler.AttachStatusObserverCommandHandler"
+			commandId="rtse.command.observer.status.Attach">
+			<activeWhen>
+				<and>
+					<reference definitionId="rtse.definition.activeSystemDiagramEditor"/>
+					<reference definitionId="rtse.definition.checkCorbaStatusObserver"/>
+				</and>
+			</activeWhen>
+		</handler>
+		<handler
+			class="jp.go.aist.rtm.systemeditor.ui.handler.AttachStatusObserverCommandHandler"
+			commandId="rtse.command.observer.status.Attach_GLOBAL">
+			<activeWhen>
+				<and>
+					<reference definitionId="rtse.definition.activeSystemDiagramEditor"/>
+					<reference definitionId="rtse.definition.checkCorbaStatusObserverGlobal"/>
+				</and>
+			</activeWhen>
+		</handler>
+		
+		<handler
+			class="jp.go.aist.rtm.systemeditor.ui.handler.ConnectionChainManualCommandHandler"
+			commandId="rtse.command.connectionchain.Manual">
+			<activeWhen>
+				<reference definitionId="rtse.definition.activeSystemDiagramEditor"/>
+			</activeWhen>
+		</handler>
+		<handler
+			class="jp.go.aist.rtm.systemeditor.ui.handler.ConnectionChainAutoCommandHandler"
+			commandId="rtse.command.connectionchain.Auto">
+			<activeWhen>
+				<reference definitionId="rtse.definition.activeSystemDiagramEditor"/>
+			</activeWhen>
+		</handler>
 	</extension>
 
 	<extension
@@ -636,6 +666,36 @@
 			</with>
 		</definition>
 		<definition
+			id="rtse.definition.checkCorbaStatusObserver">
+			<with variable="selection">
+				<iterate ifEmpty="false" operator="or">
+					<and>
+						<instanceof value="jp.go.aist.rtm.systemeditor.ui.editor.editpart.ComponentEditPart"/>
+						<test property="jp.go.aist.rtm.systemeditor.checkCorbaStatusObserver"
+							args="rtse.command.observer.status.Attach"/>
+					</and>
+				</iterate>
+			</with>
+		</definition>
+		<definition
+			id="rtse.definition.checkCorbaStatusObserverGlobal">
+			<with variable="activeEditor">
+				<test property="jp.go.aist.rtm.systemeditor.checkCorbaStatusObserverGlobal"
+					args="rtse.command.observer.status.Attach_GLOBAL"/>
+			</with>
+			<!--
+			<with variable="activeEditorId">
+				<iterate ifEmpty="false" operator="or">
+					<and>
+						<equals value="jp.go.aist.rtm.systemeditor.ui.editor.SystemDiagramEditor"/>
+						<test property="jp.go.aist.rtm.systemeditor.checkCorbaStatusObserver"
+							args="rtse.command.observer.status.Attach_GLOBAL"/>
+					</and>
+				</iterate>
+			</with>
+-->
+		</definition>
+		<definition
 			id="rtse.definition.selectEC">
 			<with variable="selection">
 				<iterate ifEmpty="false" operator="or">
@@ -664,10 +724,17 @@
 	<extension
 		point="org.eclipse.core.expressions.propertyTesters">
 		<propertyTester
+			id="rtse.propertytester.SystemDiagramEditorPropertyTester"
+			type="jp.go.aist.rtm.systemeditor.ui.editor.AbstractSystemDiagramEditor"
+			namespace="jp.go.aist.rtm.systemeditor"
+			properties="checkCorbaStatusObserverGlobal"
+			class="jp.go.aist.rtm.systemeditor.ui.propertyTester.SystemDiagramEditorPropertyTester">
+		</propertyTester>
+		<propertyTester
 			id="rtse.propertytester.ComponentEditPartPropertyTester"
 			type="jp.go.aist.rtm.systemeditor.ui.editor.editpart.ComponentEditPart"
 			namespace="jp.go.aist.rtm.systemeditor"
-			properties="hasCorbaComponent"
+			properties="hasCorbaComponent, checkCorbaStatusObserver"
 			class="jp.go.aist.rtm.systemeditor.ui.propertyTester.ComponentEditPartPropertyTester">
 		</propertyTester>
 		<propertyTester
@@ -741,14 +808,14 @@
 					commandId="rtse.command.allcomponent.AllStart"
 					id="rtse.menus.toolbar.allcomponent.AllStart"
 					label="%All_Start"
-					icon="icons/AllStart.gif"
+					icon="icons/AllStart.png"
 					style="push">
 				</command>
 				<command
 					commandId="rtse.command.allcomponent.AllStop"
 					id="rtse.menus.toolbar.allcomponent.AllStop"
 					label="%All_Stop"
-					icon="icons/AllStop.gif"
+					icon="icons/AllStop.png"
 					style="push">
 				</command>
 				<command
@@ -782,6 +849,50 @@
 				</command>
 				<separator
 					name="rtse.menus.toolbar.direction.additions"
+					visible="true">
+				</separator>
+			</toolbar>
+			<toolbar
+				id="rtse.menus.toolbar.observer.status"
+				label="Observer">
+				<command
+					commandId="rtse.command.observer.status.Attach"
+					id="rtse.menus.toolbar.Observer_Status_Attach"
+					label="%Observer_Status_Attach"
+					icon="icons/observer_status_attach.png"
+					style="toggle">
+				</command>
+				<command
+					commandId="rtse.command.observer.status.Attach_GLOBAL"
+					id="rtse.menus.toolbar.Observer_Status_Attach_GLOBAL"
+					label="%Observer_Status_Attach_GLOBAL"
+					icon="icons/observer_status_attach_global.png"
+					style="toggle">
+				</command>
+				<separator
+					name="rtse.menus.toolbar.observer.status.additions"
+					visible="true">
+				</separator>
+			</toolbar>
+			<toolbar
+				id="rtse.menus.toolbar.connectionchain"
+				label="ConnectionChain">
+				<command
+					commandId="rtse.command.connectionchain.Manual"
+					id="rtse.menus.toolbar.Connection_Chain_Manual"
+					label="%Connection_Chain_Manual"
+					icon="icons/connection_chain_manual.png"
+					style="push">
+				</command>
+				<command
+					commandId="rtse.command.connectionchain.Auto"
+					id="rtse.menus.toolbar.Connection_Chain_Auto"
+					label="%Connection_Chain_Auto"
+					icon="icons/connection_chain_auto.png"
+					style="toggle">
+				</command>
+				<separator
+					name="rtse.menus.toolbar.connectionchain.additions"
 					visible="true">
 				</separator>
 			</toolbar>
@@ -896,7 +1007,7 @@
 			</command>
 			<command
 				commandId="rtse.command.allcomponent.AllStart"
-				icon="icons/AllStart.gif"
+				icon="icons/AllStart.png"
 				id="rtse.menus.popup.systemeditor.allrtc.AllStart"
 				label="%All_Start"
 				style="push">
@@ -907,7 +1018,7 @@
 			</command>
 			<command
 				commandId="rtse.command.allcomponent.AllStop"
-				icon="icons/AllStop.gif"
+				icon="icons/AllStop.png"
 				id="rtse.menus.popup.systemeditor.allrtc.AllStop"
 				label="%All_Stop"
 				style="push">
@@ -1094,11 +1205,11 @@
 				relationship="stack"
 				relative="jp.go.aist.rtm.systemeditor.ui.views.configurationview.ConfigurationView">
 			</view>
-<!--			<view
+			<view
 				id="jp.go.aist.rtm.systemeditor.ui.views.logview.LogView"
 				relationship="stack"
 				relative="jp.go.aist.rtm.systemeditor.ui.views.configurationview.ConfigurationView">
-			</view>-->
+			</view>
 			<view
 				id="jp.go.aist.rtm.systemeditor.ui.views.actionorderview.ActionOrderView"
 				relationship="stack"
@@ -1109,7 +1220,7 @@
 			<viewShortcut id="jp.go.aist.rtm.systemeditor.ui.views.managercontrolview.ManagerControlView"/>
 			<viewShortcut id="jp.go.aist.rtm.systemeditor.ui.views.compositecomponentview.CompositeComponentView"/>
 			<viewShortcut id="jp.go.aist.rtm.systemeditor.ui.views.executioncontextview.ExecutionContextView"/>
-			<!--<viewShortcut id="jp.go.aist.rtm.systemeditor.ui.views.logview.LogView"/>-->
+			<viewShortcut id="jp.go.aist.rtm.systemeditor.ui.views.logview.LogView"/>
 			<viewShortcut id="jp.go.aist.rtm.systemeditor.ui.views.actionorderview.ActionOrderView"/>
 		</perspectiveExtension>
 	</extension>
@@ -1149,6 +1260,12 @@
 			id="jp.go.aist.rtm.systemeditor.ui.preference.OnlineEditorPreferencePage"
 			class="jp.go.aist.rtm.systemeditor.ui.preference.OnlineEditorPreferencePage"
 			name="%OnlineEditor"
+			category="jp.go.aist.rtm.systemeditor.ui.preference.MainPreferencePage">
+		</page>
+		<page
+			id="jp.go.aist.rtm.systemeditor.ui.preference.ConnectionChainPreferencePage"
+			class="jp.go.aist.rtm.systemeditor.ui.preference.ConnectionChainPreferencePage"
+			name="%ConnectionChain"
 			category="jp.go.aist.rtm.systemeditor.ui.preference.MainPreferencePage">
 		</page>
 	</extension>

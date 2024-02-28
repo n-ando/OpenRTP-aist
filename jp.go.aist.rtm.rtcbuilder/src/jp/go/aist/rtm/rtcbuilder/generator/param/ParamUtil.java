@@ -1,55 +1,56 @@
 package jp.go.aist.rtm.rtcbuilder.generator.param;
 
+import static jp.go.aist.rtm.toolscommon.profiles.util.XmlHandler.createXMLGregorianCalendar;
+
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import javax.xml.datatype.DatatypeConstants;
-import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
+import org.openrtp.namespaces.rtc.version03.ActionStatusDoc;
+import org.openrtp.namespaces.rtc.version03.Actions;
+import org.openrtp.namespaces.rtc.version03.BasicInfo;
+import org.openrtp.namespaces.rtc.version03.BasicInfoDoc;
+import org.openrtp.namespaces.rtc.version03.BasicInfoExt;
+import org.openrtp.namespaces.rtc.version03.Configuration;
+import org.openrtp.namespaces.rtc.version03.ConfigurationDoc;
+import org.openrtp.namespaces.rtc.version03.ConfigurationExt;
+import org.openrtp.namespaces.rtc.version03.Dataport;
+import org.openrtp.namespaces.rtc.version03.DataportDoc;
+import org.openrtp.namespaces.rtc.version03.DataportExt;
+import org.openrtp.namespaces.rtc.version03.DocAction;
+import org.openrtp.namespaces.rtc.version03.DocBasic;
+import org.openrtp.namespaces.rtc.version03.DocConfiguration;
+import org.openrtp.namespaces.rtc.version03.DocDataport;
+import org.openrtp.namespaces.rtc.version03.DocEventport;
+import org.openrtp.namespaces.rtc.version03.DocServiceinterface;
+import org.openrtp.namespaces.rtc.version03.DocServiceport;
+import org.openrtp.namespaces.rtc.version03.Event;
+import org.openrtp.namespaces.rtc.version03.EventDoc;
+import org.openrtp.namespaces.rtc.version03.Language;
+import org.openrtp.namespaces.rtc.version03.LanguageExt;
+import org.openrtp.namespaces.rtc.version03.Library;
+import org.openrtp.namespaces.rtc.version03.ObjectFactory;
+import org.openrtp.namespaces.rtc.version03.Position;
+import org.openrtp.namespaces.rtc.version03.Property;
+import org.openrtp.namespaces.rtc.version03.RtcProfile;
+import org.openrtp.namespaces.rtc.version03.ServiceinterfaceDoc;
+import org.openrtp.namespaces.rtc.version03.ServiceinterfaceExt;
+import org.openrtp.namespaces.rtc.version03.Serviceport;
+import org.openrtp.namespaces.rtc.version03.ServiceportDoc;
+import org.openrtp.namespaces.rtc.version03.ServiceportExt;
+import org.openrtp.namespaces.rtc.version03.TargetEnvironment;
+
 import jp.go.aist.rtm.rtcbuilder.IRtcBuilderConstants;
+import jp.go.aist.rtm.rtcbuilder.fsm.EventParam;
 import jp.go.aist.rtm.rtcbuilder.manager.GenerateManager;
-import jp.go.aist.rtm.rtcbuilder.ui.StringUtil;
 import jp.go.aist.rtm.rtcbuilder.ui.preference.ComponentPreferenceManager;
 import jp.go.aist.rtm.rtcbuilder.ui.preference.DocumentPreferenceManager;
+import jp.go.aist.rtm.rtcbuilder.util.StringUtil;
 import jp.go.aist.rtm.toolscommon.profiles.util.XmlHandler;
-
-import org.openrtp.namespaces.rtc.version02.ActionStatusDoc;
-import org.openrtp.namespaces.rtc.version02.Actions;
-import org.openrtp.namespaces.rtc.version02.BasicInfo;
-import org.openrtp.namespaces.rtc.version02.BasicInfoDoc;
-import org.openrtp.namespaces.rtc.version02.BasicInfoExt;
-import org.openrtp.namespaces.rtc.version02.Configuration;
-import org.openrtp.namespaces.rtc.version02.ConfigurationDoc;
-import org.openrtp.namespaces.rtc.version02.ConfigurationExt;
-import org.openrtp.namespaces.rtc.version02.Dataport;
-import org.openrtp.namespaces.rtc.version02.DataportDoc;
-import org.openrtp.namespaces.rtc.version02.DataportExt;
-import org.openrtp.namespaces.rtc.version02.DocAction;
-import org.openrtp.namespaces.rtc.version02.DocBasic;
-import org.openrtp.namespaces.rtc.version02.DocConfiguration;
-import org.openrtp.namespaces.rtc.version02.DocDataport;
-import org.openrtp.namespaces.rtc.version02.DocServiceinterface;
-import org.openrtp.namespaces.rtc.version02.DocServiceport;
-import org.openrtp.namespaces.rtc.version02.Language;
-import org.openrtp.namespaces.rtc.version02.LanguageExt;
-import org.openrtp.namespaces.rtc.version02.Library;
-import org.openrtp.namespaces.rtc.version02.ObjectFactory;
-import org.openrtp.namespaces.rtc.version02.Parameter;
-import org.openrtp.namespaces.rtc.version02.Position;
-import org.openrtp.namespaces.rtc.version02.Property;
-import org.openrtp.namespaces.rtc.version02.RtcProfile;
-import org.openrtp.namespaces.rtc.version02.ServiceinterfaceDoc;
-import org.openrtp.namespaces.rtc.version02.ServiceinterfaceExt;
-import org.openrtp.namespaces.rtc.version02.Serviceport;
-import org.openrtp.namespaces.rtc.version02.ServiceportDoc;
-import org.openrtp.namespaces.rtc.version02.ServiceportExt;
-import org.openrtp.namespaces.rtc.version02.TargetEnvironment;
-
-import com.sun.org.apache.xerces.internal.jaxp.datatype.DatatypeFactoryImpl;
-import com.sun.org.apache.xerces.internal.jaxp.datatype.XMLGregorianCalendarImpl;
 
 public class ParamUtil {
 
@@ -150,18 +151,6 @@ public class ParamUtil {
 			actionStatus.setImplementedbln(Boolean.valueOf(docs.get(IRtcBuilderConstants.ACTIVITY_RATE_CHANGED)).booleanValue());
 			actionType.setOnRateChanged(actionStatus);
 		}
-
-		if( Boolean.valueOf(docs.get(IRtcBuilderConstants.ACTIVITY_ACTION)).booleanValue() ) {
-			actionStatus = factory.createActionStatusDoc();
-			actionStatus.setImplementedbln(Boolean.valueOf(docs.get(IRtcBuilderConstants.ACTIVITY_ACTION)).booleanValue());
-			actionType.setOnAction(actionStatus);
-		}
-
-		if( Boolean.valueOf(docs.get(IRtcBuilderConstants.ACTIVITY_MODE_CHANGED)).booleanValue() ) {
-			actionStatus = factory.createActionStatusDoc();
-			actionStatus.setImplementedbln(Boolean.valueOf(docs.get(IRtcBuilderConstants.ACTIVITY_MODE_CHANGED)).booleanValue());
-			actionType.setOnModeChanged(actionStatus);
-		}
 		return actionType;
 	}
 
@@ -175,14 +164,13 @@ public class ParamUtil {
 		basic.setCategory(ComponentPreferenceManager.getInstance().getBasic_Category());
 		basic.setComponentType(ComponentPreferenceManager.getInstance().getBasic_ComponentType());
 		basic.setActivityType(ComponentPreferenceManager.getInstance().getBasic_ActivityType());
-		basic.setComponentKind(ComponentPreferenceManager.getInstance().getBasic_ComponentKind());
+		basic.setComponentKind("DataFlowComponent");
 		basic.setMaxInstances(BigInteger.valueOf(ComponentPreferenceManager.getInstance().getBasic_MaxInstances()));
 		basic.setExecutionType(ComponentPreferenceManager.getInstance().getBasic_ExecutionType());
 		basic.setExecutionRate(Double.valueOf(ComponentPreferenceManager.getInstance().getBasic_ExecutionRate()));
 		//
-		DatatypeFactory dateFactory = new DatatypeFactoryImpl();
-		basic.setCreationDate(dateFactory.newXMLGregorianCalendar(creationDate));
-		basic.setUpdateDate(dateFactory.newXMLGregorianCalendar(creationDate));
+		basic.setCreationDate(createXMLGregorianCalendar(creationDate));
+		basic.setUpdateDate(createXMLGregorianCalendar(creationDate));
 		//
 		DocBasic docBasic = factory.createDocBasic();
 		docBasic.setCreator(StringUtil.getDocText(DocumentPreferenceManager.getCreatorValue()));
@@ -220,7 +208,6 @@ public class ParamUtil {
 		if( profile.getConfigurationSet() != null ) {
 			createConfigParam(profile.getConfigurationSet().getConfiguration(), rtcParam);
 		}
-		convertFromModuleParameter(profile, rtcParam);
 		convertFromModuleLanguage(profile, managerList, rtcParam);
 		convertFromModuleLanguage(profile, rtcParam);
 		//
@@ -254,10 +241,6 @@ public class ParamUtil {
 				setActions( rtcParam, IRtcBuilderConstants.ACTIVITY_STATE_UPDATE, (ActionStatusDoc)actions.getOnStateUpdate());
 			if( actions.getOnRateChanged() != null )
 				setActions( rtcParam, IRtcBuilderConstants.ACTIVITY_RATE_CHANGED, (ActionStatusDoc)actions.getOnRateChanged());
-			if( actions.getOnAction() != null )
-				setActions( rtcParam, IRtcBuilderConstants.ACTIVITY_ACTION, (ActionStatusDoc)actions.getOnAction());
-			if( actions.getOnModeChanged() != null )
-				setActions( rtcParam, IRtcBuilderConstants.ACTIVITY_MODE_CHANGED, (ActionStatusDoc)actions.getOnModeChanged());
 		}
 	}
 
@@ -270,7 +253,7 @@ public class ParamUtil {
 				rtcParam.getLangList().add(IRtcBuilderConstants.LANG_CPP);
 				rtcParam.getLangArgList().clear();
 				rtcParam.getLangArgList().add(IRtcBuilderConstants.LANG_CPP_ARG);
-				rtcParam.setRtmVersion(IRtcBuilderConstants.RTM_VERSION_100);
+				rtcParam.setRtmVersion(IRtcBuilderConstants.DEFAULT_RTM_VERSION);
 			} else {
 				if (managerList != null) {
 					for (GenerateManager manager : managerList) {
@@ -315,16 +298,6 @@ public class ParamUtil {
 					rtcParam.getTargetEnvs().add(env);
 				}
 			}
-		}
-	}
-
-	private void convertFromModuleParameter(RtcProfile profile, RtcParam rtcParam) {
-		for( Object paramObj : profile.getParameters() ) {
-			Parameter param = (Parameter)paramObj;
-			ConfigParameterParam paramp = new ConfigParameterParam();
-			paramp.setConfigName(param.getName());
-			paramp.setDefaultVal(param.getDefaultValue());
-			rtcParam.getConfigParameterParams().add(paramp);
 		}
 	}
 
@@ -468,9 +441,8 @@ public class ParamUtil {
 				serviceIF.setName(serviceIfDoc.getName());
 				serviceIF.setDirection(serviceIfDoc.getDirection());
 				serviceIF.setInstanceName(serviceIfDoc.getInstanceName());
-				serviceIF.setIdlFile(serviceIfDoc.getIdlFile());
+				serviceIF.setIdlDispFile(serviceIfDoc.getIdlFile());
 				serviceIF.setInterfaceType(serviceIfDoc.getType());
-				serviceIF.setIdlSearchPath(serviceIfDoc.getPath());
 				if( docSrv!=null ) {
 					serviceIF.setDocDescription(docSrv.getDescription());
 					serviceIF.setDocArgument(docSrv.getDocArgument());
@@ -500,56 +472,93 @@ public class ParamUtil {
 	private void createDataPortParam(List dataPorts, RtcParam rtcParam) throws Exception {
 		List<DataPortParam> InPortList = new ArrayList<DataPortParam>();
 		List<DataPortParam> OutPortList = new ArrayList<DataPortParam>();
+		List<EventPortParam> EventPortList = new ArrayList<EventPortParam>();
+		
 		for( Object dataport : dataPorts ) {
 			Dataport dataPortBasic = (Dataport)dataport;
-			DataPortParam dataportp = new DataPortParam();
-			dataportp.setName(dataPortBasic.getName());
-			dataportp.setType(dataPortBasic.getType());
-			dataportp.setDataFlowType(dataPortBasic.getDataflowType());
-			dataportp.setInterfaceType(dataPortBasic.getInterfaceType());
-			dataportp.setSubscriptionType(dataPortBasic.getSubscriptionType());
-			dataportp.setIdlFile(dataPortBasic.getIdlFile());
-			dataportp.setUnit(dataPortBasic.getUnit());
-			if( dataPortBasic.getConstraint()!=null )
-				dataportp.setConstraint(XmlHandler.restoreConstraint(dataPortBasic.getConstraint()));
-
-			if(dataport instanceof DataportDoc) {
-				DataportDoc dataPortDoc = (DataportDoc)dataport;
-				DocDataport docPort = dataPortDoc.getDoc();
-				if( docPort!=null ) {
-					dataportp.setDocDescription(docPort.getDescription());
-					dataportp.setDocType(docPort.getType());
-					dataportp.setDocNum(docPort.getNumber());
-					dataportp.setDocSemantics(docPort.getSemantics());
-					dataportp.setDocUnit(docPort.getUnit());
-					dataportp.setDocOccurrence(docPort.getOccerrence());
-					dataportp.setDocOperation(docPort.getOperation());
+			if(dataPortBasic.getPortType().equals(IRtcBuilderConstants.SPEC_EVENTPORT_KIND) ) {
+				EventPortParam eventportp = new EventPortParam();
+				eventportp.setName(dataPortBasic.getName());
+				if(dataport instanceof DataportExt) {
+					DataportExt dataPortExt = (DataportExt)dataport;
+					eventportp.setVarname(dataPortExt.getVariableName());
+					eventportp.setPosition(dataPortExt.getPosition().toString());
 				}
-			}
-			if(dataport instanceof DataportExt) {
-				DataportExt dataPortExt = (DataportExt)dataport;
-				dataportp.setVarName(dataPortExt.getVariableName());
-				dataportp.setPosition(dataPortExt.getPosition().toString());
-				//Properties
-				for( Property prop : dataPortExt.getProperties() ) {
-					PropertyParam propParam = new PropertyParam();
-					propParam.setName(prop.getName());
-					propParam.setValue(prop.getValue());
-					dataportp.getProperties().add(propParam);
+				for(Object eachEvent : dataPortBasic.getEvent()) {
+					Event event = (Event)eachEvent;
+					EventParam eventp = new EventParam();
+					eventp.setName(event.getName());
+					eventp.setCondition(event.getCondition());
+					eventp.setSource(event.getSource());
+					eventp.setTarget(event.getTarget());
+					eventp.setDataType(event.getType());
+					if(event instanceof EventDoc) {
+						EventDoc docEvent = (EventDoc)event;
+						DocEventport docPort = docEvent.getDoc();
+						if( docPort!=null ) {
+							eventp.setDoc_description(docPort.getDescription());
+							eventp.setDoc_type(docPort.getType());
+							eventp.setDoc_num(docPort.getNumber());
+							eventp.setDoc_unit(docPort.getUnit());
+							eventp.setDoc_semantics(docPort.getSemantics());
+							eventp.setDoc_operation(docPort.getOperation());
+						}
+					}
+					eventportp.getEvents().add(eventp);
 				}
+				EventPortList.add(eventportp);
+				
+				
+			} else {
+				DataPortParam dataportp = new DataPortParam();
+				dataportp.setName(dataPortBasic.getName());
+				dataportp.setType(dataPortBasic.getType());
+				dataportp.setDataFlowType(dataPortBasic.getDataflowType());
+				dataportp.setInterfaceType(dataPortBasic.getInterfaceType());
+				dataportp.setSubscriptionType(dataPortBasic.getSubscriptionType());
+				dataportp.setDispIdlFile(dataPortBasic.getIdlFile());
+				dataportp.setUnit(dataPortBasic.getUnit());
+				if( dataPortBasic.getConstraint()!=null )
+					dataportp.setConstraint(XmlHandler.restoreConstraint(dataPortBasic.getConstraint()));
+	
+				if(dataport instanceof DataportDoc) {
+					DataportDoc dataPortDoc = (DataportDoc)dataport;
+					DocDataport docPort = dataPortDoc.getDoc();
+					if( docPort!=null ) {
+						dataportp.setDocDescription(docPort.getDescription());
+						dataportp.setDocType(docPort.getType());
+						dataportp.setDocNum(docPort.getNumber());
+						dataportp.setDocSemantics(docPort.getSemantics());
+						dataportp.setDocUnit(docPort.getUnit());
+						dataportp.setDocOccurrence(docPort.getOccerrence());
+						dataportp.setDocOperation(docPort.getOperation());
+					}
+				}
+				if(dataport instanceof DataportExt) {
+					DataportExt dataPortExt = (DataportExt)dataport;
+					dataportp.setVarName(dataPortExt.getVariableName());
+					dataportp.setPosition(dataPortExt.getPosition().toString());
+					//Properties
+					for( Property prop : dataPortExt.getProperties() ) {
+						PropertyParam propParam = new PropertyParam();
+						propParam.setName(prop.getName());
+						propParam.setValue(prop.getValue());
+						dataportp.getProperties().add(propParam);
+					}
+				}
+				//
+				if(dataPortBasic.getPortType().equals(IRtcBuilderConstants.SPEC_DATA_INPORT_KIND) )
+					InPortList.add(dataportp);
+				else
+					OutPortList.add(dataportp);
 			}
-			//
-			if(dataPortBasic.getPortType().equals(IRtcBuilderConstants.SPEC_DATA_INPORT_KIND) )
-				InPortList.add(dataportp);
-			else
-				OutPortList.add(dataportp);
 		}
 		rtcParam.getInports().clear();
 		rtcParam.getInports().addAll(InPortList);
 		rtcParam.getOutports().clear();
 		rtcParam.getOutports().addAll(OutPortList);
-		// rtcParam.setInports(InPortList);
-		// rtcParam.setOutports(OutPortList);
+		rtcParam.getEventports().clear();
+		rtcParam.getEventports().addAll(EventPortList);
 	}
 
 	public RtcProfile convertToModule(GeneratorParam generatorParam,
@@ -577,12 +586,14 @@ public class ParamUtil {
 		for( DataPortParam dataportp : target.getOutports() ) {
 			profile.getDataPorts().add(createDataPort(dataportp, IRtcBuilderConstants.SPEC_DATA_OUTPORT_KIND));
 		}
+		for( EventPortParam eventp : target.getEventports() ) {
+			profile.getDataPorts().add(createEventPort(eventp));
+		}
 		for( ServicePortParam serviceportp : target.getServicePorts() ) {
 			ServiceportExt serviceport = createServicePort(serviceportp);
 			profile.getServicePorts().add(serviceport);
 		}
 		convertToModuleConfiguration(target, factory, profile);
-		convertToModuleParameter(target, factory, profile);
 		convertToModuleLanguage(managerList, target, factory, profile);
 
 		deleteInapplicableItem(profile, managerList);
@@ -632,15 +643,6 @@ public class ParamUtil {
 				language.getTargets().add(env);
 			}
 			profile.setLanguage(language);
-		}
-	}
-
-	private void convertToModuleParameter(RtcParam rtcParam, ObjectFactory factory, RtcProfile profile) {
-		for( ConfigParameterParam configp : rtcParam.getConfigParameterParams() ) {
-			Parameter param = factory.createParameter();
-			param.setName(configp.getConfigName());
-			param.setDefaultValue(configp.getDefaultVal());
-			profile.getParameters().add(param);
 		}
 	}
 
@@ -698,8 +700,6 @@ public class ParamUtil {
 		actions.setOnReset(createActions(IRtcBuilderConstants.ACTIVITY_RESET, rtcParam));
 		actions.setOnStateUpdate(createActions(IRtcBuilderConstants.ACTIVITY_STATE_UPDATE, rtcParam));
 		actions.setOnRateChanged(createActions(IRtcBuilderConstants.ACTIVITY_RATE_CHANGED, rtcParam));
-		actions.setOnAction(createActions(IRtcBuilderConstants.ACTIVITY_ACTION, rtcParam));
-		actions.setOnModeChanged(createActions(IRtcBuilderConstants.ACTIVITY_MODE_CHANGED, rtcParam));
 		profile.setActions(actions);
 	}
 
@@ -719,8 +719,8 @@ public class ParamUtil {
 		//
 		basic.setAbstract(rtcParam.getAbstract());
 		basic.setRtcType(rtcParam.getRtcType());
-		if(rtcParam.getCreationDate()!=null) basic.setCreationDate(XMLGregorianCalendarImpl.parse(rtcParam.getCreationDate()));
-		if(rtcParam.getUpdateDate()!=null) basic.setUpdateDate(XMLGregorianCalendarImpl.parse(rtcParam.getUpdateDate()));
+		if(rtcParam.getCreationDate()!=null) basic.setCreationDate(createXMLGregorianCalendar(rtcParam.getCreationDate()));
+		if(rtcParam.getUpdateDate()!=null) basic.setUpdateDate(createXMLGregorianCalendar(rtcParam.getUpdateDate()));
 		if(rtcParam.getVersionUpLog()!=null)basic.getVersionUpLogs().addAll(rtcParam.getVersionUpLog());
 		if(rtcParam.getCurrentVersionUpLog()!=null)basic.getVersionUpLogs().add(rtcParam.getCurrentVersionUpLog());
 		//Doc Basic
@@ -754,7 +754,7 @@ public class ParamUtil {
 		dataport.setType(dataportp.getType());
 		dataport.setVariableName(dataportp.getVarName());
 		dataport.setPosition(Position.fromValue(dataportp.getPosition().toUpperCase()));
-		dataport.setIdlFile(dataportp.getIdlFile());
+		dataport.setIdlFile(dataportp.getDispIdlFile());
 		dataport.setDataflowType(dataportp.getDataFlowType());
 		dataport.setInterfaceType(dataportp.getInterfaceType());
 		dataport.setSubscriptionType(dataportp.getSubscriptionType());
@@ -791,6 +791,38 @@ public class ParamUtil {
 		return dataport;
 	}
 
+	private DataportExt createEventPort(EventPortParam eventportp) throws Exception {
+		ObjectFactory factory = new ObjectFactory();
+		DataportExt dataport = factory.createDataportExt();
+		dataport.setPortType(IRtcBuilderConstants.SPEC_EVENTPORT_KIND);
+		dataport.setName(eventportp.getName());
+		dataport.setType("Any");
+		dataport.setVariableName(eventportp.getVarname());
+		dataport.setPosition(Position.fromValue(eventportp.getPosition().toUpperCase()));
+		//
+		for(EventParam eventp : eventportp.getEvents()) {
+			EventDoc event = factory.createEventDoc();
+			event.setName(eventp.getName());
+			event.setCondition(eventp.getCondition());
+			event.setSource(eventp.getSource());
+			event.setTarget(eventp.getTarget());
+			event.setType(eventp.getDataType());
+			//
+			DocEventport docEvent = factory.createDocEventport();
+			docEvent.setDescription(eventp.getDoc_description());
+			docEvent.setType(eventp.getDoc_type());
+			docEvent.setNumber(eventp.getDoc_num());
+			docEvent.setSemantics(eventp.getDoc_semantics());
+			docEvent.setUnit(eventp.getDoc_unit());
+			docEvent.setOperation(eventp.getDoc_operation());
+			event.setDoc(docEvent);
+			
+			dataport.getEvent().add(event);
+		}
+		//
+		return dataport;
+	}
+	
 	private ServiceportExt createServicePort(ServicePortParam serviceportp) {
 		ObjectFactory factory = new ObjectFactory();
 		ServiceportExt serviceport = factory.createServiceportExt();
@@ -818,9 +850,8 @@ public class ParamUtil {
 			serviceIF.setDirection(serviceinterfacep.getDirection());
 			serviceIF.setInstanceName(serviceinterfacep.getInstanceName());
 			serviceIF.setVariableName(serviceinterfacep.getVarName());
-			serviceIF.setIdlFile(serviceinterfacep.getIdlFile());
+			serviceIF.setIdlFile(serviceinterfacep.getIdlDispFile());
 			serviceIF.setType(serviceinterfacep.getInterfaceType());
-			serviceIF.setPath(serviceinterfacep.getIdlSearchPath());
 			//
 			DocServiceinterface docserviceIF = factory.createDocServiceinterface();
 			docserviceIF.setDescription(serviceinterfacep.getDocDescription());
@@ -876,8 +907,6 @@ public class ParamUtil {
 			if( manager.getManagerKey().endsWith(langName) ){
 				List<String> infos = manager.getInapplicables();
 				if( infos!=null ){
-					if( infos.contains(GenerateManager.RTC_PROFILE_PARAMETERS_INAPPLICABLE) )
-						profile.getParameters().clear();
 					if( infos.contains(GenerateManager.RTC_PROFILE_SERVICE_PORTS_INAPPLICABLE) )
 						profile.getServicePorts().clear();
 				}

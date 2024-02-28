@@ -42,9 +42,19 @@
 	<target name="buildAll">
 		<antcall target="clean" />
 		<antcall target="idlCompile" />
+		<antcall target="Native2ascii" />
 		<antcall target="compile" />
 		<antcall target="jar" />
 	</target>
+  
+  	<target name="buildAll_win">
+		<antcall target="clean" />
+		<antcall target="idlCompile" />
+		<antcall target="Native2ascii_win" />
+		<antcall target="compile" />
+		<antcall target="jar" />
+	</target>
+
 
 	<target name="idlCompile" description="IDLファイルをコンパイルします">
 		<delete dir="${source.sdo}" />
@@ -64,7 +74,9 @@
 		<exec executable="${java.home}\..\bin\idlj">
 			<arg line="-fall -td ${source} -i ${idl.path} -emitAll ${idl.Logger}"/>
 		</exec>
+	</target>
 
+	<target name="Native2ascii" description="ネイティブコードからUnicodeへ変換(Linux)">
 		<exec executable="./n2a">
 			<arg line="${source}/_SDOPackage/*.java"/>
 		</exec>
@@ -76,6 +88,21 @@
 		</exec>
 		<exec executable="./n2a">
 			<arg line="${source}/RTM/*.java"/>
+		</exec>
+	</target>
+  
+  	<target name="Native2ascii_win" description="ネイティブコードからUnicodeへ変換(Windows)">
+		<exec executable="./n2a.bat">
+			<arg line="${source}\_SDOPackage\*.java"/>
+		</exec>
+		<exec executable="./n2a.bat">
+			<arg line="${source}\OpenRTM\*.java"/>
+		</exec>
+		<exec executable="./n2a.bat">
+			<arg line="${source}\RTC\*.java"/>
+		</exec>
+		<exec executable="./n2a.bat">
+			<arg line="${source}\RTM\*.java"/>
 		</exec>
 	</target>
 

@@ -1,0 +1,34 @@
+﻿dist: xenial
+language: minimal
+sudo: required
+
+#notifications:
+#  email:
+#    recipients:
+#      - someone@mail.com
+#    on_success: change # default: change
+#    on_failure: always # default: change
+
+services:
+  - docker
+
+before_install:
+  # none
+
+addons:
+  apt:
+    packages:
+      - docker-ce
+
+
+env:
+  - TARGET_DIST=ubuntu TARGET_VER=1804
+  - TARGET_DIST=ubuntu TARGET_VER=1604
+
+script:
+  - mkdir ../workdir
+  - cd ../workdir
+  - mv ../XXX .
+
+  - export IMAGE_NAME=openrtm:${TARGET_DIST}-${TARGET_VER}
+  - docker build -f XXX/scripts/${TARGET_DIST}_${TARGET_VER}/Dockerfile . -t ${IMAGE_NAME}

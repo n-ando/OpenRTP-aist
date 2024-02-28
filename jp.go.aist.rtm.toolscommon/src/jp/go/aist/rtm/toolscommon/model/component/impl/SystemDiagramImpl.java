@@ -8,28 +8,19 @@ package jp.go.aist.rtm.toolscommon.model.component.impl;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.net.Inet6Address;
+import java.net.InetAddress;
+import java.net.InterfaceAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-
-import jp.go.aist.rtm.toolscommon.model.component.Component;
-import jp.go.aist.rtm.toolscommon.model.component.ComponentFactory;
-import jp.go.aist.rtm.toolscommon.model.component.ComponentPackage;
-import jp.go.aist.rtm.toolscommon.model.component.IPropertyMap;
-import jp.go.aist.rtm.toolscommon.model.component.CorbaStatusObserver;
-import jp.go.aist.rtm.toolscommon.model.component.PortConnector;
-import jp.go.aist.rtm.toolscommon.model.component.SystemDiagram;
-import jp.go.aist.rtm.toolscommon.model.component.SystemDiagramKind;
-import jp.go.aist.rtm.toolscommon.model.component.util.CorbaObserverStore;
-import jp.go.aist.rtm.toolscommon.model.component.util.PropertyMap;
-import jp.go.aist.rtm.toolscommon.model.core.Point;
-import jp.go.aist.rtm.toolscommon.model.core.impl.ModelElementImpl;
-import jp.go.aist.rtm.toolscommon.synchronizationframework.RefreshThread;
-import jp.go.aist.rtm.toolscommon.synchronizationframework.SynchronizationSupport;
-import jp.go.aist.rtm.toolscommon.ui.propertysource.SystemDiagramPropertySource;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
@@ -39,14 +30,37 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.openrtp.namespaces.rts.version02.RtsProfileExt;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import jp.go.aist.rtm.toolscommon.manager.ToolsCommonPreferenceManager;
+import jp.go.aist.rtm.toolscommon.model.component.Component;
+import jp.go.aist.rtm.toolscommon.model.component.ComponentPackage;
+import jp.go.aist.rtm.toolscommon.model.component.CorbaStatusObserver;
+import jp.go.aist.rtm.toolscommon.model.component.IPropertyMap;
+import jp.go.aist.rtm.toolscommon.model.component.PortConnector;
+import jp.go.aist.rtm.toolscommon.model.component.SystemDiagram;
+import jp.go.aist.rtm.toolscommon.model.component.SystemDiagramKind;
+import jp.go.aist.rtm.toolscommon.model.component.util.CorbaObserverHandler;
+import jp.go.aist.rtm.toolscommon.model.component.util.PropertyMap;
+import jp.go.aist.rtm.toolscommon.model.core.Point;
+import jp.go.aist.rtm.toolscommon.model.core.impl.ModelElementImpl;
+import jp.go.aist.rtm.toolscommon.nl.Messages;
+import jp.go.aist.rtm.toolscommon.synchronizationframework.RefreshThread;
+import jp.go.aist.rtm.toolscommon.synchronizationframework.SynchronizationSupport;
+import jp.go.aist.rtm.toolscommon.ui.propertysource.SystemDiagramPropertySource;
 
 /**
  * <!-- begin-user-doc --> An implementation of the model object '<em><b>System Diagram</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link jp.go.aist.rtm.toolscommon.model.component.impl.SystemDiagramImpl#getComponents <em>Components</em>}</li>
  *   <li>{@link jp.go.aist.rtm.toolscommon.model.component.impl.SystemDiagramImpl#getKind <em>Kind</em>}</li>
@@ -57,12 +71,12 @@ import org.openrtp.namespaces.rts.version02.RtsProfileExt;
  *   <li>{@link jp.go.aist.rtm.toolscommon.model.component.impl.SystemDiagramImpl#getParentSystemDiagram <em>Parent System Diagram</em>}</li>
  *   <li>{@link jp.go.aist.rtm.toolscommon.model.component.impl.SystemDiagramImpl#getCompositeComponent <em>Composite Component</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */
-public class SystemDiagramImpl extends ModelElementImpl implements
-		SystemDiagram {
+public class SystemDiagramImpl extends ModelElementImpl implements SystemDiagram {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(SystemDiagramImpl.class);
 
 	/**
 	 * The cached value of the '{@link #getComponents() <em>Components</em>}' containment reference list.
@@ -95,7 +109,7 @@ public class SystemDiagramImpl extends ModelElementImpl implements
 	protected SystemDiagramKind kind = KIND_EDEFAULT;
 
 	protected IPropertyMap properties;
-
+	
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -453,32 +467,12 @@ public class SystemDiagramImpl extends ModelElementImpl implements
 
 	@Override
 	public synchronized void removeComponent(Component component) {
-		removeObserver(component);
+		CorbaObserverHandler.eINSTANCE.detachStatusObserver(component);
 		for (Component comp : component.getComponents()) {
-			removeObserver(comp);
+			CorbaObserverHandler.eINSTANCE.detachStatusObserver(comp);
 		}
 		//
 		getComponents().remove(component);
-	}
-
-	void removeObserver(Component component) {
-		if (!(component instanceof CorbaComponentImpl)) {
-			return;
-		}
-		if (isCompositeMember(component)) {
-			return;
-		}
-		CorbaComponentImpl corbaComp = (CorbaComponentImpl) component;
-		//
-		CorbaObserverStore.eINSTANCE.removeComponentReference(corbaComp);
-		// 状態通知オブザーバ解除
-		if (corbaComp.getStatusObserver() != null) {
-			corbaComp.getStatusObserver().detachComponent();
-		}
-		// ログ通知オブザーバ解除
-		if (corbaComp.getLogObserver() != null) {
-			corbaComp.getLogObserver().detachComponent();
-		}
 	}
 
 	@Override
@@ -495,9 +489,13 @@ public class SystemDiagramImpl extends ModelElementImpl implements
 
 	@Override
 	public synchronized void addComponent(int pos, Component component) {
-		addObserver(component);
-		for (Component comp : component.getComponents()) {
-			addObserver(comp);
+		if (!ToolsCommonPreferenceManager.getInstance().isSTATUS_OBSERVER_ATTACH_ENABLE()) {
+			LOGGER.debug("addComponent: global observer attachment is off.");
+		} else {
+			CorbaObserverHandler.eINSTANCE.attachStatusObserver(component);
+			for (Component comp : component.getComponents()) {
+				CorbaObserverHandler.eINSTANCE.attachStatusObserver(comp);
+			}
 		}
 		//
 		if (pos == -1) {
@@ -505,25 +503,6 @@ public class SystemDiagramImpl extends ModelElementImpl implements
 		} else {
 			getComponents().add(pos, component);
 		}
-	}
-
-	void addObserver(Component component) {
-		if (!(component instanceof CorbaComponentImpl)) {
-			return;
-		}
-		if (isCompositeMember(component)) {
-			return;
-		}
-		CorbaComponentImpl corbaComp = (CorbaComponentImpl) component;
-		if (!corbaComp.supportedCorbaObserver()) {
-			return;
-		}
-		// 状態通知オブザーバ登録
-		CorbaStatusObserver ob = ComponentFactory.eINSTANCE
-				.createCorbaStatusObserver();
-		ob.attachComponent(corbaComp);
-		//
-		CorbaObserverStore.eINSTANCE.addComponentReference(corbaComp);
 	}
 
 	@Override
@@ -538,16 +517,6 @@ public class SystemDiagramImpl extends ModelElementImpl implements
 		for (Component c : getUnmodifiedComponents()) {
 			removeComponent(c);
 		}
-	}
-
-	public boolean isCompositeMember(Component component) {
-		if (component.eContainer() instanceof SystemDiagram) {
-			SystemDiagram sd = (SystemDiagram) component.eContainer();
-			if (sd.getCompositeComponent() != null) {
-				return true;
-			}
-		}
-		return false;
 	}
 
 	@Override
@@ -873,9 +842,36 @@ public class SystemDiagramImpl extends ModelElementImpl implements
 			syncRemoteThread = null;
 		}
 	}
-
+	
+	private String currentIP = null;
+	private boolean useIP = false;
+	private List<String> IPList = new ArrayList<String>(); 
+	private MessageDialog msgDialog = null;
+	private String bad_address = "127.0.1.1";
+	private boolean shownBadWarning = false;
+	
 	void synchronizeRemote() {
 		if (getParentSystemDiagram() == null) {
+			try {
+				InetAddress addr = InetAddress.getLocalHost();
+				if(currentIP == null) {
+					if(addr.getHostAddress().equals(InetAddress.getLoopbackAddress().getHostAddress())) {
+						useIP = false;
+					} else {
+						useIP = true;
+					}
+				}
+				if(useIP) {
+					checkByIPAddress();
+				} else {
+					checkByList();
+				}
+			} catch (SocketException e) {
+				e.printStackTrace();
+			} catch (UnknownHostException e) {
+				e.printStackTrace();
+			}
+			
 			for (Component component : getUnmodifiedComponents()) {
 				if (component instanceof CorbaComponentImpl) {
 					CorbaComponentImpl corbaComp = (CorbaComponentImpl) component;
@@ -885,12 +881,189 @@ public class SystemDiagramImpl extends ModelElementImpl implements
 					}
 				}
 				//
-				SynchronizationSupport support = component
-						.getSynchronizationSupport();
+				SynchronizationSupport support = component.getSynchronizationSupport();
 				if (support == null) {
 					continue;
 				}
 				support.synchronizeRemote();
+			}
+		}
+	}
+
+	private void checkByList() throws SocketException {
+		boolean showBadAddress = false;
+		
+		List<String> ips = new ArrayList<String>();
+		Enumeration<NetworkInterface> netSet;
+		netSet = NetworkInterface.getNetworkInterfaces();
+		while(netSet.hasMoreElements()){
+			NetworkInterface nInterface = (NetworkInterface) netSet.nextElement();
+			List<InterfaceAddress>list = nInterface.getInterfaceAddresses();
+			if( list.size() == 0 ) continue;
+			for (InterfaceAddress interfaceAdr : list){
+				InetAddress inet = interfaceAdr.getAddress();
+				if(inet instanceof Inet6Address) continue;
+				String address = inet.getHostAddress();
+				ips.add(address);
+			}
+		}
+
+		String address = "";
+		try {
+			InetAddress addr = InetAddress.getLocalHost();
+			address = addr.getHostAddress();
+//			address = "127.0.1.1";
+		} catch (UnknownHostException ex) {
+		}
+
+		if(currentIP == null) {
+			if(0 <ips.size()) {
+				currentIP = ips.get(0);
+			} else {
+				currentIP = "checked";
+			}
+			IPList.addAll(ips);
+			
+			if(address.equals(bad_address)) {
+				shownBadWarning = true;
+				showBadAddress = true;
+			}
+
+		} else {
+			if(address.equals(bad_address)) {
+				if(shownBadWarning == false) {
+					shownBadWarning = true;
+					showBadAddress = true;
+				}
+			} else {
+				shownBadWarning = false;
+			}
+
+			int preSize = IPList.size();
+			int curSize = ips.size();
+
+			String removed = "";
+			for(String each : IPList) {
+				if(ips.contains(each) == false) {
+					removed =  each;
+					break;
+				}
+			}
+
+			String added = "";
+			for(String each : ips) {
+				if(IPList.contains(each) == false) {
+					added = each;
+					break;
+				}
+			}
+			
+			String errMsg = "";
+			if(curSize < preSize) {
+				if( 0 < removed.length()) {
+					errMsg = " ( " + removed + " " + Messages.getString("IPCaution.message03");
+				}
+			} else if(preSize < curSize) {
+				if( 0 < added.length() ) {
+					errMsg = " ( " + added + " " + Messages.getString("IPCaution.message04");
+				}
+			} else {
+				if( 0 < removed.length() && 0 < added.length() ) {
+					errMsg = " ( " + removed + " -> " + added + " )";
+				}
+			}
+			IPList.clear();
+			IPList.addAll(ips);
+			
+			if( 0 < errMsg.length() || showBadAddress ) {
+		    	StringBuilder builder = new StringBuilder();
+		    	if(0 < errMsg.length()) {
+			    	builder.append(Messages.getString("IPCaution.message01")).append(errMsg).append(System.lineSeparator());
+			    	builder.append(Messages.getString("IPCaution.message02"));
+		    	}
+		    	if(showBadAddress) {
+		    		if( 0< builder.length() ) {
+		    			builder.append(System.lineSeparator()).append(System.lineSeparator());
+		    		}
+		    		builder.append(Messages.getString("IPCaution.badIp01")).append(System.lineSeparator());
+		    		builder.append(Messages.getString("IPCaution.badIp02"));
+		    		showBadAddress = false;
+		    	}
+		    	
+				if( 0 < PlatformUI.getWorkbench().getWorkbenchWindowCount() ) {
+					Shell shell = PlatformUI.getWorkbench().getWorkbenchWindows()[0].getShell();
+					shell.getDisplay().asyncExec(new Runnable() {
+					    public void run() {
+					    	if(msgDialog != null) {
+					    		msgDialog.close();
+					    	}
+					    	String title = Messages.getString("IPCaution.title");
+					    	String[] buttonLabels = new String[] { "OK" };
+					    	msgDialog = new MessageDialog(shell, title, null, builder.toString(), MessageDialog.ERROR, buttonLabels, 0);
+					    	msgDialog.open();
+					    }
+				    });
+				}
+			}
+		}
+	}
+
+	private void checkByIPAddress() throws UnknownHostException {
+		boolean showBadAddress = false;
+
+		InetAddress addr = InetAddress.getLocalHost();
+		String address = addr.getHostAddress();
+//		address = "127.0.1.1";
+		if(currentIP==null) {
+			currentIP = address;
+			if(address.equals(bad_address)) {
+				shownBadWarning = true;
+				showBadAddress = true;
+			}
+		} else {
+			if(address.equals(bad_address)) {
+				if(shownBadWarning == false) {
+					shownBadWarning = true;
+					showBadAddress = true;
+				}
+			} else {
+				shownBadWarning = false;
+			}
+		}
+		if(currentIP.equals(address)==false || showBadAddress) {
+			
+	    	StringBuilder builder = new StringBuilder();
+	    	if(currentIP.equals(address)==false) {
+				String oldAddress = currentIP;
+				currentIP = address;
+	    		builder.append(Messages.getString("IPCaution.message01")).append(" (").append(oldAddress);
+	    		builder.append(" -> ").append(currentIP).append(")").append(System.lineSeparator());
+	    		builder.append(Messages.getString("IPCaution.message02"));
+	    	}
+
+			if(showBadAddress) {
+	    		if( 0< builder.length() ) {
+	    			builder.append(System.lineSeparator()).append(System.lineSeparator());
+	    		}
+	    		builder.append(Messages.getString("IPCaution.badIp01")).append(System.lineSeparator());
+	    		builder.append(Messages.getString("IPCaution.badIp02"));
+	    		showBadAddress = false;
+	    	}
+	    	
+	    	if(0<builder.length()) {
+				if( 0 < PlatformUI.getWorkbench().getWorkbenchWindowCount() ) {
+					Shell shell = PlatformUI.getWorkbench().getWorkbenchWindows()[0].getShell();
+					shell.getDisplay().asyncExec(new Runnable() {
+					    public void run() {
+					    	if(msgDialog != null) {
+					    		msgDialog.close();
+					    	}
+					    	String title = Messages.getString("IPCaution.title");
+					    	String[] buttonLabels = new String[] { "OK" };
+					    	msgDialog = new MessageDialog(shell, title, null, builder.toString(), MessageDialog.ERROR, buttonLabels, 0);
+					    	msgDialog.open();					    }
+					});
+				}
 			}
 		}
 	}
@@ -905,8 +1078,7 @@ public class SystemDiagramImpl extends ModelElementImpl implements
 					// 状態通知オブザーバが登録されている場合の同期
 					if (obs.isTimeOut()) {
 						// H.Bがタイムアウトしていたらダイアグラムから削除
-						if (!SynchronizationSupport.ping(corbaComp
-								.getCorbaObjectInterface())) {
+						if (!SynchronizationSupport.ping(corbaComp.getCorbaObjectInterface())) {
 							removeComponent(corbaComp);
 						}
 						continue;
@@ -914,10 +1086,13 @@ public class SystemDiagramImpl extends ModelElementImpl implements
 				}
 			}
 			//
-			SynchronizationSupport support = component
-					.getSynchronizationSupport();
+			SynchronizationSupport support = component.getSynchronizationSupport();
 			if (support == null) {
 				continue;
+			}
+			if (support.failSynchronizeRemote()) {
+				LOGGER.error("Fail to sync remote, so remove component in diagram. comp=<{}>", component);
+				removeComponent(component);
 			}
 			support.synchronizeLocal();
 		}

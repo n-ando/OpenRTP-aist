@@ -14,4 +14,4 @@ rtcProfile:
                 constraintUnitType: 
                   propertyIsEqualTo: 
                     literal: "150"
-  version: "0.2"
+  version: "0.3"

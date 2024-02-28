@@ -48,14 +48,6 @@ static const char* ${rtcParam.name.toLowerCase()}_spec[] =
 #end
 
 #end
-#if( ${rtcParam.configParameterParams.size()} > 0 )
-    // System Configuration
-#foreach($parameterParam in ${rtcParam.configParameterParams})  
-#if( ${parameterParam.isNonPeriodic()} )
-    "${parameterParam.configName}", "${parameterParam.defaultVal}",
-#end
-#end
-#end
     ""
   };
 // </rtc-template>

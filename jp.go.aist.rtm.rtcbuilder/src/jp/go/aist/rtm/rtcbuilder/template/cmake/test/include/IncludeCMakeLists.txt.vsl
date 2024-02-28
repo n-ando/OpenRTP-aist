@@ -1,0 +1,4 @@
+add_subdirectory(${rtcParam.name}Test)
+
+MAP_ADD_STR(hdrs "${dol}{PROJECT_NAME}Test/" headers)
+set(headers ${dol}{headers} PARENT_SCOPE)

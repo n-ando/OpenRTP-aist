@@ -283,5 +283,4 @@ public class DataportConnector {
     public void setPushInterval(Double value) {
         this.pushInterval = value;
     }
-
 }

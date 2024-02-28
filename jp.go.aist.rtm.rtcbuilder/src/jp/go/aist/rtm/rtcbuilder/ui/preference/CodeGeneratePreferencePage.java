@@ -1,8 +1,5 @@
 package jp.go.aist.rtm.rtcbuilder.ui.preference;
 
-import jp.go.aist.rtm.rtcbuilder.RtcBuilderPlugin;
-import jp.go.aist.rtm.rtcbuilder.ui.editors.IMessageConstants;
-
 import org.eclipse.jface.preference.ComboFieldEditor;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.IntegerFieldEditor;
@@ -13,6 +10,9 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
+
+import jp.go.aist.rtm.rtcbuilder.RtcBuilderPlugin;
+import jp.go.aist.rtm.rtcbuilder.nl.Messages;
 
 public class CodeGeneratePreferencePage extends AbstarctFieldEditorPreferencePage implements
 							IWorkbenchPreferencePage {
@@ -25,13 +25,6 @@ public class CodeGeneratePreferencePage extends AbstarctFieldEditorPreferencePag
 						{"PERIODIC", "PERIODIC"},
 						{"SPORADIC", "SPORADIC"},
 						{"EVENTDRIVEN","EVENTDRIVEN"}};
-	static private String[][] componentKindItems = {
-						{"DataFlowComponent", "DataFlowComponent"}, 
-						{"FiniteStateMachineComponent","FiniteStateMachineComponent"},
-						{"DataFlowFiniteStateMachineComponent","DataFlowFiniteStateMachineComponent"},
-						{"FiniteStateMachineMultiModeComponent","FiniteStateMachineMultiModeComponent"},
-						{"DataFlowMultiModeComponent","DataFlowMultiModeComponent"},
-						{"DataFlowFiniteStateMachineMultiModeComponent", "DataFlowFiniteStateMachineMultiModeComponent"}};
 	//
 	static private String[][] executionContextTypeItems = {
 						{"PeriodicExecutionContext", "PeriodicExecutionContext"},
@@ -45,8 +38,6 @@ public class CodeGeneratePreferencePage extends AbstarctFieldEditorPreferencePag
 	public void init(IWorkbench workbench) {
 		IPreferenceStore store = RtcBuilderPlugin.getDefault().getPreferenceStore();
 		storeComponentInitialSetting(store);
-		storeConfigurationSetInitialSetting(store);
-		storeBackupInitialSetting(store);
 	}
 
 	@Override
@@ -57,100 +48,51 @@ public class CodeGeneratePreferencePage extends AbstarctFieldEditorPreferencePag
 		gd.grabExcessHorizontalSpace = true;
 		composite.setLayoutData(gd);
 		createComponentPart(composite);
-		createConfigurationSetParts(composite);
-		createBackupParts(composite);
-	}
-
-	private void createBackupParts(Composite composite) {
-		Composite backupGroup = createGroup(composite, IPreferenceMessageConstants.CODE_GEN_TITLE_BACKUP);
-		IntegerFieldEditor moduleMaxInstanceTextEditor = new IntegerFieldEditor(ComponentPreferenceManager.Generate_Backup_Num,
-				IMessageConstants.BACKUP_FILE_NUM, backupGroup);
-		addField(moduleMaxInstanceTextEditor);
-	}
-	
-	private void createConfigurationSetParts(Composite composite) {
-		Composite configGroup = createGroup(composite, IPreferenceMessageConstants.CODE_GEN_TITLE_CONFIG);
-		DigitAlphabetStringFieldEditor configurationNameEditor = 
-			new DigitAlphabetStringFieldEditor(ComponentPreferenceManager.Generate_Configuration_Name,
-					IMessageConstants.CONFIGURATION_TBLLBL_NAME, configGroup);
-		addField(configurationNameEditor);
-		StringFieldEditor configurationTypeEditor = 
-			new StringFieldEditor(ComponentPreferenceManager.Generate_Configuration_Type,
-					IMessageConstants.CONFIGURATION_TBLLBL_TYPE, configGroup);
-		addField(configurationTypeEditor);
-		StringFieldEditor configurationVarNameEditor = 
-			new StringFieldEditor(ComponentPreferenceManager.Generate_Configuration_VarName,
-					IMessageConstants.CONFIGURATION_LBL_VARNAME, configGroup);
-		addField(configurationVarNameEditor);
-		DigitAlphabetStringFieldEditor configurationDefaultEditor = 
-			new DigitAlphabetStringFieldEditor(ComponentPreferenceManager.Generate_Configuration_Default,
-					IMessageConstants.CONFIGURATION_TBLLBL_DEFAULTVAL, configGroup);
-		addField(configurationDefaultEditor);
-		StringFieldEditor configurationConstraintEditor = 
-			new StringFieldEditor(ComponentPreferenceManager.Generate_Configuration_Constraint,
-					IMessageConstants.CONFIGURATION_LBL_CONSTRAINT, configGroup);
-		addField(configurationConstraintEditor);
-		StringFieldEditor configurationUnitEditor = 
-			new StringFieldEditor(ComponentPreferenceManager.Generate_Configuration_Unit,
-					IMessageConstants.CONFIGURATION_LBL_UNIT, configGroup);
-		addField(configurationUnitEditor);
-		//
-		StringFieldEditor configurationPrefixEditor = 
-			new StringFieldEditor(ComponentPreferenceManager.Generate_Configuration_Prefix,
-					IPreferenceMessageConstants.PORT_LBL_PREFIX, configGroup);
-		addField(configurationPrefixEditor);
-		StringFieldEditor configurationSuffixEditor = 
-			new StringFieldEditor(ComponentPreferenceManager.Generate_Configuration_Suffix,
-					IPreferenceMessageConstants.PORT_LBL_SUFFIX, configGroup);
-		addField(configurationSuffixEditor);
 	}
 
 	private void createComponentPart(Composite composite) {
 		//Basic Page
-		Composite basicGroup = createGroup(composite, IPreferenceMessageConstants.CODE_GEN_TITLE_BASIC);
+		Composite basicGroup = createGroup(composite, 
+				Messages.getString("IPreferenceMessageConstants.CODE_GEN_TITLE_BASIC"));
 		DigitAlphabetStringFieldEditor moduleNameEditor = 
 			new DigitAlphabetStringFieldEditor(ComponentPreferenceManager.Generate_Basic_Name,
-					IMessageConstants.BASIC_LBL_MODULENAME, basicGroup);
+					Messages.getString("IMC.BASIC_LBL_MODULENAME"), basicGroup);
 		addField(moduleNameEditor);
 		StringFieldEditor moduleDescriptionEditor = 
 			new StringFieldEditor(ComponentPreferenceManager.Generate_Basic_Description,
-				IMessageConstants.BASIC_LBL_DESCRIPTION, basicGroup);
+					Messages.getString("IMC.BASIC_LBL_DESCRIPTION"), basicGroup);
 		addField(moduleDescriptionEditor);
 		StringFieldEditor moduleVersionEditor = 
 			new StringFieldEditor(ComponentPreferenceManager.Generate_Basic_Version,
-					IMessageConstants.BASIC_LBL_VERSION, basicGroup);
+					Messages.getString("IMC.BASIC_LBL_VERSION"), basicGroup);
 		addField(moduleVersionEditor);
 		StringFieldEditor moduleVendorEditor = 
 			new StringFieldEditor(ComponentPreferenceManager.Generate_Basic_Vendor_Name,
-					IMessageConstants.BASIC_LBL_VENDOR, basicGroup);
+					Messages.getString("IMC.BASIC_LBL_VENDOR"), basicGroup);
 		addField(moduleVendorEditor);
 		StringFieldEditor moduleCategoryEditor = 
 			new StringFieldEditor(ComponentPreferenceManager.Generate_Basic_Category,
-					IMessageConstants.BASIC_LBL_CATEGORY, basicGroup);
+					Messages.getString("IMC.BASIC_LBL_CATEGORY"), basicGroup);
 		addField(moduleCategoryEditor);
 		//
 		ComboFieldEditor componentTypeComboEditor = new ComboFieldEditor(ComponentPreferenceManager.Generate_Basic_ComponentType,
-				IMessageConstants.BASIC_LBL_COMPONENT_TYPE, componentTypeItems, basicGroup);
+				Messages.getString("IMC.BASIC_LBL_COMPONENT_TYPE"), componentTypeItems, basicGroup);
 		addField(componentTypeComboEditor);
 		ComboFieldEditor activityTypeComboEditor = new ComboFieldEditor(ComponentPreferenceManager.Generate_Basic_ActivityType,
-				IMessageConstants.BASIC_LBL_ACTIVITY_TYPE, activityTypeItems, basicGroup);
+				Messages.getString("IMC.BASIC_LBL_ACTIVITY_TYPE"), activityTypeItems, basicGroup);
 		addField(activityTypeComboEditor);
 		//
-		ComboFieldEditor componentKindCombo = new ComboFieldEditor(ComponentPreferenceManager.Generate_Basic_ComponentKind,
-				IMessageConstants.BASIC_LBL_COMPONENT_KIND, componentKindItems, basicGroup);
-		addField(componentKindCombo);
-		//
 		IntegerFieldEditor moduleMaxInstanceTextEditor = new IntegerFieldEditor(ComponentPreferenceManager.Generate_Basic_Max_Instance,
-				IMessageConstants.BASIC_LBL_MAX_INSTANCES, basicGroup);
+				Messages.getString("IMC.BASIC_LBL_MAX_INSTANCES"), basicGroup);
 		addField(moduleMaxInstanceTextEditor);
 		//
 		ComboFieldEditor executionTypeCombo = new ComboFieldEditor(ComponentPreferenceManager.Generate_Basic_ExecutionType,
-				IMessageConstants.BASIC_LBL_EXECUTION_TYPE, executionContextTypeItems, basicGroup);
+				Messages.getString("IMC.BASIC_LBL_EXECUTION_TYPE"), executionContextTypeItems, basicGroup);
 		addField(executionTypeCombo);
 		//
 		DoubleStringFieldEditor moduleExecutionRateTextEditor = 
 			new DoubleStringFieldEditor(ComponentPreferenceManager.Generate_Basic_Execution_Rate,
-					IMessageConstants.BASIC_LBL_EXECUTION_RATE, basicGroup);
+					Messages.getString("IMC.BASIC_LBL_EXECUTION_RATE"), basicGroup);
 		addField(moduleExecutionRateTextEditor);
 		//
 		StringFieldEditor commonPrefixEditor = 
@@ -163,21 +105,6 @@ public class CodeGeneratePreferencePage extends AbstarctFieldEditorPreferencePag
 		addField(commonSuffixEditor);
 	}
 	
-	private void storeBackupInitialSetting(IPreferenceStore store) {
-		store.setDefault(ComponentPreferenceManager.Generate_Backup_Num, ComponentPreferenceManager.DEFAULT_BACKUP_NUM);
-	}
-
-	private void storeConfigurationSetInitialSetting(IPreferenceStore store) {
-		store.setDefault(ComponentPreferenceManager.Generate_Configuration_Name, ComponentPreferenceManager.DEFAULT_CONFIGURATION_NAME);
-		store.setDefault(ComponentPreferenceManager.Generate_Configuration_Type, ComponentPreferenceManager.DEFAULT_CONFIGURATION_TYPE);
-		store.setDefault(ComponentPreferenceManager.Generate_Configuration_VarName, ComponentPreferenceManager.DEFAULT_CONFIGURATION_VARNAME);
-		store.setDefault(ComponentPreferenceManager.Generate_Configuration_Default, ComponentPreferenceManager.DEFAULT_CONFIGURATION_DEFAULT);
-		store.setDefault(ComponentPreferenceManager.Generate_Configuration_Constraint, ComponentPreferenceManager.DEFAULT_CONFIGURATION_CONSTRAINT);
-		store.setDefault(ComponentPreferenceManager.Generate_Configuration_Unit, ComponentPreferenceManager.DEFAULT_CONFIGURATION_UNIT);
-		store.setDefault(ComponentPreferenceManager.Generate_Configuration_Prefix, ComponentPreferenceManager.DEFAULT_CONFIGURATION_PREFIX);
-		store.setDefault(ComponentPreferenceManager.Generate_Configuration_Suffix, ComponentPreferenceManager.DEFAULT_CONFIGURATION_SUFFIX);
-	}
-
 	private void storeComponentInitialSetting(IPreferenceStore store) {
 		store.setDefault(ComponentPreferenceManager.Generate_Basic_Name, ComponentPreferenceManager.DEFAULT_COMPONENT_NAME);
 		store.setDefault(ComponentPreferenceManager.Generate_Basic_Description, ComponentPreferenceManager.DEFAULT_DESCRIPTION);
@@ -186,7 +113,6 @@ public class CodeGeneratePreferencePage extends AbstarctFieldEditorPreferencePag
 		store.setDefault(ComponentPreferenceManager.Generate_Basic_Category, ComponentPreferenceManager.DEFAULT_CATEGORY);
 		store.setDefault(ComponentPreferenceManager.Generate_Basic_ComponentType, ComponentPreferenceManager.DEFAULT_COMPONENT_TYPE);
 		store.setDefault(ComponentPreferenceManager.Generate_Basic_ActivityType, ComponentPreferenceManager.DEFAULT_ACTIVITY_TYPE);
-		store.setDefault(ComponentPreferenceManager.Generate_Basic_ComponentKind, ComponentPreferenceManager.DEFAULT_COMPONENT_KIND);
 		store.setDefault(ComponentPreferenceManager.Generate_Basic_ExecutionType, ComponentPreferenceManager.DEFAULT_EXECUTION_TYPE);
 		store.setDefault(ComponentPreferenceManager.Generate_Basic_Max_Instance, ComponentPreferenceManager.DEFAULT_MAXINST);
 		store.setDefault(ComponentPreferenceManager.Generate_Basic_Execution_Rate, ComponentPreferenceManager.DEFAULT_EXECUTION_RATE);

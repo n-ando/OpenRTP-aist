@@ -49,7 +49,7 @@ public class LuckTest extends TestBase {
 		ServicePortParam service1 = new ServicePortParam("MySVPro",0);
 		List<ServicePortInterfaceParam> srvinterts = new ArrayList<ServicePortInterfaceParam>(); 
 		ServicePortInterfaceParam int1 = new ServicePortInterfaceParam(service1, "myservice0", "", "", 
-				rootPath + "/resource/CXX/Exception/MyService.idl", "MyService", "", 0);
+				rootPath + "/resource/CXX/Exception/MyService.idl", "MyService", 0);
 		srvinterts.add(int1);
 		service1.getServicePortInterfaces().addAll(srvinterts);
 		List<ServicePortParam> srvports = new ArrayList<ServicePortParam>();
@@ -58,7 +58,7 @@ public class LuckTest extends TestBase {
 		ServicePortParam service2 = new ServicePortParam("MyConPro",0);
 		List<ServicePortInterfaceParam> srvinterts2 = new ArrayList<ServicePortInterfaceParam>(); 
 		ServicePortInterfaceParam int2 = new ServicePortInterfaceParam(service1, "myservice1", "", "", 
-				rootPath + "/resource/CXX/Exception/MyService.idl", "", "", 1);
+				rootPath + "/resource/CXX/Exception/MyService.idl", "", 1);
 		srvinterts2.add(int2);
 		service2.getServicePortInterfaces().addAll(srvinterts2);
 		srvports.add(service2);
@@ -94,7 +94,7 @@ public class LuckTest extends TestBase {
 		ServicePortParam service1 = new ServicePortParam("MySVPro",0);
 		List<ServicePortInterfaceParam> srvinterts = new ArrayList<ServicePortInterfaceParam>(); 
 		ServicePortInterfaceParam int1 = new ServicePortInterfaceParam(service1, "myservice0", "", "", 
-				rootPath + "/resource/CXX/Exception/MyService.idl", "MyService", "", 0);
+				rootPath + "/resource/CXX/Exception/MyService.idl", "MyService", 0);
 		srvinterts.add(int1);
 		service1.getServicePortInterfaces().addAll(srvinterts);
 		List<ServicePortParam> srvports = new ArrayList<ServicePortParam>();
@@ -103,7 +103,7 @@ public class LuckTest extends TestBase {
 		ServicePortParam service2 = new ServicePortParam("MyConPro",0);
 		List<ServicePortInterfaceParam> srvinterts2 = new ArrayList<ServicePortInterfaceParam>(); 
 		ServicePortInterfaceParam int2 = new ServicePortInterfaceParam(service1, "", "", "", 
-				rootPath + "/resource/CXX/Exception/MyService.idl", "MyService", "", 1);
+				rootPath + "/resource/CXX/Exception/MyService.idl", "MyService", 1);
 		srvinterts2.add(int2);
 		service2.getServicePortInterfaces().addAll(srvinterts2);
 		srvports.add(service2);
@@ -139,7 +139,7 @@ public class LuckTest extends TestBase {
 		ServicePortParam service1 = new ServicePortParam("MySVPro",0);
 		List<ServicePortInterfaceParam> srvinterts = new ArrayList<ServicePortInterfaceParam>(); 
 		ServicePortInterfaceParam int1 = new ServicePortInterfaceParam(service1, "myservice0", "", "", 
-				rootPath + "/resource/CXX/Exception/MyService.idl", "MyService", "", 0);
+				rootPath + "/resource/CXX/Exception/MyService.idl", "MyService", 0);
 		srvinterts.add(int1);
 		service1.getServicePortInterfaces().addAll(srvinterts);
 		List<ServicePortParam> srvports = new ArrayList<ServicePortParam>();
@@ -148,7 +148,7 @@ public class LuckTest extends TestBase {
 		ServicePortParam service2 = new ServicePortParam("",0);
 		List<ServicePortInterfaceParam> srvinterts2 = new ArrayList<ServicePortInterfaceParam>(); 
 		ServicePortInterfaceParam int2 = new ServicePortInterfaceParam(service1, "myservice1", "", "", 
-				rootPath + "/resource/CXX/Exception/MyService.idl", "MyService", "", 1);
+				rootPath + "/resource/CXX/Exception/MyService.idl", "MyService", 1);
 		srvinterts2.add(int2);
 		service2.getServicePortInterfaces().addAll(srvinterts2);
 		srvports.add(service2);
@@ -184,7 +184,7 @@ public class LuckTest extends TestBase {
 		ServicePortParam service1 = new ServicePortParam("MySVPro",0);
 		List<ServicePortInterfaceParam> srvinterts = new ArrayList<ServicePortInterfaceParam>(); 
 		ServicePortInterfaceParam int1 = new ServicePortInterfaceParam(service1, "myservice0", "", "", 
-				rootPath + "/resource/CXX/Exception/MyService.idl", "", "", 0);
+				rootPath + "/resource/CXX/Exception/MyService.idl", "", 0);
 		srvinterts.add(int1);
 		service1.getServicePortInterfaces().addAll(srvinterts);
 		List<ServicePortParam> srvports = new ArrayList<ServicePortParam>();
@@ -220,7 +220,7 @@ public class LuckTest extends TestBase {
 		ServicePortParam service1 = new ServicePortParam("MySVPro",0);
 		List<ServicePortInterfaceParam> srvinterts = new ArrayList<ServicePortInterfaceParam>(); 
 		ServicePortInterfaceParam int1 = new ServicePortInterfaceParam(service1, "", "", "", 
-				rootPath + "/resource/CXX/Exception/MyService.idl", "MyService", "", 0);
+				rootPath + "/resource/CXX/Exception/MyService.idl", "MyService", 0);
 		srvinterts.add(int1);
 		service1.getServicePortInterfaces().addAll(srvinterts);
 		List<ServicePortParam> srvports = new ArrayList<ServicePortParam>();
@@ -256,7 +256,7 @@ public class LuckTest extends TestBase {
 		ServicePortParam service1 = new ServicePortParam("",0);
 		List<ServicePortInterfaceParam> srvinterts = new ArrayList<ServicePortInterfaceParam>(); 
 		ServicePortInterfaceParam int1 = new ServicePortInterfaceParam(service1, "myservice0", "", "", 
-				rootPath + "/resource/CXX/Exception/MyService.idl", "MyService", "", 0);
+				rootPath + "/resource/CXX/Exception/MyService.idl", "MyService", 0);
 		srvinterts.add(int1);
 		service1.getServicePortInterfaces().addAll(srvinterts);
 		List<ServicePortParam> srvports = new ArrayList<ServicePortParam>();

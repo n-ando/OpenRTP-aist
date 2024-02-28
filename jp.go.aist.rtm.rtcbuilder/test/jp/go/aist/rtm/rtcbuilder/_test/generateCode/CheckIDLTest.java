@@ -14,6 +14,7 @@ import jp.go.aist.rtm.rtcbuilder.generator.param.RtcParam;
 import jp.go.aist.rtm.rtcbuilder.generator.param.ServicePortInterfaceParam;
 import jp.go.aist.rtm.rtcbuilder.generator.param.ServicePortParam;
 import jp.go.aist.rtm.rtcbuilder.generator.param.idl.IdlPathParam;
+import jp.go.aist.rtm.rtcbuilder.util.RTCUtil;
 
 public class CheckIDLTest extends TestBase {
 
@@ -47,7 +48,7 @@ public class CheckIDLTest extends TestBase {
 		List<ServicePortInterfaceParam> srvinterts = new ArrayList<ServicePortInterfaceParam>();
 		ServicePortInterfaceParam int1 = new ServicePortInterfaceParam(
 				service1, "acc", "", "", rootPath + "/resource/TestXXX.idl",
-				"MyModule::MyInterface", "", 0);
+				"MyModule::MyInterface", 0);
 		srvinterts.add(int1);
 		service1.getServicePortInterfaces().addAll(srvinterts);
 		List<ServicePortParam> srvports = new ArrayList<ServicePortParam>();
@@ -70,7 +71,7 @@ public class CheckIDLTest extends TestBase {
 		List<ServicePortInterfaceParam> srvinterts = new ArrayList<ServicePortInterfaceParam>();
 		ServicePortInterfaceParam int1 = new ServicePortInterfaceParam(
 				service1, "acc", "", "", rootPath + "/resource/Test.idl",
-				"MyModule::MyInterface", "", 0);
+				"MyModule::MyInterface", 0);
 		srvinterts.add(int1);
 		service1.getServicePortInterfaces().addAll(srvinterts);
 		List<ServicePortParam> srvports = new ArrayList<ServicePortParam>();
@@ -91,7 +92,7 @@ public class CheckIDLTest extends TestBase {
 		List<ServicePortInterfaceParam> srvinterts = new ArrayList<ServicePortInterfaceParam>();
 		ServicePortInterfaceParam int1 = new ServicePortInterfaceParam(
 				service1, "acc", "", "", rootPath + "/resource/Test.idl",
-				"MyModule::MyInterface", "C:/Program Files/OpenRTM-aist/1.2.0/rtm/idl", 0);
+				"MyModule::MyInterface", 0);
 		srvinterts.add(int1);
 		service1.getServicePortInterfaces().addAll(srvinterts);
 		List<ServicePortParam> srvports = new ArrayList<ServicePortParam>();
@@ -100,10 +101,12 @@ public class CheckIDLTest extends TestBase {
 
 		List<IdlPathParam> idlDirs = new ArrayList<IdlPathParam>();
 		Generator generator = new Generator();
+		RTCUtil.getIDLPathes(rtcParam);
+		
 		try {
 			generator.validateIDLDef(genParam, idlDirs);
-		} catch (HeaderException ex) {
 			assertTrue(false);
+		} catch (HeaderException ex) {
 		}
 	}
 
@@ -112,7 +115,7 @@ public class CheckIDLTest extends TestBase {
 		List<ServicePortInterfaceParam> srvinterts = new ArrayList<ServicePortInterfaceParam>();
 		ServicePortInterfaceParam int1 = new ServicePortInterfaceParam(
 				service1, "acc", "", "", rootPath + "/resource/Test2.idl",
-				"MyModule::MyInterface", "C:/Program Files/OpenRTM-aist/1.2.0/rtm/idl", 0);
+				"MyModule::MyInterface", 0);
 		srvinterts.add(int1);
 		service1.getServicePortInterfaces().addAll(srvinterts);
 		List<ServicePortParam> srvports = new ArrayList<ServicePortParam>();
@@ -133,7 +136,7 @@ public class CheckIDLTest extends TestBase {
 		List<ServicePortInterfaceParam> srvinterts = new ArrayList<ServicePortInterfaceParam>();
 		ServicePortInterfaceParam int1 = new ServicePortInterfaceParam(
 				service1, "acc", "", "", rootPath + "/resource/Test2.idl",
-				"MyModule::MyInterface", "", 0);
+				"MyModule::MyInterface", 0);
 		srvinterts.add(int1);
 		service1.getServicePortInterfaces().addAll(srvinterts);
 		List<ServicePortParam> srvports = new ArrayList<ServicePortParam>();
@@ -155,7 +158,7 @@ public class CheckIDLTest extends TestBase {
 		List<ServicePortInterfaceParam> srvinterts = new ArrayList<ServicePortInterfaceParam>();
 		ServicePortInterfaceParam int1 = new ServicePortInterfaceParam(
 				service1, "SampleIF", "", "", rootPath + "/resource/Test.idl",
-				"MyModule::MyInterface", "C:/Program Files/OpenRTM-aist/1.2.0/rtm/idl", 0);
+				"MyModule::MyInterface", 0);
 		srvinterts.add(int1);
 		service1.getServicePortInterfaces().addAll(srvinterts);
 		List<ServicePortParam> srvports = new ArrayList<ServicePortParam>();
@@ -166,6 +169,8 @@ public class CheckIDLTest extends TestBase {
 		rtcParam.setActionImplemented(4, true);
 		rtcParam.setActionImplemented(5, true);
 		rtcParam.setActionImplemented(9, true);
+		
+		RTCUtil.getIDLPathes(rtcParam);
 
 		List<IdlPathParam> idlDirs = new ArrayList<IdlPathParam>();
 		Generator generator = new Generator();
@@ -185,7 +190,7 @@ public class CheckIDLTest extends TestBase {
 		List<ServicePortInterfaceParam> srvinterts = new ArrayList<ServicePortInterfaceParam>();
 		ServicePortInterfaceParam int1 = new ServicePortInterfaceParam(
 				service1, "SampleIF", "", "", rootPath + "/resource/Test.idl",
-				"MyModule::MyInterface", "", 0);
+				"MyModule::MyInterface", 0);
 		srvinterts.add(int1);
 		service1.getServicePortInterfaces().addAll(srvinterts);
 		List<ServicePortParam> srvports = new ArrayList<ServicePortParam>();
@@ -202,7 +207,7 @@ public class CheckIDLTest extends TestBase {
 		Generator generator = new Generator();
 		List<GeneratedResult> result = generator.generateTemplateCode(genParam, idlDirs);
 
-		String resourceDir = rootPath + "/resource/100/CXX/CheckIDL/";
+		String resourceDir = rootPath + "/resource/100/CXX/CheckIDLDef/";
 
 		checkCode(result, resourceDir, "Sample.cpp");
 		checkCode(result, resourceDir, "Sample.h");

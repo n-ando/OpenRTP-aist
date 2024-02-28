@@ -1,10 +1,4 @@
-cmake_minimum_required(VERSION 2.8)
-if(POLICY CMP0040)
-  cmake_policy(SET CMP0040 OLD)
-endif()
-if(POLICY CMP0053)
-  cmake_policy(SET CMP0053 OLD)
-endif()
+cmake_minimum_required(VERSION 3.5.1)
 
 project(${rtcParam.name})
 string(TOLOWER ${dol}{PROJECT_NAME} PROJECT_NAME_LOWER)
@@ -22,7 +16,7 @@ set(PROJECT_MAINTAINER "unknown")
 #end
 set(PROJECT_TYPE "java/${rtcParam.category}")
 
-find_package(OpenRTM)
+find_package(OpenRTM REQUIRED)
 set(RTM_VER ${dol}{OPENRTM_VERSION})
 set(RTM_SHORT_VER ${dol}{OPENRTM_VERSION_MAJOR}${dol}{OPENRTM_VERSION_MINOR}${dol}{OPENRTM_VERSION_PATCH})
 
@@ -81,13 +75,18 @@ endif()
 
 option(BUILD_DOCUMENTATION "Build the documentation" OFF)
 
-file(GLOB CLASS_FILES "${dol}{CMAKE_CURRENT_SOURCE_DIR}/bin/*.class")
-file(GLOB SUB_CLASS_DIRS "${dol}{CMAKE_CURRENT_SOURCE_DIR}/bin/*")
-list(REMOVE_ITEM SUB_CLASS_DIRS ${dol}{CLASS_FILES})
-message(STATUS "subdirectories are  ${dol}{SUB_CLASS_DIRS}")
+set(CLASS_FILES_DIR "${dol}{CMAKE_CURRENT_SOURCE_DIR}/bin")
+#if( ${tmpltHelper.checkUserDefined(${rtcParam})} )
+file(GLOB CLASS_FILES "${dol}{CLASS_FILES_DIR}/*.class")
+file(GLOB IDL_CLASS_DIR "${dol}{CMAKE_CURRENT_SOURCE_DIR}/bin/*")
+list(REMOVE_ITEM IDL_CLASS_DIR ${dol}{CLASS_FILES})
+#end
 set(EXEC_FILES ""
-               ${dol}{CLASS_FILES}
+    ${dol}{CLASS_FILES_DIR}/${dol}{PROJECT_NAME}.class 
+    ${dol}{CLASS_FILES_DIR}/${dol}{PROJECT_NAME}Comp.class 
+    ${dol}{CLASS_FILES_DIR}/${dol}{PROJECT_NAME}Impl.class
 )
+file(GLOB IDL_FILES "${dol}{CMAKE_CURRENT_SOURCE_DIR}/idl/*.idl")
 
 if(WIN32)
     set(SCRIPT_FILE ""
@@ -98,8 +97,7 @@ else()
 endif()
 ${sharp}end
 
-set(OTHER_SRCS CMakeLists.txt
-               RTC.xml ${rtcParam.name}.conf rtc.conf)
+set(OTHER_SRCS RTC.xml ${rtcParam.name}.conf rtc.conf)
 
 ${sharp} check java installed
 find_package(Java)
@@ -115,25 +113,24 @@ else()
    set(INSTALL_PREFIX "${dol}{OPENRTM_SHARE_PREFIX}/components/${dol}{PROJECT_TYPE}/${dol}{PROJECT_NAME}")
 endif()
 
-foreach(target ${dol}{EXEC_FILES})
-  add_custom_command( TARGET ${dol}{PROJECT_NAME} POST_BUILD
-    COMMAND ${dol}{CMAKE_COMMAND} -E copy
-        ${dol}{PROJECT_SOURCE_DIR}/${dol}{target} ${dol}{PROJECT_BINARY_DIR}
-  )
-endforeach()          
-
 install(FILES ${dol}{EXEC_FILES} DESTINATION "${dol}{INSTALL_PREFIX}"
         COMPONENT component)
 
-install(DIRECTORY ${dol}{SUB_CLASS_DIRS} DESTINATION "${dol}{INSTALL_PREFIX}"
-        FILES_MATCHING PATTERN "*.class")
+#if( ${tmpltHelper.checkUserDefined(${rtcParam})} )
+install(DIRECTORY ${dol}{IDL_CLASS_DIR} DESTINATION "${dol}{INSTALL_PREFIX}"
+        COMPONENT component)
 
-
+#end
 install(PROGRAMS ${dol}{SCRIPT_FILE} DESTINATION "${dol}{INSTALL_PREFIX}"
         COMPONENT component)
 
 install(FILES ${dol}{OTHER_SRCS} DESTINATION ${dol}{INSTALL_PREFIX}
         COMPONENT component)
+
+if(IDL_FILES)
+    install(FILES ${dol}{IDL_FILES} DESTINATION ${dol}{INSTALL_PREFIX}/idl
+        COMPONENT component)
+endif(IDL_FILES) 
 
 ${sharp} add uninstall target
 configure_file(

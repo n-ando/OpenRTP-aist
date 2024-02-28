@@ -18,8 +18,8 @@ public class OpenAction extends EditorPartAction {
 	@Override
 	protected void init() {
 		setId(ID);
-		setText("Open...");
-		setToolTipText("Open...");
+		setText("Load System");
+		setToolTipText("Load System");
 	}
 
 	@Override
@@ -29,6 +29,6 @@ public class OpenAction extends EditorPartAction {
 
 	@Override
 	public void run() {
-		((AbstractSystemDiagramEditor) getEditorPart()).open(RestoreOption.NONE);
+		((AbstractSystemDiagramEditor) getEditorPart()).open();
 	}
 }

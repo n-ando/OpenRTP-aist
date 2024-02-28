@@ -13,7 +13,6 @@
 			<xsd:element name="ConfigurationSet" type="rtc:configuration_set" minOccurs="0" maxOccurs="1"/>
 			<xsd:element name="DataPorts" type="rtc:dataport" minOccurs="0" maxOccurs="unbounded"/>
 			<xsd:element name="ServicePorts" type="rtc:serviceport" minOccurs="0" maxOccurs="unbounded"/>
-			<xsd:element name="Parameters" type="rtc:parameter" minOccurs="0" maxOccurs="unbounded"/>
 			<xsd:element name="Language" type="rtc:language" minOccurs="0" maxOccurs="1"/>
 		</xsd:sequence>
 		<xsd:attribute name="id" type="xsd:string" use="required"/>
@@ -97,12 +96,14 @@
 	<xsd:complexType name="dataport">
 		<xsd:sequence>
 			<xsd:element name="Constraint" type="rtc:constraint_type" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="Event" type="rtc:event" minOccurs="0" maxOccurs="unbounded"/>
 		</xsd:sequence>
 		<xsd:attribute name="portType" use="required">
 			<xsd:simpleType>
 				<xsd:restriction base="xsd:string">
 					<xsd:enumeration value="DataInPort"/>
 					<xsd:enumeration value="DataOutPort"/>
+					<xsd:enumeration value="EventPort"/>
 				</xsd:restriction>
 			</xsd:simpleType>
 		</xsd:attribute>
@@ -113,6 +114,14 @@
 		<xsd:attribute name="dataflowType" type="xsd:string" use="optional"/>
 		<xsd:attribute name="subscriptionType" type="xsd:string" use="optional"/>
 		<xsd:attribute name="unit" type="xsd:string" use="optional"/>
+	</xsd:complexType>
+
+	<xsd:complexType name="event">
+		<xsd:attribute name="name" type="xsd:string" use="required"/>
+		<xsd:attribute name="condition" type="xsd:string" use="optional"/>
+		<xsd:attribute name="source" type="xsd:string" use="required"/>
+		<xsd:attribute name="target" type="xsd:string" use="required"/>
+		<xsd:attribute name="type" type="xsd:string" use="optional"/>
 	</xsd:complexType>
 
 	<xsd:complexType name="serviceport">
@@ -136,16 +145,10 @@
 		<xsd:attribute name="instanceName" type="xsd:string" use="optional"/>
 		<xsd:attribute name="idlFile" type="xsd:string" use="optional"/>
 		<xsd:attribute name="type" type="xsd:string" use="required"/>
-		<xsd:attribute name="path" type="xsd:string" use="optional"/>
 	</xsd:complexType>
 
 	<xsd:complexType name="transmission_method">
 		<xsd:attribute name="kind" type="xsd:string" use="required"/>
-	</xsd:complexType>
-
-	<xsd:complexType name="parameter">
-		<xsd:attribute name="name" type="xsd:string" use="required"/>
-		<xsd:attribute name="defaultValue" type="xsd:string" use="optional"/>
 	</xsd:complexType>
 
 	<xsd:complexType name="language">

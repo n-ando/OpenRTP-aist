@@ -10,7 +10,6 @@ import jp.go.aist.rtm.rtcbuilder.generator.param.idl.ServiceClassParam;
 import jp.go.aist.rtm.rtcbuilder.ui.Perspective.LanguageProperty;
 
 public abstract class GenerateManager {
-	public static String RTC_PROFILE_PARAMETERS_INAPPLICABLE = "RTC_PROFILE_PARAMETERS_INAPPLICABLE";
 	public static String RTC_PROFILE_SERVICE_PORTS_INAPPLICABLE = "RTC_PROFILE_SERVICE_PORTS_INAPPLICABLE";
 
 	// 生成対象言語
@@ -29,7 +28,7 @@ public abstract class GenerateManager {
 
 	// 生成対象言語名称(引数用)
 	public String getTargetVersion() {
-		return IRtcBuilderConstants.RTM_VERSION_100;
+		return IRtcBuilderConstants.DEFAULT_RTM_VERSION;
 	}
 
 	// 特定のタグを適用対象外とするか否か

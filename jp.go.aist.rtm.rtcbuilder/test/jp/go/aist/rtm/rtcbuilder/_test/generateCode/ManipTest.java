@@ -11,6 +11,7 @@ import jp.go.aist.rtm.rtcbuilder.generator.param.GeneratorParam;
 import jp.go.aist.rtm.rtcbuilder.generator.param.RtcParam;
 import jp.go.aist.rtm.rtcbuilder.generator.param.ServicePortInterfaceParam;
 import jp.go.aist.rtm.rtcbuilder.generator.param.ServicePortParam;
+import jp.go.aist.rtm.rtcbuilder.generator.param.idl.IdlPathParam;
 
 public class ManipTest extends TestBase {
 
@@ -42,7 +43,7 @@ public class ManipTest extends TestBase {
 		ServicePortParam service1 = new ServicePortParam("sv_name", 0);
 		List<ServicePortInterfaceParam> srvinterts = new ArrayList<ServicePortInterfaceParam>(); 
 		ServicePortInterfaceParam int1 = new ServicePortInterfaceParam(service1, "if_name", "", "", 
-				rootPath + "/resource/100/CXX/idlmodule/serviceArgStruct/MyServiceModuleTypeDef.idl", "MyService", "", 0);
+				rootPath + "/resource/100/CXX/idlmodule/serviceArgStruct/MyServiceModuleTypeDef.idl", "MyService", 0);
 		srvinterts.add(int1);
 		service1.getServicePortInterfaces().addAll(srvinterts);
 		List<ServicePortParam> srvports = new ArrayList<ServicePortParam>();
@@ -77,7 +78,7 @@ public class ManipTest extends TestBase {
 		ServicePortParam service1 = new ServicePortParam("sV1",0);
 		List<ServicePortInterfaceParam> srvinterts = new ArrayList<ServicePortInterfaceParam>(); 
 		ServicePortInterfaceParam int1 = new ServicePortInterfaceParam(service1, "sIF1", "", "sIFv", 
-				rootPath + "resource/100/CXX/idltype/IDLType1/TestIDL.idl", "ComFk", "", 0);
+				rootPath + "resource/100/CXX/idltype/IDLType1/TestIDL.idl", "ComFk", 0);
 		srvinterts.add(int1);
 		service1.getServicePortInterfaces().addAll(srvinterts);
 		List<ServicePortParam> srvports = new ArrayList<ServicePortParam>();
@@ -110,11 +111,13 @@ public class ManipTest extends TestBase {
 		rtcParam.setExecutionRate(1000.0);;
 		rtcParam.setComponentKind("DataFlowComponent");
 
+		rtcParam.getIdlSearchPathList().add(new IdlPathParam(rootPath + "/resource/100/CXX/Manip", false));
+
 		ServicePortParam service1 = new ServicePortParam("sv_name", 0);
 		List<ServicePortInterfaceParam> srvinterts = new ArrayList<ServicePortInterfaceParam>();
 		ServicePortInterfaceParam int1 = new ServicePortInterfaceParam(
 				service1, "if_name", "", "if_variable_name", rootPath + "/resource/100/CXX/Manip/ManipulatorCommonInterface_MiddleLevel.idl",
-				"ManipulatorCommonInterface_Middle", rootPath + "/resource/100/CXX/Manip", 0);
+				"ManipulatorCommonInterface_Middle", 0);
 		srvinterts.add(int1);
 		service1.getServicePortInterfaces().addAll(srvinterts);
 		List<ServicePortParam> srvports = new ArrayList<ServicePortParam>();

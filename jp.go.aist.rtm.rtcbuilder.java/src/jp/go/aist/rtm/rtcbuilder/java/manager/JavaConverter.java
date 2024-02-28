@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 import jp.go.aist.rtm.rtcbuilder.IRtcBuilderConstants;
+import jp.go.aist.rtm.rtcbuilder.fsm.StateParam;
+import jp.go.aist.rtm.rtcbuilder.fsm.TransitionParam;
 import jp.go.aist.rtm.rtcbuilder.generator.param.ConfigSetParam;
 import jp.go.aist.rtm.rtcbuilder.generator.param.DataPortParam;
 import jp.go.aist.rtm.rtcbuilder.generator.param.RtcParam;
@@ -162,6 +164,29 @@ public class JavaConverter {
 		return portTypes;
 	}
 
+	public List<String> getEventTypes(StateParam param) {
+		List<String> eventTypes = new ArrayList<String>();
+		for (TransitionParam trans : param.getAllTransList()) {
+			if(trans.existDataType()==false) continue;
+			
+			if (!eventTypes.contains(trans.getDataType())) {
+				eventTypes.add(trans.getDataType());
+			}
+		}
+		return eventTypes;
+	}
+	
+	public List<String> getEachEventTypes(StateParam param) {
+		List<String> eventTypes = new ArrayList<String>();
+		for (TransitionParam trans : param.getTransList()) {
+			if(trans.existDataType()==false) continue;
+			
+			if (!eventTypes.contains(trans.getDataType())) {
+				eventTypes.add(trans.getDataType());
+			}
+		}
+		return eventTypes;
+	}
 	/**
 	 * パラメータの型一覧を取得する
 	 * 

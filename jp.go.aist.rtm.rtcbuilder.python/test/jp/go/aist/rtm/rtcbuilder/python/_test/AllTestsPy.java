@@ -4,6 +4,7 @@ import jp.go.aist.rtm.rtcbuilder.python._test._100.AISTTest;
 import jp.go.aist.rtm.rtcbuilder.python._test._100.BaseTest;
 import jp.go.aist.rtm.rtcbuilder.python._test._100.BuildTest;
 import jp.go.aist.rtm.rtcbuilder.python._test._100.ConfigSetTest;
+import jp.go.aist.rtm.rtcbuilder.python._test._100.FSMTest;
 import jp.go.aist.rtm.rtcbuilder.python._test._100.IDLPathTest;
 import jp.go.aist.rtm.rtcbuilder.python._test._100.PyDocTest;
 import jp.go.aist.rtm.rtcbuilder.python._test._100.PyIDLInheritTest;
@@ -29,6 +30,8 @@ public class AllTestsPy {
 		suite.addTestSuite(PyIDLType.class);
 		suite.addTestSuite(BuildTest.class);
 		suite.addTestSuite(IDLPathTest.class);
+		
+		suite.addTestSuite(FSMTest.class);
 		//$JUnit-END$
 		return suite;
 	}

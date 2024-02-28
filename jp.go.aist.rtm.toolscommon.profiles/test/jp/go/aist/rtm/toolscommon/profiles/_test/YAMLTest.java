@@ -2,12 +2,12 @@ package jp.go.aist.rtm.toolscommon.profiles._test;
 
 import jp.go.aist.rtm.toolscommon.profiles.util.YamlHandler;
 
-import org.openrtp.namespaces.rtc.version02.RtcProfile;
+import org.openrtp.namespaces.rtc.version03.RtcProfile;
 
 public class YAMLTest extends TestBase {
 
 	public void testRtcYamlExport() throws Exception{
-		String resourceDir = rootPath +  "\\resource\\RTC\\YAMLSample_RTC_Ver02Ex.yaml";
+		String resourceDir = rootPath +  "\\resource\\RTC\\YAMLSample_RTC_Ver03Ex.yaml";
 		String expected = readFile(resourceDir, "\r\n");
 		//
 		SampleProfileGenerator handle = new SampleProfileGenerator();

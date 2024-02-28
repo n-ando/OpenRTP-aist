@@ -11,6 +11,7 @@ import static jp.go.aist.rtm.toolscommon.manager.ToolsCommonPreferenceManager.KE
 import static jp.go.aist.rtm.toolscommon.manager.ToolsCommonPreferenceManager.KEY_STATUS_OBSERVER_HB_TRYCOUNT;
 import static jp.go.aist.rtm.toolscommon.manager.ToolsCommonPreferenceManager.KEY_STATUS_OBSERVER_PORT_EVENT_RECV_MIN_INTERVAL;
 import static jp.go.aist.rtm.toolscommon.manager.ToolsCommonPreferenceManager.KEY_STATUS_OBSERVER_PORT_EVENT_SEND_MIN_INTERVAL;
+import static jp.go.aist.rtm.toolscommon.model.component.impl.CorbaComponentImpl.removeRemote_FullObject;
 import static jp.go.aist.rtm.toolscommon.model.component.impl.CorbaComponentImpl.synchronizeRemote_ActiveConfigurationSet;
 import static jp.go.aist.rtm.toolscommon.model.component.impl.CorbaComponentImpl.synchronizeRemote_ConfigurationSets;
 import static jp.go.aist.rtm.toolscommon.model.component.impl.CorbaComponentImpl.synchronizeRemote_EC_ComponentState;
@@ -28,6 +29,11 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.emf.ecore.EClass;
+import org.omg.PortableServer.Servant;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import jp.go.aist.rtm.toolscommon.manager.ToolsCommonPreferenceManager;
 import jp.go.aist.rtm.toolscommon.model.component.ComponentPackage;
 import jp.go.aist.rtm.toolscommon.model.component.CorbaComponent;
@@ -37,17 +43,10 @@ import jp.go.aist.rtm.toolscommon.model.component.util.CorbaObjectStore;
 import jp.go.aist.rtm.toolscommon.model.component.util.CorbaObserverStore;
 import jp.go.aist.rtm.toolscommon.model.component.util.ICorbaPortEventObserver;
 
-import org.eclipse.emf.ecore.EClass;
-import org.omg.PortableServer.Servant;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * <!-- begin-user-doc -->
  * An implementation of the model object '<em><b>Corba Status Observer</b></em>'.
  * <!-- end-user-doc -->
- * <p>
- * </p>
  *
  * @generated
  */
@@ -220,158 +219,165 @@ public class CorbaStatusObserverImpl extends CorbaObserverImpl implements CorbaS
 		}
 
 		String profId = (serviceProfile == null) ? "" : serviceProfile.id;
-		LOGGER.info("update_status({}, {}): id={}",
-				TYPE_NAMES[status_kind.value()], hint, profId);
+		LOGGER.info("update_status({}, {}): id={}", TYPE_NAMES[status_kind.value()], hint, profId);
 
 		if (CorbaObserverStore.eINSTANCE.isEmptyComponentReference(rtc)) {
 			return;
 		}
-		//
-		if (OpenRTM.StatusKind.COMPONENT_PROFILE.equals(status_kind)) {
-			// RTC.ComponentProfileの変更通知
-			synchronizeRemote_RTCComponentProfile(rtc);
-		}
-		if (OpenRTM.StatusKind.RTC_STATUS.equals(status_kind)) {
-			// RTC状態の変更通知
-			if (hint == null) {
-				return;
-			}
-			String[] ss = hint.split(":");
-			if (ss.length != 2) {
-				return;
-			}
-			String state = ss[0];
-			String id = ss[1];
+
+		try {
 			//
-			int stateValue = ExecutionContext.RTC_UNKNOWN;
-			if ("ACTIVE".equals(state)) {
-				stateValue = RTC.LifeCycleState._ACTIVE_STATE;
-			} else if ("INACTIVE".equals(state)) {
-				stateValue = RTC.LifeCycleState._INACTIVE_STATE;
-			} else if ("ERROR".equals(state)) {
-				stateValue = RTC.LifeCycleState._ERROR_STATE;
-			} else if ("FINALIZE".equals(state)) {
-				// H.Bタイムアウトを設定
-				HeartBeat hb = hbMap.get(rtc);
-				hb.setForceTimeOut(true);
-				return;
+			if (OpenRTM.StatusKind.COMPONENT_PROFILE.equals(status_kind)) {
+				// RTC.ComponentProfileの変更通知
+				synchronizeRemote_RTCComponentProfile(rtc);
 			}
-			//
-			RTC.ExecutionContext ec = CorbaObjectStore.eINSTANCE.findContext(
-					rtc, id);
-			CorbaObjectStore.eINSTANCE
-					.registComponentState(ec, rtc, stateValue);
-		}
-		if (OpenRTM.StatusKind.EC_STATUS.equals(status_kind)) {
-			// EC状態の変更通知
-			if (hint == null) {
-				return;
+			if (OpenRTM.StatusKind.RTC_STATUS.equals(status_kind)) {
+				// RTC状態の変更通知
+				if (hint == null) {
+					return;
+				}
+				String[] ss = hint.split(":");
+				if (ss.length != 2) {
+					return;
+				}
+				String state = ss[0];
+				String id = ss[1];
+				//
+				int stateValue = ExecutionContext.RTC_UNKNOWN;
+				if ("ACTIVE".equals(state)) {
+					stateValue = RTC.LifeCycleState._ACTIVE_STATE;
+				} else if ("INACTIVE".equals(state)) {
+					stateValue = RTC.LifeCycleState._INACTIVE_STATE;
+				} else if ("ERROR".equals(state)) {
+					stateValue = RTC.LifeCycleState._ERROR_STATE;
+				} else if ("FINALIZE".equals(state)) {
+					// H.Bタイムアウトを設定
+					HeartBeat hb = hbMap.get(rtc);
+					hb.setForceTimeOut(true);
+					return;
+				}
+				//
+				RTC.ExecutionContext ec = CorbaObjectStore.eINSTANCE.findContext(rtc, id);
+				CorbaObjectStore.eINSTANCE.registComponentState(ec, rtc, stateValue);
 			}
-			String[] ss = hint.split(":");
-			if (ss.length != 2) {
-				return;
-			}
-			String action = ss[0];
-			String id = ss[1];
-			//
-			if ("ATTACHED".equals(action) || "DETACHED".equals(action)) {
-				RTC.ExecutionContext oldEc = CorbaObjectStore.eINSTANCE.findContext(rtc, id);
+			if (OpenRTM.StatusKind.EC_STATUS.equals(status_kind)) {
+				// EC状態の変更通知
+				if (hint == null) {
+					return;
+				}
+				String[] ss = hint.split(":");
+				if (ss.length != 2) {
+					return;
+				}
+				String action = ss[0];
+				String id = ss[1];
 				//
-				LOGGER.trace("  sync RTC rtc=<{}>", rtc);
-				synchronizeRemote_RTCExecutionContexts(rtc);
-				//
-				RTC.ExecutionContext newEc = CorbaObjectStore.eINSTANCE.findContext(rtc, id);
-				//
-				RTC.ExecutionContext ec = null;
-				if ("ATTACHED".equals(action)) {
-					ec = newEc;
+				if ("ATTACHED".equals(action) || "DETACHED".equals(action)) {
+					RTC.ExecutionContext oldEc = CorbaObjectStore.eINSTANCE.findContext(rtc, id);
 					//
-					if (ec == null) {
-						// 自RTCが所有する ECに対して自RTCをアタッチした場合、RTC-ECの関連のコンテキストIDが 2つになる
-						// 1. RTC--<0>----->EC
-						// 2. RTC--<1000>-->EC
-						// このとき、ECから逆引きで 1つしかコンテキストIDが取得できないため、ローカルですべてのコンテキストIDを取得できない
-						// そのため、オブザーバ通知で受け取ったID値によるECの検索で、暫定的に補完しておく
+					LOGGER.trace("  sync RTC rtc=<{}>", rtc);
+					synchronizeRemote_RTCExecutionContexts(rtc);
+					//
+					RTC.ExecutionContext newEc = CorbaObjectStore.eINSTANCE.findContext(rtc, id);
+					//
+					RTC.ExecutionContext ec = null;
+					if ("ATTACHED".equals(action)) {
+						ec = newEc;
+						//
+						if (ec == null) {
+							// 自RTCが所有する ECに対して自RTCをアタッチした場合、RTC-ECの関連のコンテキストIDが 2つになる
+							// 1. RTC--<0>----->EC
+							// 2. RTC--<1000>-->EC
+							// このとき、ECから逆引きで 1つしかコンテキストIDが取得できないため、ローカルですべてのコンテキストIDを取得できない
+							// そのため、オブザーバ通知で受け取ったID値によるECの検索で、暫定的に補完しておく
+							try {
+								ec = rtc.get_context(Integer.parseInt(id));
+								CorbaObjectStore.eINSTANCE.registContext(rtc, id, ec);
+							} catch (Exception e) {
+								LOGGER.error("Fail to get RTC.ExecutionContext: rtc={} id={}", rtc, id);
+								LOGGER.error("ERROR:", e);
+							}
+						}
+					} else if ("DETACHED".equals(action)) {
+						ec = oldEc;
+					}
+					if (ec != null) {
 						try {
-							ec = rtc.get_context(Integer.parseInt(id));
-							CorbaObjectStore.eINSTANCE.registContext(rtc, id, ec);
-						} catch (Exception e) {
-							LOGGER.error("Fail to get RTC.ExecutionContext: rtc={} id={}", rtc, id);
-							LOGGER.error("ERROR:", e);
+							Thread.sleep(1000);
+						} catch (InterruptedException e) {
+							LOGGER.error("Fail to intarvel.", e);
+						}
+						LOGGER.trace("  sync EC: ec=<{}>", ec);
+						synchronizeRemote_EC_ECProfile(ec);
+						synchronizeRemote_EC_ComponentState(rtc, ec);
+						// 複合RTCの子情報の変更通知がないため、ECのアタッチ/デタッチ時にECオーナーを更新
+						RTC.ExecutionContextProfile ecprof = CorbaObjectStore.eINSTANCE.findECProfile(ec);
+						if (ecprof != null && ecprof.owner != null) {
+							synchronizeRemote_RTCRTObjects(ecprof.owner);
 						}
 					}
-				} else if ("DETACHED".equals(action)) {
-					ec = oldEc;
-				}
-				if (ec != null) {
-					try {
-						Thread.sleep(1000);
-					} catch (InterruptedException e) {
-						LOGGER.error("Fail to intarvel.", e);
+				} else if ("RATE_CHANGED".equals(action)) {
+					RTC.ExecutionContext ec = CorbaObjectStore.eINSTANCE.findContext(rtc, id);
+					if (ec != null) {
+						synchronizeRemote_EC_ECProfile(ec);
 					}
-					LOGGER.trace("  sync EC: ec=<{}>", ec);
-					synchronizeRemote_EC_ECProfile(ec);
-					synchronizeRemote_EC_ComponentState(rtc, ec);
-					// 複合RTCの子情報の変更通知がないため、ECのアタッチ/デタッチ時にECオーナーを更新
-					RTC.ExecutionContextProfile ecprof = CorbaObjectStore.eINSTANCE.findECProfile(ec);
-					if (ecprof != null && ecprof.owner != null) {
-						synchronizeRemote_RTCRTObjects(ecprof.owner);
+				} else if ("STARTUP".equals(action) || "SHUTDOWN".equals(action)) {
+					RTC.ExecutionContext ec = CorbaObjectStore.eINSTANCE.findContext(rtc, id);
+					if (ec != null) {
+						synchronizeRemote_EC_ECState(ec);
 					}
 				}
-			} else if ("RATE_CHANGED".equals(action)) {
-				RTC.ExecutionContext ec = CorbaObjectStore.eINSTANCE.findContext(rtc, id);
-				if (ec != null) {
-					synchronizeRemote_EC_ECProfile(ec);
+			}
+			if (OpenRTM.StatusKind.PORT_PROFILE.equals(status_kind)) {
+				// RTC.PortProfileの変更通知
+				if (hint == null) {
+					return;
 				}
-			} else if ("STARTUP".equals(action) || "SHUTDOWN".equals(action)) {
-				RTC.ExecutionContext ec = CorbaObjectStore.eINSTANCE.findContext(rtc, id);
-				if (ec != null) {
-					synchronizeRemote_EC_ECState(ec);
+				int p = hint.indexOf(":");
+				if (p == -1) {
+					return;
 				}
-			}
-		}
-		if (OpenRTM.StatusKind.PORT_PROFILE.equals(status_kind)) {
-			// RTC.PortProfileの変更通知
-			if (hint == null) {
-				return;
-			}
-			int p = hint.indexOf(":");
-			if (p == -1) {
-				return;
-			}
-			String action = hint.substring(0, p);
-			String port_name = hint.substring(p + 1);
-			//
-			if ("CONNECT".equals(action) || "DISCONNECT".equals(action)) {
-				synchronizeRemote_RTCPortProfile(rtc, port_name);
-			} else if ("ADD".equals(action) || "REMOVE".equals(action)) {
-				synchronizeRemote_RTCComponentProfile(rtc);
-			} else if ("SEND".equals(action) || "RECEIVE".equals(action)) {
-				for (ICorbaPortEventObserver obs : CorbaObserverStore.eINSTANCE.findPortEventObserver(this.rtc)) {
-					obs.notifyEvent(action, port_name);
-				}
-			}
-		}
-		if (OpenRTM.StatusKind.CONFIGURATION.equals(status_kind)) {
-			// ConfigurationSetの変更通知
-			if (hint == null) {
-				return;
-			}
-			int p = hint.indexOf(":");
-			if (p == -1) {
-				return;
-			}
-			String action = hint.substring(0, p);
-			if ("ACTIVATE_CONFIG_SET".equals(action)) {
-				synchronizeRemote_ActiveConfigurationSet(rtc);
-			} else {
-				synchronizeRemote_ConfigurationSets(rtc);
-				// 複合RTCの公開ポート変更の通知がないので、ConfigurationSetの通知時にプロファイルを更新
-				RTC.ComponentProfile prof = CorbaObjectStore.eINSTANCE
-						.findRTCProfile(rtc);
-				if (prof != null && prof.category != null && prof.category.startsWith("composite.")) {
+				String action = hint.substring(0, p);
+				String port_name = hint.substring(p + 1);
+				//
+				if ("CONNECT".equals(action) || "DISCONNECT".equals(action)) {
+					synchronizeRemote_RTCPortProfile(rtc, port_name);
+				} else if ("ADD".equals(action) || "REMOVE".equals(action)) {
 					synchronizeRemote_RTCComponentProfile(rtc);
+				} else if ("SEND".equals(action) || "RECEIVE".equals(action)) {
+					for (ICorbaPortEventObserver obs : CorbaObserverStore.eINSTANCE.findPortEventObserver(this.rtc)) {
+						obs.notifyEvent(action, port_name);
+					}
 				}
+			}
+			if (OpenRTM.StatusKind.CONFIGURATION.equals(status_kind)) {
+				// ConfigurationSetの変更通知
+				if (hint == null) {
+					return;
+				}
+				int p = hint.indexOf(":");
+				if (p == -1) {
+					return;
+				}
+				String action = hint.substring(0, p);
+				if ("ACTIVATE_CONFIG_SET".equals(action)) {
+					synchronizeRemote_ActiveConfigurationSet(rtc);
+				} else {
+					synchronizeRemote_ConfigurationSets(rtc);
+					// 複合RTCの公開ポート変更の通知がないので、ConfigurationSetの通知時にプロファイルを更新
+					RTC.ComponentProfile prof = CorbaObjectStore.eINSTANCE.findRTCProfile(rtc);
+					if (prof != null && prof.category != null && prof.category.startsWith("composite.")) {
+						synchronizeRemote_RTCComponentProfile(rtc);
+					}
+				}
+			}
+		} catch (RuntimeException e) {
+			LOGGER.error("Fail to sync: rtc={}", rtc);
+			LOGGER.error("ERROR:", e);
+			// 同期エラー時に強制的にタイムアウトにする
+			HeartBeat hb = hbMap.get(rtc);
+			if (hb != null) {
+				hb.setForceTimeOut(true);
 			}
 		}
 	}

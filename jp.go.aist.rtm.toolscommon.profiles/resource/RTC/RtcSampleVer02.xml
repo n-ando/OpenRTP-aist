@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<rtc:RtcProfile rtc:version="0.2" rtc:id="RTC:SampleVender:SampleCategory:SampleComponent:1.0.0" xmlns:rtcExt="http://www.openrtp.org/namespaces/rtc_ext" xmlns:rtcDoc="http://www.openrtp.org/namespaces/rtc_doc" xmlns:rtc="http://www.openrtp.org/namespaces/rtc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <rtc:BasicInfo xsi:type="rtcExt:basic_info_ext" rtcExt:saveProject="Output Project" rtc:updateDate="2008-04-18T14:00:00" rtc:creationDate="2008-04-18T14:00:00" rtc:hardwareProfile="SampleProfile" rtc:abstract="SampleAbstract" rtc:version="1.0.0" rtc:vendor="SampleVendor" rtc:maxInstances="1" rtc:executionType="PeriodicExecutionContext" rtc:executionRate="1000.0" rtc:description="SampleDescription" rtc:category="SampleCategory" rtc:rtcType="Normal" rtc:componentKind="DataFlowComponent" rtc:activityType="PERIODIC" rtc:componentType="STATIC" rtc:name="SampleComponent">
+<rtc:RtcProfile rtc:version="0.2" rtc:id="RTC:SampleVender:SampleCategory:SampleComponent:1.0.0" xmlns:rtc="http://www.openrtp.org/namespaces/rtc" xmlns:rtcExt="http://www.openrtp.org/namespaces/rtc_ext" xmlns:rtcDoc="http://www.openrtp.org/namespaces/rtc_doc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <rtc:BasicInfo xsi:type="rtcExt:basic_info_ext" rtcExt:saveProject="Output Project" rtc:updateDate="2008-04-18T14:00:00.000+09:00" rtc:creationDate="2008-04-18T14:00:00.000+09:00" rtc:hardwareProfile="SampleProfile" rtc:abstract="SampleAbstract" rtc:version="1.0.0" rtc:vendor="SampleVendor" rtc:maxInstances="1" rtc:executionType="PeriodicExecutionContext" rtc:executionRate="1000.0" rtc:description="SampleDescription" rtc:category="SampleCategory" rtc:rtcType="Normal" rtc:componentKind="DataFlowComponent" rtc:activityType="PERIODIC" rtc:componentType="STATIC" rtc:name="SampleComponent">
         <rtcDoc:Doc rtcDoc:reference="SampleReference" rtcDoc:license="SampleLicense" rtcDoc:creator="SampleCreator" rtcDoc:algorithm="SampleAlgorithm" rtcDoc:inout="SampleBasicInout" rtcDoc:description="SampleBasicDecription"/>
         <rtcExt:VersionUpLogs>2008/04/18 14:00:00:Ver1.0</rtcExt:VersionUpLogs>
         <rtcExt:VersionUpLogs>2008/04/18 17:00:00:Ver1.1</rtcExt:VersionUpLogs>
@@ -108,10 +108,10 @@
     </rtc:DataPorts>
     <rtc:DataPorts xsi:type="rtcExt:dataport_ext" rtcExt:position="RIGHT" rtcExt:variableName="Out2Var" rtc:subscriptionType="New,Periodic" rtc:dataflowType="Push,Pull" rtc:interfaceType="CorbaPort" rtc:type="RTC::TimedDouble" rtc:name="outport2" rtc:portType="DataOutPort"/>
     <rtc:ServicePorts xsi:type="rtcExt:serviceport_ext" rtcExt:position="LEFT" rtc:name="SrvPort1">
-        <rtc:ServiceInterface xsi:type="rtcExt:serviceinterface_ext" rtcExt:variableName="IF1VarName" rtc:path="IF1SearchPath" rtc:type="IF1Type" rtc:idlFile="IF1Idlfile.idl" rtc:instanceName="IF1Instance" rtc:direction="Provided" rtc:name="S1IF1">
+        <rtc:ServiceInterface xsi:type="rtcExt:serviceinterface_ext" rtcExt:variableName="IF1VarName" rtc:type="IF1Type" rtc:idlFile="IF1Idlfile.idl" rtc:instanceName="IF1Instance" rtc:direction="Provided" rtc:name="S1IF1">
             <rtcDoc:Doc rtcDoc:docPostCondition="if1 PostCond" rtcDoc:docPreCondition="if1 PreCond" rtcDoc:docException="if1 Exception" rtcDoc:docReturn="if1 Return" rtcDoc:docArgument="if1 Argument" rtcDoc:description="if1 description"/>
         </rtc:ServiceInterface>
-        <rtc:ServiceInterface xsi:type="rtcExt:serviceinterface_ext" rtc:path="IF2SearchPath" rtc:type="IF2Type" rtc:idlFile="IF2Idlfile.idl" rtc:instanceName="IF2Instance" rtc:direction="Required" rtc:name="S1IF2"/>
+        <rtc:ServiceInterface xsi:type="rtcExt:serviceinterface_ext" rtc:type="IF2Type" rtc:idlFile="IF2Idlfile.idl" rtc:instanceName="IF2Instance" rtc:direction="Required" rtc:name="S1IF2"/>
         <rtc:TransMethods rtc:kind="CORBA"/>
         <rtcDoc:Doc rtcDoc:ifdescription="ServicePort1 I/F description" rtcDoc:description="ServicePort1 description"/>
     </rtc:ServicePorts>
@@ -119,8 +119,6 @@
         <rtc:TransMethods rtc:kind="TCP"/>
         <rtcDoc:Doc rtcDoc:ifdescription="ServicePort2 I/F description" rtcDoc:description="ServicePort2 description"/>
     </rtc:ServicePorts>
-    <rtc:Parameters rtc:defaultValue="param_def1" rtc:name="param1"/>
-    <rtc:Parameters rtc:defaultValue="param_def2" rtc:name="param2"/>
     <rtc:Language xsi:type="rtcExt:language_ext" rtc:kind="Java">
         <rtcExt:targets rtcExt:os="Linux" rtcExt:langVersion="JDK6">
             <rtcExt:osVersions>2.4</rtcExt:osVersions>

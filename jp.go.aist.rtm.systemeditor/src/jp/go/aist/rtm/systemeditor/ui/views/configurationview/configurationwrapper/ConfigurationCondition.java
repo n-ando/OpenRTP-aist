@@ -537,7 +537,7 @@ public class ConfigurationCondition {
 	 * @return 換算した値
 	 */
 	public String getValueByStep(int step, ConfigurationWidget widget,
-			String previousValue) {
+			String previousValue, String stepSizeStr) {
 		if (this.min == null || this.max == null)
 			return "0"; //$NON-NLS-1$
 		if (step < 0) {
@@ -551,7 +551,7 @@ public class ConfigurationCondition {
 		double dprev = Double.valueOf(previousValue);
 		double dvalue = dmin + (widget.getSliderStep() * step);
 		dvalue = (dvalue > dmax) ? dmax : dvalue;
-		if (isInt()) {
+		if (isInt() && stepSizeStr.indexOf(".") == -1) {
 			if (dvalue > dprev && dvalue < dprev + 1) {
 				dvalue = dprev + 1;
 			} else if (dvalue < dprev && dvalue > dprev - 1) {
@@ -559,7 +559,15 @@ public class ConfigurationCondition {
 			}
 			return Integer.toString((int) dvalue);
 		} else {
-			return Double.toString(new BigDecimal(dvalue).setScale(getDigits(),
+			int digit = getDigits();
+			int d_point = stepSizeStr.indexOf(".");
+			if (d_point != -1) {
+				int digitSS = stepSizeStr.length() - d_point - 1;
+				if(digit < digitSS) {
+					digit = digitSS;
+				}
+			}
+			return Double.toString(new BigDecimal(dvalue).setScale(digit,
 					BigDecimal.ROUND_HALF_EVEN).doubleValue());
 		}
 	}

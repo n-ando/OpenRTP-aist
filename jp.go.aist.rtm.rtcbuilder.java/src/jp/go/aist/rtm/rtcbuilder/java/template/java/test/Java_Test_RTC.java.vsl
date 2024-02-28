@@ -1,4 +1,5 @@
 // -*- Java -*-
+// <rtc-template block="description">
 /*!
  * @file ${rtcParam.name}Test.java
 #set( $Date$ = "dummy" )
@@ -15,6 +16,7 @@
 #set( $Id$ = "dummy" )
  * \$Id$
  */
+// </rtc-template>
 
 import jp.go.aist.rtm.RTC.Manager;
 import jp.go.aist.rtm.RTC.RTObject_impl;
@@ -65,14 +67,6 @@ public class ${rtcParam.name}Test implements RtcNewFunc, RtcDeleteFunc, Register
             "conf.__type__.${configParam.name}", "${configParam.type}",
 #end
 
-#end
-#if( ${rtcParam.configParameterParams.size()} > 0 )
-            // System Configuration
-#foreach($parameterParam in ${rtcParam.configParameterParams})  
-#if( ${parameterParam.isNonPeriodic()} )
-            "${parameterParam.configName}", "${parameterParam.defaultVal}",
-#end
-#end
 #end
     	    ""
             };

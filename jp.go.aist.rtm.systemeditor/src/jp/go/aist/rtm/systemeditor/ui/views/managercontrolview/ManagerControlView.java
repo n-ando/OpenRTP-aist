@@ -129,7 +129,7 @@ public class ManagerControlView extends ViewPart {
 		});
 		//
 		this.loadableModuleButton = new Button(menuButtonComposite, SWT.TOP);
-		this.loadableModuleButton.setText("Loadable Modules");
+		this.loadableModuleButton.setText("Loadable Mod.");
 		gd = new GridData();
 		gd.widthHint = MENU_BUTTON_WIDTH;
 		this.loadableModuleButton.setLayoutData(gd);
@@ -147,7 +147,7 @@ public class ManagerControlView extends ViewPart {
 		});
 		//
 		this.loadedeModuleButton = new Button(menuButtonComposite, SWT.TOP);
-		this.loadedeModuleButton.setText("Loaded Modules");
+		this.loadedeModuleButton.setText("Loaded Mod.");
 		gd = new GridData();
 		gd.widthHint = MENU_BUTTON_WIDTH;
 		this.loadedeModuleButton.setLayoutData(gd);

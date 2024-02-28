@@ -25,6 +25,7 @@ import jp.go.aist.rtm.toolscommon.model.component.util.ICorbaPortEventObserver;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link jp.go.aist.rtm.toolscommon.model.component.CorbaComponent#getRTCComponentProfile <em>RTC Component Profile</em>}</li>
  *   <li>{@link jp.go.aist.rtm.toolscommon.model.component.CorbaComponent#getRTCExecutionContexts <em>RTC Execution Contexts</em>}</li>
@@ -37,7 +38,6 @@ import jp.go.aist.rtm.toolscommon.model.component.util.ICorbaPortEventObserver;
  *   <li>{@link jp.go.aist.rtm.toolscommon.model.component.CorbaComponent#getStatusObserver <em>Status Observer</em>}</li>
  *   <li>{@link jp.go.aist.rtm.toolscommon.model.component.CorbaComponent#getLogObserver <em>Log Observer</em>}</li>
  * </ul>
- * </p>
  *
  * @see jp.go.aist.rtm.toolscommon.model.component.ComponentPackage#getCorbaComponent()
  * @model

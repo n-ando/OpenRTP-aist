@@ -15,6 +15,7 @@ public class DataPortParam extends PortBaseParam implements Serializable {
 	private String type;
 	private String varname;
 	private String idlFile;
+	private String dispIdlFile;
 	private String dataFlowType;
 	private String interfaceType;
 	private String subscriptionType;
@@ -63,6 +64,7 @@ public class DataPortParam extends PortBaseParam implements Serializable {
 		this.doc_operation = "";
 		//
 		this.idlFile = "";
+		this.dispIdlFile = "";
 		this.dataFlowType = "";
 		this.interfaceType = "";
 		this.subscriptionType = "";
@@ -88,6 +90,7 @@ public class DataPortParam extends PortBaseParam implements Serializable {
 		this.doc_operation = doc_operation;
 		//
 		this.idlFile = "";
+		this.dispIdlFile = "";
 		this.dataFlowType = "";
 		this.interfaceType = "";
 		this.subscriptionType = "";
@@ -107,6 +110,9 @@ public class DataPortParam extends PortBaseParam implements Serializable {
 	}
 	public String getIdlFile() {
 		return idlFile;
+	}
+	public String getDispIdlFile() {
+		return dispIdlFile;
 	}
 	public String getDataFlowType() {
 		return dataFlowType;
@@ -141,6 +147,9 @@ public class DataPortParam extends PortBaseParam implements Serializable {
 	public void setVarName(String varname) {
 		checkUpdated(this.varname, varname);
 		this.varname = varname;
+	}
+	public void setDispIdlFile(String file) {
+		this.dispIdlFile = file;
 	}
 	public void setIdlFile(String file) {
 		checkUpdated(this.idlFile, file);

@@ -1,50 +1,48 @@
 package jp.go.aist.rtm.toolscommon.profiles.util;
 
+import static jp.go.aist.rtm.toolscommon.profiles.util.XmlHandler.createXMLGregorianCalendar;
+
 import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 
-import javax.xml.datatype.XMLGregorianCalendar;
-
-import jp.go.aist.rtm.toolscommon.profiles.nl.Messages;
-
-import org.openrtp.namespaces.rtc.version02.ActionStatusDoc;
-import org.openrtp.namespaces.rtc.version02.Actions;
 import org.openrtp.namespaces.rtc.version02.And;
-import org.openrtp.namespaces.rtc.version02.BasicInfoExt;
-import org.openrtp.namespaces.rtc.version02.ConfigurationExt;
-import org.openrtp.namespaces.rtc.version02.ConfigurationSet;
 import org.openrtp.namespaces.rtc.version02.ConstraintHashType;
 import org.openrtp.namespaces.rtc.version02.ConstraintListType;
 import org.openrtp.namespaces.rtc.version02.ConstraintType;
 import org.openrtp.namespaces.rtc.version02.ConstraintUnitType;
-import org.openrtp.namespaces.rtc.version02.DataportExt;
-import org.openrtp.namespaces.rtc.version02.DocAction;
-import org.openrtp.namespaces.rtc.version02.DocBasic;
-import org.openrtp.namespaces.rtc.version02.DocConfiguration;
-import org.openrtp.namespaces.rtc.version02.DocDataport;
-import org.openrtp.namespaces.rtc.version02.DocServiceinterface;
-import org.openrtp.namespaces.rtc.version02.DocServiceport;
-import org.openrtp.namespaces.rtc.version02.LanguageExt;
-import org.openrtp.namespaces.rtc.version02.Library;
-import org.openrtp.namespaces.rtc.version02.ObjectFactory;
 import org.openrtp.namespaces.rtc.version02.Or;
-import org.openrtp.namespaces.rtc.version02.Parameter;
-import org.openrtp.namespaces.rtc.version02.Position;
-import org.openrtp.namespaces.rtc.version02.Property;
 import org.openrtp.namespaces.rtc.version02.PropertyIsBetween;
 import org.openrtp.namespaces.rtc.version02.PropertyIsEqualTo;
 import org.openrtp.namespaces.rtc.version02.PropertyIsGreaterThan;
 import org.openrtp.namespaces.rtc.version02.PropertyIsGreaterThanOrEqualTo;
 import org.openrtp.namespaces.rtc.version02.PropertyIsLessThan;
 import org.openrtp.namespaces.rtc.version02.PropertyIsLessThanOrEqualTo;
-import org.openrtp.namespaces.rtc.version02.RtcProfile;
-import org.openrtp.namespaces.rtc.version02.ServiceinterfaceExt;
-import org.openrtp.namespaces.rtc.version02.ServiceportExt;
-import org.openrtp.namespaces.rtc.version02.TargetEnvironment;
-import org.openrtp.namespaces.rtc.version02.TransmissionMethod;
 
-import com.sun.org.apache.xerces.internal.jaxp.datatype.XMLGregorianCalendarImpl;
+import org.openrtp.namespaces.rtc.version03.ActionStatusDoc;
+import org.openrtp.namespaces.rtc.version03.Actions;
+import org.openrtp.namespaces.rtc.version03.BasicInfoExt;
+import org.openrtp.namespaces.rtc.version03.ConfigurationExt;
+import org.openrtp.namespaces.rtc.version03.ConfigurationSet;
+import org.openrtp.namespaces.rtc.version03.DataportExt;
+import org.openrtp.namespaces.rtc.version03.DocAction;
+import org.openrtp.namespaces.rtc.version03.DocBasic;
+import org.openrtp.namespaces.rtc.version03.DocConfiguration;
+import org.openrtp.namespaces.rtc.version03.DocDataport;
+import org.openrtp.namespaces.rtc.version03.DocServiceinterface;
+import org.openrtp.namespaces.rtc.version03.DocServiceport;
+import org.openrtp.namespaces.rtc.version03.LanguageExt;
+import org.openrtp.namespaces.rtc.version03.Library;
+import org.openrtp.namespaces.rtc.version03.ObjectFactory;
+import org.openrtp.namespaces.rtc.version03.Position;
+import org.openrtp.namespaces.rtc.version03.Property;
+import org.openrtp.namespaces.rtc.version03.RtcProfile;
+import org.openrtp.namespaces.rtc.version03.ServiceinterfaceExt;
+import org.openrtp.namespaces.rtc.version03.ServiceportExt;
+import org.openrtp.namespaces.rtc.version03.TargetEnvironment;
+import org.openrtp.namespaces.rtc.version03.TransmissionMethod;
+
+import jp.go.aist.rtm.toolscommon.profiles.nl.Messages;
 
 public class YamlSubHandlerVer02 {
 
@@ -77,8 +75,8 @@ public class YamlSubHandlerVer02 {
 					basic.setVersion((String)basicY.get("version"));
 					basic.setAbstract((String)basicY.get("abstract"));
 					basic.setHardwareProfile((String)basicY.get("hardwareProfile"));
-					basic.setCreationDate(createDateTimeFromYaml((Map)basicY.get("creationDate")));
-					basic.setUpdateDate(createDateTimeFromYaml((Map)basicY.get("updateDate")));
+					basic.setCreationDate(createXMLGregorianCalendar((Map<String, Integer>) basicY.get("creationDate")));
+					basic.setUpdateDate(createXMLGregorianCalendar((Map<String, Integer>) basicY.get("updateDate")));
 					//Basic Doc
 					Map docbasicY = (Map)basicY.get("rtcDoc::doc");
 					if( docbasicY != null ) {
@@ -275,19 +273,6 @@ public class YamlSubHandlerVer02 {
 					}
 				}
 
-				//Parameter
-				List paramsInfoY = (List)profileY.get("parameters");
-				if( paramsInfoY != null ) {
-					for(int intIdx=0;intIdx<paramsInfoY.size();intIdx++ ) {
-						Map paramInfoY = (Map)paramsInfoY.get(intIdx);
-						if( paramInfoY != null ) {
-							Parameter param = factory.createParameter();
-							param.setName((String)paramInfoY.get("name"));
-							param.setDefaultValue((String)paramInfoY.get("defaultValue"));
-							profile.getParameters().add(param);
-						}
-					}
-				}
 				//Language
 				Map langInfoY = (Map)profileY.get("language");
 				if( langInfoY != null ) {
@@ -345,16 +330,6 @@ public class YamlSubHandlerVer02 {
 		return profile;
 	}
 
-	private XMLGregorianCalendar createDateTimeFromYaml(Map dateY) {
-		return XMLGregorianCalendarImpl.createDateTime(
-				((Integer)dateY.get("year")).intValue(),
-				((Integer)dateY.get("month")).intValue(),
-				((Integer)dateY.get("day")).intValue(),
-				((Integer)dateY.get("hour")).intValue(),
-				((Integer)dateY.get("minute")).intValue(),
-				((Integer)dateY.get("second")).intValue() );
-	}
-
 	private ActionStatusDoc createActionFromYaml(Map actionY) {
 		ObjectFactory factory = new ObjectFactory();
 		ActionStatusDoc actionStatus = factory.createActionStatusDoc();
@@ -389,7 +364,7 @@ public class YamlSubHandlerVer02 {
 		dataport.setUnit((String)yamlMap.get("unit"));
 		//constraint
 		Map constY = (Map)yamlMap.get("constraint");
-		dataport.setConstraint(convertConstraint(factory, constY));
+		dataport.setConstraint(convertConstraintV2(constY));
 		//Doc
 		Map portdocY = (Map)yamlMap.get("rtcDoc::doc");
 		if( portdocY != null ) {
@@ -552,6 +527,135 @@ public class YamlSubHandlerVer02 {
 		return result;
 	}
 
+	private org.openrtp.namespaces.rtc.version02.ConstraintType convertConstraintV2(Map constY) throws Exception {
+		org.openrtp.namespaces.rtc.version02.ObjectFactory factory = new org.openrtp.namespaces.rtc.version02.ObjectFactory();
+		org.openrtp.namespaces.rtc.version02.ConstraintType result = null;
+		if( constY!=null ) {
+			result = factory.createConstraintType();
+			if( constY.get("constraintUnitType")!=null ) {
+				Map unitY = (Map)constY.get("constraintUnitType");
+				org.openrtp.namespaces.rtc.version02.ConstraintUnitType unitP = factory.createConstraintUnitType();
+				result.setConstraintUnitType(unitP);
+				Map targetY = null;
+				String literal = null;
+				//
+				if( unitY.get("key")!=null ) {
+					literal = (String)unitY.get("key");
+					if( literal==null || literal.length()<=0 )
+						throw new Exception(Messages.getString("YamlSubHandlerVer02.126"));
+					unitP.setKey(literal);
+				}
+				//
+				if( unitY.get("propertyIsEqualTo")!=null ) {
+					targetY = (Map)unitY.get("propertyIsEqualTo");
+					literal = (String)targetY.get("literal");
+					if( literal==null || literal.length()<=0 )
+						throw new Exception(Messages.getString("YamlSubHandlerVer02.125"));
+					org.openrtp.namespaces.rtc.version02.PropertyIsEqualTo equalP = factory.createPropertyIsEqualTo();
+					unitP.setPropertyIsEqualTo(equalP);
+					equalP.setLiteral(literal);
+					return result;
+
+				} else if( unitY.get("propertyIsGreaterThan")!=null ) {
+					targetY = (Map)unitY.get("propertyIsGreaterThan");
+					literal = (String)targetY.get("literal");
+					if( literal==null || literal.length()<=0 )
+						throw new Exception(Messages.getString("YamlSubHandlerVer02.134"));
+					org.openrtp.namespaces.rtc.version02.PropertyIsGreaterThan greaterP = factory.createPropertyIsGreaterThan();
+					unitP.setPropertyIsGreaterThan(greaterP);
+					greaterP.setLiteral(literal);
+					return result;
+
+				} else if( unitY.get("propertyIsGreaterThanOrEqualTo")!=null ) {
+					targetY = (Map)unitY.get("propertyIsGreaterThanOrEqualTo");
+					literal = (String)targetY.get("literal");
+					if( literal==null || literal.length()<=0 )
+						throw new Exception(Messages.getString("YamlSubHandlerVer02.124"));
+					org.openrtp.namespaces.rtc.version02.PropertyIsGreaterThanOrEqualTo greaterEqualP = factory.createPropertyIsGreaterThanOrEqualTo();
+					unitP.setPropertyIsGreaterThanOrEqualTo(greaterEqualP);
+					greaterEqualP.setLiteral(literal);
+					return result;
+
+				} else 	if( unitY.get("propertyIsLessThan")!=null ) {
+					targetY = (Map)unitY.get("propertyIsLessThan");
+					literal = (String)targetY.get("literal");
+					if( literal==null || literal.length()<=0 )
+						throw new Exception(Messages.getString("YamlSubHandlerVer02.142"));
+					org.openrtp.namespaces.rtc.version02.PropertyIsLessThan lessP = factory.createPropertyIsLessThan();
+					unitP.setPropertyIsLessThan(lessP);
+					lessP.setLiteral(literal);
+					return result;
+
+				} else 	if( unitY.get("propertyIsLessThanOrEqualTo")!=null ) {
+					targetY = (Map)unitY.get("propertyIsLessThanOrEqualTo");
+					literal = (String)targetY.get("literal");
+					if( literal==null || literal.length()<=0 )
+						throw new Exception(Messages.getString("YamlSubHandlerVer02.146"));
+					org.openrtp.namespaces.rtc.version02.PropertyIsLessThanOrEqualTo lessEqualP = factory.createPropertyIsLessThanOrEqualTo();
+					unitP.setPropertyIsLessThanOrEqualTo(lessEqualP);
+					lessEqualP.setLiteral(literal);
+					return result;
+
+				} else 	if( unitY.get("propertyIsBetween")!=null ) {
+					targetY = (Map)unitY.get("propertyIsBetween");
+					String lower = (String)targetY.get("lowerBoundary");
+					if( lower==null || lower.length()<=0 )
+						throw new Exception(Messages.getString("YamlSubHandlerVer02.150"));
+					String upper = (String)targetY.get("upperBoundary");
+					if( upper==null || upper.length()<=0 )
+						throw new Exception(Messages.getString("YamlSubHandlerVer02.152"));
+
+					org.openrtp.namespaces.rtc.version02.PropertyIsBetween betweenP = factory.createPropertyIsBetween();
+					unitP.setPropertyIsBetween(betweenP);
+					betweenP.setLowerBoundary(lower);
+					betweenP.setUpperBoundary(upper);
+					return result;
+
+				} else 	if( unitY.get("and")!=null ) {
+					targetY = (Map)unitY.get("and");
+					List constraintListY = (List)targetY.get("constraint");
+					org.openrtp.namespaces.rtc.version02.And andP = factory.createAnd();
+					unitP.setAnd(andP);
+					for(int index=0;index<constraintListY.size();index++) {
+						andP.getConstraint().add(convertConstraintV2((Map)constraintListY.get(index)));
+					}
+					return result;
+
+				} else if( unitY.get("or")!=null ) {
+					targetY = (Map)unitY.get("or");
+					List constraintListY = (List)targetY.get("constraint");
+					org.openrtp.namespaces.rtc.version02.Or orP = factory.createOr();
+					unitP.setOr(orP);
+					for(int index=0;index<constraintListY.size();index++) {
+						orP.getConstraint().add(convertConstraintV2((Map)constraintListY.get(index)));
+					}
+					return result;
+				}
+
+			} else if( constY.get("constraintListType")!=null ) {
+				Map listY = (Map)constY.get("constraintListType");
+				org.openrtp.namespaces.rtc.version02.ConstraintListType listP = factory.createConstraintListType();
+				result.setConstraintListType(listP);
+				List constraintListY = (List)listY.get("constraint");
+				for(int index=0;index<constraintListY.size();index++) {
+					listP.getConstraint().add(convertConstraintV2((Map)constraintListY.get(index)));
+				}
+				return result;
+
+			} else if( constY.get("constraintHashType")!=null ) {
+				Map hashY = (Map)constY.get("constraintHashType");
+				org.openrtp.namespaces.rtc.version02.ConstraintHashType hashP = factory.createConstraintHashType();
+				result.setConstraintHashType(hashP);
+				List constraintListY = (List)hashY.get("constraint");
+				for(int index=0;index<constraintListY.size();index++) {
+					hashP.getConstraint().add(convertConstraintV2((Map)constraintListY.get(index)));
+				}
+				return result;
+			}
+		}
+		return result;
+	}
+	
 	@SuppressWarnings("unchecked")
 	private ServiceportExt createServicePortFromYaml(Map yamlMap) {
 		ObjectFactory factory = new ObjectFactory();
@@ -606,7 +710,6 @@ public class YamlSubHandlerVer02 {
 				serviceIF.setInstanceName((String)interfaceY.get("instanceName"));
 				serviceIF.setIdlFile((String)interfaceY.get("idlFile"));
 				serviceIF.setType((String)interfaceY.get("type"));
-				serviceIF.setPath((String)interfaceY.get("path"));
 				//Doc
 				Map ifDocY = (Map)interfaceY.get("rtcDoc::doc");
 				if( ifDocY != null ) {

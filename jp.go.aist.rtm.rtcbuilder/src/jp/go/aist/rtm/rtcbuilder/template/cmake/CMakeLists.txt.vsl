@@ -1,10 +1,4 @@
-cmake_minimum_required(VERSION 2.8)
-if(POLICY CMP0046)
- cmake_policy(SET CMP0046 OLD)
-endif()
-if(POLICY CMP0048)
-  cmake_policy(SET CMP0048 OLD)
-endif()
+cmake_minimum_required(VERSION 3.5.1)
 
 project(${rtcParam.name})
 string(TOLOWER ${dol}{PROJECT_NAME} PROJECT_NAME_LOWER)
@@ -22,7 +16,7 @@ set(PROJECT_MAINTAINER "unknown")
 #end
 set(PROJECT_TYPE "c++/${rtcParam.category}")
 
-find_package(OpenRTM)
+find_package(OpenRTM REQUIRED)
 set(RTM_VER ${dol}{OPENRTM_VERSION})
 set(RTM_SHORT_VER ${dol}{OPENRTM_VERSION_MAJOR}${dol}{OPENRTM_VERSION_MINOR}${dol}{OPENRTM_VERSION_PATCH})
 
@@ -70,12 +64,14 @@ if(PKGMGR AND NOT LINUX_PACKAGE_GENERATOR)
      OUTPUT_VARIABLE CPACK_DEBIAN_PACKAGE_ARCHITECTURE
      OUTPUT_STRIP_TRAILING_WHITESPACE)
    message(STATUS "Package manager is ${dol}{PKGMGR}. Arch is ${dol}{CPACK_DEBIAN_PACKAGE_ARCHITECTURE}.")
+   set(CPACK_DEBIAN_PACKAGE_DEPENDS "openrtm2 (>= ${dol}{OPENRTM_VERSION_MAJOR}.${dol}{OPENRTM_VERSION_MINOR}.${dol}{OPENRTM_VERSION_PATCH})")
  endif()
  if(${dol}{PKGMGR} MATCHES "RPM")
    execute_process(COMMAND uname "-m"
      OUTPUT_VARIABLE CPACK_RPM_PACKAGE_ARCHITECTURE
      OUTPUT_STRIP_TRAILING_WHITESPACE)
    message(STATUS "Package manager is ${dol}{PKGMGR}. Arch is ${dol}{CPACK_RPM_PACKAGE_ARCHITECTURE}.")
+   set(CPACK_RPM_PACKAGE_REQUIRES "openrtm2 (>= ${dol}{OPENRTM_VERSION_MAJOR}.${dol}{OPENRTM_VERSION_MINOR}.${dol}{OPENRTM_VERSION_PATCH})")
  endif()
 endif()
 
@@ -87,7 +83,7 @@ ADD_CUSTOM_TARGET (${dol}{PROJECT_NAME}_uninstall "${dol}{CMAKE_COMMAND}" -P
 
 ${sharp}option(BUILD_EXAMPLES "Build and install examples" OFF)
 option(BUILD_DOCUMENTATION "Build the documentation" OFF)
-${sharp}option(BUILD_TESTS "Build the tests" OFF)
+option(BUILD_TESTS "Build the tests" OFF)
 ${sharp}option(BUILD_TOOLS "Build the tools" OFF)
 option(BUILD_IDL "Build and install idl" ON)
 option(BUILD_SOURCES "Build and install sources" OFF)
@@ -108,18 +104,18 @@ endif (${dol}{CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 
 ${sharp} Set up installation directories
 if(WIN32)
-   set(OPENRTM_SHARE_PREFIX "OpenRTM-aist/${dol}{RTM_VER}/Components/${dol}{PROJECT_TYPE}")
+   set(RTM_COMPONENT_PREFIX "Components/${dol}{PROJECT_TYPE}")
+   set(OPENRTM_SHARE_PREFIX "OpenRTM-aist/${dol}{RTM_VER}/${dol}{RTM_COMPONENT_PREFIX}")
    set(INSTALL_PREFIX ${dol}{PROJECT_NAME})
    if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
-      set(CMAKE_INSTALL_PREFIX "${dol}{OPENRTM_DIR}Components/${dol}{PROJECT_TYPE}/${dol}{PROJECT_NAME}" CACHE PATH "..." FORCE)
+      set(CMAKE_INSTALL_PREFIX "${dol}{OPENRTM_DIR}/${dol}{RTM_COMPONENT_PREFIX}" CACHE PATH "..." FORCE)
+   else()
+      set(CMAKE_INSTALL_PREFIX "${dol}{CMAKE_INSTALL_PREFIX}/${dol}{OPENRTM_SHARE_PREFIX}")
    endif()
 else(WIN32)
    set(OPENRTM_SHARE_PREFIX "share/openrtm-${dol}{OPENRTM_VERSION_MAJOR}.${dol}{OPENRTM_VERSION_MINOR}")
    set(INSTALL_PREFIX "${dol}{OPENRTM_SHARE_PREFIX}/components/${dol}{PROJECT_TYPE}/${dol}{PROJECT_NAME}")
 endif(WIN32)
-       
-${sharp} Universal settings
-${sharp}enable_testing()
 
 ${sharp} Subdirectories
 add_subdirectory(cmake)
@@ -135,13 +131,21 @@ if(BUILD_IDL)
     add_subdirectory(idl)
 endif(BUILD_IDL)
 
+file(GLOB IDL_FILES "${dol}{CMAKE_CURRENT_SOURCE_DIR}/idl/*.idl")
+if(IDL_FILES)
+    install(FILES ${dol}{IDL_FILES} DESTINATION ${dol}{INSTALL_PREFIX}/idl
+        COMPONENT component)
+endif(IDL_FILES)
+
 add_subdirectory(include)
 MAP_ADD_STR(headers  "include/" comp_hdrs)
 add_subdirectory(src)
 
-${sharp}if(BUILD_TESTS)
-${sharp}    add_subdirectory(test)
-${sharp}endif(BUILD_TESTS)
+if(BUILD_TESTS)
+    ${sharp} Universal settings
+    enable_testing()
+    add_subdirectory(test)
+endif(BUILD_TESTS)
 
 ${sharp}if(BUILD_TOOLS)
 ${sharp}    add_subdirectory(tools)
@@ -153,11 +157,8 @@ if(BUILD_SOURCES)
 endif(BUILD_SOURCES)
 
 ${sharp} Package creation
-${sharp} By default, do not warn when built on machines using only VS Express:
-IF(NOT DEFINED CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_NO_WARNINGS)
-SET(CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_NO_WARNINGS ON)
-ENDIF()
-include(InstallRequiredSystemLibraries)
+${sharp} By default, do not include the system runtime library.
+${sharp}include(InstallRequiredSystemLibraries)
 set(PROJECT_EXECUTABLES ${dol}{PROJECT_NAME}Comp
     "${dol}{PROJECT_NAME}Comp.exe")
 
@@ -169,5 +170,3 @@ configure_file("${dol}{PROJECT_SOURCE_DIR}/cmake/cpack_options.cmake.in"
 set(CPACK_PROJECT_CONFIG_FILE ${dol}{cpack_options})
 include(${dol}{CPACK_PROJECT_CONFIG_FILE})
 include(CPack)
-
-

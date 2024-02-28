@@ -1,10 +1,12 @@
-set(comp_srcs ${rtcParam.name}.cpp #foreach($providerIdlFile in ${rtcParam.providerIdlPathes})${tmpltHelper.getFilenameNoExt(${providerIdlFile.idlFile})}${tmpltHelper.serviceImplSuffix}.cpp #end)
+set(comp_srcs ${rtcParam.name}.cpp #foreach($providerIdlFile in ${rtcParam.providerIdlPathes})${tmpltHelper.getFilenameNoExt(${providerIdlFile.idlFile})}${tmpltHelper.serviceImplSuffix}.cpp #end#if( ${tmpltHelper.checkFSM(${rtcParam})})${rtcParam.name}FSM.cpp#end)
 set(standalone_srcs ${rtcParam.name}Comp.cpp)
 
 if(${dol}{OPENRTM_VERSION_MAJOR} LESS 2)
   set(OPENRTM_CFLAGS ${dol}{OPENRTM_CFLAGS} ${dol}{OMNIORB_CFLAGS})
   set(OPENRTM_INCLUDE_DIRS ${OPENRTM_INCLUDE_DIRS} ${dol}{OMNIORB_INCLUDE_DIRS})
   set(OPENRTM_LIBRARY_DIRS ${OPENRTM_LIBRARY_DIRS} ${dol}{OMNIORB_LIBRARY_DIRS})
+else()
+  set(CMAKE_CXX_STANDARD 11)
 endif()
 
 if (DEFINED OPENRTM_INCLUDE_DIRS)

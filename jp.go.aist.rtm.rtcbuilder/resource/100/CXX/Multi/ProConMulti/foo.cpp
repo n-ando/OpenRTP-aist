@@ -1,17 +1,19 @@
 // -*- C++ -*-
+// <rtc-template block="description">
 /*!
  * @file  foo.cpp
  * @brief test module
- * @date $Date$
  *
- * $Id$
  */
-
+// </rtc-template>
 #include "foo.h"
-
 // Module specification
 // <rtc-template block="module_spec">
+#if RTM_MAJOR_VERSION >= 2
+static const char* const foo_spec[] =
+#else
 static const char* foo_spec[] =
+#endif
   {
     "implementation_id", "foo",
     "type_name",         "foo",
@@ -27,7 +29,6 @@ static const char* foo_spec[] =
     ""
   };
 // </rtc-template>
-
 /*!
  * @brief constructor
  * @param manager Maneger Object
@@ -41,134 +42,87 @@ foo::foo(RTC::Manager* manager)
     m_MySVPro2Port("MySVPro2"),
     m_MyConProPort("MyConPro"),
     m_MyConPro2Port("MyConPro2")
-
     // </rtc-template>
 {
 }
-
 /*!
  * @brief destructor
  */
 foo::~foo()
 {
 }
-
-
-
 RTC::ReturnCode_t foo::onInitialize()
 {
   // Registration: InPort/OutPort/Service
   // <rtc-template block="registration">
   // Set InPort buffers
   addInPort("in1", m_in1In);
-  
   // Set OutPort buffer
   addOutPort("out1", m_out1Out);
-  
   // Set service provider to Ports
   m_MySVProPort.registerProvider("myserviceP1", "MyService", m_myserviceP1);
   m_MySVPro2Port.registerProvider("myserviceP2", "MyService2", m_myserviceP2);
-  
   // Set service consumers to Ports
   m_MyConProPort.registerConsumer("myservice0", "MyService", m_myservice0);
   m_MyConPro2Port.registerConsumer("myservice2", "DAQService", m_myservice2);
-  
   // Set CORBA Service Ports
   addPort(m_MySVProPort);
   addPort(m_MySVPro2Port);
   addPort(m_MyConProPort);
   addPort(m_MyConPro2Port);
-  
   // </rtc-template>
-
   // <rtc-template block="bind_config">
   // </rtc-template>
-  
   return RTC::RTC_OK;
 }
-
 /*
 RTC::ReturnCode_t foo::onFinalize()
 {
   return RTC::RTC_OK;
 }
 */
-
-/*
-RTC::ReturnCode_t foo::onStartup(RTC::UniqueId ec_id)
-{
-  return RTC::RTC_OK;
-}
-*/
-
-/*
-RTC::ReturnCode_t foo::onShutdown(RTC::UniqueId ec_id)
-{
-  return RTC::RTC_OK;
-}
-*/
-
-/*
-RTC::ReturnCode_t foo::onActivated(RTC::UniqueId ec_id)
-{
-  return RTC::RTC_OK;
-}
-*/
-
-/*
-RTC::ReturnCode_t foo::onDeactivated(RTC::UniqueId ec_id)
-{
-  return RTC::RTC_OK;
-}
-*/
-
-/*
-RTC::ReturnCode_t foo::onExecute(RTC::UniqueId ec_id)
-{
-  return RTC::RTC_OK;
-}
-*/
-
-/*
-RTC::ReturnCode_t foo::onAborting(RTC::UniqueId ec_id)
-{
-  return RTC::RTC_OK;
-}
-*/
-
-/*
-RTC::ReturnCode_t foo::onError(RTC::UniqueId ec_id)
-{
-  return RTC::RTC_OK;
-}
-*/
-
-/*
-RTC::ReturnCode_t foo::onReset(RTC::UniqueId ec_id)
-{
-  return RTC::RTC_OK;
-}
-*/
-
-/*
-RTC::ReturnCode_t foo::onStateUpdate(RTC::UniqueId ec_id)
-{
-  return RTC::RTC_OK;
-}
-*/
-
-/*
-RTC::ReturnCode_t foo::onRateChanged(RTC::UniqueId ec_id)
-{
-  return RTC::RTC_OK;
-}
-*/
-
-
-
+//RTC::ReturnCode_t foo::onStartup(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
+//RTC::ReturnCode_t foo::onShutdown(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
+//RTC::ReturnCode_t foo::onActivated(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
+//RTC::ReturnCode_t foo::onDeactivated(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
+//RTC::ReturnCode_t foo::onExecute(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
+//RTC::ReturnCode_t foo::onAborting(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
+//RTC::ReturnCode_t foo::onError(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
+//RTC::ReturnCode_t foo::onReset(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
+//RTC::ReturnCode_t foo::onStateUpdate(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
+//RTC::ReturnCode_t foo::onRateChanged(RTC::UniqueId /*ec_id*/)
+//{
+//  return RTC::RTC_OK;
+//}
 extern "C"
 {
- 
   void fooInit(RTC::Manager* manager)
   {
     coil::Properties profile(foo_spec);
@@ -176,7 +130,4 @@ extern "C"
                              RTC::Create<foo>,
                              RTC::Delete<foo>);
   }
-  
-};
-
-
+}

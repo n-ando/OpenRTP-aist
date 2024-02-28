@@ -256,7 +256,7 @@ public class NamingObjectNodeImpl extends CorbaNodeImpl implements NamingObjectN
 									.resolve(new NameComponent[] {
 											binding.binding_name[binding.binding_name.length - 1] });
 							if (result != null && !SynchronizationSupport.ping(result)) {
-								LOGGER.debug("getRemoteAttributeValue: ping lost for result=<{}>", result);
+								// LOGGER.debug("getRemoteAttributeValue: ping lost for result=<{}>", result);
 								result = null;
 							}
 						} catch (Exception e) {

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.function.Consumer;
 
 import jp.go.aist.rtm.toolscommon.model.component.Component;
 import jp.go.aist.rtm.toolscommon.model.component.Port;
@@ -25,14 +26,15 @@ import org.slf4j.LoggerFactory;
  */
 public class SynchronizationSupport {
 
-	private static final Logger LOGGER = LoggerFactory
-			.getLogger(SynchronizationSupport.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(SynchronizationSupport.class);
 
 	private LocalObject localObject;
 
 	private MappingRule mappingRule;
 
 	private SynchronizationManager synchronizationManager;
+
+	private boolean _failSynchronizeRemote = false;
 
 	/**
 	 * コンストラクタ
@@ -62,6 +64,13 @@ public class SynchronizationSupport {
 	}
 
 	/**
+	 * リモートの同期にエラーがあった場合はtrue
+	 */
+	public boolean failSynchronizeRemote() {
+		return this._failSynchronizeRemote;
+	}
+
+	/**
 	 * リモートオブジェクトを同期する。
 	 */
 	public synchronized void synchronizeRemote() {
@@ -71,16 +80,19 @@ public class SynchronizationSupport {
 		} catch (Exception e) {
 			// void
 		}
-		if (!mappingRule.getClassMapping().allowZombie()
-				&& (remoteObjects == null || !ping(remoteObjects))) {
-			remove();
+		if (!mappingRule.getClassMapping().allowZombie() && (remoteObjects == null || !ping(remoteObjects))) {
+			this._failSynchronizeRemote = true;
 			return;
 		}
-		synchronizeRemoteAttribute();
-		if (localObject.eContainer() instanceof SystemDiagram) {
-			if (localObject instanceof Component) {
-				((Component) localObject).synchronizeRemoteChildComponents();
-			}
+		try {
+			runInDiagramComponent(localObject, comp -> {
+				comp.synchronizeRemoteAttribute(null);
+				comp.synchronizeRemoteChildComponents();
+			});
+		} catch (RuntimeException e) {
+			LOGGER.error("Fail to synchronize remote.");
+			LOGGER.error("ERROR:", e);
+			this._failSynchronizeRemote = true;
 		}
 	}
 
@@ -90,13 +102,29 @@ public class SynchronizationSupport {
 	 * 包含参照をたどり、すべてのローカルオブジェクトを同期する
 	 */
 	public synchronized void synchronizeLocal() {
-		synchronizeLocalAttribute();
-		synchronizeLocalReference();
-		if (localObject.eContainer() instanceof SystemDiagram) {
-			if (localObject instanceof Component) {
-				((Component) localObject).synchronizeChildComponents();
+		runInDiagramComponent(localObject, comp -> {
+			comp.synchronizeLocalAttribute(null);
+		});
+		for (AttributeMapping attibuteMapping : mappingRule.getAllAttributeMappings()) {
+			try {
+				attibuteMapping.syncronizeLocal(localObject);
+			} catch (Exception e) {
+				LOGGER.error("Fail to synchronize local", e);
 			}
 		}
+		runInDiagramComponent(localObject, comp -> {
+			comp.synchronizeLocalReference();
+		});
+		for (ReferenceMapping referenceMapping : mappingRule.getAllReferenceMappings()) {
+			try {
+				referenceMapping.syncronizeLocal(localObject);
+			} catch (Exception e) {
+				LOGGER.error("Fail to synchronize local", e);
+			}
+		}
+		runInDiagramComponent(localObject, comp -> {
+			comp.synchronizeChildComponents();
+		});
 		for (Object content : localObject.eContents()) {
 			if (content instanceof LocalObject) {
 				LocalObject lo = (LocalObject) content;
@@ -107,53 +135,11 @@ public class SynchronizationSupport {
 		}
 	}
 
-	private void remove() {
-		EObject container = localObject.eContainer();
-		if (container == null) {
-			EcoreUtil.remove(localObject);
-			return;
-		}
-		synchronized (container) {
-			EcoreUtil.remove(localObject);
-		}
-	}
-
-	private void synchronizeRemoteAttribute() {
-		if (localObject.eContainer() instanceof SystemDiagram) {
-			if (localObject instanceof Component) {
-				((Component) localObject).synchronizeRemoteAttribute(null);
-			}
-		}
-	}
-
-	private void synchronizeLocalAttribute() {
-		if (localObject.eContainer() instanceof SystemDiagram) {
-			if (localObject instanceof Component) {
-				((Component) localObject).synchronizeLocalAttribute(null);
-			}
-		}
-		for (AttributeMapping attibuteMapping : mappingRule
-				.getAllAttributeMappings()) {
-			try {
-				attibuteMapping.syncronizeLocal(localObject);
-			} catch (Exception e) {
-				LOGGER.error("Fail to synchronize local", e);
-			}
-		}
-	}
-
-	private void synchronizeLocalReference() {
-		if (localObject.eContainer() instanceof SystemDiagram) {
-			if (localObject instanceof Component) {
-				((Component) localObject).synchronizeLocalReference();
-			}
-		}
-		for (ReferenceMapping referenceMapping : mappingRule
-				.getAllReferenceMappings()) {
-			try {
-				referenceMapping.syncronizeLocal(localObject);
-			} catch (Exception e) {
-				LOGGER.error("Fail to synchronize local", e);
+	// SystemDiagramに配置されたコンポーネントの場合に実行
+	void runInDiagramComponent(LocalObject local, Consumer<Component> consumer) {
+		if (local.eContainer() instanceof SystemDiagram) {
+			if (local instanceof Component) {
+				consumer.accept((Component) local);
 			}
 		}
 	}

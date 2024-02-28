@@ -1,0 +1,321 @@
+--- 
+rtcProfile: 
+  actions: 
+    onAborting:
+      "rtcDoc::doc":
+        description: on_aborting description
+        postCondition: on_aborting Post_condition
+        preCondition: on_aborting Pre_condition
+      implemented: true
+    onAction:
+      "rtcDoc::doc":
+        description: on_action description
+        postCondition: on_action Post_condition
+        preCondition: on_action Pre_condition
+      implemented: false
+    onActivated:
+      "rtcDoc::doc":
+        description: on_activated description
+        postCondition: on_activated Post_condition
+        preCondition: on_activated Pre_condition
+      implemented: true
+    onDeactivated:
+      "rtcDoc::doc":
+        description: on_deactivated description
+        postCondition: on_deactivated Post_condition
+        preCondition: on_deactivated Pre_condition
+      implemented: false
+    onError:
+      "rtcDoc::doc":
+        description: on_error description
+        postCondition: on_error Post_condition
+        preCondition: on_error Pre_condition
+      implemented: false
+    onExecute:
+      "rtcDoc::doc":
+        description: on_execute description
+        postCondition: on_execute Post_condition
+        preCondition: on_execute Pre_condition
+      implemented: false
+    onFinalize:
+      "rtcDoc::doc":
+        description: on_finalize description
+        postCondition: on_finalize Post_condition
+        preCondition: on_finalize Pre_condition
+      implemented: false
+    onInitialize:
+      "rtcDoc::doc":
+        description: on_initialize description
+        postCondition: on_initialize Post_condition
+        preCondition: on_initialize Pre_condition
+      implemented: true
+    onModeChanged:
+      "rtcDoc::doc":
+        description: on_mode_cahnge description
+        postCondition: on_mode_cahnge Post_condition
+        preCondition: on_mode_cahnge Pre_condition
+      implemented: false
+    onRateChanged:
+      "rtcDoc::doc":
+        description: on_rate_changed description
+        postCondition: on_rate_changed Post_condition
+        preCondition: on_rate_changed Pre_condition
+      implemented: false
+    onReset:
+      "rtcDoc::doc":
+        description: on_reset description
+        postCondition: on_reset Post_condition
+        preCondition: on_reset Pre_condition
+      implemented: false
+    onShutdown:
+      "rtcDoc::doc":
+        description: on_shutdown description
+        postCondition: on_shutdown Post_condition
+        preCondition: on_shutdown Pre_condition
+      implemented: true
+    onStartup:
+      "rtcDoc::doc":
+        description: on_startup description
+        postCondition: on_startup Post_condition
+        preCondition: on_startup Pre_condition
+      implemented: false
+    onStateUpdate:
+      "rtcDoc::doc":
+        description: on_state_update description
+        postCondition: on_state_update Post_condition
+        preCondition: on_state_update Pre_condition
+      implemented: false
+  basicInfo:
+    abstract: SampleAbstract
+    activityType: PERIODIC
+    category: SampleCategory
+    "rtcExt::comment": Basic Comment
+    componentKind: DataFlowComponent
+    componentType: STATIC
+    creationDate:
+      day: 18
+      fractionalSecond: 0.000
+      hour: 14
+      millisecond: 0
+      minute: 0
+      month: 4
+      second: 0
+      timezone: 540
+      year: 2008
+    description: SampleDescription
+    "rtcDoc::doc":
+      algorithm: SampleAlgorithm
+      creator: SampleCreator
+      description: SampleBasicDecription
+      inout: SampleBasicInout
+      license: SampleLicense
+      reference: SampleReference
+    executionRate: 1000.0
+    executionType: PeriodicExecutionContext
+    hardwareProfile: hdProfile
+    maxInstances: 1
+    name: SampleComponent
+    "rtcExt::properties": 
+      -
+        name: BasicPropKey1
+        value: BasicPropVal2
+      -
+        name: BasicPropKey2
+        value: BasicPropVal2
+    rtcType: Normal
+    "rtcExt::saveProject": Output Project
+    updateDate:
+      day: 18
+      fractionalSecond: 0.000
+      hour: 14
+      millisecond: 0
+      minute: 0
+      month: 4
+      second: 0
+      timezone: 540
+      year: 2008
+    vendor: SampleVendor
+    version: 1.0.0
+    "rtcExt::versionUpLogs": 
+      - "2008/04/18 14:00:00:Ver1.0"
+      - "2008/04/18 17:00:00:Ver1.1"
+  configurationSet: 
+    configuration: 
+      -
+        "rtcExt::comment": conf1_comment
+        defaultValue: "1"
+        "rtcDoc::doc":
+          constraint: config_constraint1
+          dataname: dataname1
+          defaultValue: default1
+          description: config_Desc1
+          range: config_range1
+          unit: config_unit1
+        name: config1
+        "rtcExt::properties": 
+          -
+            name: Conf1PropKey1
+            value: Conf1PropVal1
+          -
+            name: Conf1PropKey2
+            value: Conf1PropVal2
+        type: int
+        unit: conf1_unit
+        "rtcExt::variableName": var1
+      -
+        defaultValue: Sample
+        name: config2
+        type: String
+        "rtcExt::variableName": var2
+  dataPorts: 
+    -
+      "rtcExt::comment": dp1_comment
+      dataflowType: "Push,Pull"
+      "rtcDoc::doc":
+        description: In1Description
+        number: In1Number
+        occerrence: In1Occerrence
+        operation: In1Operation
+        semantics: In1Semantics
+        type: In1Type
+        unit: In1Unit
+      idlFile: DataPort1.idl
+      interfaceType: CorbaPort
+      name: inport1
+      portType: DataInPort
+      "rtcExt::position": LEFT
+      "rtcExt::properties": 
+        -
+          name: Dp1PropKey1
+          value: Dp1PropVal2
+        -
+          name: Dp1PropKey2
+          value: Dp1PropVal2
+      subscriptionType: "Periodic,New,Flush"
+      type: "RTC::TimedLong"
+      unit: dp1_unit
+      "rtcExt::variableName": In1Var
+    -
+      dataflowType: "Push,Pull"
+      interfaceType: CorbaPort
+      name: inport2
+      portType: DataInPort
+      "rtcExt::position": LEFT
+      subscriptionType: "New,Periodic"
+      type: "RTC::TimedDouble"
+      "rtcExt::variableName": In2Var
+    -
+      "rtcExt::comment": dp3_comment
+      dataflowType: Push
+      "rtcDoc::doc":
+        description: Out1Description
+        number: Out1Number
+        occerrence: Out1Occerrence
+        operation: Out1Operation
+        semantics: Out1Semantics
+        type: Out1Type
+        unit: Out1Unit
+      idlFile: dp1out.idl
+      interfaceType: CorbaPort
+      name: outport1
+      portType: DataOutPort
+      "rtcExt::position": RIGHT
+      "rtcExt::properties": 
+        -
+          name: Dp3PropKey1
+          value: Dp3PropVal1
+        -
+          name: Dp3PropKey2
+          value: Dp3PropVal2
+      subscriptionType: "New,Periodic"
+      type: "RTC::TimedLong"
+      unit: dp1out_unit
+      "rtcExt::variableName": Out1Var
+    -
+      dataflowType: "Push,Pull"
+      interfaceType: CorbaPort
+      name: outport2
+      portType: DataOutPort
+      "rtcExt::position": RIGHT
+      subscriptionType: "New,Periodic"
+      type: "RTC::TimedDouble"
+      "rtcExt::variableName": Out2Var
+  id: "RTC:SampleVender:SampleCategory:SampleComponent:1.0.0"
+  language:
+    kind: Java
+    "rtcExt::targets": 
+      -
+        cpus: 
+          - i386
+          - ARM
+        langVersion: JDK6
+        libraries: 
+          -
+            name: SampleLib1
+            other: Sample1
+            version: "1.0"
+          -
+            name: SampleLib2
+            other: Sample2
+            version: "1.5"
+        os: Linux
+        osVersions: 
+          - "2.4"
+          - "2.6"
+  servicePorts: 
+    -
+      "rtcExt::comment": srv1_comment
+      "rtcDoc::doc":
+        description: ServicePort1 description
+        ifdescription: ServicePort1 I/F description
+      name: SrvPort1
+      "rtcExt::position": LEFT
+      "rtcExt::properties": 
+        -
+          name: Srv1PropKey1
+          value: Srv1PropVal2
+        -
+          name: Srv1PropKey2
+          value: Srv1PropVal2
+      serviceInterface: 
+        -
+          "rtcExt::comment": srv1_comment
+          direction: Provided
+          "rtcDoc::doc":
+            description: if1 Description
+            docArgument: if1 Argument
+            docException: if1 Exception
+            docPostCondition: if1 PostCond
+            docPreCondition: if1 PreCond
+            docReturn: if1 Return
+          idlFile: IF1Idlfile.idl
+          instanceName: IF1Instance
+          name: S1IF1
+          "rtcExt::properties": 
+            -
+              name: IF1PropKey1
+              value: IF1PropVal1
+            -
+              name: IF1PropKey2
+              value: IF1PropVal2
+          type: IF1Type
+          "rtcExt::variableName": IF1VarName
+        -
+          direction: Required
+          idlFile: IF2Idlfile.idl
+          instanceName: IF2Instance
+          name: S1IF2
+          type: IF2Type
+          "rtcExt::variableName": IF2VarName
+      transMethods: 
+        -
+          kind: CORBA
+        -
+          kind: TCP/IP
+    -
+      "rtcDoc::doc":
+        description: ServicePort2 description
+        ifdescription: ServicePort2 I/F description
+      name: SrvPort2
+      "rtcExt::position": RIGHT
+  version: "0.3"

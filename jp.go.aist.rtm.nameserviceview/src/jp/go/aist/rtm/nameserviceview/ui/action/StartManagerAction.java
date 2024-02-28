@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jp.go.aist.rtm.nameserviceview.ui.views.nameserviceview.NameServiceView;
+import jp.go.aist.rtm.nameserviceview.util.NameServiceProcessHandler;
 import jp.go.aist.rtm.toolscommon.model.manager.RTCManager;
 import jp.go.aist.rtm.toolscommon.util.AdapterUtil;
 
@@ -21,10 +22,13 @@ public class StartManagerAction implements IViewActionDelegate {
 	private NameServiceView view;
 
 	private static String SCRIPT_WINDOWS = System.getenv("RTM_ROOT") + "bin" + Path.SEPARATOR + "rtcd-cxx-daemon.bat";
-	private static String SCRIPT_LINUX = "/usr/bin/rtcd";
+	
+	private static String SCRIPT_LINUX = "";
 
 	public void init(IViewPart view) {
 		this.view = (NameServiceView) view;
+		// find rtcd
+		SCRIPT_LINUX = NameServiceProcessHandler.searchCommand("rtcd2");
 	}
 
 	public void run(IAction action) {
@@ -76,6 +80,10 @@ public class StartManagerAction implements IViewActionDelegate {
 			target = SCRIPT_WINDOWS;
 		} else {
 			target = SCRIPT_LINUX;
+			if(target == null || target.length()==0) {
+				action.setEnabled(false);
+				return;
+			}
 		}
 		File targetFile = new File(target);
 		if(targetFile.exists()==false) {

@@ -21,7 +21,7 @@ import jp.go.aist.rtm.rtcbuilder.manager.GenerateManager;
 import jp.go.aist.rtm.toolscommon.profiles.util.XmlHandler;
 import jp.go.aist.rtm.toolscommon.profiles.util.YamlHandler;
 
-import org.openrtp.namespaces.rtc.version02.RtcProfile;
+import org.openrtp.namespaces.rtc.version03.RtcProfile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

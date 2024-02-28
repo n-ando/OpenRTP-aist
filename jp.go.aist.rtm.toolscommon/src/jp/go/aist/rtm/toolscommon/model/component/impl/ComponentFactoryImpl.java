@@ -43,7 +43,6 @@ import jp.go.aist.rtm.toolscommon.model.component.CorbaConfigurationSet;
 import jp.go.aist.rtm.toolscommon.model.component.CorbaConnectorProfile;
 import jp.go.aist.rtm.toolscommon.model.component.CorbaContextHandler;
 import jp.go.aist.rtm.toolscommon.model.component.CorbaExecutionContext;
-import jp.go.aist.rtm.toolscommon.model.component.CorbaLogObserver;
 import jp.go.aist.rtm.toolscommon.model.component.CorbaObserver;
 import jp.go.aist.rtm.toolscommon.model.component.CorbaPortSynchronizer;
 import jp.go.aist.rtm.toolscommon.model.component.CorbaStatusObserver;
@@ -128,7 +127,6 @@ public class ComponentFactoryImpl extends EFactoryImpl implements
 			case ComponentPackage.CORBA_CONTEXT_HANDLER: return createCorbaContextHandler();
 			case ComponentPackage.CORBA_OBSERVER: return createCorbaObserver();
 			case ComponentPackage.CORBA_STATUS_OBSERVER: return createCorbaStatusObserver();
-			case ComponentPackage.CORBA_LOG_OBSERVER: return createCorbaLogObserver();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -369,17 +367,7 @@ public class ComponentFactoryImpl extends EFactoryImpl implements
 		return corbaStatusObserver;
 	}
 
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public CorbaLogObserver createCorbaLogObserver() {
-		CorbaLogObserverImpl corbaLogObserver = new CorbaLogObserverImpl();
-		return corbaLogObserver;
-	}
-
-	/**
+		/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated

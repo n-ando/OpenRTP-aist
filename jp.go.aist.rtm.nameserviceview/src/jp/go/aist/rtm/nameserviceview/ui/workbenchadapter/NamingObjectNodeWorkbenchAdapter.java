@@ -13,9 +13,9 @@ public class NamingObjectNodeWorkbenchAdapter extends NamingContextNodeWorkbench
 	@Override
 	public ImageDescriptor getImageDescriptor(Object o) {
 		if (o instanceof NamingObjectNode && ((NamingObjectNode) o).isZombie()) {
-			return NameServiceViewPlugin.getImageDescriptor("icons/Zombie.gif");
+			return NameServiceViewPlugin.getImageDescriptor("icons/Zombie.png");
 		}
-		return NameServiceViewPlugin.getImageDescriptor("icons/Question.gif");
+		return NameServiceViewPlugin.getImageDescriptor("icons/Question.png");
 	}
 
 }

@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import jp.go.aist.rtm.rtcbuilder.fsm.StateParam;
 import jp.go.aist.rtm.rtcbuilder.generator.GeneratedResult;
 import jp.go.aist.rtm.rtcbuilder.generator.param.RtcParam;
 import jp.go.aist.rtm.rtcbuilder.template.TemplateHelper;
@@ -51,17 +52,16 @@ public class CommonGenerateManager extends GenerateManager {
 	public List<GeneratedResult> generateTemplateCode10(
 			Map<String, Object> contextMap) {
 		List<GeneratedResult> result = new ArrayList<GeneratedResult>();
+		RtcParam rtcParam = (RtcParam) contextMap.get("rtcParam");
+		if(rtcParam.isStaticFSM()) {
+			StateParam stateParam = rtcParam.getFsmParam();
+			stateParam.setEventParam(rtcParam);
+			contextMap.put("fsmParam", stateParam);
+		}
 
-		GeneratedResult gr;
-
-		gr = generateREADME(contextMap);
-		result.add(gr);
-
-		gr = generateRTCConf10(contextMap);
-		result.add(gr);
-
-		gr = generateComponentConf(contextMap);
-		result.add(gr);
+		result.add(generateREADME(contextMap));
+		result.add(generateRTCConf10(contextMap));
+		result.add(generateComponentConf(contextMap));
 
 		return result;
 	}
@@ -69,14 +69,9 @@ public class CommonGenerateManager extends GenerateManager {
 	// RTM 1.0
 
 	public GeneratedResult generateREADME(Map<String, Object> contextMap) {
-		RtcParam rtcParam = (RtcParam) contextMap.get("rtcParam");
-		String outfile = "README." + rtcParam.getName();
+		String outfile = "README.md";
 		String infile = "";
-		if(rtcParam.isChoreonoid()) {
-			infile = "common/README_Choreonoid.vsl";
-		} else {
-			infile = "common/README.vsl";
-		}
+		infile = "common/README.vsl";
 		return generate(infile, outfile, contextMap);
 	}
 

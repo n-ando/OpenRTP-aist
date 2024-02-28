@@ -8,23 +8,24 @@ import java.util.List;
 import jp.go.aist.rtm.toolscommon.model.component.ConfigurationSet;
 import jp.go.aist.rtm.toolscommon.model.component.NameValue;
 
-import org.junit.Test;
 import org.openrtp.namespaces.rtc.version02.And;
-import org.openrtp.namespaces.rtc.version02.Configuration;
-import org.openrtp.namespaces.rtc.version02.ConfigurationExt;
 import org.openrtp.namespaces.rtc.version02.ConstraintHashType;
 import org.openrtp.namespaces.rtc.version02.ConstraintListType;
 import org.openrtp.namespaces.rtc.version02.ConstraintType;
 import org.openrtp.namespaces.rtc.version02.ConstraintUnitType;
 import org.openrtp.namespaces.rtc.version02.Or;
-import org.openrtp.namespaces.rtc.version02.Property;
 import org.openrtp.namespaces.rtc.version02.PropertyIsBetween;
 import org.openrtp.namespaces.rtc.version02.PropertyIsEqualTo;
 import org.openrtp.namespaces.rtc.version02.PropertyIsGreaterThan;
 import org.openrtp.namespaces.rtc.version02.PropertyIsGreaterThanOrEqualTo;
 import org.openrtp.namespaces.rtc.version02.PropertyIsLessThan;
 import org.openrtp.namespaces.rtc.version02.PropertyIsLessThanOrEqualTo;
-import org.openrtp.namespaces.rtc.version02.RtcProfile;
+
+import org.junit.Test;
+import org.openrtp.namespaces.rtc.version03.Configuration;
+import org.openrtp.namespaces.rtc.version03.ConfigurationExt;
+import org.openrtp.namespaces.rtc.version03.Property;
+import org.openrtp.namespaces.rtc.version03.RtcProfile;
 
 
 public class RTCConfigurationParserTest {

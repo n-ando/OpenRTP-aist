@@ -43,10 +43,6 @@ public class ComponentPreferenceManager {
 	 */
 	public static final String Generate_Basic_ActivityType = getClassName() + "GENERATE_BASIC_ACTIVITY_TYPE";
 	/**
-	 * Component Kindのキー
-	 */
-	public static final String Generate_Basic_ComponentKind = getClassName() + "GENERATE_BASIC_COMPONENT_KIND";
-	/**
 	 * Max Instanceのキー
 	 */
 	public static final String Generate_Basic_Max_Instance = getClassName() + "GENERATE_BASIC_MAX_INSTANCES";
@@ -155,6 +151,18 @@ public class ComponentPreferenceManager {
 	public static final String Generate_ServiceIF_Suffix = getClassName() + "GENERATE_SERVICEIF_SUFFIX";
 	//
 	/**
+	 * EventPort 変数名のキー
+	 */
+	public static final String Generate_EventPort_VarName = getClassName() + "GENERATE_EVENTPORT_VARNAME";
+	/**
+	 * EventPort 接頭語のキー
+	 */
+	public static final String Generate_EventPort_Prefix = getClassName() + "GENERATE_EVENTPORT_PREFIX";
+	/**
+	 * EventPort 接尾語のキー
+	 */
+	public static final String Generate_EventPort_Suffix = getClassName() + "GENERATE_EVENTPORT_SUFFIX";
+	/**
 	 * バックアップファイル設定数のキー
 	 */
 	public static final String Generate_Backup_Num = getClassName() + "GENERATE_BACKUP_NUM";
@@ -167,7 +175,6 @@ public class ComponentPreferenceManager {
 	public static final String DEFAULT_VENDER = "VenderName";
 	public static final String DEFAULT_COMPONENT_TYPE = IRtcBuilderConstants.COMPONENT_TYPE_ITEMS[0];
 	public static final String DEFAULT_ACTIVITY_TYPE = IRtcBuilderConstants.ACTIVITY_TYPE_ITEMS[0];
-	public static final String DEFAULT_COMPONENT_KIND = IRtcBuilderConstants.COMPONENT_KIND_ITEMS[0];
 	public static final int DEFAULT_MAXINST = 1;
 	public static final String DEFAULT_EXECUTION_TYPE = IRtcBuilderConstants.EXECUTIONCONTEXT_TYPE_ITEMS[0];
 	public static final double DEFAULT_EXECUTION_RATE = 1000.0;
@@ -200,6 +207,10 @@ public class ComponentPreferenceManager {
 	public static final String DEFAULT_SERVICEIF_VARNAME = "";
 	public static final String DEFAULT_SERVICEIF_PREFIX = "";
 	public static final String DEFAULT_SERVICEIF_SUFFIX = "";
+	//
+	public static final String DEFAULT_EVENTPORT_VARNAME = "event_name";
+	public static final String DEFAULT_EVENTPORT_PREFIX = "";
+	public static final String DEFAULT_EVENTPORT_SUFFIX = "";
 	//
 	public static final int DEFAULT_BACKUP_NUM = 3;
 	
@@ -261,16 +272,6 @@ public class ComponentPreferenceManager {
 	 */
 	public String getBasic_ActivityType() {
 		return getStringStoreValue(Generate_Basic_ActivityType, DEFAULT_ACTIVITY_TYPE);
-	}
-
-	/**
-	 * コード生成時の Module Component Kind デフォルト値を取得する
-	 * 
-	 * @param key キー
-	 * @return Module Component Kind デフォルト値
-	 */
-	public String getBasic_ComponentKind() {
-		return getStringStoreValue(Generate_Basic_ComponentKind, DEFAULT_COMPONENT_KIND);
 	}
 
 	/**

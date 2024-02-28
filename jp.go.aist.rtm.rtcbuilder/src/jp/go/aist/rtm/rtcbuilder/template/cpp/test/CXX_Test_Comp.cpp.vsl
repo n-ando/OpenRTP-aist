@@ -1,28 +1,31 @@
 // -*- C++ -*-
+// <rtc-template block="description">
 /*!
  * @file ${rtcParam.name}TestComp.cpp
- * @brief Standalone component
- * @date ${dol}Date${dol}
+ * @brief Standalone component (test code)
 #parse("${template}/cpp/_doc.vsl")
- * ${dol}Id${dol}
  */
+// </rtc-template>
 
 ${sharp}include <rtm/Manager.h>
 ${sharp}include <iostream>
 ${sharp}include <string>
 ${sharp}include <stdlib.h>
+${sharp}include <rtm/CORBA_RTCUtil.h>
 ${sharp}include "${rtcParam.name}Test.h"
+${sharp}include "${rtcParam.name}.h"
 
 
 void MyModuleInit(RTC::Manager* manager)
 {
   ${rtcParam.name}TestInit(manager);
+  ${rtcParam.name}Init(manager);
   RTC::RtcBase* comp;
 
   // Create a component
   comp = manager->createComponent("${rtcParam.name}Test");
 
-  if (comp==NULL)
+  if (comp==nullptr)
   {
     std::cerr << "Component create failed." << std::endl;
     abort();
@@ -71,13 +74,31 @@ void MyModuleInit(RTC::Manager* manager)
   return;
 }
 
+bool RunTest()
+{
+  RTC::RtcBase* comp;
+  RTC::Manager &mamager = RTC::Manager::instance();
+  comp = mamager.getComponent("${rtcParam.name}Test0");
+  if (comp == nullptr)
+  {
+    std::cerr << "Component get failed." << std::endl;
+    return false;
+  }
+
+  ${rtcParam.name}Test* testcomp = dynamic_cast<${rtcParam.name}Test*>(comp);
+  if (testcomp == nullptr)
+  {
+    std::cerr << "Component get failed." << std::endl;
+    return false;
+  }
+
+  return testcomp->runTest();
+}
+
 int main (int argc, char** argv)
 {
   RTC::Manager* manager;
   manager = RTC::Manager::init(argc, argv);
-
-  // Initialize manager
-  manager->init(argc, argv);
 
   // Set module initialization proceduer
   // This procedure will be invoked in activateManager() function.
@@ -88,10 +109,27 @@ int main (int argc, char** argv)
 
   // run the manager in blocking mode
   // runManager(false) is the default.
-  manager->runManager();
+  // manager->runManager();
 
   // If you want to run the manager in non-blocking mode, do like this
-  // manager->runManager(true);
+  manager->runManager(true);
 
-  return 0;
+  bool ret = RunTest();
+
+${sharp}if RTM_MAJOR_VERSION >= 2
+  manager->terminate();
+  manager->join();
+${sharp}else
+  manager->shutdown();
+${sharp}endif
+
+  
+  if (ret)
+  {
+    return 0;
+  }
+  else
+  {
+    return 1;
+  }
 }

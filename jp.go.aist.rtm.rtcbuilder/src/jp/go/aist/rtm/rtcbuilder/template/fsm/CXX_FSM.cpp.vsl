@@ -1,0 +1,57 @@
+// -*- C++ -*-
+/*!
+ * @file  ${rtcParam.name}FSM.cpp
+ * @date ${dol}Date${dol}
+ * ${dol}Id${dol}
+ */
+
+${sharp}include "${rtcParam.name}FSM.h"
+
+namespace ${rtcParam.name}Fsm {
+
+// Top state
+RTC::ReturnCode_t ${fsmParam.name}::onInit() {
+  setState<${tmpltHelper.getInitialState(${rtcParam})}>();
+  return RTC::RTC_OK;
+}
+
+RTC::ReturnCode_t ${fsmParam.name}::onEntry() {
+  return RTC::RTC_OK;
+}
+
+RTC::ReturnCode_t ${fsmParam.name}::onExit() {
+  return RTC::RTC_OK;
+}
+
+#foreach($eachState in ${fsmParam.getAllValidStateList()})
+//============================================================
+// State ${eachState.name}
+RTC::ReturnCode_t ${eachState.name}::onInit() {
+${tmpltHelper.checkTransition(${eachState})}
+  return RTC::RTC_OK;
+}
+
+#if( ${eachState.hasEntry} )
+RTC::ReturnCode_t ${eachState.name}::onEntry() {
+  return RTC::RTC_OK;
+}
+#end
+#if( ${eachState.hasExit} )
+RTC::ReturnCode_t ${eachState.name}::onExit() {
+  return RTC::RTC_OK;
+}
+#end
+
+#foreach($eachTrans in ${eachState.getTransList()})
+#if( ${eachTrans.event.length()} > 0 )
+#if( ${eachTrans.existEventParam()} )
+void ${eachState.name}::${eachTrans.event}(${eachTrans.eventParam.dataTypeStr}) {
+  setState<${eachTrans.target}>();
+}
+
+#end
+#end
+#end
+
+#end
+} //end namespace '${rtcParam.name}FSM'

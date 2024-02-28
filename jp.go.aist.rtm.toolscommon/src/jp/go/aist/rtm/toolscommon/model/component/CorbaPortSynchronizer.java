@@ -16,10 +16,10 @@ import jp.go.aist.rtm.toolscommon.model.core.CorbaWrapperObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link jp.go.aist.rtm.toolscommon.model.component.CorbaPortSynchronizer#getRTCPortProfile <em>RTC Port Profile</em>}</li>
  * </ul>
- * </p>
  *
  * @see jp.go.aist.rtm.toolscommon.model.component.ComponentPackage#getCorbaPortSynchronizer()
  * @model

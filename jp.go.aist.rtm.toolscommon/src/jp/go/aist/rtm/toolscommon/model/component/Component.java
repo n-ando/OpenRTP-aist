@@ -20,6 +20,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link jp.go.aist.rtm.toolscommon.model.component.Component#getConfigurationSets <em>Configuration Sets</em>}</li>
  *   <li>{@link jp.go.aist.rtm.toolscommon.model.component.Component#getActiveConfigurationSet <em>Active Configuration Set</em>}</li>
@@ -53,7 +54,6 @@ import org.eclipse.emf.ecore.EStructuralFeature;
  *   <li>{@link jp.go.aist.rtm.toolscommon.model.component.Component#getInitialize <em>Initialize</em>}</li>
  *   <li>{@link jp.go.aist.rtm.toolscommon.model.component.Component#getFinalize <em>Finalize</em>}</li>
  * </ul>
- * </p>
  *
  * @see jp.go.aist.rtm.toolscommon.model.component.ComponentPackage#getComponent()
  * @model abstract="true"

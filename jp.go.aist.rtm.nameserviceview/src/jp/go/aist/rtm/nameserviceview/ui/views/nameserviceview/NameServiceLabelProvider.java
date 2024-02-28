@@ -47,7 +47,7 @@ public class NameServiceLabelProvider extends LabelProvider {
 			if (result != null) return result;
 		}
 
-		return NameServiceViewPlugin.getCachedImage("icons/Question.gif");
+		return NameServiceViewPlugin.getCachedImage("icons/Question.png");
 	}
 
 	private Object getTargetObject(Object obj) {

@@ -69,9 +69,9 @@ public class DocumentPreferencePage extends AbstractPreferencePage implements
 		GridLayout layout = new GridLayout(2,false);
 		group.setLayout(layout);
 		
-		for (int intIdx = 0; intIdx < 7; intIdx++) {
+		for (int intIdx = 0; intIdx < 6; intIdx++) {
 			createRadioArea(group, intIdx);
-			createRadioArea(group,intIdx+7);
+			createRadioArea(group,intIdx+6);
 		}
 		documentArray = new ArrayList<String>();
 		documentArray = DocumentPreferenceManager.getDocumentValue();

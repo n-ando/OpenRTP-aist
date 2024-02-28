@@ -11,6 +11,7 @@ import jp.go.aist.rtm.rtcbuilder.generator.param.GeneratorParam;
 import jp.go.aist.rtm.rtcbuilder.generator.param.RtcParam;
 import jp.go.aist.rtm.rtcbuilder.generator.param.ServicePortInterfaceParam;
 import jp.go.aist.rtm.rtcbuilder.generator.param.ServicePortParam;
+import jp.go.aist.rtm.rtcbuilder.generator.param.idl.IdlPathParam;
 
 public class IDLStructTest extends TestBase {
 
@@ -38,12 +39,14 @@ public class IDLStructTest extends TestBase {
 		rtcParam.setActivityType("PERIODIC");
 		rtcParam.setMaxInstance(1);
 		rtcParam.setComponentKind("DataFlowComponent");
+		
+		rtcParam.getIdlSearchPathList().add(new IdlPathParam(rootPath + "/resource/100/CXX/idlstruct/", false));
 
 		ServicePortParam service1 = new ServicePortParam("svcPort", 0);
 		List<ServicePortInterfaceParam> srvinterts = new ArrayList<ServicePortInterfaceParam>();
 		ServicePortInterfaceParam int1 = new ServicePortInterfaceParam(
 				service1, "inf0", "inf0", "", rootPath + "/resource/100/CXX/idlstruct/module_ysuga_net.idl",
-				"ysuga_net::Hoge", rootPath + "/resource/100/CXX/idlstruct/", 0);
+				"ysuga_net::Hoge", 0);
 		srvinterts.add(int1);
 		service1.getServicePortInterfaces().addAll(srvinterts);
 		List<ServicePortParam> srvports = new ArrayList<ServicePortParam>();

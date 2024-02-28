@@ -1,4 +1,5 @@
 // -*- Java -*-
+// <rtc-template block="description">
 /*!
  * @file testComp.java
  * @brief Standalone component
@@ -6,6 +7,9 @@
  *
  * $Id$
  */
+// </rtc-template>
+import java.util.ArrayList;
+import java.util.List;
 import jp.go.aist.rtm.RTC.Manager;
 import jp.go.aist.rtm.RTC.ModuleInitProc;
 import jp.go.aist.rtm.RTC.RTObject_impl;
@@ -17,11 +21,17 @@ import jp.go.aist.rtm.RTC.util.Properties;
  *
  */
 public class testComp implements ModuleInitProc {
+    static String m_instanceName = new String(""); 
     public void myModuleInit(Manager mgr) {
       Properties prop = new Properties(test.component_conf);
       mgr.registerFactory(prop, new test(), new test());
+      // prepare arg for createComponent()
+      String arg = new String("");
+      if (!m_instanceName.isEmpty()) {
+          arg += "?instance_name=" + m_instanceName;
+      }
       // Create a component
-      RTObject_impl comp = mgr.createComponent("test");
+      RTObject_impl comp = mgr.createComponent("test" + arg);
       if( comp==null ) {
           System.err.println("Component create failed.");
           System.exit(0);
@@ -73,8 +83,17 @@ public class testComp implements ModuleInitProc {
 //      }
     }
     public static void main(String[] args) {
+        // store instance_name to static and removed args created
+        List<String> mgrargs = new ArrayList<String>();
+        for (int i = 0; i < args.length; ++i) {
+            if (args[i].indexOf("--instance_name=") == -1) {
+                mgrargs.add(args[i]);
+            } else {
+                m_instanceName = args[i].replace("--instance_name=", "");
+            }
+        }    
         // Initialize manager
-        final Manager manager = Manager.init(args);
+        final Manager manager = Manager.init(mgrargs.toArray(new String[mgrargs.size()]));
         // Set module initialization proceduer
         // This procedure will be invoked in activateManager() function.
         testComp init = new testComp();

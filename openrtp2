@@ -1,0 +1,82 @@
+#!/bin/bash
+
+cd $(cd $(dirname $(readlink -f $0 || echo $0));pwd -P)
+
+debug_echo () {
+    if test "x$DEBUG" = "xTRUE"; then
+        echo "$*"
+    fi
+}
+#------------------------------------------------------------
+# Usage
+#------------------------------------------------------------
+SCRIPT_NAME=$(basename $0)
+tmp=$(readlink $0)
+if test "x$tmp" = "x" ; then
+    SCRIPT_DIR=$(dirname $0)
+else
+    SCRIPT_DIR=$(dirname $tmp)
+fi
+usage()
+{
+    echo ""
+    echo "Usage: $SCRIPT_NAME [--help|--debug] [Eclipse options]"
+    echo ""
+    echo "  --help: print this help message"
+    echo "  --debug: Print debug message"
+    echo ""
+}
+
+#============================================================
+# functions
+#============================================================
+
+ECLIPSE_ARGS=""
+for arg in $* ; do
+    if test "x$arg" = "x--help" ; then
+        usage
+        exit 0
+    fi
+    if test "x$arg" = "x--debug" ; then
+        DEBUG="TRUE"
+    else
+        ECLIPSE_ARGS="$ECLIPSE_ARGS $arg"
+    fi
+done
+debug_echo "Debug mode enable."
+debug_echo "ECLIPSE_ARGS: $ECLIPSE_ARGS"
+
+find_OPENRTP_DIR()
+{
+    openrtp_dir=`find /usr/lib /usr/lib64 -name 'openrtp'  2>/dev/null`
+    OPENRTP_DIR=$openrtp_dir
+    debug_echo "OPENRTP_DIR: $OPENRTP_DIR"
+    if test -f $OPENRTP_DIR/eclipse ; then
+        OPENRTP_EXECUTABLE=$OPENRTP_DIR/eclipse
+        debug_echo "OPENRTP_EXECUTABLE: $OPENRTP_EXECUTABLE"
+    else
+        echo "WARNING: No OpenRTP installation under OpenRTM libdir."
+    fi
+    eclipse_dir=`find ./ -name 'eclipse'  2>/dev/null`
+
+    if test "x$eclipse_dir" != "x" ; then
+        OPENRTP_DIR="./"
+        OPENRTP_EXECUTABLE="./eclipse"
+        debug_echo "OPENRTP_DIR: $OPENRTP_DIR"
+        debug_echo "OPENRTP_EXECUTABLE: $OPENRTP_EXECUTABLE"
+        return 0
+    elif test "x$openrtp_dir" = "x" ; then
+        echo "ERROR: No OpenRTP installation found. Aborting."
+        exit 1
+    fi
+}
+#------------------------------
+# main
+#------------------------------
+
+find_OPENRTP_DIR
+
+export SWT_GTK3=0
+export GDK_NATIVE_WINDOWS=1
+cd $OPENRTP_DIR
+$OPENRTP_EXECUTABLE $ECLIPSE_ARGS -vmargs -Djava.util.logging.config.file=$OPENRTP_DIR/logger.properties

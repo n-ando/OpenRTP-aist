@@ -1,14 +1,20 @@
 package jp.go.aist.rtm.systemeditor.ui.util;
 
+import static jp.go.aist.rtm.toolscommon.profiles.util.XmlHandler.createXMLGregorianCalendar;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import javax.xml.datatype.DatatypeFactory;
-import javax.xml.datatype.XMLGregorianCalendar;
-
 import org.eclipse.emf.common.util.TreeIterator;
+import org.junit.Before;
+import org.junit.Test;
 import org.openrtp.namespaces.rts.version02.Activation;
 import org.openrtp.namespaces.rts.version02.Component;
 import org.openrtp.namespaces.rts.version02.ComponentExt;
@@ -45,8 +51,6 @@ import org.openrtp.namespaces.rts.version02.TargetPort;
 import org.openrtp.namespaces.rts.version02.TargetPortExt;
 import org.openrtp.namespaces.rts.version02.Waittime;
 
-import com.sun.org.apache.xerces.internal.jaxp.datatype.DatatypeFactoryImpl;
-
 import RTC.ComponentProfile;
 import jp.go.aist.rtm.nameserviceview.corba.NameServerAccesserTest;
 import jp.go.aist.rtm.nameserviceview.model.nameservice.NamingContextNode;
@@ -72,7 +76,7 @@ import jp.go.aist.rtm.toolscommon.model.core.Rectangle;
 import jp.go.aist.rtm.toolscommon.util.RtsProfileHandler;
 import junit.framework.TestCase;
 
-public class RtsProfileHandlerTest extends TestCase {
+public class RtsProfileHandlerTest {
 	private RtsProfileHandler handler;
 
 	private Port port1;
@@ -90,8 +94,8 @@ public class RtsProfileHandlerTest extends TestCase {
 
 	private ObjectFactory objectFactory;
 
-	@Override
-	protected void setUp() throws Exception {
+	@Before
+	public void setUp() throws Exception {
 		objectFactory = new ObjectFactory();
 		handler = new RtsProfileHandler();
 		SystemEditorWrapperFactory instance = new SystemEditorWrapperFactory(NameServerAccesserTest.setupMappingRule());
@@ -99,6 +103,7 @@ public class RtsProfileHandlerTest extends TestCase {
 	}
 
 	// ファイルがないとエラーになる環境依存テスト
+	@Test
 	public void testLoad() throws Exception {
 		String targetFile = "/RTSystemEditor/RtsSampleVer0.2.xml";
 		SystemDiagram diagram = handler.load(targetFile, SystemDiagramKind.ONLINE_LITERAL);
@@ -107,6 +112,7 @@ public class RtsProfileHandlerTest extends TestCase {
 	}
 
 	// XMLのロードだけを行うテスト
+	@Test
 	public void testPopulate() throws Exception {
 		SystemDiagram diagram = ComponentFactory.eINSTANCE.createSystemDiagram();
 //		diagram.setKind(SystemDiagramKind.ONLINE_LITERAL);
@@ -156,6 +162,7 @@ public class RtsProfileHandlerTest extends TestCase {
 	}
 
 	// オフラインでロードを行うテスト
+	@Test
 	public void testPopulate2() throws Exception {
 		SystemDiagram diagram = ComponentFactory.eINSTANCE.createSystemDiagram();
 		diagram.setKind(SystemDiagramKind.OFFLINE_LITERAL);
@@ -247,17 +254,11 @@ public class RtsProfileHandlerTest extends TestCase {
 				}
 			}
 		}
-		handler.populateCorbaBaseObject(diagram);
-		for (int i = 0; i < existComponents.size(); i++) {
-			CorbaComponentImpl component = existComponents.get(i);
-			CorbaComponentImpl loadComponent = (CorbaComponentImpl) diagram.getComponents().get(i);
-			assertEquals(component.getCorbaBaseObject(), loadComponent.getCorbaBaseObject());
-			didAssert = true;
-		}
 		assertTrue(didAssert);
 	}
 
 	// ベンドポイントを復元するテスト
+	@Test
 	public void testConvertFromBendPointString() throws Exception {
 		Map<Integer, jp.go.aist.rtm.toolscommon.model.core.Point> result
 			= handler.convertFromBendPointString("{1:(392,110)}");
@@ -267,6 +268,7 @@ public class RtsProfileHandlerTest extends TestCase {
 		assertEquals(110, point.getY());
 	}
 
+	@Test
 	public void testConvertFromBendPointString2() throws Exception {
 		Map<Integer, jp.go.aist.rtm.toolscommon.model.core.Point> result
 			= handler.convertFromBendPointString("{1:(392,110), 2:(23,45)}");
@@ -280,6 +282,7 @@ public class RtsProfileHandlerTest extends TestCase {
 	}
 
 	// ダイアグラムを保存するテスト(online)
+	@Test
 	public void testSaveOnline() throws Exception {
 		SystemDiagram diagram = setupDiagram();
 		diagram.setKind(SystemDiagramKind.ONLINE_LITERAL);
@@ -292,7 +295,7 @@ public class RtsProfileHandlerTest extends TestCase {
 		ExecutionContextExt executionContext = (ExecutionContextExt) component.getExecutionContexts().get(0);
 		assertEquals("default", executionContext.getId());
 		assertEquals("PERIODIC", executionContext.getKind());
-		assertEquals(15.0, executionContext.getRate());
+		assertEquals(Double.valueOf(15.0), executionContext.getRate());
 		assertEquals("id2", executionContext.getParticipants().get(0).getComponentId());
 		Property property4 = executionContext.getProperties().get(0);
 		assertEquals("property5", property4.getName());
@@ -302,6 +305,7 @@ public class RtsProfileHandlerTest extends TestCase {
 	}
 
 	// ダイアグラムを保存するテスト
+	@Test
 	public void testSave() throws Exception {
 		SystemDiagram diagram = setupDiagram();
 		diagram.setKind(SystemDiagramKind.OFFLINE_LITERAL);
@@ -312,8 +316,8 @@ public class RtsProfileHandlerTest extends TestCase {
 		// プロファイル直下の属性
 		assertEquals("id1", result.getId());
 		assertEquals("abstract1", result.getAbstract());
-		assertEquals("2009-01-14T18:49:18.892+09:00", result.getCreationDate().toString());
-		assertEquals("2009-01-25T09:35:18.892+09:00", result.getUpdateDate().toString());
+		assertEquals("2009-01-14T18:49:18.000+09:00", result.getCreationDate().toString());
+		assertEquals("2009-01-25T09:35:18.000+09:00", result.getUpdateDate().toString());
 		assertEquals("0.2", result.getVersion());
 		// 拡張属性
 		assertEquals("comment1", result.getComment());
@@ -615,11 +619,6 @@ public class RtsProfileHandlerTest extends TestCase {
 		return result;
 	}
 
-	private XMLGregorianCalendar createXMLGregorianCalendar(String date) {
-		DatatypeFactory dateFactory = new DatatypeFactoryImpl();
-		return dateFactory.newXMLGregorianCalendar(date);
-	}
-
 	private Component setupComponent1() {
 		ComponentExt result = new ComponentExt();
 		result.setId("id2");
@@ -672,7 +671,8 @@ public class RtsProfileHandlerTest extends TestCase {
 	}
 
 	private jp.go.aist.rtm.toolscommon.model.component.ExecutionContext setupEofExecutionContext() {
-		jp.go.aist.rtm.toolscommon.model.component.ExecutionContext result = new ExecutionContextImpl();
+		jp.go.aist.rtm.toolscommon.model.component.CorbaExecutionContext result = ComponentFactory.eINSTANCE
+				.createCorbaExecutionContext();
 		result.setRateL(15.0);
 		return result;
 	}

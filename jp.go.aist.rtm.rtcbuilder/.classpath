@@ -2,6 +2,13 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="test"/>
+	<classpathentry exported="true" kind="lib" path="lib/rsyntaxtextarea.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jgraphx.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/commons-beanutils-1.9.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/commons-collections-3.2.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/commons-digester-2.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/commons-logging-1.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/commons-scxml-0.9.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/velocity-1.6.3-dep.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>

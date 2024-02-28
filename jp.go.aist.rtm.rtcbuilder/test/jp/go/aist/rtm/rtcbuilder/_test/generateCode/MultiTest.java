@@ -51,7 +51,7 @@ public class MultiTest extends TestBase {
 		ServicePortParam service1 = new ServicePortParam("MySVPro", 0);
 		List<ServicePortInterfaceParam> srvinterts = new ArrayList<ServicePortInterfaceParam>(); 
 		ServicePortInterfaceParam int1 = new ServicePortInterfaceParam(service1, "myserviceP1", "", "", 
-				rootPath + "resource/100/CXX/Multi/ProConMulti/MyService.idl", "MyService", "", 0);
+				rootPath + "resource/100/CXX/Multi/ProConMulti/MyService.idl", "MyService", 0);
 		srvinterts.add(int1);
 		service1.getServicePortInterfaces().addAll(srvinterts);
 		List<ServicePortParam> srvports = new ArrayList<ServicePortParam>();
@@ -60,7 +60,7 @@ public class MultiTest extends TestBase {
 		ServicePortParam service2 = new ServicePortParam("MySVPro2",0);
 		List<ServicePortInterfaceParam> srvinterts2 = new ArrayList<ServicePortInterfaceParam>(); 
 		ServicePortInterfaceParam int2 = new ServicePortInterfaceParam(service1, "myserviceP2", "", "", 
-				rootPath + "resource/100/CXX/Multi/ProConMulti/MyService2.idl", "MyService2", "", 0);
+				rootPath + "resource/100/CXX/Multi/ProConMulti/MyService2.idl", "MyService2", 0);
 		srvinterts2.add(int2);
 		service2.getServicePortInterfaces().addAll(srvinterts2);
 		srvports.add(service2);
@@ -68,7 +68,7 @@ public class MultiTest extends TestBase {
 		ServicePortParam service3 = new ServicePortParam("MyConPro",0);
 		List<ServicePortInterfaceParam> srvintert3 = new ArrayList<ServicePortInterfaceParam>(); 
 		ServicePortInterfaceParam int3 = new ServicePortInterfaceParam(service1, "myservice0", "", "", 
-				rootPath + "resource/100/CXX/Multi/ProConMulti/MyService.idl", "MyService", "", 1);
+				rootPath + "resource/100/CXX/Multi/ProConMulti/MyService.idl", "MyService", 1);
 		srvintert3.add(int3);
 		service3.getServicePortInterfaces().addAll(srvintert3);
 		srvports.add(service3);
@@ -76,7 +76,7 @@ public class MultiTest extends TestBase {
 		ServicePortParam service4 = new ServicePortParam("MyConPro2",0);
 		List<ServicePortInterfaceParam> srvinterts4 = new ArrayList<ServicePortInterfaceParam>(); 
 		ServicePortInterfaceParam int4 = new ServicePortInterfaceParam(service1, "myservice2", "", "", 
-				rootPath + "resource/100/CXX/Multi/ProConMulti/DAQService.idl", "DAQService", "", 1);
+				rootPath + "resource/100/CXX/Multi/ProConMulti/DAQService.idl", "DAQService", 1);
 		srvinterts4.add(int4);
 		service4.getServicePortInterfaces().addAll(srvinterts4);
 		srvports.add(service4);
@@ -99,7 +99,7 @@ public class MultiTest extends TestBase {
 		ServicePortParam service1 = new ServicePortParam("MyConPro",0);
 		List<ServicePortInterfaceParam> srvinterts = new ArrayList<ServicePortInterfaceParam>(); 
 		ServicePortInterfaceParam int1 = new ServicePortInterfaceParam(service1, "myservice0", "", "", 
-				rootPath + "resource/100/CXX/Multi/ConMulti/MyService.idl", "MyService", "", 1);
+				rootPath + "resource/100/CXX/Multi/ConMulti/MyService.idl", "MyService", 1);
 		srvinterts.add(int1);
 		service1.getServicePortInterfaces().addAll(srvinterts);
 		List<ServicePortParam> srvports = new ArrayList<ServicePortParam>();
@@ -108,7 +108,7 @@ public class MultiTest extends TestBase {
 		ServicePortParam service2 = new ServicePortParam("MyConPro2",0);
 		List<ServicePortInterfaceParam> srvinterts2 = new ArrayList<ServicePortInterfaceParam>(); 
 		ServicePortInterfaceParam int2 = new ServicePortInterfaceParam(service1, "myservice2", "", "", 
-				rootPath + "resource/100/CXX/Multi/ConMulti/DAQService.idl", "DAQService", "", 1);
+				rootPath + "resource/100/CXX/Multi/ConMulti/DAQService.idl", "DAQService", 1);
 		srvinterts2.add(int2);
 		service2.getServicePortInterfaces().addAll(srvinterts2);
 		srvports.add(service2);
@@ -132,7 +132,7 @@ public class MultiTest extends TestBase {
 		ServicePortParam service1 = new ServicePortParam("MySVPro",0);
 		List<ServicePortInterfaceParam> srvinterts = new ArrayList<ServicePortInterfaceParam>(); 
 		ServicePortInterfaceParam int1 = new ServicePortInterfaceParam(service1, "myservice0", "", "", 
-				rootPath + "resource/100/CXX/Multi/ProMulti/MyService.idl", "MyService", "", 0);
+				rootPath + "resource/100/CXX/Multi/ProMulti/MyService.idl", "MyService", 0);
 		srvinterts.add(int1);
 		service1.getServicePortInterfaces().addAll(srvinterts);
 		List<ServicePortParam> srvports = new ArrayList<ServicePortParam>();
@@ -141,7 +141,7 @@ public class MultiTest extends TestBase {
 		ServicePortParam service2 = new ServicePortParam("MySVPro2",0);
 		List<ServicePortInterfaceParam> srvinterts2 = new ArrayList<ServicePortInterfaceParam>(); 
 		ServicePortInterfaceParam int2 = new ServicePortInterfaceParam(service1, "myservice2", "", "", 
-				rootPath + "resource/100/CXX/Multi/ProMulti/DAQService.idl", "DAQService", "", 0);
+				rootPath + "resource/100/CXX/Multi/ProMulti/DAQService.idl", "DAQService", 0);
 		srvinterts2.add(int2);
 		service2.getServicePortInterfaces().addAll(srvinterts2);
 		srvports.add(service2);

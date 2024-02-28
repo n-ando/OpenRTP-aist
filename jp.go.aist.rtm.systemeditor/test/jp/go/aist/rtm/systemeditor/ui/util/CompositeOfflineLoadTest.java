@@ -1,11 +1,15 @@
 package jp.go.aist.rtm.systemeditor.ui.util;
 
+import static jp.go.aist.rtm.toolscommon.profiles.util.XmlHandler.createXMLGregorianCalendar;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
 import java.math.BigInteger;
 import java.util.List;
 
-import javax.xml.datatype.DatatypeFactory;
-
 import org.eclipse.emf.common.util.EList;
+import org.junit.Test;
 import org.openrtp.namespaces.rts.version02.Component;
 import org.openrtp.namespaces.rts.version02.ComponentExt;
 import org.openrtp.namespaces.rts.version02.ConfigurationData;
@@ -20,8 +24,6 @@ import org.openrtp.namespaces.rts.version02.ServiceportConnector;
 import org.openrtp.namespaces.rts.version02.TargetComponent;
 import org.openrtp.namespaces.rts.version02.TargetPort;
 
-import com.sun.org.apache.xerces.internal.jaxp.datatype.DatatypeFactoryImpl;
-
 import jp.go.aist.rtm.nameserviceview.corba.NameServerAccesserTest;
 import jp.go.aist.rtm.systemeditor.factory.SystemEditorWrapperFactory;
 import jp.go.aist.rtm.toolscommon.model.component.ComponentFactory;
@@ -34,14 +36,13 @@ import jp.go.aist.rtm.toolscommon.model.component.SystemDiagramKind;
 import jp.go.aist.rtm.toolscommon.util.RtsProfileHandler;
 import junit.framework.TestCase;
 
-public class CompositeOfflineLoadTest extends TestCase {
+public class CompositeOfflineLoadTest {
 	private ObjectFactory objectFactory;
-	private DatatypeFactory dateFactory;
 	private SystemDiagram diagram;
 
+	@Test
 	public void testLoadAndSave() throws Exception {
 		objectFactory = new ObjectFactory();
-		dateFactory = new DatatypeFactoryImpl();
 		SystemEditorWrapperFactory instance = new SystemEditorWrapperFactory(NameServerAccesserTest.setupMappingRule());
 		SystemEditorWrapperFactory.setInstance(instance);
 
@@ -56,8 +57,8 @@ public class CompositeOfflineLoadTest extends TestCase {
 		handler.restoreCompositeComponentPort(diagram);
 		handler.restoreConnection(diagram);
 
-		assertEquals("2009-03-06T10:15:43.349+09:00", diagram.getUpdateDate());
-		assertEquals("2009-03-06T10:15:43.349+09:00", diagram.getCreationDate());
+		assertEquals("2009-03-06T10:15:43.000+09:00", diagram.getUpdateDate());
+		assertEquals("2009-03-06T10:15:43.000+09:00", diagram.getCreationDate());
 		assertEquals("RTSystem:d.d:d", diagram.getSystemId());
 
 		assertEquals(2, diagram.getComponents().size());
@@ -308,8 +309,8 @@ public class CompositeOfflineLoadTest extends TestCase {
 
 	private RtsProfileExt createRtsProfile() {
 		RtsProfileExt rtsProfile = objectFactory.createRtsProfileExt();
-		rtsProfile.setUpdateDate(dateFactory.newXMLGregorianCalendar("2009-03-06T10:15:43.349+09:00"));
-		rtsProfile.setCreationDate(dateFactory.newXMLGregorianCalendar("2009-03-06T10:15:43.349+09:00"));
+		rtsProfile.setUpdateDate(createXMLGregorianCalendar("2009-03-06T10:15:43.349+09:00"));
+		rtsProfile.setCreationDate(createXMLGregorianCalendar("2009-03-06T10:15:43.349+09:00"));
 		rtsProfile.setVersion("0.2");
 		rtsProfile.setId("RTSystem:d.d:d");
 		rtsProfile.getComponents().add(createComponentS1());

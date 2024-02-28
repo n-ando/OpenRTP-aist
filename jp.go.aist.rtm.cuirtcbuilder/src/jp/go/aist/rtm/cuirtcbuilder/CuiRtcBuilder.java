@@ -167,9 +167,7 @@ public class CuiRtcBuilder {
 		List<IdlPathParam> sources = new ArrayList<IdlPathParam>();
 		sources.addAll(target);
 		String defaultPath = System.getenv("RTM_ROOT");
-		int baseindex = -1;
 		if (defaultPath != null) {
-			baseindex = 0;
 			if(!defaultPath.endsWith(FS)) {
 				defaultPath += FS;
 			}
@@ -202,9 +200,6 @@ public class CuiRtcBuilder {
 					param.setContent(idlContent);
 					param.setFullPath(source + FS + idlName);
 					sourceContents.add(param);
-					if( baseindex<intidx) {
-						param.setAddition(true);
-					}
 				}
 			} catch (IOException e) {
 				e.printStackTrace();

@@ -21,9 +21,22 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.jface.dialogs.IDialogConstants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import jp.go.aist.rtm.rtcbuilder.corba.idl.parser.IDLParser;
 import jp.go.aist.rtm.rtcbuilder.corba.idl.parser.ParseException;
 import jp.go.aist.rtm.rtcbuilder.corba.idl.parser.syntaxtree.specification;
+import jp.go.aist.rtm.rtcbuilder.fsm.StateParam;
 import jp.go.aist.rtm.rtcbuilder.generator.GeneratedResult;
 import jp.go.aist.rtm.rtcbuilder.generator.HeaderException;
 import jp.go.aist.rtm.rtcbuilder.generator.IDLParamConverter;
@@ -32,6 +45,7 @@ import jp.go.aist.rtm.rtcbuilder.generator.param.ConfigSetParam;
 import jp.go.aist.rtm.rtcbuilder.generator.param.DataPortParam;
 import jp.go.aist.rtm.rtcbuilder.generator.param.DataTypeParam;
 import jp.go.aist.rtm.rtcbuilder.generator.param.GeneratorParam;
+import jp.go.aist.rtm.rtcbuilder.generator.param.PropertyParam;
 import jp.go.aist.rtm.rtcbuilder.generator.param.RtcParam;
 import jp.go.aist.rtm.rtcbuilder.generator.param.ServicePortInterfaceParam;
 import jp.go.aist.rtm.rtcbuilder.generator.param.ServicePortParam;
@@ -46,23 +60,12 @@ import jp.go.aist.rtm.rtcbuilder.manager.CMakeGenerateManager;
 import jp.go.aist.rtm.rtcbuilder.manager.CXXGenerateManager;
 import jp.go.aist.rtm.rtcbuilder.manager.CommonGenerateManager;
 import jp.go.aist.rtm.rtcbuilder.manager.GenerateManager;
+import jp.go.aist.rtm.rtcbuilder.nl.Messages;
 import jp.go.aist.rtm.rtcbuilder.ui.editors.IMessageConstants;
 import jp.go.aist.rtm.rtcbuilder.util.FileUtil;
 import jp.go.aist.rtm.rtcbuilder.util.RTCUtil;
 import jp.go.aist.rtm.rtcbuilder.util.StringUtil;
 import jp.go.aist.rtm.rtcbuilder.util.ValidationUtil;
-
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IFolder;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IWorkspaceRoot;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.jface.dialogs.IDialogConstants;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * ジェネレータクラス
@@ -127,7 +130,9 @@ public class Generator {
 				String idlContent = FileUtil.readFile(targetIDL);
 				if (idlContent == null) continue;
 				List<String> idlSearchDirs = new ArrayList<String>();
-				idlSearchDirs.add(serviceInterfaces.getIdlSearchPath());
+				for(IdlPathParam path : rtcParam.getIdlSearchPathList()) {
+					idlSearchDirs.add(path.getPath());
+				}
 				if(idlDir!=null){
 					for(IdlPathParam each : idlDir) {
 						idlSearchDirs.add(each.getPath());
@@ -166,6 +171,7 @@ public class Generator {
 		}
 		rtcParam.checkAndSetParameter();
 		rtcParam.getIdlPathes().clear();
+		rtcParam.getIdlPathes().addAll(rtcParam.getIdlSearchPathList());
 		//
 		for( DataPortParam outport : rtcParam.getOutports() ) {
 			if(0<outport.getIdlFile().length()) {
@@ -191,20 +197,7 @@ public class Generator {
 				if( !IDLPathes.contains(serviceInterfaces.getIdlFullPath()) ) {
 					IDLPathes.add(serviceInterfaces.getIdlFullPath());
                     IDLPathParams.add(
-                            new ServiceClassParam(serviceInterfaces.getIdlFullPath(), serviceInterfaces.getIdlFullPath(),
-															 serviceInterfaces.getIdlSearchPath()));
-				}
-				if( 0<serviceInterfaces.getIdlSearchPath().length()) {
-					boolean existed = false;
-					for(IdlPathParam exist : rtcParam.getIdlPathes()) {
-						if(exist.getPath().equals(serviceInterfaces.getIdlSearchPath())) {
-							existed = true;
-							break;
-						}
-					}
-					if(existed==false) {
-						rtcParam.getIdlPathes().add(new IdlPathParam(serviceInterfaces.getIdlSearchPath(), false));
-					}
+                            new ServiceClassParam(serviceInterfaces.getIdlFullPath(), serviceInterfaces.getIdlFullPath(), ""));
 				}
 			}
 		}
@@ -231,8 +224,9 @@ public class Generator {
 		List<ServiceClassParam> serviceClassParamList = new ArrayList<ServiceClassParam>();
 		List<String> serviceClassNameList = new ArrayList<String>();
 		for( ServiceClassParam serviceClassParam : rtcServiceClasses ) {
-			if( !serviceClassNameList.contains(serviceClassParam.getName()) ) {
-				serviceClassNameList.add(serviceClassParam.getName());
+			String checkKey = serviceClassParam.getName() + "::" + serviceClassParam.getIdlPath();
+			if( !serviceClassNameList.contains(checkKey) ) {
+				serviceClassNameList.add(checkKey);
 				serviceClassParamList.add(serviceClassParam);
 			}
 		}
@@ -306,7 +300,7 @@ public class Generator {
 		List<String> serviceInterfaceNames = new ArrayList<String>();
 		for( ServicePortParam servicePort : rtcParam.getServicePorts() ) {
 			for( ServicePortInterfaceParam serviceInterface : servicePort.getServicePortInterfaces() ) {
-				String result = ValidationUtil.validateServiceInterface(serviceInterface);
+				String result = ValidationUtil.validateServiceInterface(serviceInterface, rtcParam.getOutputProject());
 				if( result!=null ) 	throw new RuntimeException(result + " : " + rtcParam.getName());
 				if (serviceInterfaceNames.contains(serviceInterface.getTmplVarName()))
 					throw new RuntimeException(IRTCBMessageConstants.VALIDATE_ERROR_INTERFACESAMENAME + rtcParam.getName());
@@ -321,6 +315,36 @@ public class Generator {
 			if (configNames.contains(config.getName()))
 				throw new RuntimeException(IMessageConstants.CONFIGURATION_VALIDATE_DUPLICATE + rtcParam.getName());
 			configNames.add(config.getName());
+		}
+		/////FSM
+		PropertyParam fsm = rtcParam.getProperty(IRtcBuilderConstants.PROP_TYPE_FSM);
+		if(fsm!=null) {
+			if(Boolean.valueOf(fsm.getValue())) {
+				PropertyParam fsmType = rtcParam.getProperty(IRtcBuilderConstants.PROP_TYPE_FSMTYTPE);
+				if(fsmType==null) {
+					throw new RuntimeException(Messages.getString("IMC.FSM_NOT_SELECTED") + rtcParam.getName());
+				} else {
+					String strType = fsmType.getValue();
+					if(!(strType.equals(IRtcBuilderConstants.FSMTYTPE_STATIC) || strType.equals(IRtcBuilderConstants.FSMTYTPE_DYNAMIC))) {
+						throw new RuntimeException(Messages.getString("IMC.FSM_TYPE_INVALID") + rtcParam.getName());
+					}
+				}
+				
+				StateParam fsmParam = rtcParam.getFsmParam();
+				if(fsmParam==null) {
+					throw new RuntimeException(Messages.getString("IMC.FSM_NO_SM") + rtcParam.getName());
+				} else {
+					List<String> stateList = new ArrayList<String>();
+					stateList.add(fsmParam.getName());
+					for(StateParam param : fsmParam.getAllStateList() ) {
+						if(stateList.contains(param.getName())) {
+							throw new RuntimeException(Messages.getString("IMC.STATE_DUPL1") + param.getName() + Messages.getString("IMC.STATE_DUPL2") + rtcParam.getName());
+						} else {
+							stateList.add(param.getName());
+						}
+					}
+				}
+			}
 		}
 	}
 
@@ -367,6 +391,7 @@ public class Generator {
 		List<ServiceClassParam> result = new ArrayList<ServiceClassParam>();
 		List<String> includeFiles = new ArrayList<String>();
 
+		String lineSeparator = System.getProperty("line.separator");
 		for (int intIdx = 0; intIdx < IDLPathes.size(); intIdx++) {
 			ServiceClassParam sv = IDLPathes.get(intIdx);
 			if (sv == null) continue;
@@ -375,8 +400,18 @@ public class Generator {
 			try {
 				String idlContent = FileUtil.readFile(sv.getName());
 				if (idlContent == null) continue;
+				
+				String[] eachLines = idlContent.split(lineSeparator);
+				StringBuffer tmpBuf= new StringBuffer();
+				for(String eachLine : eachLines) {
+					tmpBuf.append(eachLine.trim()  + lineSeparator);
+			    }
+				idlContent = tmpBuf.toString();
+				
 				List<String> pathList = new ArrayList<String>();
-				pathList.add(sv.getIdlPath());
+				for(IdlPathParam path : rtcParam.getIdlSearchPathList()) {
+					pathList.add(path.getPath());
+				}
 				if(idlDir!=null) {
 					for(IdlPathParam each : idlDir) {
 						pathList.add(each.getPath());
@@ -545,7 +580,7 @@ public class Generator {
 			}
 			boolean isHit = false;
 			if(tdparam.isDefault()) {
-				if(targetType.equals(defFull)) {
+				if(targetType.equals(defFull) || targetFull.equals(defFull)) {
 					isHit = true;
 				}
 			} else {
@@ -679,7 +714,8 @@ public class Generator {
 		boolean isOutput = false;
 		if (targetFile.exists()) {
 			String originalFileContents = FileUtil.readFile(targetFile.getAbsolutePath());
-			if (originalFileContents.equals(generatedResult.getCode()) == false) {
+			if (StringUtil.removeNewLine(originalFileContents).equals(
+					StringUtil.removeNewLine(generatedResult.getCode())) == false) {
 				int selectedProcess = handler.getSelectedProcess(generatedResult, originalFileContents);
 				if (selectedProcess != MergeHandler.PROCESS_ORIGINAL_ID
 						&& selectedProcess != IDialogConstants.CANCEL_ID) {

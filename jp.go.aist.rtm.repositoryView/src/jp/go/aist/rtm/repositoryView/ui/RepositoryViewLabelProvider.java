@@ -55,9 +55,9 @@ public class RepositoryViewLabelProvider extends LabelProvider {
 				if(item instanceof RTSystemRVLeafItem) {
 					imageName = "icon/RTsystem.png";
 				} else if(item instanceof RTSenarioRVLeafItem) {
-					imageName = "icon/welcome_editor.gif";
+					imageName = "icon/welcome_editor.png";
 				} else if(item instanceof RTModelRVLeafItem) {
-					imageName = "icon/showchild_mode.gif";
+					imageName = "icon/showchild_mode.png";
 				} else {
 					if( ((RTCRVLeafItem)item).getComponent().isSpecUnLoad() ) {
 						imageName = "icon/ComponentD.png";

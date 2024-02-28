@@ -85,12 +85,12 @@ install-arch:
 	dh_installdirs -s
 
 	# for openrtp package
-	(cd $(CURDIR) ; mkdir -p $(CURDIR)/debian/openrtp/usr/lib/$(DEB_HOST_MULTIARCH)/openrtm-$(SHORT_VER)/openrtp)
-	(cd $(CURDIR) ; cp -R [a-c]* $(CURDIR)/debian/openrtp/usr/lib/$(DEB_HOST_MULTIARCH)/openrtm-$(SHORT_VER)/openrtp)
-	(cd $(CURDIR) ; cp -R [e-z]* $(CURDIR)/debian/openrtp/usr/lib/$(DEB_HOST_MULTIARCH)/openrtm-$(SHORT_VER)/openrtp)
-	(cd $(CURDIR) ; cp -R dropins $(CURDIR)/debian/openrtp/usr/lib/$(DEB_HOST_MULTIARCH)/openrtm-$(SHORT_VER)/openrtp)
-	(cd $(CURDIR) ; rm -rf $(CURDIR)/debian/openrtp/usr/lib/$(DEB_HOST_MULTIARCH)/openrtm-$(SHORT_VER)/openrtp/packages)
-	(cd $(CURDIR) ; cp openrtp $(CURDIR)/debian/openrtp/usr/bin/ ; chmod 755 $(CURDIR)/debian/openrtp/usr/bin/openrtp)
+	(cd $(CURDIR) ; mkdir -p $(CURDIR)/debian/openrtp2/usr/lib/$(DEB_HOST_MULTIARCH)/openrtm-$(SHORT_VER)/openrtp)
+	(cd $(CURDIR) ; cp -R [a-c]* $(CURDIR)/debian/openrtp2/usr/lib/$(DEB_HOST_MULTIARCH)/openrtm-$(SHORT_VER)/openrtp)
+	(cd $(CURDIR) ; cp -R [e-z]* $(CURDIR)/debian/openrtp2/usr/lib/$(DEB_HOST_MULTIARCH)/openrtm-$(SHORT_VER)/openrtp)
+	(cd $(CURDIR) ; cp -R dropins $(CURDIR)/debian/openrtp2/usr/lib/$(DEB_HOST_MULTIARCH)/openrtm-$(SHORT_VER)/openrtp)
+	(cd $(CURDIR) ; rm -rf $(CURDIR)/debian/openrtp2/usr/lib/$(DEB_HOST_MULTIARCH)/openrtm-$(SHORT_VER)/openrtp/packages)
+	(cd $(CURDIR) ; cp openrtp2 $(CURDIR)/debian/openrtp2/usr/bin/ ; chmod 755 $(CURDIR)/debian/openrtp2/usr/bin/openrtp2)
 
 	dh_install -s
 # Must not depend on anything. This is to be called by

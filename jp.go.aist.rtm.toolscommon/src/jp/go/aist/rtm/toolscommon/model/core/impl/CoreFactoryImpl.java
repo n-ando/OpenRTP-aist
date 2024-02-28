@@ -16,6 +16,7 @@ import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
 import jp.go.aist.rtm.toolscommon.corba.CorbaUtil;
+import jp.go.aist.rtm.toolscommon.model.core.*;
 import jp.go.aist.rtm.toolscommon.model.core.CoreFactory;
 import jp.go.aist.rtm.toolscommon.model.core.CorePackage;
 import jp.go.aist.rtm.toolscommon.model.core.ModelElement;

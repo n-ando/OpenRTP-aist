@@ -10,13 +10,12 @@ import jp.go.aist.rtm.rtcbuilder.generator.GeneratedResult;
 import junit.framework.TestCase;
 
 public class TestBase extends TestCase {
-//	protected String rootPath = "C:\\Tech-Arts\\Eclipse\\jp.go.aist.rtm.rtcbuilder\\";
 	protected String rootPath;
 	protected String expPath;
 	protected String expContent;
 	protected int index;
 	protected String[] ignore_row_phrases = {"--service-idl=", "--consumer-idl"};
-	protected final int default_file_num = 35;
+	protected final int default_file_num = 37;
 
 	public TestBase () {
 		File fileCurrent = new File(".");
@@ -24,6 +23,10 @@ public class TestBase extends TestCase {
 		rootPath = rootPath.substring(0,rootPath.length()-1);
 	}
 	protected String readFile(String fileName) {
+		return readFile(fileName, "\r\n");
+	}
+	
+	protected String readFile(String fileName, String separator) {
 		StringBuffer stbRet = new StringBuffer();
 		try (FileReader fr = new FileReader(fileName); BufferedReader br = new BufferedReader(fr) ) {
 			String str = new String();
@@ -35,7 +38,7 @@ public class TestBase extends TestCase {
 						break;
 					}
 				}
-				if(!isIgnore) stbRet.append(str + "\r\n");
+				if(!isIgnore) stbRet.append(str + separator);
 			}
 		} catch (IOException e){
 			e.printStackTrace();
@@ -55,7 +58,9 @@ public class TestBase extends TestCase {
 	}
 
 	protected String getGeneratedString(String source) {
-		String sep = System.getProperty( "line.separator" );
+		return getGeneratedString(source, System.getProperty( "line.separator" ));
+	}
+	protected String getGeneratedString(String source, String sep) {
 		String[] target = source.split(sep);
 		StringBuffer stbRet = new StringBuffer();
 
@@ -79,14 +84,21 @@ public class TestBase extends TestCase {
 		return result;
 	}
 
-	protected void checkCode(List<GeneratedResult> result, String resourceDir,
-			String fileName) {
+	protected void checkCode(List<GeneratedResult> result, String resourceDir, String fileName) {
 		index = getFileIndex(fileName, result);
 		expPath = resourceDir + fileName;
 		expContent = readFile(expPath);
 		expContent = replaceRootPath(expContent);
 		assertEquals(expContent,
-				getGeneratedString(result.get(index).getCode()));
+				getGeneratedString(result.get(index).getCode(), "\r\n"));
+	}
+	protected void checkCode(List<GeneratedResult> result, String resourceDir, String fileName, String separator) {
+		index = getFileIndex(fileName, result);
+		expPath = resourceDir + fileName;
+		expContent = readFile(expPath, separator);
+		expContent = replaceRootPath(expContent);
+		assertEquals(expContent,
+				getGeneratedString(result.get(index).getCode(), separator));
 	}
 
 }

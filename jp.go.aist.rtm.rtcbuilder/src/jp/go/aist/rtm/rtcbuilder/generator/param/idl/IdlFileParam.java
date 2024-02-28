@@ -103,6 +103,16 @@ public class IdlFileParam implements Serializable {
 		return result;
 	}
 
+	public List<IdlFileParam> getIncludeIdlParamsWithoutDefault() {
+		List<IdlFileParam> result = new ArrayList<IdlFileParam>();
+		String defaultPath = System.getenv("RTM_ROOT");
+		for (String s : includeIdlPathes) {
+			if(s.startsWith(defaultPath)) continue;
+			result.add(new IdlFileParam(s, this.parent));
+		}
+		return result;
+	}
+	
 	public boolean isDataPort() {
 		return isDataPort;
 	}
@@ -112,5 +122,10 @@ public class IdlFileParam implements Serializable {
 
 	public List<String> getTargetType() {
 		return targetTypes;
+	}
+	
+	public boolean checkDefault() {
+		String defaultPath = System.getenv("RTM_ROOT");
+		return idlPath.startsWith(defaultPath);
 	}
 }

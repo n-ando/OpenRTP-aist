@@ -1,30 +1,53 @@
-${sharp} -*- sh -*-
-${sharp}------------------------------------------------------------
-${sharp} Configuration file for ${rtcParam.name}
+${sharp}============================================================
+${sharp} Component Configuration for ${rtcParam.name}
+${sharp}
+${sharp} Component specific configuration file is specified from rtc.conf as
+${sharp} follows.
+${sharp}
+${sharp} English reference:  https://openrtm.org/openrtm/en/comp_conf_reference
+${sharp} Japanese reference: https://openrtm.org/openrtm/ja/comp_conf_reference
 ${sharp}
 ${sharp} This configuration file name should be specified in rtc.conf (or other
 ${sharp} configuration file specified by -f option) by "config_file" property.
+${sharp}
+${sharp} <component category>.<component name>.config_file: <config name>.conf
 ${sharp}
 ${sharp} ${rtcParam.category}.${rtcParam.name}.config_file: ${rtcParam.name}.conf
 ${sharp} or
 ${sharp} ${rtcParam.category}.${rtcParam.name}0.config_file: ${rtcParam.name}0.conf
 ${sharp} ${rtcParam.category}.${rtcParam.name}1.config_file: ${rtcParam.name}1.conf
 ${sharp} ${rtcParam.category}.${rtcParam.name}2.config_file: ${rtcParam.name}2.conf
+${sharp}============================================================
 ${sharp}
-${sharp} ------------------------------------------------------------
-${sharp} An example configuration file for ${rtcParam.name}
+${sharp} Available component specific configurations as follows.
+
+${sharp}============================================================
+${sharp} Basic profiles
+${sharp}============================================================
 ${sharp}
-${sharp} See details in the following reference manual
+${sharp} The following basic profiles could be overwrite from component.conf
+${sharp}
+${sharp} implementation_id:
+${sharp} type_name:
+${sharp} description:
+${sharp} version:
+${sharp} vendor:
+${sharp} category:
+${sharp} activity_type:
+${sharp} max_instance:
+${sharp} language:
+${sharp} lang_type:
 ${sharp}
 
-${sharp} Execution context configuration
-${sharp} exec_cxt.periodic.type: PeriodicExecutionContext
-${sharp} exec_cxt.periodic.rate: 1000
+${sharp}============================================================
+${sharp} Configuration-set parameter setting
+${sharp}============================================================
+${sharp}------------------------------------------------------------
+${sharp} Configuration sets
 ${sharp}
-${sharp}
-${sharp} configuration.active_config: mode0
-
-${sharp} Configuration-set example
+${sharp} conf.[configuration_set_name].[parameter_name]:
+${sharp}------------------------------------------------------------
+${sharp} Available configuration parameters
 ${sharp}
 #if( ${rtcParam.configParams.size()} > 0 )
 #foreach($configParam in ${rtcParam.configParams})  
@@ -32,6 +55,7 @@ ${sharp} conf.default.${configParam.name}: ${configParam.defaultVal}
 #end
 ${sharp}
 ${sharp} Additional configuration-set example named "mode0"
+${sharp} "mode0" is the Configuration Set name and can be any string. 
 ${sharp}
 #foreach($configParam in ${rtcParam.configParams})  
 ${sharp} conf.mode0.${configParam.name}: ${configParam.defaultVal}
@@ -64,53 +88,227 @@ ${sharp} conf.mode1.str_param1: default set in conf file
 ${sharp} conf.mode1.vector_param0: 0.0,0.1,0.2,0.3,0.4,0.5,0.6
 #end
 
-${sharp}${sharp}============================================================
-${sharp}${sharp} Component configuration reference
-${sharp}${sharp}
+${sharp}============================================================
+${sharp} Active configuration-set
+${sharp}============================================================
+${sharp}
+${sharp} Initial active configuration-set. The following "mode0" is a
+${sharp} configuration-set name.  A configuration-set named "mode0" should be
+${sharp} appear in this configuration file as follows.
+${sharp}
+${sharp}configuration.active_config: mode0
 
-${sharp}${sharp}============================================================
-${sharp}${sharp} Active configuration-set
-${sharp}${sharp}============================================================
-${sharp}${sharp}
-${sharp}${sharp} Initial active configuration-set. The following "mode0" is a
-${sharp}${sharp} configuration-set name.  A configuration-set named "mode0" should be
-${sharp}${sharp} appear in this configuration file as follows.
-${sharp}${sharp}
-${sharp}${sharp} configuration.active_config: mode0
-${sharp}${sharp}
-${sharp} conf.mode0.param0: hoge
-${sharp} conf.mode0.param1: fuga
-${sharp} conf.mode0.param2: munya
+${sharp}============================================================
+${sharp} Execution context options
+${sharp}============================================================
+${sharp}------------------------------------------------------------
+${sharp} Periodic type ExecutionContext
+${sharp}
+${sharp} Other availabilities in OpenRTM-aist
+${sharp}
+${sharp} - ExtTrigExecutionContext:   External triggered EC. It is embedded in
+${sharp}                              OpenRTM library.
+${sharp} - OpenHRPExecutionContext:   External triggred paralell execution
+${sharp}                              EC. It is embedded in OpenRTM
+${sharp}                              library. This is usually used with
+${sharp}                              OpenHRP3.
+${sharp} - SimulatorExecutionContext: External triggred paralell execution
+${sharp}                              EC. It is embedded in OpenRTM
+${sharp}                              library. This is usually used with
+${sharp}                              Choreonoid.
+${sharp} - RTPreemptEC:               Real-time execution context for Linux
+${sharp}                              RT-preemptive pathed kernel.
+${sharp} - ArtExecutionContext:       Real-time execution context for ARTLinux
+${sharp}                              (http://sourceforge.net/projects/art-linux/)
+${sharp}
+${sharp} - Setting: (Periodic|ExtTrig|OpenHRP~Simulator~RTPreemptExecutionContext)
+${sharp} - Default: PeriodicExecutionContext
+${sharp} - Example:
+${sharp}exec_cxt.periodic.type: PeriodicExecutionContext
 
-${sharp}${sharp}============================================================
-${sharp}${sharp} GUI control option for RTSystemEditor
-${sharp}${sharp}============================================================
-${sharp}${sharp} Available GUI control options [__widget__]:
-${sharp}${sharp}
-${sharp}${sharp} - text:          text box [default].
-${sharp}${sharp} - slider.<step>: Horizontal slider. <step> is step for the slider.
-${sharp}${sharp}                  A range constraints option is required. 
-${sharp}${sharp} - spin:          Spin button. A range constraitns option is required.
-${sharp}${sharp} - radio:         Radio button. An enumeration constraints is required.
-${sharp}${sharp} - checkbox:      Checkbox control. An enumeration constraints is
-${sharp}${sharp}                  required. The parameter has to be able to accept a
-${sharp}${sharp}                  comma separated list.
-${sharp}${sharp} - orderd_list:   Orderd list control.  An enumeration constraint is
-${sharp}${sharp}                  required. The parameter has to be able to accept a
-${sharp}${sharp}                  comma separated list. In this control, Enumerated
-${sharp}${sharp}                  elements can appear one or more times in the given list.
-${sharp}${sharp}
-${sharp}${sharp} Available GUI control constraint options [__constraints__]:
-${sharp}${sharp}
-${sharp}${sharp} - none:         blank
-${sharp}${sharp} - direct value: 100 (constant value)
-${sharp}${sharp} - range:        <, >, <=, >= can be used.
-${sharp}${sharp} - enumeration:  (enum0, enum1, ...)
-${sharp}${sharp} - array:        <constraints0>, ,constraints1>, ... for only array value
-${sharp}${sharp} - hash:         {key0: value0, key1:, value0, ...}
-${sharp}${sharp}
+${sharp}------------------------------------------------------------
+${sharp} The execution cycle of ExecutionContext
+${sharp}
+${sharp} This option specifies the system wide EC's period. If RTC does not
+${sharp} specifies EC's periodic rate, this periodic rate will be used.
+${sharp}
+${sharp} - Setting: Read/Write, period [Hz]
+${sharp} - Default: 1000 [Hz]
+${sharp} - Example:
+#if(${rtcParam.executionRate}>0)exec_cxt.periodic.rate:${rtcParam.executionRate}
+#else
+${sharp} exec_cxt.periodic.rate: 1000
+#end
+
+${sharp}------------------------------------------------------------
+${sharp} State transition mode settings YES/NO
+${sharp}
+${sharp} Default: YES (Default setting is recommended.)
+${sharp}
+${sharp} Activating, deactivating and resetting of RTC makes state
+${sharp} transition.  Some execution contexts execute main logic in different
+${sharp} thread.  If these flags set to YES, activation, deactivation and
+${sharp} resetting will be performed synchronously.  In other words, if these
+${sharp} flags are YES, activation/deactivation/resetting-operations must be
+${sharp} returned after state transition completed.
+${sharp}
+${sharp} "synchronous_transition" will set synchronous transition flags to
+${sharp} all other synchronous transition flags
+${sharp} (synchronous_activation/deactivation/resetting.
+${sharp}
+${sharp}exec_cxt.sync_transition: YES
+${sharp}exec_cxt.sync_activation: YES
+${sharp}exec_cxt.sync_deactivation: YES
+${sharp}exec_cxt.sync_reset: YES
+
+${sharp}------------------------------------------------------------
+${sharp} Timeout of synchronous state transition [s]
+${sharp}
+${sharp} Default: 1.0 [s]
+${sharp}
+${sharp} When synchronous transition flags are set to YES, the following
+${sharp} timeout settings are valid. If "transition_timeout" is set, the
+${sharp} value will be set to all other timeout of activation/deactivation
+${sharp} and resetting
+${sharp}
+${sharp}exec_cxt.transition_timeout: 0.5
+${sharp}exec_cxt.activation_timeout: 0.5
+${sharp}exec_cxt.deactivation_timeout: 0.5
+${sharp}exec_cxt.reset_timeout: 0.5
+
+${sharp}------------------------------------------------------------
+${sharp} Manager process's CPU affinity setting
+${sharp}
+${sharp} This option make the EC bound to specific CPU(s).  Options must
+${sharp} be one or more comma separated numbers to identify CPU ID. CPU ID
+${sharp} is started from 0, and maximum number is number of CPU core -1.  If
+${sharp} invalid CPU ID is specified, all the CPU will be used for the EC.
+${sharp}
+${sharp} - Setting: Read/Write, duration [s]
+${sharp} - Default: 0.5
+${sharp} - Example:
+${sharp}   manager.cpu_affinity: 0, 1, 2, ...
+${sharp}exec_cxt.cpu_affinity: 0
+
+${sharp}------------------------------------------------------------
+${sharp} Specifying Execution Contexts
+${sharp}
+${sharp} Default: No default
+${sharp}
+${sharp} execution_contexts: None or <EC0>,<EC1>,...
+${sharp} <EC?>: ECtype(ECname)
+${sharp}
+${sharp} RTC can be attached with zero or more Execution
+${sharp} Contexts. "execution_contexts" option specifies RTC-specific
+${sharp} attached ECs and its name. If the option is not specified, the
+${sharp} internal global options or rtc.conf options related to EC will be
+${sharp} used. If None is specified, no EC will be created.
+${sharp}
+${sharp} Availabilities in OpenRTM-aist
+${sharp}
+${sharp} - ExtTrigExecutionContext: External triggered EC. It is embedded in
+${sharp}                            OpenRTM library.
+${sharp} - OpenHRPExecutionContext: External triggred paralell execution
+${sharp}                            EC. It is embedded in OpenRTM
+${sharp}                            library. This is usually used with
+${sharp}                            OpenHRP3.
+${sharp} - RTPreemptEC:             Real-time execution context for Linux
+${sharp}                            RT-preemptive pathed kernel.
+${sharp} - ArtExecutionContext:     Real-time execution context for ARTLinux
+${sharp}                            (http://sourceforge.net/projects/art-linux/)
+${sharp}
+${sharp} execution_contexts: PeriodicExecutionContext(pec1000Hz), \
+${sharp}                     PeriodicExecutionContext(pec500Hz)
+
+${sharp}------------------------------------------------------------
+${sharp} EC specific configurations
+${sharp}
+${sharp} Default: No default
+${sharp}
+${sharp} Each EC can have its own configuration. Individual configuration can
+${sharp} be specified by using EC type name or EC instance name. Attached ECs
+${sharp} would be specified in execution_context option like <EC type
+${sharp} name>(<EC instance name>), ...  EC specific option can be specified
+${sharp} as follows.
+${sharp}
+${sharp} ec.<EC type name>.<option>
+${sharp} ec.<EC instance name>.<option>
+${sharp}
+${sharp} Example:
+${sharp} ec.PeriodicExecutionContext.sync_transition: NO
+${sharp} ec.pec1000Hz.rate: 1000
+${sharp} ec.pec1000Hz.synch_transition: YES
+${sharp} ec.pec1000Hz.transition_timeout: 0.5
+${sharp} ec.pec500Hz.rate: 500
+${sharp} ec.pec500Hz.synch_activation: YES
+${sharp} ec.pec500Hz.synch_deactivation: NO
+${sharp} ec.pec500Hz.synch_reset: YES
+${sharp} ec.pec500Hz.activation_timeout: 0.5
+${sharp} ec.pec500Hz.reset_timeout: 0.5
+
+${sharp} End of Execution context settings
+${sharp}============================================================
+
+${sharp}============================================================
+${sharp} Port configurations
+${sharp}============================================================
+${sharp} InPort options
+${sharp}   port.inport.<port_name>.* -> InPortBase.init()
+${sharp}   port.inport.dataport.*    -> InPortBase.init()
+${sharp}port.inport.dataport.provider_types: corba_cdr, direct, shm_memory
+${sharp}port.inport.dataport.consumer_types: corba_cdr, direct, shm_memory
+${sharp}port.inport.dataport.connection_limit: 1
+${sharp}
+${sharp} OutPort options
+${sharp}   port.outport.<port_name>.* -> OutPortBase.init()
+${sharp}   port.outport.<port_name>.* -> OutPortBase.init()
+${sharp}port.inport.dataport.provider_types: corba_cdr, direct, shm_memory
+${sharp}port.inport.dataport.consumer_types: corba_cdr, direct, shm_memory
+${sharp}port.inport.dataport.connection_limit: 1
+${sharp}
+${sharp} Service port options
+${sharp}   port.corbaport.<port_name>.* -> Base.init() 
+${sharp}   port.corba.* -> Base.init() 
+${sharp}None
+${sharp}
+${sharp} End of Port configurations
+${sharp}============================================================
+
+${sharp}============================================================
+${sharp} Configuration sets GUI settings for RTSystemEditor
+${sharp}
+${sharp}   Configuration parameters can be operated by GUI widgets on
+${sharp}   RTSystemEditor's configuration-set dialog. Normally, when designing
+${sharp}   RTC with RTCBuilder, you can specify what kind of GUI widget is
+${sharp}   assigned to each parameter, but you can also specify GUI widget
+${sharp}   assignment from component.conf.
+${sharp}
+${sharp} conf.[configuration_set_name].[parameter_name]:
+${sharp} conf.__widget__.[parameter_name]: GUI control type for RTSystemEditor
+${sharp} conf.__constraint__.[parameter_name]: Constraints for the value
+${sharp}
+${sharp}------------------------------------------------------------
+${sharp} GUI control option for RTSystemEditor
+${sharp}
+${sharp} Available GUI control options [__widget__]:
+${sharp}
+${sharp} conf.__widget__.[widget_name]:
+${sharp}
+${sharp} available wdget name:
+${sharp} - text:          text box [default].
+${sharp} - slider.<step>: Horizontal slider. <step> is step for the slider.
+${sharp}                  A range constraints option is required. 
+${sharp} - spin:          Spin button. A range constraitns option is required.
+${sharp} - radio:         Radio button. An enumeration constraints is required.
+${sharp} - checkbox:      Checkbox control. An enumeration constraints is
+${sharp}                  required. The parameter has to be able to accept a
+${sharp}                  comma separated list.
+${sharp} - orderd_list:   Orderd list control.  An enumeration constraint is
+${sharp}                  required. The parameter has to be able to accept a
+${sharp}                  comma separated list. In this control, Enumerated
+${sharp}                  elements can appear one or more times in the given list.
 #if(${tmpltHelper.checkNotWidget(${rtcParam})})
-${sharp}${sharp} examples:
+${sharp} examples:
 ${sharp} conf.__widget__.int_param0: slider.10
 ${sharp} conf.__widget__.int_param1: spin
 ${sharp} conf.__widget__.double_param0: slider.10
@@ -126,9 +324,35 @@ ${sharp} conf.__widget__.${configParam.name}, ${configParam.widget}#if( ${config
 #end
 #end
 #end
-
-
+${sharp}
+${sharp}------------------------------------------------------------
+${sharp} GUI control constraint options [__constraints__]:
+${sharp}
+${sharp} conf.__constraints__.[parameter_name]:
+${sharp}
+${sharp} available constraints:
+${sharp} - none:         blank
+${sharp} - direct value: 100 (constant value)
+${sharp} - range:        <, >, <=, >= can be used.
+${sharp} - enumeration:  (enum0, enum1, ...)
+${sharp} - array:        <constraints0>, ,constraints1>, ... for only array value
+${sharp} - hash:         {key0: value0, key1:, value0, ...}
+${sharp}
+${sharp} available constraint formats (substitute variable name: "x"):
+${sharp} - No constraint              : (blank)
+${sharp} - Direct                     : 100 (read only)
+${sharp} - 100 or over                : x >= 100
+${sharp} - 100 or less                : x <= 100
+${sharp} - Over 100                   : x > 100
+${sharp} - Less 100                   : x < 0
+${sharp} - 100 or over and 200 or less: 100 <= x <= 200
+${sharp} - Over 100 and less 200      : 100 < x < 200
+${sharp} - Enumeration                : (9600, 19200, 115200)
+${sharp} - Array                      : x < 1, x < 10, x > 100
+${sharp} - Hash                       : {key0: 100<x<200, key1: x>=100}
+${sharp}
 #if(${tmpltHelper.checkNotConstraint(${rtcParam})})
+${sharp} examples:
 ${sharp} conf.__constraints__.int_param0: 0<=x<=150
 ${sharp} conf.__constraints__.int_param1: 0<=x<=1000
 ${sharp} conf.__constraints__.double_param0: 0<=x<=100
@@ -150,43 +374,3 @@ ${sharp} conf.__type__.${configParam.name}: ${configParam.type}
 #end
 #end
 
-${sharp}${sharp}============================================================
-${sharp}${sharp} Execution context settings
-${sharp}${sharp}============================================================
-${sharp}${sharp}
-${sharp}${sharp} Periodic type ExecutionContext
-${sharp}${sharp}
-${sharp}${sharp} Other availabilities in OpenRTM-aist
-${sharp}${sharp}
-${sharp}${sharp} - ExtTrigExecutionContext: External triggered EC. It is embedded in
-${sharp}${sharp}                            OpenRTM library.
-${sharp}${sharp} - OpenHRPExecutionContext: External triggred paralell execution
-${sharp}${sharp}                            EC. It is embedded in OpenRTM
-${sharp}${sharp}                            library. This is usually used with
-${sharp}${sharp}                            OpenHRP3.
-${sharp}${sharp} - RTPreemptEC:             Real-time execution context for Linux
-${sharp}${sharp}                            RT-preemptive pathed kernel.
-${sharp}${sharp} - ArtExecutionContext:     Real-time execution context for ARTLinux
-${sharp}${sharp}                            (http://sourceforge.net/projects/art-linux/)
-${sharp}${sharp}
-#if(${tmpltHelper.checkPeriodicType(${rtcParam})})
-exec_cxt.periodic.type:${tmpltHelper.getPeriodicTypeValue(${rtcParam})}
-#else
-${sharp} exec_cxt.periodic.type: PeriodicExecutionContext
-#end
-
-${sharp}${sharp}
-${sharp}${sharp} The execution cycle of ExecutionContext
-${sharp}${sharp}
-#if(${rtcParam.executionRate}>0)exec_cxt.periodic.rate:${rtcParam.executionRate}
-#else
-${sharp} exec_cxt.periodic.rate: 1000
-#end
-
-#if( ${rtcParam.configParameterParams.size()} > 0 )
-#foreach($parameterParam in ${rtcParam.configParameterParams})  
-#if(${tmpltHelper.checkNotPeriodicTypeParam(${parameterParam})})
-${parameterParam.configName}:${parameterParam.defaultVal}
-#end
-#end
-#end

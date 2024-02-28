@@ -1,10 +1,7 @@
 package jp.go.aist.rtm.rtcbuilder.ui.preference;
 
-import jp.go.aist.rtm.rtcbuilder.RtcBuilderPlugin;
-
-import org.eclipse.jface.preference.DirectoryFieldEditor;
-import org.eclipse.jface.preference.FieldEditorPreferencePage;
-import org.eclipse.jface.preference.PathEditor;
+import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.preference.IntegerFieldEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -12,32 +9,42 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
-public class RtcBuilderPreferencePage extends FieldEditorPreferencePage implements
+import jp.go.aist.rtm.rtcbuilder.RtcBuilderPlugin;
+import jp.go.aist.rtm.rtcbuilder.nl.Messages;
+import jp.go.aist.rtm.rtcbuilder.ui.editors.IMessageConstants;
+
+public class RtcBuilderPreferencePage extends AbstarctFieldEditorPreferencePage implements
 		IWorkbenchPreferencePage {
 	public RtcBuilderPreferencePage(){
-		super(GRID);
 		setPreferenceStore(RtcBuilderPlugin.getDefault().getPreferenceStore());
 	}
 	
 	@Override
 	public void init(IWorkbench workbench) {
+		IPreferenceStore store = RtcBuilderPlugin.getDefault().getPreferenceStore();
+		storeBackupInitialSetting(store);
 	}
 
 	@Override
 	protected void createFieldEditors() {
-		Composite composite = new Composite(getFieldEditorParent(), SWT.NONE);
-		composite.setLayout(new GridLayout(1,false));
-		
-		GridData gd = new GridData(GridData.FILL_BOTH);
+		Composite composite = new Composite(getFieldEditorParent(), SWT.NULL);
+		composite.setLayout(new GridLayout());
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.grabExcessHorizontalSpace = true;
 		composite.setLayoutData(gd);
-		
-		PathEditor editor = new PathEditor(RTCBuilderPreferenceManager.IDLFILE_DIRECTORIES,
-				IPreferenceMessageConstants.LBL_IDL_SEARCH_DIRS,	"",	composite);
-		editor.getListControl(composite).setLayoutData(gd);
-		addField(editor);
-		//
-		DirectoryFieldEditor dirEditor = new DirectoryFieldEditor(RTCBuilderPreferenceManager.HOME_DIRECTORY,
-				IPreferenceMessageConstants.LBL_HOME_DIR, composite);
-		addField(dirEditor);
+		createBackupParts(composite);
 	}
+	
+	private void createBackupParts(Composite composite) {
+		Composite backupGroup = createGroup(composite, 
+				Messages.getString("IPreferenceMessageConstants.CODE_GEN_TITLE_BACKUP"));
+		IntegerFieldEditor moduleMaxInstanceTextEditor = new IntegerFieldEditor(ComponentPreferenceManager.Generate_Backup_Num,
+				IMessageConstants.BACKUP_FILE_NUM, backupGroup);
+		addField(moduleMaxInstanceTextEditor);
+	}
+
+	private void storeBackupInitialSetting(IPreferenceStore store) {
+		store.setDefault(ComponentPreferenceManager.Generate_Backup_Num, ComponentPreferenceManager.DEFAULT_BACKUP_NUM);
+	}
+
 }

@@ -29,6 +29,7 @@ import org.eclipse.ui.views.properties.IPropertySource;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link jp.go.aist.rtm.toolscommon.model.component.impl.ExecutionContextImpl#getKindL <em>Kind L</em>}</li>
  *   <li>{@link jp.go.aist.rtm.toolscommon.model.component.impl.ExecutionContextImpl#getRateL <em>Rate L</em>}</li>
@@ -36,7 +37,6 @@ import org.eclipse.ui.views.properties.IPropertySource;
  *   <li>{@link jp.go.aist.rtm.toolscommon.model.component.impl.ExecutionContextImpl#getOwner <em>Owner</em>}</li>
  *   <li>{@link jp.go.aist.rtm.toolscommon.model.component.impl.ExecutionContextImpl#getParticipants <em>Participants</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

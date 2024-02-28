@@ -1,8 +1,0 @@
-#include "MyServiceParentWithType.idl"
-
-interface MyServiceWithTypeChild : MyServiceWithType
-{
-  void setPos(in float pos);
-  EchoList getPos();
-};
-

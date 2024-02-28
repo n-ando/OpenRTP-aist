@@ -1,6 +1,6 @@
 package jp.go.aist.rtm.toolscommon.profiles._test;
 
-import org.openrtp.namespaces.rtc.version02.RtcProfile;
+import org.openrtp.namespaces.rtc.version03.RtcProfile;
 
 import jp.go.aist.rtm.toolscommon.profiles.util.XmlHandler;
 
@@ -21,19 +21,6 @@ public class XMLTest extends TestBase {
 			fail();
 		}
 		assertEquals(expected, result);
-	}
-	
-	public void testRtcXmlImport() throws Exception{
-		String resourceDir = rootPath +  "\\resource\\RTC\\SampleXML.xml";
-		String expected = readFile(resourceDir,"\n");
-		XmlHandler handler = new XmlHandler();
-		RtcProfile profile = null;
-		try {
-			profile = handler.restoreFromXmlRtc(expected);
-		} catch(Exception ex) {
-			fail(ex.getCause().getMessage());
-		}
-		checkDetailXml(profile);
 	}
 	
 	public void testRtcXmlImportVer02() throws Exception{

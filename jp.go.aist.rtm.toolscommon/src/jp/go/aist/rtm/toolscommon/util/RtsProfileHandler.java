@@ -5,6 +5,7 @@ import static jp.go.aist.rtm.toolscommon.model.component.ExecutionContext.KIND_E
 import static jp.go.aist.rtm.toolscommon.model.component.ExecutionContext.KIND_OTHER;
 import static jp.go.aist.rtm.toolscommon.model.component.ExecutionContext.KIND_PERIODIC;
 import static jp.go.aist.rtm.toolscommon.model.component.ExecutionContext.KIND_UNKNOWN;
+import static jp.go.aist.rtm.toolscommon.profiles.util.XmlHandler.createXMLGregorianCalendar;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -12,8 +13,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.xml.datatype.DatatypeFactory;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.emf.common.util.EList;
@@ -30,9 +29,6 @@ import org.openrtp.namespaces.rts.version02.TargetComponent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.sun.org.apache.xerces.internal.jaxp.datatype.DatatypeFactoryImpl;
-
-import jp.go.aist.rtm.toolscommon.corba.CorbaUtil;
 import jp.go.aist.rtm.toolscommon.factory.ComponentLoader;
 import jp.go.aist.rtm.toolscommon.model.component.Component;
 import jp.go.aist.rtm.toolscommon.model.component.ComponentFactory;
@@ -56,7 +52,7 @@ import jp.go.aist.rtm.toolscommon.profiles.util.XmlHandler;
  * RTSプロファイルの入出力を司るクラス
  *
  */
-public class RtsProfileHandler extends ProfileHandlerBase {
+public class RtsProfileHandler {
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(RtsProfileHandler.class);
@@ -103,28 +99,6 @@ public class RtsProfileHandler extends ProfileHandlerBase {
 		loader.setDiagram(diagram);
 		populate(diagram, profile);
 		return diagram;
-	}
-
-	/**
-	 * ダイアグラムの直下に含まれる全コンポーネントに対し、IORからCORABAオブジェクトを設定する
-	 * @param eDiagram
-	 */
-	public void populateCorbaBaseObject(SystemDiagram eDiagram) {
-		for (Object element : eDiagram.getRegisteredComponents()) {
-			if (!(element instanceof CorbaComponent)) continue;
-			CorbaComponent eCorbaComp = (CorbaComponent)element;
-			String ior = eCorbaComp.getIor();
-			if (ior == null) continue;
-			eCorbaComp.setCorbaObject(getRTObject(ior));
-		}
-	}
-
-	private RTC.RTObject getRTObject(String ior) {
-		try {
-			return RTC.RTObjectHelper.narrow(CorbaUtil.stringToObject(ior));
-		} catch (Exception e) {
-			return null;
-		}
 	}
 
 	/**
@@ -267,11 +241,10 @@ public class RtsProfileHandler extends ProfileHandlerBase {
 		factory = new org.openrtp.namespaces.rts.version02.ObjectFactory();
 		org.openrtp.namespaces.rts.version02.RtsProfileExt profile = factory.createRtsProfileExt();
 		profile.setId(eDiagram.getSystemId());
-		DatatypeFactory dateFactory = new DatatypeFactoryImpl();
 		if(eDiagram.getCreationDate() != null) {
-			profile.setCreationDate(dateFactory.newXMLGregorianCalendar(eDiagram.getCreationDate()));
+			profile.setCreationDate(createXMLGregorianCalendar(eDiagram.getCreationDate()));
 		}
-		profile.setUpdateDate(dateFactory.newXMLGregorianCalendar(eDiagram.getUpdateDate()));
+		profile.setUpdateDate(createXMLGregorianCalendar(eDiagram.getUpdateDate()));
 		profile.setVersion("0.2");
 
 		populateComponents(eDiagram, profile);
@@ -796,11 +769,7 @@ public class RtsProfileHandler extends ProfileHandlerBase {
 			org.openrtp.namespaces.rts.version02.Component original) {
 		// プロパティ設定
 		for (String key : eComp.getPropertyKeys()) {
-			//デプロイ情報は除外
-			if(key.equals(KEY_DEPLOY_TYPE) || key.equals(KEY_DEPLOY_TARGET)
-					|| key.equals(KEY_DEPLOY_IOR)) continue;
-			//
-			setProperty(key, eComp.getProperty(key), target.getProperties());
+				setProperty(key, eComp.getProperty(key), target.getProperties());
 		}
 		populateIOR(target.getProperties(), eComp);
 	}
@@ -1497,11 +1466,19 @@ public class RtsProfileHandler extends ProfileHandlerBase {
 			Component eComp,
 			List<org.openrtp.namespaces.rts.version02.Component> components) {
 		for (org.openrtp.namespaces.rts.version02.Component component : components) {
-			if (component.getId().equals(eComp.getComponentId())
-					&& component.getInstanceName().equals(
-							eComp.getInstanceNameL())
-					&& component.getPathUri().equals(eComp.getPathId())) {
-				return component;
+			if(eComp instanceof ComponentSpecification) {
+				if (component.getId().equals(eComp.getComponentId())
+						&& component.getInstanceName().equals(
+								eComp.getInstanceNameL())
+						&& component.getPathUri().equals(eComp.getPathId())) {
+					return component;
+				}
+			} else {
+				if (component.getId().equals(eComp.getComponentId())
+						&& component.getInstanceName().equals(
+								eComp.getInstanceNameL())) {
+					return component;
+				}
 			}
 		}
 		return null;

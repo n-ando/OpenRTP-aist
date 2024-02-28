@@ -1,6 +1,6 @@
 package jp.go.aist.rtm.toolscommon.profiles.handlers;
 
-import org.openrtp.namespaces.rtc.version02.ActionStatusDoc;
+import org.openrtp.namespaces.rtc.version03.ActionStatusDoc;
 
 
 public class ActionStatusHandler extends CommonDocHandler {

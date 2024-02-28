@@ -39,7 +39,7 @@ public class ServicePortFigure extends PortFigureBase {
 			portLabel.setLabelAlignment(PositionConstants.RIGHT);
 			constraint = new Rectangle(0, 0, LABELWIDTH, -1);
 			sizeX = SIZE+LABELWIDTH+LABELMARGIN;
-			sizeY = SIZE;
+			sizeY = SIZE + 3;
 		} else if( direction == PortDirection.TOP ) {
 			offsetX = LABELWIDTH/2-SIZE/2;
 			addPolyPoint(offsetX + 0, 0);
@@ -69,7 +69,7 @@ public class ServicePortFigure extends PortFigureBase {
 			addPolyPoint(offsetX + 0, 10);
 			constraint = new Rectangle(SIZE+LABELMARGIN, 0, -1, -1);
 			sizeX = SIZE+LABELWIDTH+LABELMARGIN;
-			sizeY = SIZE;
+			sizeY = SIZE + 3;
 		}
 
 		this.setConstraint(portLabel, constraint);

@@ -1,6 +1,6 @@
 package jp.go.aist.rtm.rtcbuilder.python.manager;
 
-import static jp.go.aist.rtm.rtcbuilder.IRtcBuilderConstants.RTM_VERSION_100;
+import static jp.go.aist.rtm.rtcbuilder.IRtcBuilderConstants.DEFAULT_RTM_VERSION;
 import static jp.go.aist.rtm.rtcbuilder.python.IRtcBuilderConstantsPython.LANG_PYTHON;
 import static jp.go.aist.rtm.rtcbuilder.python.IRtcBuilderConstantsPython.LANG_PYTHON_ARG;
 import static jp.go.aist.rtm.rtcbuilder.util.RTCUtil.form;
@@ -11,12 +11,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import jp.go.aist.rtm.rtcbuilder.fsm.StateParam;
 import jp.go.aist.rtm.rtcbuilder.generator.GeneratedResult;
 import jp.go.aist.rtm.rtcbuilder.generator.param.RtcParam;
 import jp.go.aist.rtm.rtcbuilder.generator.param.idl.IdlFileParam;
 import jp.go.aist.rtm.rtcbuilder.generator.param.idl.ServiceClassParam;
 import jp.go.aist.rtm.rtcbuilder.manager.GenerateManager;
 import jp.go.aist.rtm.rtcbuilder.python.ui.Perspective.PythonProperty;
+import jp.go.aist.rtm.rtcbuilder.python.util.RTCUtilPy;
 import jp.go.aist.rtm.rtcbuilder.template.TemplateHelper;
 import jp.go.aist.rtm.rtcbuilder.template.TemplateUtil;
 import jp.go.aist.rtm.rtcbuilder.ui.Perspective.LanguageProperty;
@@ -33,7 +35,7 @@ public class PythonGenerateManager extends GenerateManager {
 
 	@Override
 	public String getTargetVersion() {
-		return RTM_VERSION_100;
+		return DEFAULT_RTM_VERSION;
 	}
 
 	@Override
@@ -78,10 +80,7 @@ public class PythonGenerateManager extends GenerateManager {
 			allIdlFileParams.add(target);
 		}
 		List<IdlFileParam> allIdlFileParamsForBuild = new ArrayList<IdlFileParam>();
-		for(IdlFileParam target : allIdlFileParams) {
-			if(RTCUtil.checkDefault(target.getIdlPath(), rtcParam.getParent().getDataTypeParams())) continue;
-			allIdlFileParamsForBuild.add(target);
-		}
+		allIdlFileParamsForBuild.addAll(allIdlFileParams);
 		for(IdlFileParam target : rtcParam.getIncludedIdlPathes()) {
 			if(RTCUtil.checkDefault(target.getIdlPath(), rtcParam.getParent().getDataTypeParams())) continue;
 			allIdlFileParamsForBuild.add(target);
@@ -97,6 +96,11 @@ public class PythonGenerateManager extends GenerateManager {
 				}
 			}
 		}
+		List<IdlFileParam> allFileParams = new ArrayList<IdlFileParam>();
+		allFileParams.addAll(rtcParam.getProviderIdlPathes());
+		allFileParams.addAll(rtcParam.getConsumerIdlPathes());
+		List<String> moduleList = RTCUtilPy.checkDefaultModuile(allFileParams, true, rtcParam.getParent().getDataTypeParams());
+		List<String> testModuleList = RTCUtilPy.checkDefaultModuile(allFileParams, false, rtcParam.getParent().getDataTypeParams());
 
 		Map<String, Object> contextMap = new HashMap<String, Object>();
 		contextMap.put("template", TEMPLATE_PATH);
@@ -107,7 +111,8 @@ public class PythonGenerateManager extends GenerateManager {
 		contextMap.put("allIdlFileParam", allIdlFileParams);
 		contextMap.put("idlPathes", rtcParam.getIdlPathes());
 		contextMap.put("allIdlFileParamBuild", allIdlFileParamsForBuild);
-		contextMap.put("rtmRootIdlDir", RTCUtil.getRTMRootIdlPath());
+		contextMap.put("defaultModule", moduleList);
+		contextMap.put("defaultTestModule", testModuleList);
 
 		return generateTemplateCode10(contextMap);
 	}
@@ -120,35 +125,39 @@ public class PythonGenerateManager extends GenerateManager {
 		RtcParam rtcParam = (RtcParam) contextMap.get("rtcParam");
 		List<IdlFileParam> allIdlFileParams = (List<IdlFileParam>) contextMap
 				.get("allIdlFileParam");
+		boolean isStaticFSM = rtcParam.isStaticFSM();
+		if(isStaticFSM) {
+			StateParam stateParam = rtcParam.getFsmParam();
+			stateParam.setEventParam(rtcParam);
+			contextMap.put("fsmParam", stateParam);
+		}
 
-		GeneratedResult gr;
-		gr = generatePythonSource(contextMap);
-		result.add(gr);
+		result.add(generatePythonSource(contextMap));
+		
+		if(isStaticFSM) {
+			result.add(generatePythonFSM(contextMap));
+		}
+		
+		result.add(generateScript1604(contextMap));
+		result.add(generateScript1804(contextMap));
+		result.add(generateAppVeyorTemplate(contextMap));
 
 		if ( 0<allIdlFileParams.size() ) {
-			gr = generateIDLCompileBat(contextMap);
-			result.add(gr);
-			gr = generateIDLCompileSh(contextMap);
-			result.add(gr);
-			gr = generateDeleteBat(contextMap);
-			result.add(gr);
+			result.add(generateIDLCompileBat(contextMap));
+			result.add(generateIDLCompileSh(contextMap));
+			result.add(generateDeleteBat(contextMap));
 		}
 
 		for (IdlFileParam idlFileParam : rtcParam.getProviderIdlPathes()) {
-			if(RTCUtil.checkDefault(idlFileParam.getIdlPath(), rtcParam.getParent().getDataTypeParams())) continue;
 			contextMap.put("idlFileParam", idlFileParam);
-			gr = generateSVCIDLExampleSource(contextMap);
-			result.add(gr);
+			result.add(generateSVCIDLExampleSource(contextMap));
 		}
 		//////////
-		gr = generatePythonTestSource(contextMap);
-		result.add(gr);
+		result.add(generatePythonTestSource(contextMap));
 		for (IdlFileParam idlFileParam : rtcParam.getConsumerIdlPathes()) {
 			if(idlFileParam.isDataPort()) continue;
-			if(RTCUtil.checkDefault(idlFileParam.getIdlPath(), rtcParam.getParent().getDataTypeParams())) continue;
 			contextMap.put("idlFileParam", idlFileParam);
-			gr = generateTestSVCIDLExampleSource(contextMap);
-			result.add(gr);
+			result.add(generateTestSVCIDLExampleSource(contextMap));
 		}
 
 		return result;
@@ -171,6 +180,14 @@ public class PythonGenerateManager extends GenerateManager {
 		return generate(infile, outfile, contextMap);
 	}
 
+	public GeneratedResult generatePythonFSM(Map<String, Object> contextMap) {
+		RtcParam rtcParam = (RtcParam) contextMap.get("rtcParam");
+		String outfile = null;
+		outfile = rtcParam.getName()  + "FSM.py";
+		String infile = "python/fsm/Py_FSM.py.vsl";
+		return generate(infile, outfile, contextMap);
+	}
+	
 	// 1.0系 (ビルド環境)
 
 	public GeneratedResult generateIDLCompileBat(Map<String, Object> contextMap) {
@@ -185,7 +202,8 @@ public class PythonGenerateManager extends GenerateManager {
 		String outfile = "idlcompile.sh";
 		String infile = "python/idlcompile.sh.vsl";
 		GeneratedResult result = generate(infile, outfile, contextMap);
-		result.setNotBom(true);
+		result.setCode(result.getCode().replaceAll("\r\n", "\n"));
+		result.setEncode("EUC_JP");
 		return result;
 	}
 
@@ -207,8 +225,28 @@ public class PythonGenerateManager extends GenerateManager {
 	public GeneratedResult generateTestSVCIDLExampleSource(
 			Map<String, Object> contextMap) {
 		IdlFileParam idlParam = (IdlFileParam) contextMap.get("idlFileParam");
+		idlParam.getServiceClassParams().clear();
+		idlParam.getServiceClassParams().addAll(idlParam.getTestServiceClassParams());
 		String outfile = "test/" + idlParam.getIdlFileNoExt() + "_idl_example.py";
 		String infile = "python/Py_SVC_idl_example.py.vsl";
+		return generate(infile, outfile, contextMap);
+	}
+	
+	public GeneratedResult generateScript1604(Map<String, Object> contextMap) {
+		String outfile = "scripts/ubuntu_1604/Dockerfile";
+		String infile = "python/scripts/Dockerfile_ubuntu_1604.vsl";
+		return generate(infile, outfile, contextMap);
+	}
+	
+	public GeneratedResult generateScript1804(Map<String, Object> contextMap) {
+		String outfile = "scripts/ubuntu_1804/Dockerfile";
+		String infile = "python/scripts/Dockerfile_ubuntu_1804.vsl";
+		return generate(infile, outfile, contextMap);
+	}
+	
+	public GeneratedResult generateAppVeyorTemplate(Map<String, Object> contextMap) {
+		String outfile = ".appveyor.yml";
+		String infile = "python/appveyor.vsl";
 		return generate(infile, outfile, contextMap);
 	}
 	//////////

@@ -11,6 +11,7 @@ import jp.go.aist.rtm.rtcbuilder.generator.param.GeneratorParam;
 import jp.go.aist.rtm.rtcbuilder.generator.param.RtcParam;
 import jp.go.aist.rtm.rtcbuilder.generator.param.ServicePortInterfaceParam;
 import jp.go.aist.rtm.rtcbuilder.generator.param.ServicePortParam;
+import jp.go.aist.rtm.rtcbuilder.generator.param.idl.IdlPathParam;
 import jp.go.aist.rtm.rtcbuilder.manager.GenerateManager;
 import static jp.go.aist.rtm.rtcbuilder.IRtcBuilderConstants.*;
 
@@ -28,7 +29,7 @@ public class BuildTest extends TestBase {
 		rtcParam.setOutputProject(rootPath + "/resource/work");
 		rtcParam.setLanguage(LANG_CPP);
 		rtcParam.setLanguageArg(LANG_CPP_ARG);
-		rtcParam.setRtmVersion(RTM_VERSION_100);
+		rtcParam.setRtmVersion(DEFAULT_RTM_VERSION);
 		rtcParam.setIsTest(true);
 		genParam.setRtcParam(rtcParam);
 
@@ -66,7 +67,7 @@ public class BuildTest extends TestBase {
 		List<ServicePortInterfaceParam> srvinterts = new ArrayList<ServicePortInterfaceParam>();
 		ServicePortInterfaceParam int1 = new ServicePortInterfaceParam(
 				service1, "acc", "", "", rootPath + "/resource/MyService.idl",
-				"MyService", "", 0);
+				"MyService", 0);
 		srvinterts.add(int1);
 		service1.getServicePortInterfaces().addAll(srvinterts);
 		List<ServicePortParam> srvports = new ArrayList<ServicePortParam>();
@@ -76,7 +77,7 @@ public class BuildTest extends TestBase {
 		List<ServicePortInterfaceParam> srvinterts2 = new ArrayList<ServicePortInterfaceParam>();
 		ServicePortInterfaceParam int2 = new ServicePortInterfaceParam(
 				service2, "rate", "", "",
-				rootPath + "/resource/DAQService.idl", "DAQService", "", 1);
+				rootPath + "/resource/DAQService.idl", "DAQService", 1);
 		srvinterts2.add(int2);
 		service2.getServicePortInterfaces().addAll(srvinterts2);
 		srvports.add(service2);
@@ -117,6 +118,8 @@ public class BuildTest extends TestBase {
 		rtcParam.setActivityType("PERIODIC");
 		rtcParam.setComponentKind("DataFlowComponent");
 		rtcParam.setMaxInstance(2);
+		
+		rtcParam.getIdlSearchPathList().add(new IdlPathParam(fixturePath(name), false));
 
 		List<ServicePortParam> svports = new ArrayList<ServicePortParam>();
 
@@ -124,13 +127,12 @@ public class BuildTest extends TestBase {
 		List<ServicePortInterfaceParam> iflist = new ArrayList<ServicePortInterfaceParam>();
 		ServicePortInterfaceParam sif1 = new ServicePortInterfaceParam(sv1,
 				"MyServiceProvider", "", "", fixturePath(name)
-						+ "/MyServiceChildMulti.idl", "MyServiceChild",
-				fixturePath(name), 0);
+						+ "/MyServiceChildMulti.idl", "MyServiceChild", 0);
 		iflist.add(sif1);
 		ServicePortInterfaceParam sif2 = new ServicePortInterfaceParam(sv1,
 				"MyServiceProvider2", "", "", fixturePath(name)
 						+ "/MyServiceChildWithType.idl",
-				"MyServiceWithTypeChild", fixturePath(name), 0);
+				"MyServiceWithTypeChild", 0);
 		iflist.add(sif2);
 		sv1.getServicePortInterfaces().addAll(iflist);
 		svports.add(sv1);
@@ -139,13 +141,12 @@ public class BuildTest extends TestBase {
 		iflist = new ArrayList<ServicePortInterfaceParam>();
 		ServicePortInterfaceParam sif3 = new ServicePortInterfaceParam(sv2,
 				"MyServiceRequire", "", "", fixturePath(name)
-						+ "/MyServiceChildMulti.idl", "MyServiceChild",
-				fixturePath(name), 1);
+						+ "/MyServiceChildMulti.idl", "MyServiceChild", 1);
 		iflist.add(sif3);
 		ServicePortInterfaceParam sif4 = new ServicePortInterfaceParam(sv2,
 				"MyServiceRequire2", "", "", fixturePath(name)
 						+ "/MyServiceChildWithType.idl",
-				"MyServiceWithTypeChild", fixturePath(name), 1);
+				"MyServiceWithTypeChild", 1);
 		iflist.add(sif4);
 		sv2.getServicePortInterfaces().addAll(iflist);
 		svports.add(sv2);

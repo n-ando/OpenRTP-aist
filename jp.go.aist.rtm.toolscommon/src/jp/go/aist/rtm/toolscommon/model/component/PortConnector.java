@@ -38,7 +38,7 @@ public interface PortConnector extends WrapperObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Routing Constraint</em>' map.
 	 * @see jp.go.aist.rtm.toolscommon.model.component.ComponentPackage#getPortConnector_RoutingConstraint()
-	 * @model mapType="jp.go.aist.rtm.toolscommon.model.component.EIntegerObjectToPointMapEntry<org.eclipse.emf.ecore.EIntegerObject, jp.go.aist.rtm.toolscommon.model.core.Point>"
+	 * @model mapType="jp.go.aist.rtm.toolscommon.model.component.EIntegerObjectToPointMapEntry&lt;org.eclipse.emf.ecore.EIntegerObject, jp.go.aist.rtm.toolscommon.model.core.Point&gt;"
 	 * @generated
 	 */
 	EMap<Integer, Point> getRoutingConstraint();

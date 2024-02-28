@@ -12,7 +12,6 @@ import jp.go.aist.rtm.rtcbuilder.generator.param.GeneratorParam;
 import jp.go.aist.rtm.rtcbuilder.generator.param.RtcParam;
 import jp.go.aist.rtm.rtcbuilder.generator.param.ServicePortInterfaceParam;
 import jp.go.aist.rtm.rtcbuilder.generator.param.ServicePortParam;
-import jp.go.aist.rtm.rtcbuilder.generator.param.idl.IdlPathParam;
 import jp.go.aist.rtm.rtcbuilder.python.IRtcBuilderConstantsPython;
 import jp.go.aist.rtm.rtcbuilder.python._test.TestBase;
 import jp.go.aist.rtm.rtcbuilder.python.manager.PythonCMakeGenerateManager;
@@ -82,7 +81,7 @@ public class AISTTest extends TestBase {
 		ServicePortInterfaceParam int1 = new ServicePortInterfaceParam(
 				service1, "myservice0", "", "", rootPath
 						+ "resource/Python/AIST6/work/MyService.idl",
-				"MyService", "", 0);
+				"MyService", 0);
 		srvinterts.add(int1);
 		service1.getServicePortInterfaces().addAll(srvinterts);
 		List<ServicePortParam> srvports = new ArrayList<ServicePortParam>();
@@ -93,7 +92,7 @@ public class AISTTest extends TestBase {
 		ServicePortInterfaceParam int2 = new ServicePortInterfaceParam(
 				service1, "myservice", "", "", rootPath
 						+ "resource/Python/AIST6/work/MyServiceAIST.idl",
-				"MyService2", "", 0);
+				"MyService2", 0);
 		srvinterts2.add(int2);
 		service2.getServicePortInterfaces().addAll(srvinterts2);
 		srvports.add(service2);
@@ -126,8 +125,7 @@ public class AISTTest extends TestBase {
 		List<ServicePortInterfaceParam> srvinterts = new ArrayList<ServicePortInterfaceParam>();
 		ServicePortInterfaceParam int1 = new ServicePortInterfaceParam(
 				service1, "myservice0", "", "", rootPath
-						+ "resource/Python/AIST4/MyService.idl", "MyService",
-				"", 0);
+						+ "resource/Python/AIST4/MyService.idl", "MyService", 0);
 		srvinterts.add(int1);
 		service1.getServicePortInterfaces().addAll(srvinterts);
 		List<ServicePortParam> srvports = new ArrayList<ServicePortParam>();
@@ -137,15 +135,14 @@ public class AISTTest extends TestBase {
 		List<ServicePortInterfaceParam> srvinterts2 = new ArrayList<ServicePortInterfaceParam>();
 		ServicePortInterfaceParam int2 = new ServicePortInterfaceParam(
 				service1, "myservice", "", "", rootPath
-						+ "resource/Python/AIST4/MyService.idl", "MyService",
-				"", 0);
+						+ "resource/Python/AIST4/MyService.idl", "MyService", 0);
 		srvinterts2.add(int2);
 		service2.getServicePortInterfaces().addAll(srvinterts2);
 		srvports.add(service2);
 		rtcParam.getServicePorts().addAll(srvports);
 
-		List<IdlPathParam> idlDirs = RTCUtil.getIDLPathes(rtcParam);
-		List<GeneratedResult> result = generator.generateTemplateCode(genParam, idlDirs);
+		RTCUtil.getIDLPathes(rtcParam);
+		List<GeneratedResult> result = generator.generateTemplateCode(genParam, rtcParam.getIdlSearchPathList());
 
 		String resourceDir = rootPath + "/resource/100/aist/AIST4/";
 
@@ -153,7 +150,7 @@ public class AISTTest extends TestBase {
 		checkCode(result, resourceDir, "test.py");
 		checkCode(result, resourceDir, "MyService_idl_example.py");
 		checkCode(result, resourceDir, "idlcompile.bat");
-		checkCode(result, resourceDir, "idlcompile.sh");
+		checkCode(result, resourceDir, "idlcompile.sh", "\n");
 	}
 
 	public void testAIST3() throws Exception {
@@ -179,8 +176,7 @@ public class AISTTest extends TestBase {
 		List<ServicePortInterfaceParam> srvinterts = new ArrayList<ServicePortInterfaceParam>();
 		ServicePortInterfaceParam int1 = new ServicePortInterfaceParam(
 				service1, "myservice0", "", "", rootPath
-						+ "resource/Python/AIST3/MyService.idl", "MyService",
-				"", 0);
+						+ "resource/Python/AIST3/MyService.idl", "MyService", 0);
 		srvinterts.add(int1);
 		service1.getServicePortInterfaces().addAll(srvinterts);
 		List<ServicePortParam> srvports = new ArrayList<ServicePortParam>();
@@ -190,15 +186,14 @@ public class AISTTest extends TestBase {
 		List<ServicePortInterfaceParam> srvinterts2 = new ArrayList<ServicePortInterfaceParam>();
 		ServicePortInterfaceParam int2 = new ServicePortInterfaceParam(
 				service1, "myservice1", "", "", rootPath
-						+ "resource/Python/AIST3/MyService.idl", "MyService",
-				"", 1);
+						+ "resource/Python/AIST3/MyService.idl", "MyService", 1);
 		srvinterts2.add(int2);
 		service2.getServicePortInterfaces().addAll(srvinterts2);
 		srvports.add(service2);
 		rtcParam.getServicePorts().addAll(srvports);
 
-		List<IdlPathParam> idlDirs = RTCUtil.getIDLPathes(rtcParam);
-		List<GeneratedResult> result = generator.generateTemplateCode(genParam, idlDirs);
+		RTCUtil.getIDLPathes(rtcParam);
+		List<GeneratedResult> result = generator.generateTemplateCode(genParam, rtcParam.getIdlSearchPathList());
 
 		String resourceDir = rootPath + "/resource/100/aist/AIST3/";
 
@@ -206,7 +201,7 @@ public class AISTTest extends TestBase {
 		checkCode(result, resourceDir, "test.py");
 		checkCode(result, resourceDir, "MyService_idl_example.py");
 		checkCode(result, resourceDir, "idlcompile.bat");
-		checkCode(result, resourceDir, "idlcompile.sh");
+		checkCode(result, resourceDir, "idlcompile.sh", "\n");
 	}
 
 	public void testAIST2() throws Exception {
@@ -232,23 +227,22 @@ public class AISTTest extends TestBase {
 		List<ServicePortInterfaceParam> srvinterts = new ArrayList<ServicePortInterfaceParam>();
 		ServicePortInterfaceParam int1 = new ServicePortInterfaceParam(
 				service1, "myservice", "", "", rootPath
-						+ "resource/Python/AIST2/MyService.idl", "MyService",
-				"", 1);
+						+ "resource/Python/AIST2/MyService.idl", "MyService", 1);
 		srvinterts.add(int1);
 		service1.getServicePortInterfaces().addAll(srvinterts);
 		List<ServicePortParam> srvports = new ArrayList<ServicePortParam>();
 		srvports.add(service1);
 		rtcParam.getServicePorts().addAll(srvports);
 
-		List<IdlPathParam> idlDirs = RTCUtil.getIDLPathes(rtcParam);
-		List<GeneratedResult> result = generator.generateTemplateCode(genParam, idlDirs);
+		RTCUtil.getIDLPathes(rtcParam);
+		List<GeneratedResult> result = generator.generateTemplateCode(genParam, rtcParam.getIdlSearchPathList());
 
 		String resourceDir = rootPath + "/resource/100/aist/AIST2/";
 
 		assertEquals(default_file_num+7, result.size());
 		checkCode(result, resourceDir, "test.py");
 		checkCode(result, resourceDir, "idlcompile.bat");
-		checkCode(result, resourceDir, "idlcompile.sh");
+		checkCode(result, resourceDir, "idlcompile.sh", "\n");
 	}
 
 	public void testAIST1() throws Exception {
@@ -266,16 +260,15 @@ public class AISTTest extends TestBase {
 		List<ServicePortInterfaceParam> srvinterts = new ArrayList<ServicePortInterfaceParam>();
 		ServicePortInterfaceParam int1 = new ServicePortInterfaceParam(
 				service1, "myservice", "", "", rootPath
-						+ "resource/Python/AIST1/MyService.idl", "MyService",
-				"", 0);
+						+ "resource/Python/AIST1/MyService.idl", "MyService", 0);
 		srvinterts.add(int1);
 		service1.getServicePortInterfaces().addAll(srvinterts);
 		List<ServicePortParam> srvports = new ArrayList<ServicePortParam>();
 		srvports.add(service1);
 		rtcParam.getServicePorts().addAll(srvports);
 		
-		List<IdlPathParam> idlDirs = RTCUtil.getIDLPathes(rtcParam);
-		List<GeneratedResult> result = generator.generateTemplateCode(genParam, idlDirs);
+		RTCUtil.getIDLPathes(rtcParam);
+		List<GeneratedResult> result = generator.generateTemplateCode(genParam, rtcParam.getIdlSearchPathList());
 
 		String resourceDir = rootPath + "/resource/100/aist/AIST1/";
 
@@ -283,7 +276,7 @@ public class AISTTest extends TestBase {
 		checkCode(result, resourceDir, "test.py");
 		checkCode(result, resourceDir, "MyService_idl_example.py");
 		checkCode(result, resourceDir, "idlcompile.bat");
-		checkCode(result, resourceDir, "idlcompile.sh");
+		checkCode(result, resourceDir, "idlcompile.sh", "\n");
 	}
 
 }

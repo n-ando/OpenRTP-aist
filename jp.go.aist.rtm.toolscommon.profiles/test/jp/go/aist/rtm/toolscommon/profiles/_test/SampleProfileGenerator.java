@@ -1,37 +1,36 @@
 package jp.go.aist.rtm.toolscommon.profiles._test;
 
+import static jp.go.aist.rtm.toolscommon.profiles.util.XmlHandler.createXMLGregorianCalendar;
+
 import java.math.BigInteger;
 
-import jp.go.aist.rtm.toolscommon.profiles.util.XmlHandler;
-
-import org.openrtp.namespaces.rtc.version02.ActionStatusDoc;
-import org.openrtp.namespaces.rtc.version02.Actions;
-import org.openrtp.namespaces.rtc.version02.BasicInfoExt;
-import org.openrtp.namespaces.rtc.version02.ConfigurationDoc;
-import org.openrtp.namespaces.rtc.version02.ConfigurationExt;
-import org.openrtp.namespaces.rtc.version02.ConfigurationSet;
-import org.openrtp.namespaces.rtc.version02.DataportExt;
-import org.openrtp.namespaces.rtc.version02.DocAction;
-import org.openrtp.namespaces.rtc.version02.DocBasic;
-import org.openrtp.namespaces.rtc.version02.DocConfiguration;
-import org.openrtp.namespaces.rtc.version02.DocDataport;
-import org.openrtp.namespaces.rtc.version02.DocServiceinterface;
-import org.openrtp.namespaces.rtc.version02.DocServiceport;
-import org.openrtp.namespaces.rtc.version02.LanguageExt;
-import org.openrtp.namespaces.rtc.version02.Library;
-import org.openrtp.namespaces.rtc.version02.ObjectFactory;
-import org.openrtp.namespaces.rtc.version02.Parameter;
-import org.openrtp.namespaces.rtc.version02.Position;
-import org.openrtp.namespaces.rtc.version02.Property;
-import org.openrtp.namespaces.rtc.version02.RtcProfile;
-import org.openrtp.namespaces.rtc.version02.ServiceinterfaceExt;
-import org.openrtp.namespaces.rtc.version02.ServiceportExt;
-import org.openrtp.namespaces.rtc.version02.TargetEnvironment;
-import org.openrtp.namespaces.rtc.version02.TransmissionMethod;
+import org.openrtp.namespaces.rtc.version03.ActionStatusDoc;
+import org.openrtp.namespaces.rtc.version03.Actions;
+import org.openrtp.namespaces.rtc.version03.BasicInfoExt;
+import org.openrtp.namespaces.rtc.version03.ConfigurationDoc;
+import org.openrtp.namespaces.rtc.version03.ConfigurationExt;
+import org.openrtp.namespaces.rtc.version03.ConfigurationSet;
+import org.openrtp.namespaces.rtc.version03.DataportExt;
+import org.openrtp.namespaces.rtc.version03.DocAction;
+import org.openrtp.namespaces.rtc.version03.DocBasic;
+import org.openrtp.namespaces.rtc.version03.DocConfiguration;
+import org.openrtp.namespaces.rtc.version03.DocDataport;
+import org.openrtp.namespaces.rtc.version03.DocServiceinterface;
+import org.openrtp.namespaces.rtc.version03.DocServiceport;
+import org.openrtp.namespaces.rtc.version03.LanguageExt;
+import org.openrtp.namespaces.rtc.version03.Library;
+import org.openrtp.namespaces.rtc.version03.ObjectFactory;
+import org.openrtp.namespaces.rtc.version03.Position;
+import org.openrtp.namespaces.rtc.version03.Property;
+import org.openrtp.namespaces.rtc.version03.RtcProfile;
+import org.openrtp.namespaces.rtc.version03.ServiceinterfaceExt;
+import org.openrtp.namespaces.rtc.version03.ServiceportExt;
+import org.openrtp.namespaces.rtc.version03.TargetEnvironment;
+import org.openrtp.namespaces.rtc.version03.TransmissionMethod;
 import org.openrtp.namespaces.rts.version02.Component;
 import org.openrtp.namespaces.rts.version02.RtsProfileExt;
 
-import com.sun.org.apache.xerces.internal.jaxp.datatype.XMLGregorianCalendarImpl;
+import jp.go.aist.rtm.toolscommon.profiles.util.XmlHandler;
 
 public class SampleProfileGenerator {
 
@@ -40,8 +39,8 @@ public class SampleProfileGenerator {
 		RtsProfileExt profile = factory.createRtsProfileExt();
 		profile.setId("RTSystem:jp.go.aist:SampleRTS:1.0.0");
 		profile.setVersion("0.2");
-		profile.setCreationDate(XMLGregorianCalendarImpl.createDateTime(2008, 4, 18, 14, 0, 0));
-		profile.setUpdateDate(XMLGregorianCalendarImpl.parse("2008-04-18T14:00:00"));
+		profile.setCreationDate(createXMLGregorianCalendar(2008, 4, 18, 14, 0, 0));
+		profile.setUpdateDate(createXMLGregorianCalendar("2008-04-18T14:00:00"));
 		profile.setComment("Sample Comment");
 		profile.getVersionUpLogs().add("Version0.1");
 		profile.getVersionUpLogs().add("Version0.2");
@@ -80,9 +79,8 @@ public class SampleProfileGenerator {
 		basic.setAbstract("SampleAbstract");
 		basic.setHardwareProfile("SampleProfile");
 		basic.setRtcType("Normal");
-		basic.setCreationDate(XMLGregorianCalendarImpl.createDateTime(2008, 4, 18, 14, 0, 0));
-//		basic.setUpdateDate(XMLGregorianCalendarImpl.createDateTime(2008, 4, 17, 14, 0, 0));
-		basic.setUpdateDate(XMLGregorianCalendarImpl.parse("2008-04-18T14:00:00"));
+		basic.setCreationDate(createXMLGregorianCalendar(2008, 4, 18, 14, 0, 0));
+		basic.setUpdateDate(createXMLGregorianCalendar("2008-04-18T14:00:00"));
 		basic.setSaveProject("Output Project");
 		profile.setBasicInfo(basic);
 		//
@@ -319,7 +317,6 @@ public class SampleProfileGenerator {
 		serviceIF1.setVariableName("IF1VarName");
 		serviceIF1.setIdlFile("IF1Idlfile.idl");
 		serviceIF1.setType("IF1Type");
-		serviceIF1.setPath("IF1SearchPath");
 		//
 		DocServiceinterface docIf1 = factory.createDocServiceinterface();
 		docIf1.setDescription("if1 description");
@@ -332,7 +329,6 @@ public class SampleProfileGenerator {
 		service1.getServiceInterface().add(serviceIF1);
 		//
 		ServiceinterfaceExt serviceIF2 = factory.createServiceinterfaceExt();
-		serviceIF2.setPath("IF2SearchPath");
 		serviceIF2.setType("IF2Type");
 		serviceIF2.setIdlFile("IF2Idlfile.idl");
 		serviceIF2.setInstanceName("IF2Instance");
@@ -356,16 +352,6 @@ public class SampleProfileGenerator {
 		serviceDoc2.setIfdescription("ServicePort2 I/F description");
 		service2.setDoc(serviceDoc2);
 		profile.getServicePorts().add(service2);
-		//
-		Parameter param1 = factory.createParameter();
-		param1.setName("param1");
-		param1.setDefaultValue("param_def1");
-		profile.getParameters().add(param1);
-		//
-		Parameter param2 = factory.createParameter();
-		param2.setName("param2");
-		param2.setDefaultValue("param_def2");
-		profile.getParameters().add(param2);
 		//
 		LanguageExt lang = factory.createLanguageExt();
 		lang.setKind("Java");
@@ -397,7 +383,7 @@ public class SampleProfileGenerator {
 		ObjectFactory factory = new ObjectFactory();
 		RtcProfile profile =  factory.createRtcProfile();
 		profile.setId("RTC:SampleVender:SampleCategory:SampleComponent:1.0.0");
-		profile.setVersion("0.2");
+		profile.setVersion("0.3");
 		//Component
 		////Basic
 		BasicInfoExt basic = factory.createBasicInfoExt();
@@ -415,8 +401,8 @@ public class SampleProfileGenerator {
 		basic.setAbstract("SampleAbstract");
 		basic.setVersion("1.0.0");
 		basic.setHardwareProfile("hdProfile");
-		basic.setCreationDate(XMLGregorianCalendarImpl.createDateTime(2008, 4, 18, 14, 0, 0));
-		basic.setUpdateDate(XMLGregorianCalendarImpl.parse("2008-04-18T14:00:00"));
+		basic.setCreationDate(createXMLGregorianCalendar(2008, 4, 18, 14, 0, 0));
+		basic.setUpdateDate(createXMLGregorianCalendar("2008-04-18T14:00:00"));
 		profile.setBasicInfo(basic);
 		////Doc
 		DocBasic docbasic = factory.createDocBasic();
@@ -696,7 +682,6 @@ public class SampleProfileGenerator {
 		serviceIF1.setInstanceName("IF1Instance");
 		serviceIF1.setIdlFile("IF1Idlfile.idl");
 		serviceIF1.setType("IF1Type");
-		serviceIF1.setPath("IF1SearchPath");
 		////Doc
 		DocServiceinterface docIf1 = factory.createDocServiceinterface();
 		docIf1.setDescription("if1 Description");
@@ -727,7 +712,6 @@ public class SampleProfileGenerator {
 		serviceIF2.setVariableName("IF2VarName");
 		serviceIF2.setIdlFile("IF2Idlfile.idl");
 		serviceIF2.setType("IF2Type");
-		serviceIF2.setPath("IF2SearchPath");
 		service1.getServiceInterface().add(serviceIF2);
 		profile.getServicePorts().add(service1);
 		//
@@ -778,16 +762,6 @@ public class SampleProfileGenerator {
 		configset.getConfiguration().add(config2);
 		//
 		profile.setConfigurationSet(configset);
-		//
-		Parameter param1 = factory.createParameter();
-		param1.setName("param1");
-		param1.setDefaultValue("param_def1");
-		profile.getParameters().add(param1);
-		//
-		Parameter param2 = factory.createParameter();
-		param2.setName("param2");
-		param2.setDefaultValue("param_def2");
-		profile.getParameters().add(param2);
 		//
 		LanguageExt lang = factory.createLanguageExt();
 		lang.setKind("Java");

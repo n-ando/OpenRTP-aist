@@ -2,14 +2,6 @@ package jp.go.aist.rtm.systemeditor.ui.editor;
 
 import java.lang.reflect.InvocationTargetException;
 
-import jp.go.aist.rtm.systemeditor.extension.LoadProfileExtension;
-import jp.go.aist.rtm.systemeditor.factory.ProfileLoader;
-import jp.go.aist.rtm.systemeditor.nl.Messages;
-import jp.go.aist.rtm.systemeditor.ui.editor.action.RestoreOption;
-import jp.go.aist.rtm.toolscommon.model.component.SystemDiagram;
-import jp.go.aist.rtm.toolscommon.model.component.SystemDiagramKind;
-import jp.go.aist.rtm.toolscommon.util.RtsProfileHandler;
-
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -19,6 +11,13 @@ import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.FileEditorInput;
 import org.openrtp.namespaces.rts.version02.RtsProfileExt;
+
+import jp.go.aist.rtm.systemeditor.extension.LoadProfileExtension;
+import jp.go.aist.rtm.systemeditor.factory.ProfileLoader;
+import jp.go.aist.rtm.systemeditor.nl.Messages;
+import jp.go.aist.rtm.toolscommon.model.component.SystemDiagram;
+import jp.go.aist.rtm.toolscommon.model.component.SystemDiagramKind;
+import jp.go.aist.rtm.toolscommon.util.RtsProfileHandler;
 
 /**
  * SystemDiagramEditorクラス
@@ -52,10 +51,10 @@ public class OfflineSystemDiagramEditor extends AbstractSystemDiagramEditor {
 		getSystemDiagram().setKind(SystemDiagramKind.OFFLINE_LITERAL);
 	}
 
-	protected IEditorInput load(IEditorInput input, final IEditorSite site,
-			final RestoreOption restore) throws PartInitException {
+	protected IEditorInput load(IEditorInput input, final IEditorSite site)
+			throws PartInitException {
 		
-		IEditorInput targetInput = getTargetInput(input, "Offline System Diagram");
+		IEditorInput targetInput = getTargetInput(input, "Offline System Editor");
 
 		if (targetInput instanceof FileEditorInput)	 {
 			// RTSプロファイルをファイルからロードする

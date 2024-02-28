@@ -1,5 +1,6 @@
 package jp.go.aist.rtm.rtcbuilder.ui.preference;
 
+import jp.go.aist.rtm.rtcbuilder.nl.Messages;
 import jp.go.aist.rtm.rtcbuilder.ui.editors.IMessageConstants;
 import jp.go.aist.rtm.rtcbuilder.util.StringUtil;
 
@@ -80,11 +81,11 @@ public abstract class AbstarctFieldEditorPreferencePage extends FieldEditorPrefe
 			} catch (Exception e) {
 			}
 			if (parseDbl == null) {
-				super.setErrorMessage(IMessageConstants.BASIC_VALIDATE_ECRATE1);
+				super.setErrorMessage(Messages.getString("IMC.BASIC_VALIDATE_ECRATE1"));
 				return false;
 			}
 			if (parseDbl != null && parseDbl.intValue() < 0) {
-				super.setErrorMessage(IMessageConstants.BASIC_VALIDATE_ECRATE2);
+				super.setErrorMessage(Messages.getString("IMC.BASIC_VALIDATE_ECRATE2"));
 				return false;
 			}
 			return super.doCheckState();

@@ -42,7 +42,7 @@ public class TemplateTestAIST2 extends TestBase {
 		ServicePortParam service1 = new ServicePortParam("portName",0);
 		List<ServicePortInterfaceParam> srvinterts = new ArrayList<ServicePortInterfaceParam>(); 
 		ServicePortInterfaceParam int1 = new ServicePortInterfaceParam(service1, "name", "", "", 
-				rootPath + "resource/100/CXX/AIST2/MyService.idl", "Test::MyService", "", 0);
+				rootPath + "resource/100/CXX/AIST2/MyService.idl", "Test::MyService", 0);
 		srvinterts.add(int1);
 		service1.getServicePortInterfaces().addAll(srvinterts);
 		List<ServicePortParam> srvports = new ArrayList<ServicePortParam>();

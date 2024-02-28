@@ -1,10 +1,12 @@
 package jp.go.aist.rtm.toolscommon.util;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jp.go.aist.rtm.toolscommon.model.component.ComponentFactory;
 import jp.go.aist.rtm.toolscommon.model.component.InPort;
 import jp.go.aist.rtm.toolscommon.model.component.OutPort;
+import jp.go.aist.rtm.toolscommon.util.ConnectorUtil.SerializerInfo;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -28,11 +30,15 @@ public class ConnectorUtilTest {
 		// 1.0 名前空間あり
 		out.setDataType("RTC::TimedLong,RTC::TimedFloat,RTC::TimedDouble");
 		in.setDataType("RTC::TimedLong,RTC::TimedDouble");
-		List<String> result = ConnectorUtil.getAllowDataTypes(out, in);
+		List<SerializerInfo> result = ConnectorUtil.getAllowDataTypes(out, in);
+		List<String> resultType = new ArrayList<String>();
+		for(SerializerInfo each : result) {
+			resultType.add(each.dataType);
+		}
 
 		assertEquals(2, result.size());
-		assertTrue(result.contains("RTC::TimedLong"));
-		assertTrue(result.contains("RTC::TimedDouble"));
+		assertTrue(resultType.contains("RTC::TimedLong"));
+		assertTrue(resultType.contains("RTC::TimedDouble"));
 	}
 
 	@Test
@@ -40,10 +46,14 @@ public class ConnectorUtilTest {
 		// 1.0 名前空間不一致
 		out.setDataType("TimedLong,TimedFloat,RTC::TimedDouble");
 		in.setDataType("RTC::TimedLong,RTC::TimedDouble");
-		List<String> result = ConnectorUtil.getAllowDataTypes(out, in);
+		List<SerializerInfo> result = ConnectorUtil.getAllowDataTypes(out, in);
+		List<String> resultType = new ArrayList<String>();
+		for(SerializerInfo each : result) {
+			resultType.add(each.dataType);
+		}
 
 		assertEquals(1, result.size());
-		assertTrue(result.contains("RTC::TimedDouble"));
+		assertTrue(resultType.contains("RTC::TimedDouble"));
 	}
 
 	@Test
@@ -51,11 +61,15 @@ public class ConnectorUtilTest {
 		// 1.0 Any含む(source)
 		out.setDataType("TimedLong,Any");
 		in.setDataType("RTC::TimedFloat,RTC::TimedDouble");
-		List<String> result = ConnectorUtil.getAllowDataTypes(out, in);
+		List<SerializerInfo> result = ConnectorUtil.getAllowDataTypes(out, in);
+		List<String> resultType = new ArrayList<String>();
+		for(SerializerInfo each : result) {
+			resultType.add(each.dataType);
+		}
 
 		assertEquals(2, result.size());
-		assertTrue(result.contains("RTC::TimedFloat"));
-		assertTrue(result.contains("RTC::TimedDouble"));
+		assertTrue(resultType.contains("RTC::TimedFloat"));
+		assertTrue(resultType.contains("RTC::TimedDouble"));
 	}
 
 	@Test
@@ -63,11 +77,15 @@ public class ConnectorUtilTest {
 		// 1.0 Any含む(target)
 		out.setDataType("TimedLong,RTC::TimedDouble");
 		in.setDataType("Any,TimedLong");
-		List<String> result = ConnectorUtil.getAllowDataTypes(out, in);
+		List<SerializerInfo> result = ConnectorUtil.getAllowDataTypes(out, in);
+		List<String> resultType = new ArrayList<String>();
+		for(SerializerInfo each : result) {
+			resultType.add(each.dataType);
+		}
 
 		assertEquals(2, result.size());
-		assertTrue(result.contains("TimedLong"));
-		assertTrue(result.contains("RTC::TimedDouble"));
+		assertTrue(resultType.contains("TimedLong"));
+		assertTrue(resultType.contains("RTC::TimedDouble"));
 	}
 
 	@Test
@@ -76,11 +94,15 @@ public class ConnectorUtilTest {
 		out
 				.setDataType("IDL:RTC/TimedLong:1.0,IDL:RTC/TimedFloat:1.0,IDL:RTC/TimedDouble:1.0");
 		in.setDataType("IDL:RTC/TimedLong:1.0,IDL:RTC/TimedDouble:1.0");
-		List<String> result = ConnectorUtil.getAllowDataTypes(out, in);
+		List<SerializerInfo> result = ConnectorUtil.getAllowDataTypes(out, in);
+		List<String> resultType = new ArrayList<String>();
+		for(SerializerInfo each : result) {
+			resultType.add(each.dataType);
+		}
 
 		assertEquals(2, result.size());
-		assertTrue(result.contains("IDL:RTC/TimedLong:1.0"));
-		assertTrue(result.contains("IDL:RTC/TimedDouble:1.0"));
+		assertTrue(resultType.contains("IDL:RTC/TimedLong:1.0"));
+		assertTrue(resultType.contains("IDL:RTC/TimedDouble:1.0"));
 	}
 
 	@Test
@@ -89,10 +111,14 @@ public class ConnectorUtilTest {
 		out
 				.setDataType("IDL:RTC/TimedLong:1.1,IDL:RTC/TimedFloat:1.0,IDL:RTC/TimedDouble:1.0");
 		in.setDataType("IDL:RTC/TimedLong:1.0,IDL:RTC/TimedDouble:1.0");
-		List<String> result = ConnectorUtil.getAllowDataTypes(out, in);
+		List<SerializerInfo> result = ConnectorUtil.getAllowDataTypes(out, in);
+		List<String> resultType = new ArrayList<String>();
+		for(SerializerInfo each : result) {
+			resultType.add(each.dataType);
+		}
 
 		assertEquals(1, result.size());
-		assertTrue(result.contains("IDL:RTC/TimedDouble:1.0"));
+		assertTrue(resultType.contains("IDL:RTC/TimedDouble:1.0"));
 	}
 
 	@Test
@@ -100,13 +126,15 @@ public class ConnectorUtilTest {
 		// 1.1/1.0 混在(後方一致でIFR形式を返す)
 		out.setDataType("RTC::TimedLong,RTC::TimedFloat,TimedDouble");
 		in.setDataType("IDL:RTC/TimedLong:1.0,IDL:RTC/TimedDouble:1.0");
-		List<String> result = ConnectorUtil.getAllowDataTypes(out, in);
+		List<SerializerInfo> result = ConnectorUtil.getAllowDataTypes(out, in);
+		List<String> resultType = new ArrayList<String>();
+		for(SerializerInfo each : result) {
+			resultType.add(each.dataType);
+		}
 
 		assertEquals(2, result.size());
-		// assertTrue(result.contains("RTC::TimedLong"));
-		// assertTrue(result.contains("TimedDouble"));
-		assertTrue(result.contains("IDL:RTC/TimedLong:1.0"));
-		assertTrue(result.contains("IDL:RTC/TimedDouble:1.0"));
+		assertTrue(resultType.contains("IDL:RTC/TimedLong:1.0"));
+		assertTrue(resultType.contains("IDL:RTC/TimedDouble:1.0"));
 	}
 
 	@Test
@@ -115,13 +143,15 @@ public class ConnectorUtilTest {
 		out
 				.setDataType("IDL:RTC/TimedLong:1.0,IDL:RTC/TimedFloat:1.0,IDL:RTC/TimedDouble:1.0");
 		in.setDataType("RTC::TimedLong,TimedDouble");
-		List<String> result = ConnectorUtil.getAllowDataTypes(out, in);
+		List<SerializerInfo> result = ConnectorUtil.getAllowDataTypes(out, in);
+		List<String> resultType = new ArrayList<String>();
+		for(SerializerInfo each : result) {
+			resultType.add(each.dataType);
+		}
 
 		assertEquals(2, result.size());
-		// assertTrue(result.contains("RTC::TimedLong"));
-		// assertTrue(result.contains("TimedDouble"));
-		assertTrue(result.contains("IDL:RTC/TimedLong:1.0"));
-		assertTrue(result.contains("IDL:RTC/TimedDouble:1.0"));
+		assertTrue(resultType.contains("IDL:RTC/TimedLong:1.0"));
+		assertTrue(resultType.contains("IDL:RTC/TimedDouble:1.0"));
 	}
 
 	@Test
@@ -130,11 +160,14 @@ public class ConnectorUtilTest {
 		out.setDataType("RTC::TimedLong,AAA::TimedFloat,TimedDouble");
 		in
 				.setDataType("IDL:TimedLong:1.0,IDL:RTC/TimedFloat:1.0,IDL:AAA/BBB/TimedDouble:1.0");
-		List<String> result = ConnectorUtil.getAllowDataTypes(out, in);
+		List<SerializerInfo> result = ConnectorUtil.getAllowDataTypes(out, in);
+		List<String> resultType = new ArrayList<String>();
+		for(SerializerInfo each : result) {
+			resultType.add(each.dataType);
+		}
 
 		assertEquals(1, result.size());
-		// assertTrue(result.contains("TimedDouble"));
-		assertTrue(result.contains("IDL:AAA/BBB/TimedDouble:1.0"));
+		assertTrue(resultType.contains("IDL:AAA/BBB/TimedDouble:1.0"));
 	}
 
 	@Test

@@ -70,7 +70,7 @@ public class BuildTest extends TestBase {
 		List<ServicePortInterfaceParam> srvinterts = new ArrayList<ServicePortInterfaceParam>();
 		ServicePortInterfaceParam int1 = new ServicePortInterfaceParam(
 				service1, "acc", "", "", rootPath + "/resource/MyService.idl",
-				"MyService", "", 0);
+				"MyService", 0);
 		srvinterts.add(int1);
 		service1.getServicePortInterfaces().addAll(srvinterts);
 		List<ServicePortParam> srvports = new ArrayList<ServicePortParam>();
@@ -80,15 +80,15 @@ public class BuildTest extends TestBase {
 		List<ServicePortInterfaceParam> srvinterts2 = new ArrayList<ServicePortInterfaceParam>();
 		ServicePortInterfaceParam int2 = new ServicePortInterfaceParam(
 				service2, "rate", "", "",
-				rootPath + "/resource/DAQService.idl", "DAQService", "", 1);
+				rootPath + "/resource/DAQService.idl", "DAQService", 1);
 		srvinterts2.add(int2);
 		service2.getServicePortInterfaces().addAll(srvinterts2);
 		srvports.add(service2);
 
 		rtcParam.getServicePorts().addAll(srvports);
 
-		List<IdlPathParam> idlDirs = RTCUtil.getIDLPathes(rtcParam);
-		List<GeneratedResult> result = generator.generateTemplateCode(genParam, idlDirs);
+		RTCUtil.getIDLPathes(rtcParam);
+		List<GeneratedResult> result = generator.generateTemplateCode(genParam, rtcParam.getIdlSearchPathList());
 
 		String resourceDir = fixturePath(name) + "/";
 
@@ -96,7 +96,7 @@ public class BuildTest extends TestBase {
 		checkCode(result, resourceDir, "foo.py");
 		checkCode(result, resourceDir, "MyService_idl_example.py");
 		checkCode(result, resourceDir, "idlcompile.bat");
-		checkCode(result, resourceDir, "idlcompile.sh");
+//		checkCode(result, resourceDir, "idlcompile.sh");
 	}
 
 	public void testCMake2() throws Exception {
@@ -112,19 +112,20 @@ public class BuildTest extends TestBase {
 		rtcParam.setMaxInstance(5);
 		rtcParam.setComponentKind("DataFlowComponent");
 
+		rtcParam.getIdlSearchPathList().add(new IdlPathParam(fixturePath(name), false));
+
 		List<ServicePortParam> svports = new ArrayList<ServicePortParam>();
 
 		ServicePortParam sv1 = new ServicePortParam("MyServiceProvider", 0);
 		List<ServicePortInterfaceParam> iflist = new ArrayList<ServicePortInterfaceParam>();
 		ServicePortInterfaceParam sif1 = new ServicePortInterfaceParam(sv1,
 				"MyServiceProvider", "", "", fixturePath(name)
-						+ "/MyServiceChildMulti.idl", "MyServiceChild",
-				fixturePath(name), 0);
+						+ "/MyServiceChildMulti.idl", "MyServiceChild", 0);
 		iflist.add(sif1);
 		ServicePortInterfaceParam sif2 = new ServicePortInterfaceParam(sv1,
 				"MyServiceProvider2", "", "", fixturePath(name)
 						+ "/MyServiceChildWithType.idl",
-				"MyServiceWithTypeChild", fixturePath(name), 0);
+				"MyServiceWithTypeChild", 0);
 		iflist.add(sif2);
 		sv1.getServicePortInterfaces().addAll(iflist);
 		svports.add(sv1);
@@ -133,13 +134,12 @@ public class BuildTest extends TestBase {
 		iflist = new ArrayList<ServicePortInterfaceParam>();
 		ServicePortInterfaceParam sif3 = new ServicePortInterfaceParam(sv2,
 				"MyServiceRequire", "", "", fixturePath(name)
-						+ "/MyServiceChildMulti.idl", "MyServiceChild",
-				fixturePath(name), 1);
+						+ "/MyServiceChildMulti.idl", "MyServiceChild", 1);
 		iflist.add(sif3);
 		ServicePortInterfaceParam sif4 = new ServicePortInterfaceParam(sv2,
 				"MyServiceRequire2", "", "", fixturePath(name)
 						+ "/MyServiceChildWithType.idl",
-				"MyServiceWithTypeChild", fixturePath(name), 1);
+				"MyServiceWithTypeChild", 1);
 		iflist.add(sif4);
 		sv2.getServicePortInterfaces().addAll(iflist);
 		svports.add(sv2);

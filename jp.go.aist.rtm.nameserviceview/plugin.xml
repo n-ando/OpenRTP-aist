@@ -35,14 +35,14 @@
 				label="%Filter" 
 				menubarPath="additions"
 				toolbarPath="additions" 
-				icon="icons/filter_ps.gif" 
+				icon="icons/filter_ps.png" 
 				tooltip="%Name_Serviceview_Filter" 
 				helpContextId=""
 				class="jp.go.aist.rtm.nameserviceview.ui.action.FilterAction" > 
 			</action>
 			<action
 				class="jp.go.aist.rtm.nameserviceview.ui.action.KillZombiesAction"
-				icon="icons/KillZombie.gif"
+				icon="icons/KillZombie.png"
 				id="jp.go.aist.rtm.nameserviceview.ui.action.KillZombies"
 				label="%Kill_Zombies"
 				menubarPath="additions"

@@ -81,18 +81,6 @@ public class ServicePortInterfaceParamTest extends
 		assertUpdated(sip, new UpdateChecker() {
 			@Override
 			void execute1(ServicePortInterfaceParam e) {
-				e.setIdlSearchPath("/path/to/idl1");
-			}
-
-			@Override
-			void execute2(ServicePortInterfaceParam e) {
-				e.setIdlSearchPath("/path/to/idl2");
-			}
-		});
-		//
-		assertUpdated(sip, new UpdateChecker() {
-			@Override
-			void execute1(ServicePortInterfaceParam e) {
 				e.setIndex(1);
 			}
 

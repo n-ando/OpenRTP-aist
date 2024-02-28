@@ -1,0 +1,54 @@
+# XXX CMake config file
+#
+# This file sets the following variables:
+# XXX_FOUND - Always TRUE.
+# XXX_INCLUDE_DIRS - Directories containing the XXX include files.
+# XXX_IDL_DIRS - Directories containing the XXX IDL files.
+# XXX_LIBRARIES - Libraries needed to use XXX.
+# XXX_DEFINITIONS - Compiler flags for XXX.
+# XXX_VERSION - The version of XXX found.
+# XXX_VERSION_MAJOR - The major version of XXX found.
+# XXX_VERSION_MINOR - The minor version of XXX found.
+# XXX_VERSION_REVISION - The revision version of XXX found.
+# XXX_VERSION_CANDIDATE - The candidate version of XXX found.
+
+message(STATUS "Found XXX-@PROJECT_VERSION@")
+set(XXX_FOUND TRUE)
+
+find_package(<dependency> REQUIRED)
+
+#set(XXX_INCLUDE_DIRS
+#    "@CMAKE_INSTALL_PREFIX@/include/@PROJECT_NAME_LOWER@-@PROJECT_VERSION_MAJOR@"
+#    ${<dependency>_INCLUDE_DIRS}
+#    )
+#
+#set(XXX_IDL_DIRS
+#    "@CMAKE_INSTALL_PREFIX@/include/@PROJECT_NAME_LOWER@-@PROJECT_VERSION_MAJOR@/idl")
+set(XXX_INCLUDE_DIRS
+    "@CMAKE_INSTALL_PREFIX@/include/@CPACK_PACKAGE_FILE_NAME@"
+    ${<dependency>_INCLUDE_DIRS}
+    )
+set(XXX_IDL_DIRS
+    "@CMAKE_INSTALL_PREFIX@/include/@CPACK_PACKAGE_FILE_NAME@/idl")
+
+
+if(WIN32)
+    set(XXX_LIBRARIES
+        "@CMAKE_INSTALL_PREFIX@/@LIB_INSTALL_DIR@/@CMAKE_SHARED_LIBRARY_PREFIX@@PROJECT_NAME_LOWER@@CMAKE_STATIC_LIBRARY_SUFFIX@"
+        ${<dependency>_LIBRARIES}
+        )
+else(WIN32)
+    set(XXX_LIBRARIES
+        "@CMAKE_INSTALL_PREFIX@/@LIB_INSTALL_DIR@/@CMAKE_SHARED_LIBRARY_PREFIX@@PROJECT_NAME_LOWER@@CMAKE_SHARED_LIBRARY_SUFFIX@"
+        ${<dependency>_LIBRARIES}
+        )
+endif(WIN32)
+
+set(XXX_DEFINITIONS ${<dependency>_DEFINITIONS})
+
+set(XXX_VERSION @PROJECT_VERSION@)
+set(XXX_VERSION_MAJOR @PROJECT_VERSION_MAJOR@)
+set(XXX_VERSION_MINOR @PROJECT_VERSION_MINOR@)
+set(XXX_VERSION_REVISION @PROJECT_VERSION_REVISION@)
+set(XXX_VERSION_CANDIDATE @PROJECT_VERSION_CANDIDATE@)
+

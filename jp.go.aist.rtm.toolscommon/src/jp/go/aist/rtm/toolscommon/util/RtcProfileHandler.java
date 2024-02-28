@@ -14,16 +14,16 @@ import jp.go.aist.rtm.toolscommon.model.component.Port;
 import jp.go.aist.rtm.toolscommon.model.component.PortInterfaceProfile;
 import jp.go.aist.rtm.toolscommon.profiles.util.XmlHandler;
 
-import org.openrtp.namespaces.rtc.version02.BasicInfo;
-import org.openrtp.namespaces.rtc.version02.BasicInfoExt;
-import org.openrtp.namespaces.rtc.version02.Dataport;
-import org.openrtp.namespaces.rtc.version02.DataportExt;
-import org.openrtp.namespaces.rtc.version02.Property;
-import org.openrtp.namespaces.rtc.version02.RtcProfile;
-import org.openrtp.namespaces.rtc.version02.Serviceinterface;
-import org.openrtp.namespaces.rtc.version02.ServiceinterfaceDoc;
-import org.openrtp.namespaces.rtc.version02.Serviceport;
-import org.openrtp.namespaces.rtc.version02.ServiceportExt;
+import org.openrtp.namespaces.rtc.version03.BasicInfo;
+import org.openrtp.namespaces.rtc.version03.BasicInfoExt;
+import org.openrtp.namespaces.rtc.version03.Dataport;
+import org.openrtp.namespaces.rtc.version03.DataportExt;
+import org.openrtp.namespaces.rtc.version03.Property;
+import org.openrtp.namespaces.rtc.version03.RtcProfile;
+import org.openrtp.namespaces.rtc.version03.Serviceinterface;
+import org.openrtp.namespaces.rtc.version03.ServiceinterfaceDoc;
+import org.openrtp.namespaces.rtc.version03.Serviceport;
+import org.openrtp.namespaces.rtc.version03.ServiceportExt;
 
 //
 /**
@@ -120,6 +120,8 @@ public class RtcProfileHandler {
 			specification.setActiveConfigurationSet(parser
 					.getActiveConfigurationSet());
 		}
+		
+		specification.setProperty("language", module.getLanguage().getKind());
 
 		String moduleId = SPEC_SUFFIX + SPEC_MAJOR_SEPARATOR
 				+ specification.getVenderL() + SPEC_MAJOR_SEPARATOR

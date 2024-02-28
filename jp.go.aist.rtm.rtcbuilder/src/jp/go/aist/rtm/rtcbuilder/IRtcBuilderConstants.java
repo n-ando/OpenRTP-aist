@@ -9,7 +9,7 @@ public interface IRtcBuilderConstants {
     public static final String NEWEDITOR_ACTION_ID = RtcBuilderPlugin.PLUGIN_ID + ".ui.actionSet";
 
 	public static final String RTM_VERSION_100 = "1.0.0";
-	public static final String DEFAULT_RTM_VERSION = RTM_VERSION_100;
+	public static final String DEFAULT_RTM_VERSION = "2.0.0";
 
 	/**
 	 * サービス実装のデフォルトサフィックス
@@ -32,12 +32,13 @@ public interface IRtcBuilderConstants {
 	//
 	public static final String SPEC_DATA_INPORT_KIND = "DataInPort";
 	public static final String SPEC_DATA_OUTPORT_KIND = "DataOutPort";
+	public static final String SPEC_EVENTPORT_KIND = "EventPort";
 
 	public static final String DEFAULT_RTC_XML = "RTC.xml";
 	public static final String YAML_EXTENSION = "yaml";
 	public static final String XML_EXTENSION = "xml";
 	//
-	public static final String SCHEMA_VERSION = "0.2";
+	public static final String SCHEMA_VERSION = "0.3";
 
 	public static final String NEWLINE_CODE = "<br/>";
 
@@ -50,22 +51,13 @@ public interface IRtcBuilderConstants {
 	public static final String[] ACTIVITY_TYPE_ITEMS = new String[] {
 			"PERIODIC", "SPORADIC", "EVENTDRIVEN" };
 
-	public static final String[] COMPONENT_KIND_ITEMS = new String[] {
-		"DataFlowComponent", 
-		"FiniteStateMachineComponent",
-		"DataFlowFiniteStateMachineComponent",
-		"FiniteStateMachineMultiModeComponent",
-		"DataFlowMultiModeComponent",
-		"DataFlowFiniteStateMachineMultiModeComponent"};
-
 	public static final String[] EXECUTIONCONTEXT_TYPE_ITEMS = new String[] {
 		"PeriodicExecutionContext", "ExtTrigExecutionContext" };
 
 	public static final String[] ACTION_TYPE_ITEMS = new String[] {
 		"onInitialize", "onFinalize", "onStartup", "onShutdown", "onActivated",
 		"onDeactivated", "onAborting", "onError", "onReset",
-		"onExecute", "onStateUpdate", "onRateChanged",
-		"onAction", "onModeChanged"};
+		"onExecute", "onStateUpdate", "onRateChanged"};
 	
 	public static final String TAG_BACKEND = "backend";
 	public static final String TAG_SVC_IDL = "svc-idl";
@@ -112,13 +104,7 @@ public interface IRtcBuilderConstants {
 	public static final String DOC_INTERFACE_PREFIX = SPACE3 + "*" + SPACE12;
 	public static final String DOC_INTERFACE_DETAIL_PREFIX = SPACE3 + "*" + SPACE18; 
 	//
-	public static final String DOC_README_PREFIX = SPACE3; 
-	public static final String DOC_README_COPYRIGHT_PREFIX = SPACE2; 
-	public static final String DOC_README_MODULE_PREFIX = SPACE13; 
 	public static final String DOC_README_ACTIVITY_PREFIX = "\t" + SPACE15; 
-	public static final String DOC_README_PORT_PREFIX = "\t" + SPACE13; 
-	public static final String DOC_README_PORT_DETAIL_PREFIX = "\t\t" + SPACE17; 
-	public static final String DOC_README_INTERFACE_PREFIX = "\t\t" + SPACE15; 
 	//
 	public static final int DOC_DEFAULT_WIDTH = 66; 
 	public static final int DOC_AUTHOR_OFFSET = 11; 
@@ -135,11 +121,7 @@ public interface IRtcBuilderConstants {
 	public static final int DOC_INTERFACE_OFFSET = 16;
 	public static final int DOC_INTERFACE_DETAIL_OFFSET = 22;
 	//
-	public static final int DOC_README_MODULE_OFFSET = 13; 
 	public static final int DOC_README_ACTIVITY_OFFSET = 17;
-	public static final int DOC_README_PORT_OFFSET = 15;
-	public static final int DOC_README_PORT_DETAIL_OFFSET = 21;
-	public static final int DOC_README_INTERFACE_OFFSET = 19;
 	//
 	public static final int ACTIVITY_INITIALIZE = 0; 
 	public static final int ACTIVITY_FINALIZE = 1;
@@ -153,12 +135,17 @@ public interface IRtcBuilderConstants {
 	public static final int ACTIVITY_EXECUTE = 9;
 	public static final int ACTIVITY_STATE_UPDATE = 10;
 	public static final int ACTIVITY_RATE_CHANGED = 11;
-	public static final int ACTIVITY_ACTION = 12;
-	public static final int ACTIVITY_MODE_CHANGED = 13;
-	public static final int ACTIVITY_DUMMY = 14;
+	public static final int ACTIVITY_DUMMY = 12;
 	//
 	public static final int PORT_SPACE_HEIGHT = 60;
 	public static final int PORT_SPACE_WIDTH = 150;
 
 	public static final int SINGLE_COLUMN_WIDTH = 200;
+	//FSM
+	public static final String PROP_TYPE_FSM =  "FSM";
+	public static final String PROP_TYPE_FSMTYTPE =  "FSMType";
+	public static final String FSMTYTPE_STATIC =  "StaticFSM";
+	public static final String FSMTYTPE_DYNAMIC =  "DynamicFSM";
+	
+	public static final int Type_Event = 1;
 }

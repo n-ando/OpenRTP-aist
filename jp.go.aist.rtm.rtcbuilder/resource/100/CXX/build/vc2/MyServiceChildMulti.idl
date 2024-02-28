@@ -1,9 +1,0 @@
-#include "MyServiceParent1.idl"
-#include "MyServiceParent2.idl"
-
-interface MyServiceChild : MyService, MyService2
-{
-  void setPos(in float pos);
-  EchoList1 getPos();
-};
-

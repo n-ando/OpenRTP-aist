@@ -5,10 +5,6 @@
  *
  */
 
-#include "InterfaceDataTypesSkel.h"
-#include "BasicDataTypeSkel.h"
-#include "ExtendedDataTypesSkel.h"
-
 #include "CalibrationServiceSkel.h"
 
 #ifndef CALIBRATIONSERVICESVC_IMPL_H
@@ -40,8 +36,8 @@ class ImageCalibService_CalibrationServiceSVC_impl
    // attributes and operations
    void setImageNumber(::CORBA::Short num);
    ::CORBA::Short getImageNumber();
-   RTC::CameraImage* captureCalibImage(::CORBA::Short num);
-   RTC::CameraImage* getCalibImage(::CORBA::Short num);
+   RTC::CameraImage captureCalibImage(::CORBA::Short num);
+   RTC::CameraImage getCalibImage(::CORBA::Short num);
    ImageCalibService::ImageList* getCalibImages();
    ::CORBA::Boolean removeCalibImage(::CORBA::Short num);
    RTC::CameraInfo getCalibParameter();

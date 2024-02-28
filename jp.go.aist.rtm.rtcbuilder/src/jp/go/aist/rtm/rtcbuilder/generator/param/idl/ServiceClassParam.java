@@ -19,6 +19,7 @@ public class ServiceClassParam implements Serializable {
 	private String name;
 	private String idlPath;
     private String idlFile;
+    private String idlDispFile;
 	private String module;
 	private List<ServiceMethodParam> methods = new ArrayList<ServiceMethodParam>();
 	private RtcParam parent;
@@ -77,6 +78,14 @@ public class ServiceClassParam implements Serializable {
     public void setIdlFile(String idlFile) {
         this.idlFile = idlFile;
     }
+
+	public String getIdlDispFile() {
+		return idlDispFile;
+	}
+
+	public void setIdlDispFile(String idlDispFile) {
+		this.idlDispFile = idlDispFile;
+	}
 
 	public Map<String,TypeDefParam> getTypeDef() {
 		return this.typeDef;

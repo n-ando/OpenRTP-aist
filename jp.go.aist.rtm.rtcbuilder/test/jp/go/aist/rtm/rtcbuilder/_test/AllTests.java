@@ -5,31 +5,30 @@ import jp.go.aist.rtm.rtcbuilder._test.etc.PreProcessorTest;
 import jp.go.aist.rtm.rtcbuilder._test.etc.StringUtilTest;
 import jp.go.aist.rtm.rtcbuilder._test.etc.TemplateHelperTest;
 import jp.go.aist.rtm.rtcbuilder._test.generateCode.BasicTest;
-import jp.go.aist.rtm.rtcbuilder._test.generateCode.BaseClass;
 import jp.go.aist.rtm.rtcbuilder._test.generateCode.BuildTest;
 import jp.go.aist.rtm.rtcbuilder._test.generateCode.CheckIDLTest;
-import jp.go.aist.rtm.rtcbuilder._test.generateCode.IDLStructTest;
-import jp.go.aist.rtm.rtcbuilder._test.generateCode.ImplTest;
-import jp.go.aist.rtm.rtcbuilder._test.generateCode.LibraryTest;
-import jp.go.aist.rtm.rtcbuilder._test.generateCode.ManipTest;
-import jp.go.aist.rtm.rtcbuilder._test.generateCode.MultiTest;
-import jp.go.aist.rtm.rtcbuilder._test.generateCode.ServicePortTest;
-import jp.go.aist.rtm.rtcbuilder._test.generateCode.SystemConfigTest;
-import jp.go.aist.rtm.rtcbuilder._test.generateCode.VariableTest;
-import jp.go.aist.rtm.rtcbuilder._test.generateCode.IDLPathTest;
+import jp.go.aist.rtm.rtcbuilder._test.generateCode.ConfigSetTest;
+import jp.go.aist.rtm.rtcbuilder._test.generateCode.Constraint;
+import jp.go.aist.rtm.rtcbuilder._test.generateCode.ContentTest;
+import jp.go.aist.rtm.rtcbuilder._test.generateCode.DataPortIDLTest;
+import jp.go.aist.rtm.rtcbuilder._test.generateCode.DocLongTest;
+import jp.go.aist.rtm.rtcbuilder._test.generateCode.ExCxtTest;
+import jp.go.aist.rtm.rtcbuilder._test.generateCode.FSMTest;
 import jp.go.aist.rtm.rtcbuilder._test.generateCode.IDLInheritTest;
 import jp.go.aist.rtm.rtcbuilder._test.generateCode.IDLModuleTest;
-import jp.go.aist.rtm.rtcbuilder._test.generateCode.PrefixSuffixTest;
-import jp.go.aist.rtm.rtcbuilder._test.generateCode.TemplateTestAIST2;
-import jp.go.aist.rtm.rtcbuilder._test.generateCode.LuckTest;
-import jp.go.aist.rtm.rtcbuilder._test.generateCode.ExCxtTest;
-import jp.go.aist.rtm.rtcbuilder._test.generateCode.DocLongTest;
+import jp.go.aist.rtm.rtcbuilder._test.generateCode.IDLPathTest;
+import jp.go.aist.rtm.rtcbuilder._test.generateCode.IDLStructTest;
 import jp.go.aist.rtm.rtcbuilder._test.generateCode.IDLType;
-import jp.go.aist.rtm.rtcbuilder._test.generateCode.DataPortIDLTest;
-import jp.go.aist.rtm.rtcbuilder._test.generateCode.ContentTest;
-import jp.go.aist.rtm.rtcbuilder._test.generateCode.Constraint;
-import jp.go.aist.rtm.rtcbuilder._test.generateCode.ConfigSetTest;
-import jp.go.aist.rtm.rtcbuilder._test.param.ConfigParameterParamTest;
+import jp.go.aist.rtm.rtcbuilder._test.generateCode.ImplTest;
+import jp.go.aist.rtm.rtcbuilder._test.generateCode.LibraryTest;
+import jp.go.aist.rtm.rtcbuilder._test.generateCode.LuckTest;
+import jp.go.aist.rtm.rtcbuilder._test.generateCode.ManipTest;
+import jp.go.aist.rtm.rtcbuilder._test.generateCode.MultiTest;
+import jp.go.aist.rtm.rtcbuilder._test.generateCode.PrefixSuffixTest;
+import jp.go.aist.rtm.rtcbuilder._test.generateCode.ServicePortTest;
+import jp.go.aist.rtm.rtcbuilder._test.generateCode.TemplateTestAIST2;
+import jp.go.aist.rtm.rtcbuilder._test.generateCode.TestComp;
+import jp.go.aist.rtm.rtcbuilder._test.generateCode.VariableTest;
 import jp.go.aist.rtm.rtcbuilder._test.param.ConfigSetParamTest;
 import jp.go.aist.rtm.rtcbuilder._test.param.DataPortParamTest;
 import jp.go.aist.rtm.rtcbuilder._test.param.ParamActionsTest;
@@ -89,13 +88,13 @@ public class AllTests {
 		suite.addTestSuite(ImplTest.class);
 		suite.addTestSuite(MultiTest.class);
 		suite.addTestSuite(VariableTest.class);
-		suite.addTestSuite(SystemConfigTest.class);
-		suite.addTestSuite(BaseClass.class);
 		suite.addTestSuite(LibraryTest.class);
 		suite.addTestSuite(ConfigSetTest.class);
 		suite.addTestSuite(IDLStructTest.class);
 		suite.addTestSuite(ManipTest.class);
 		suite.addTestSuite(ContentTest.class);
+		//
+		suite.addTestSuite(FSMTest.class);
 		//
 		suite.addTestSuite(TemplateHelperTest.class);
 		//
@@ -106,10 +105,11 @@ public class AllTests {
 		suite.addTestSuite(ServicePortParamTest.class);
 		suite.addTestSuite(ServicePortInterfaceParamTest.class);
 		suite.addTestSuite(RecordedListTest.class);
-		suite.addTestSuite(ConfigParameterParamTest.class);
 		suite.addTestSuite(ParamActionsTest.class);
 		//
 		suite.addTestSuite(ServicePortTest.class);
+		//
+		suite.addTestSuite(TestComp.class);
 		//$JUnit-END$
 		return suite;
 	}

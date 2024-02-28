@@ -35,10 +35,10 @@ import _SDOPackage.NameValue;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link jp.go.aist.rtm.toolscommon.model.component.impl.CorbaConnectorProfileImpl#getRtcConnectorProfile <em>Rtc Connector Profile</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */
@@ -257,6 +257,8 @@ public class CorbaConnectorProfileImpl extends ConnectorProfileImpl implements C
 				PROP.OUTPORT_EMPTY_POLICY);
 		addProperty(result, profile.getOutportBufferReadTimeout(),
 				PROP.OUTPORT_READ_TIMEOUT);
+		addProperty(result, profile.getOutportSerializerType(),
+				PROP.OUTPORT_SERIALIZER_TYPE);
 		//
 		addProperty(result, profile.getInportBufferLength(),
 				PROP.INPORT_BUFF_LENGTH);
@@ -268,6 +270,8 @@ public class CorbaConnectorProfileImpl extends ConnectorProfileImpl implements C
 				PROP.INPORT_EMPTY_POLICY);
 		addProperty(result, profile.getInportBufferReadTimeout(),
 				PROP.INPORT_READ_TIMEOUT);
+		addProperty(result, profile.getInportSerializerType(),
+				PROP.INPORT_SERIALIZER_TYPE);
 
 		for (String key : profile.getPropertyKeys()) {
 			addProperty(result, profile.getProperty(key), key);

@@ -173,6 +173,12 @@ public abstract class AbstractEditorFormPage extends FormPage {
 		return composite;
 	}
 
+	protected void createHintLabel(String desc, FormToolkit toolkit, Composite composite) {
+		Label lblDesc = toolkit.createLabel(composite, desc);
+		GridData gd = new GridData();
+		gd.horizontalSpan = 3;
+		lblDesc.setLayoutData(gd);
+	}
 	protected void createHintLabel(String title, String desc, FormToolkit toolkit, Composite composite) {
 		Label lblt1 = toolkit.createLabel(composite, title);
 		GridData gd = new GridData();
@@ -261,6 +267,22 @@ public abstract class AbstractEditorFormPage extends FormPage {
 		return text;
 	}
 
+	protected Text createLabelAndRefText(FormToolkit toolkit, Composite composite,
+			String labelString, int style, int hspan) {
+		if( labelString!=null && labelString.length()>0 ) {
+			toolkit.createLabel(composite, labelString);
+		}
+
+		final Text text = toolkit.createText(composite, "", style);
+		text.setEditable(false);
+		text.setBackground(getSite().getShell().getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
+		
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.horizontalSpan = hspan;
+		text.setLayoutData(gridData);
+		return text;
+	}
+	
 	protected Combo createLabelAndCombo(FormToolkit toolkit, Composite composite,
 			String labelString, String[] items) {
 		return createLabelAndCombo(toolkit, composite, labelString, items, 0);
@@ -318,10 +340,11 @@ public abstract class AbstractEditorFormPage extends FormPage {
 		Label label = toolkit.createLabel(composite, labelString);
 		if(color>0) label.setForeground(getSite().getShell().getDisplay().getSystemColor(color));
 		Combo combo = new Combo(composite, SWT.DROP_DOWN);
+		loadDefaultComboValue(combo, key);
+		combo.add("");
 		for(int index=0;index<defaultValue.length;index++) {
 			combo.add(defaultValue[index]);
 		}
-		loadDefaultComboValue(combo, key);
 
 		combo.select(0);
 		combo.addKeyListener(new KeyListener() {
@@ -402,15 +425,20 @@ public abstract class AbstractEditorFormPage extends FormPage {
 		String defaultString = RtcBuilderPlugin.getDefault().getPreferenceStore()
 				.getString(key);
 		StringTokenizer tokenize = new StringTokenizer(defaultString, ",");
+		String[] items = combo.getItems();
+		List<String> baseList = Arrays.asList(items);
+		List<String> itemList = new ArrayList<>(baseList);
 		while (tokenize.hasMoreTokens()) {
-			combo.add(tokenize.nextToken());
+			String item = tokenize.nextToken();
+			if(itemList.contains(item)) continue;
+			combo.add(item);
+			itemList.add(item);
 		}
 	}
 
 	protected String[] extractDataTypes() {
-		List<IdlPathParam> sources = RTCUtil.getIDLPathes(editor.getRtcParam());
+		RTCUtil.getIDLPathes(editor.getRtcParam());
 		String FS = System.getProperty("file.separator");
-		int baseindex = -1;
 		List<DataTypeParam> sourceContents = new ArrayList<DataTypeParam>();
 		
         List<String> exclusionList = Arrays.asList(
@@ -418,8 +446,7 @@ public abstract class AbstractEditorFormPage extends FormPage {
         		"openrtm.idl", "rtc.idl", "sdopackage.idl",
         		"sharedmemory.idl");
 		
-		for (int intidx = 0; intidx < sources.size(); intidx++) {
-			IdlPathParam source = sources.get(intidx);
+		for (IdlPathParam source : editor.getRtcParam().getIdlSearchPathList()) {
 			try {
 				File idlDir = new File(source.getPath());
 				String[] list = idlDir.list();
@@ -442,12 +469,10 @@ public abstract class AbstractEditorFormPage extends FormPage {
 					String idlContent = FileUtil.readFile(source.getPath() + FS + idlName);
 					DataTypeParam param = new DataTypeParam();
 					param.setContent(idlContent);
+					param.setDispPath(source.getDispPath() + FS + idlName);
 					param.setFullPath(source.getPath() + FS + idlName);
 					param.setDefault(source.isDefault());
 					sourceContents.add(param);
-					if( baseindex<intidx) {
-						param.setAddition(true);
-					}
 				}
 			} catch (IOException e) {
 				LOGGER.error("Fail to read idl file", e);
@@ -455,8 +480,10 @@ public abstract class AbstractEditorFormPage extends FormPage {
 		}
 		String[] defaultTypeList = new String[0];
 		List<String> dataTypes = new ArrayList<String>();
-		if( IDLParamConverter.extractTypeDef(sourceContents, dataTypes)==false ) {
-			MessageDialog.openWarning(RtcBuilderPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow().getShell(), "IDL Parse", IMessageConstants.IDL_PARSE_EROOR);
+		StringBuilder builder = new StringBuilder();
+		if( IDLParamConverter.extractTypeDef(sourceContents, dataTypes, builder)==false ) {
+			MessageDialog.openWarning(RtcBuilderPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow().getShell(),
+					"IDL Parse", IMessageConstants.IDL_PARSE_EROOR + System.lineSeparator() + builder.toString());
 		}
 		defaultTypeList = new String[dataTypes.size()];
 		defaultTypeList = dataTypes.toArray(defaultTypeList);
@@ -464,7 +491,6 @@ public abstract class AbstractEditorFormPage extends FormPage {
 		editor.getGeneratorParam().getDataTypeParams().clear();
 		editor.getGeneratorParam().getDataTypeParams().addAll(sourceContents);
 		//
-
 		return defaultTypeList;
 	}
 

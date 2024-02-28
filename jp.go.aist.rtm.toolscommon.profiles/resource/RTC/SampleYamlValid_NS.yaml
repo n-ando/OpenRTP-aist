@@ -99,7 +99,7 @@ rtcProfile:
       year: 2008
     vendor: SampleVendor
     version: 1.0.0
-    "rtcExt::versionUpLog": 
+    "rtcExt::versionUpLogs": 
       - "2008/04/18 14:00:00:Ver1.0"
       - "2008/04/18 17:00:00:Ver1.1"
   configurationSet: 
@@ -115,19 +115,19 @@ rtcProfile:
           unit: config_unit1
         name: config1
         type: int
-        varname: var1
+        "rtcExt::variableName": var1
       -
         defaultValue: Sample
         name: config2
         type: String
-        varname: var2
+        "rtcExt::variableName": var2
   dataPorts: 
     -
       dataflowType: "Push,Pull"
       "rtcDoc::doc":
         description: In1Description
         number: In1Number
-        occerrence: In1Occerrence
+        occurrence: In1Occerrence
         operation: In1Operation
         semantics: In1Semantics
         type: In1Type
@@ -137,24 +137,24 @@ rtcProfile:
       name: inport1
       portType: DataInPort
       "rtcExt::position": LEFT
-      subscriprionType: "Periodic,New,Flush"
+      subscriptionType: "Periodic,New,Flush"
       type: "RTC::TimedLong"
-      "rtcExt::varname": In1Var
+      "rtcExt::variableName": In1Var
     -
       dataflowType: "Push,Pull"
       interfaceType: CorbaPort
       name: inport2
       portType: DataInPort
       "rtcExt::position": LEFT
-      subscriprionType: "New,Periodic"
+      subscriptionType: "New,Periodic"
       type: "RTC::TimedDouble"
-      "rtcExt::varname": In2Var
+      "rtcExt::variableName": In2Var
     -
       dataflowType: Push
       "rtcDoc::doc":
         description: Out1Description
         number: Out1Number
-        occerrence: Out1Occerrence
+        occurrence: Out1Occerrence
         operation: Out1Operation
         semantics: Out1Semantics
         type: Out1Type
@@ -163,23 +163,28 @@ rtcProfile:
       name: outport1
       portType: DataOutPort
       "rtcExt::position": RIGHT
-      subscriprionType: "New,Periodic"
+      subscriptionType: "New,Periodic"
       type: "RTC::TimedLong"
-      "rtcExt::varname": Out1Var
+      "rtcExt::variableName": Out1Var
     -
       dataflowType: "Push,Pull"
       interfaceType: CorbaPort
       name: outport2
       portType: DataOutPort
       "rtcExt::position": RIGHT
-      subscriprionType: "New,Periodic"
+      subscriptionType: "New,Periodic"
       type: "RTC::TimedDouble"
-      "rtcExt::varname": Out2Var
+      "rtcExt::variableName": Out2Var
   id: "RTC:SampleVendor.SampleCategory.SampleComponent:1.0.0"
   language: 
-    java: 
-      library: 
-        - library1
+    kind: Java
+    "rtcExt::targets":
+      -
+        libraries: 
+          -
+            name: library1
+            other: Sample1
+            version: "1.0"
   parameters: 
     -
       defaultValue: param_def1
@@ -209,7 +214,7 @@ rtcProfile:
           name: S1IF1
           path: IF1SearchPath
           type: IF1Type
-          varname: IF1VarName
+          "rtcExt::variableName": IF1VarName
         -
           direction: Required
           idlFile: IF2Idlfile.idl
@@ -217,11 +222,11 @@ rtcProfile:
           name: S1IF2
           path: IF2SearchPath
           type: IF2Type
-          varname: IF2VarName
+          "rtcExt::variableName": IF2VarName
     -
       "rtcDoc::doc":
         description: ServicePort2 description
         ifdescription: ServicePort2 I/F description
       name: SrvPort2
       "rtcExt::position": RIGHT
-  version: "0.1"
+  version: "0.3"

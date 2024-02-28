@@ -35,6 +35,7 @@ import org.eclipse.emf.ecore.util.EObjectResolvingEList;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link jp.go.aist.rtm.toolscommon.model.component.impl.PortImpl#getOriginalPortString <em>Original Port String</em>}</li>
  *   <li>{@link jp.go.aist.rtm.toolscommon.model.component.impl.PortImpl#getSynchronizer <em>Synchronizer</em>}</li>
@@ -50,7 +51,6 @@ import org.eclipse.emf.ecore.util.EObjectResolvingEList;
  *   <li>{@link jp.go.aist.rtm.toolscommon.model.component.impl.PortImpl#getDataType <em>Data Type</em>}</li>
  *   <li>{@link jp.go.aist.rtm.toolscommon.model.component.impl.PortImpl#getInterfaceType <em>Interface Type</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */
@@ -372,6 +372,10 @@ public class PortImpl extends WrapperObjectImpl implements Port {
 		return SDOUtil.getValueList(getSubscriptionType());
 	}
 
+	public List<String> getSerializerTypes() {
+		return SDOUtil.getValueList(getSubscriptionType());
+	}
+	
 	/**
 	 * nameValueから値を取得する
 	 * 

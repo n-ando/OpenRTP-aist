@@ -36,7 +36,7 @@
         point="org.eclipse.ui.actionSets">
      <actionSet
            id="jp.go.aist.rtm.rtcbuilder.ui.actionSet"
-           label="RTC Builder Actions">
+           label="RTCBuilder Actions">
 			<action
 				id="jp.go.aist.rtm.rtcbuilder.ui.action.NewRtcBuilderEditorAction" 
 				label="%NewRtcBuilderEditorActionLabel"
@@ -101,11 +101,6 @@
            name="%preferecePagesCodeGenerateName"/>
      <page
            category="jp.go.aist.rtm.rtcbuilder.ui.preferencePage.codeGenerate"
-           class="jp.go.aist.rtm.rtcbuilder.ui.preference.ConfigPreferencePage"
-           id="jp.go.aist.rtm.rtcbuilder.ui.preferencePage.codeGenerate.Configuration"
-           name="%preferecePagesConfigurationName"/>
-     <page
-           category="jp.go.aist.rtm.rtcbuilder.ui.preferencePage.codeGenerate"
            class="jp.go.aist.rtm.rtcbuilder.ui.preference.CodeGeneratePortPreferencePage"
            id="jp.go.aist.rtm.rtcbuilder.ui.preferencePage.codeGenerate.Ports"
            name="%preferecePagesPortsName"/>
@@ -114,6 +109,11 @@
            class="jp.go.aist.rtm.rtcbuilder.ui.preference.DocumentPreferencePage"
            id="jp.go.aist.rtm.rtcbuilder.ui.preferencePage.codeGenerate.Document"
            name="%preferecePagesDocumentName"/>
+     <page
+           category="jp.go.aist.rtm.rtcbuilder.ui.preferencePage.codeGenerate"
+           class="jp.go.aist.rtm.rtcbuilder.ui.preference.CodeGenerateConfigPreferencePage"
+           id="jp.go.aist.rtm.rtcbuilder.ui.preferencePage.codeGenerate.Configuration"
+           name="%preferecePagesConfigurationName"/>
   </extension>
   <extension
         point="org.eclipse.core.runtime.contentTypes">

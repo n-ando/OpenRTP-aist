@@ -51,7 +51,6 @@ public class DataPortIDLTest extends TestBase {
 		param.getDefinedTypes().add("MyType::Frame1");
 		param.setContent("struct Frame0 {\n  double mat[3][3];\n  double pos[3];\n};");
 		param.setFullPath("TestIDL.idl");
-		param.setAddition(true);
 		genParam.getDataTypeParams().add(param);
 
 		Generator generator = new Generator();
@@ -93,14 +92,12 @@ public class DataPortIDLTest extends TestBase {
 		param1.setFullPath(rootPath + "/resource/100/DataPortIDL/sourceIDL/ArUco.idl");
 		param1.getDefinedTypes().add("arUco::arUcoPoint2D");
 		param1.setDefault(false);
-		param1.setAddition(true);
 		genParam.getDataTypeParams().add(param1);
 
 		DataTypeParam param2 = new DataTypeParam();
 		param2.setFullPath(rootPath + "/resource/100/DataPortIDL/sourceIDL/GameFramework.idl");
 		param2.getDefinedTypes().add("GameFramework::CenterPosition");
 		param2.setDefault(false);
-		param2.setAddition(true);
 		genParam.getDataTypeParams().add(param2);
 		/////
 

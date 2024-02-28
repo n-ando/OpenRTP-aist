@@ -2,15 +2,15 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: jp.go.aist.rtm.systemeditor.RCP; singleton:=true
-Bundle-Version: 1.2.0
+Bundle-Version: 2.0.2
 Bundle-Activator: jp.go.aist.rtm.systemeditor.rcp.SystemEditorActivator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
- jp.go.aist.rtm.nameserviceview;bundle-version="1.2.0",
- jp.go.aist.rtm.repositoryView;bundle-version="1.2.0",
- jp.go.aist.rtm.systemeditor;bundle-version="1.2.0",
- jp.go.aist.rtm.toolscommon;bundle-version="1.2.0",
- jp.go.aist.rtm.toolscommon.profiles;bundle-version="1.2.0"
+ jp.go.aist.rtm.nameserviceview;bundle-version="2.0.2",
+ jp.go.aist.rtm.repositoryView;bundle-version="2.0.2",
+ jp.go.aist.rtm.systemeditor;bundle-version="2.0.2",
+ jp.go.aist.rtm.toolscommon;bundle-version="2.0.2",
+ jp.go.aist.rtm.toolscommon.profiles;bundle-version="2.0.2"
 Bundle-ActivationPolicy: lazy
 Bundle-Vendor: %providerName
 Export-Package: jp.go.aist.rtm.systemeditor.rcp

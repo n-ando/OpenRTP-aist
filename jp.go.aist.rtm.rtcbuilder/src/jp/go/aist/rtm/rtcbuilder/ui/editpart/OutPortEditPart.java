@@ -1,13 +1,12 @@
 package jp.go.aist.rtm.rtcbuilder.ui.editpart;
 
+import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.geometry.Point;
+
 import jp.go.aist.rtm.rtcbuilder.model.component.DataOutPort;
 import jp.go.aist.rtm.rtcbuilder.ui.figure.ComponentFigure;
+import jp.go.aist.rtm.rtcbuilder.ui.figure.OutPortBaseFigure;
 import jp.go.aist.rtm.rtcbuilder.ui.figure.OutPortFigure;
-import jp.go.aist.rtm.rtcbuilder.util.RTCUtil;
-
-import org.eclipse.draw2d.IFigure;
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.ui.PlatformUI;
 
 /**
  * OutPortのEditPartクラス
@@ -21,11 +20,17 @@ public class OutPortEditPart extends PortEditPartBase {
 	protected IFigure createFigure() {
 		ComponentFigure parentFigure = (ComponentFigure)((ComponentEditPart)this.getParent()).getFigure();
 		int direction = this.getModel().getDirection().getValue();
-		OutPortFigure result = new OutPortFigure(getModel(), direction,
-				new Color(PlatformUI.getWorkbench().getDisplay(), RTCUtil.defaultRGBMap.get(RTCUtil.COLOR_DATAPORT)));
+		
+		OutPortBaseFigure result = new OutPortBaseFigure(getModel(), direction);
+		
 		int index = this.getModel().getIndex();
+		result.setSize(Integer.MAX_VALUE, Integer.MAX_VALUE);
+		result.setLocation(new Point(0,0));
 
-		return modifyPosition(parentFigure, direction, index, result);
+		OutPortFigure innerFigure = (OutPortFigure)modifyPosition(parentFigure, direction, index, result.getInnerFigure());
+		result.setInnerFigure(innerFigure);
+
+		return result;
 	}
 
 	@Override
@@ -41,7 +46,7 @@ public class OutPortEditPart extends PortEditPartBase {
 	 * {@inheritDoc}
 	 */
 	protected void refreshVisuals() {
-		OutPortFigure outport = (OutPortFigure)getFigure();
+		OutPortBaseFigure outport = (OutPortBaseFigure)getFigure();
 		originalChildren = outport.getParent().getChildren();
 		super.refreshVisuals();
 	}

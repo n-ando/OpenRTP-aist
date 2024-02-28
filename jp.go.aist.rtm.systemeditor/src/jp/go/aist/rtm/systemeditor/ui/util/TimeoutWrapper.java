@@ -8,12 +8,9 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import jp.go.aist.rtm.systemeditor.nl.Messages;
 import jp.go.aist.rtm.toolscommon.manager.ToolsCommonPreferenceManager;
 
 /**
@@ -49,8 +46,6 @@ public class TimeoutWrapper {
 			return ret;
 		} catch (TimeoutException e) {
 			// タイムアウト発生
-			MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
-					Messages.getString("TimeoutWrapper.0"), Messages.getString("TimeoutWrapper.1"));
 			return null;
 		} catch (InterruptedException | ExecutionException e) {
 			LOGGER.error("Fail to get future", e);

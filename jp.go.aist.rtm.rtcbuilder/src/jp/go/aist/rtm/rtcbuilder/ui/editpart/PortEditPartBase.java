@@ -3,10 +3,6 @@ package jp.go.aist.rtm.rtcbuilder.ui.editpart;
 import java.util.ArrayList;
 import java.util.List;
 
-import jp.go.aist.rtm.rtcbuilder.model.component.PortDirection;
-import jp.go.aist.rtm.rtcbuilder.ui.figure.ComponentFigure;
-import jp.go.aist.rtm.rtcbuilder.ui.figure.PortFigureBase;
-
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.RectangleFigure;
@@ -14,6 +10,10 @@ import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.ui.PlatformUI;
+
+import jp.go.aist.rtm.rtcbuilder.model.component.PortDirection;
+import jp.go.aist.rtm.rtcbuilder.ui.figure.ComponentFigure;
+import jp.go.aist.rtm.rtcbuilder.ui.figure.PortFigureBase;
 
 public abstract class PortEditPartBase extends AbstractEditPart {
 
@@ -25,7 +25,7 @@ public abstract class PortEditPartBase extends AbstractEditPart {
 		if(direction == PortDirection.RIGHT) {
 			maxNum = ((ComponentEditPart)this.getParent()).getModel().getRightMaxNum();
 			posX = parentBound.x + parentBound.width - result.getSize().width + PortFigureBase.SIZE;
-			posY = parentBound.y + (parentBound.height-PortFigureBase.SIZE) - (parentBound.height-PortFigureBase.SIZE)*(index+1)/(maxNum+1);
+			posY = parentBound.y + (parentBound.height-PortFigureBase.SIZE)*(index+1)/(maxNum+1);
 		} else if(direction == PortDirection.TOP) {
 			maxNum = ((ComponentEditPart)this.getParent()).getModel().getTopMaxNum();
 			posX = parentBound.x - result.getSize().width/2 + (parentBound.width-PortFigureBase.SIZE)*(index+1)/(maxNum+1);
@@ -37,7 +37,7 @@ public abstract class PortEditPartBase extends AbstractEditPart {
 		} else {
 			maxNum = ((ComponentEditPart)this.getParent()).getModel().getLeftMaxNum();
 			posX = parentBound.x - PortFigureBase.SIZE;
-			posY = parentBound.y + (parentBound.height-PortFigureBase.SIZE) - (parentBound.height-PortFigureBase.SIZE)*(index+1)/(maxNum+1);
+			posY = parentBound.y + (parentBound.height-PortFigureBase.SIZE)*(index+1)/(maxNum+1);
 		}
 		result.setLocation(new Point(posX, posY));
 		return result;

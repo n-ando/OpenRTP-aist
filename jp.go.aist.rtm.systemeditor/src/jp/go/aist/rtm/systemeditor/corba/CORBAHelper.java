@@ -137,7 +137,7 @@ public class CORBAHelper {
 				throw new CORBAException(String.format(
 						"Fail to find manager: path=<%s>", comp.getPathId()));
 			}
-			String param = buildCreateComponentParam(comp);
+			String param = buildCreateComponentParam(comp, null);
 			LOGGER.info("createRTObject: cmd=<{}>", param);
 			RTC.RTObject rtobj = manager.create_component(param);
 			return rtobj;
@@ -156,7 +156,7 @@ public class CORBAHelper {
 		 * @throws CORBAException
 		 */
 		public RTC.RTObject createRTObject(RTCManager manager,
-				CorbaComponent comp, SystemDiagram diagram)
+				CorbaComponent comp, SystemDiagram diagram, String managerName)
 				throws CORBAException {
 			LOGGER.trace(
 					"createRTObject START manager=<{}> comp=<{}> diagram=<{}>",
@@ -165,7 +165,7 @@ public class CORBAHelper {
 				throw new CORBAException(String.format(
 						"No manager specified: path=<%s>", comp.getPathId()));
 			}
-			String param = buildCreateComponentParam(comp);
+			String param = buildCreateComponentParam(comp, managerName);
 			LOGGER.info("createRTObject: cmd=<{}>", param);
 			Component c = manager.createComponentR(param);
 			if (c instanceof CorbaComponent) {
@@ -320,7 +320,7 @@ public class CORBAHelper {
 		 *            CORBA コンポーネント
 		 * @return コンポーネント生成パラメータ (失敗時はnull)
 		 */
-		public String buildCreateComponentParam(CorbaComponent comp) {
+		public String buildCreateComponentParam(CorbaComponent comp, String managerName) {
 			String implementationId = comp.getProperty(KEY_IMPLEMENTATION_ID);
 			String instanceName = comp.getProperty(KEY_INSTANCE_NAME);
 			if (implementationId == null || instanceName == null) {
@@ -331,8 +331,12 @@ public class CORBAHelper {
 			CreateComponentParameter param = new CreateComponentParameter(
 					implementationId);
 			param.setInstanceName(instanceName);
-			if (manager != null) {
-				param.setManagerName(manager);
+			if(managerName!=null) {
+				param.setManagerName(managerName);
+			} else {
+				if (manager != null) {
+					param.setManagerName(manager);
+				}
 			}
 			return param.buildCommand();
 		}

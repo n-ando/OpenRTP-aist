@@ -2,6 +2,8 @@ package jp.go.aist.rtm.rtcbuilder.util;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import jp.go.aist.rtm.rtcbuilder.IRtcBuilderConstants;
 
@@ -25,6 +27,13 @@ public class StringUtil {
 	    return true;
 	}
 
+	public static boolean checkProhibitedChar(String source) {
+		if(source.length()==0) return true;
+		Pattern p = Pattern.compile("^[\\p{Alnum}|_]*$");
+		Matcher m = p.matcher(source);
+		return m.find();
+	}
+	
 	public static String splitString(String source, int width, String prefix, int offset) {
 		if( source==null || source.equals("") || width<=0 ) return "";
 
@@ -143,31 +152,6 @@ public class StringUtil {
 		return result.toString();
 	}
 
-//		if( source==null || source.equals("") || width<=0 ) return "";
-//		StringBuffer result = new StringBuffer();
-//		int length = offset;
-//		int startpos = 0;
-//		for( int intIdx=0; intIdx<source.length(); intIdx++ ) {
-//			length += String.valueOf(source.charAt(intIdx)).getBytes().length;
-//			if( width<=length ) {
-//				if( result.length() > 0 )
-//					result.append(prefix);
-//				result.append(source.substring(startpos, intIdx+1));
-//				if( intIdx+1 < source.length() )
-//					result.append("\r\n");
-//				startpos = intIdx+1;
-//				length = 0;
-//			}
-//		}
-//		if( startpos != source.length() ) {
-//			if( result.length()>0 )
-//				result.append(prefix);
-//			result.append(source.substring(startpos));
-//		}
-//		return result.toString();
-//	}
-//
-	
 	public static String connectMessageWithSepalator(String[] ss){
 		if( ss==null ) return "";
 		
@@ -199,5 +183,54 @@ public class StringUtil {
 		}
 		
 		return false;
+	}
+	
+	public static String getDocText(String text) {
+		String result = text;
+		if ("".equals(result)) {
+			return "";
+		}
+		String sep = System.getProperty("line.separator");
+		String lines[] = result.split(sep);
+		StringBuffer buffer = new StringBuffer();
+		for( int index=0; index<lines.length; index++ ) {
+			buffer.append(lines[index]);
+			if(index<lines.length-1) buffer.append(IRtcBuilderConstants.NEWLINE_CODE);
+		}
+		return buffer.toString();
+	}
+
+	public static String getDisplayDocText(String text) {
+		String result = text;
+		if( text==null || "".equals(result) ) {
+			return "";
+		}
+		String sep = System.getProperty("line.separator");
+		String lines[] = result.split(IRtcBuilderConstants.NEWLINE_CODE);
+		StringBuffer buffer = new StringBuffer();
+		for( int index=0; index<lines.length; index++ ) {
+			buffer.append(lines[index]);
+			if(index<lines.length-1) buffer.append(sep);
+		}
+		return buffer.toString();
+	}
+	
+	public static String removeLastNewLine(String source) {
+        String sep = System.getProperty("line.separator");
+        if(source.endsWith(sep)==false) return source;
+        //
+        StringBuilder builder = new StringBuilder(source);
+        int n = sep.length();
+        int size = builder.length();        
+        builder.delete(size-n, size);
+        
+        return builder.toString();
+	}
+	
+	public static String removeNewLine(String source) {
+		source = source.replace("\r","");
+		source = source.replace("\n","");
+        
+        return source;
 	}
 }

@@ -149,7 +149,7 @@ public class DocLongTest extends TestBase {
 		service1.setDocIfDescription("ServicePort1のインターフェースの概要1234567890123456789012345678901234567890123456789012345678901234567890");
 		List<ServicePortInterfaceParam> srvinterts = new ArrayList<ServicePortInterfaceParam>(); 
 		ServicePortInterfaceParam int1 = new ServicePortInterfaceParam(service1, "acc", "", "", 
-				rootPath + "/resource/MyService.idl", "MyService", "", 0);
+				rootPath + "/resource/MyService.idl", "MyService", 0);
 		int1.setDocDescription("ServiceIF1の概要説明1234567890123456789012345678901234567890123456789012345678901234567890");
 		int1.setDocArgument("ServiceIF1の引数1234567890123456789012345678901234567890123456789012345678901234567890");
 		int1.setDocReturn("ServiceIF1の返値1234567890123456789012345678901234567890123456789012345678901234567890");
@@ -166,7 +166,7 @@ public class DocLongTest extends TestBase {
 		service2.setDocIfDescription("ServicePort2のインターフェースの概要1234567890123456789012345678901234567890123456789012345678901234567890");
 		List<ServicePortInterfaceParam> srvinterts2 = new ArrayList<ServicePortInterfaceParam>(); 
 		ServicePortInterfaceParam int2 = new ServicePortInterfaceParam(service2, "rate", "", "", 
-				rootPath + "/resource/DAQService.idl", "DAQService", "", 1);
+				rootPath + "/resource/DAQService.idl", "DAQService", 1);
 		int2.setDocDescription("ServiceIF2の概要説明1234567890123456789012345678901234567890123456789012345678901234567890");
 		int2.setDocArgument("ServiceIF2の引数1234567890123456789012345678901234567890123456789012345678901234567890");
 		int2.setDocReturn("ServiceIF2の返値1234567890123456789012345678901234567890123456789012345678901234567890");
@@ -225,7 +225,7 @@ public class DocLongTest extends TestBase {
 		Generator generator = new Generator();
 		List<GeneratedResult> result = generator.generateTemplateCode(genParam);
 
-		String resourceDir = rootPath + "/resource/100/CXX/Doc/fullLong/";
+		String resourceDir = rootPath + "/resource/100/CXX/Doc/";
 
 		assertEquals(default_file_num + 4, result.size());
 		checkCode(result, resourceDir, "fooComp.cpp");
@@ -233,6 +233,7 @@ public class DocLongTest extends TestBase {
 		checkCode(result, resourceDir, "foo.cpp");
 		checkCode(result, resourceDir, "MyServiceSVC_impl.h");
 		checkCode(result, resourceDir, "MyServiceSVC_impl.cpp");
+		checkCode(result, resourceDir, "README.md");
 	}
 
 }

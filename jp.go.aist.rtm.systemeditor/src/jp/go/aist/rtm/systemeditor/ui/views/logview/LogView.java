@@ -1,26 +1,24 @@
 package jp.go.aist.rtm.systemeditor.ui.views.logview;
 
-import java.text.SimpleDateFormat;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import jp.go.aist.rtm.systemeditor.RTSystemEditorPlugin;
-import jp.go.aist.rtm.toolscommon.model.component.Component;
-import jp.go.aist.rtm.toolscommon.model.component.CorbaComponent;
-import jp.go.aist.rtm.toolscommon.model.component.SystemDiagram;
-import jp.go.aist.rtm.toolscommon.model.component.SystemDiagramKind;
-import jp.go.aist.rtm.toolscommon.model.component.util.RTCLogStore;
-import jp.go.aist.rtm.toolscommon.util.AdapterUtil;
-
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVPrinter;
+import org.apache.commons.csv.CSVRecord;
+import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
-import org.eclipse.jface.viewers.CellEditor;
-import org.eclipse.jface.viewers.CheckboxCellEditor;
-import org.eclipse.jface.viewers.ColumnViewer;
-import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
@@ -31,61 +29,51 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
-import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.SashForm;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Combo;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.FileDialog;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.TableItem;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.part.ViewPart;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import jp.go.aist.rtm.systemeditor.nl.Messages;
+import jp.go.aist.rtm.systemeditor.ui.util.LoggerHandler;
+import jp.go.aist.rtm.toolscommon.model.component.SystemDiagram;
+import jp.go.aist.rtm.toolscommon.model.component.SystemDiagramKind;
+import jp.go.aist.rtm.toolscommon.util.AdapterUtil;
+
 public class LogView extends ViewPart {
+	private LoggerHandler handler;
 
-	static final OpenRTM.LogLevel[] LEVEL_LIST = new OpenRTM.LogLevel[] {
-			OpenRTM.LogLevel.ERROR, //
-			OpenRTM.LogLevel.WARN, //
-			OpenRTM.LogLevel.INFO, //
-			OpenRTM.LogLevel.NORMAL, //
-			OpenRTM.LogLevel.DEBUG, //
-			OpenRTM.LogLevel.TRACE, //
-			OpenRTM.LogLevel.VERBOSE, // 
-			OpenRTM.LogLevel.PARANOID //
-	};
+	private TableViewer rtclogTableViewer;
+	private Table rtclogTable;
+	private Button btnFilter ;
 
-	static final int PROPERTY_DISP = 0;
-	static final int PROPERTY_RTC = 1;
+	private SystemDiagram targetDiagram;
 
-	static final int PROPERTY_TIME = 0;
-	static final int PROPERTY_LEVEL = 1;
-	static final int PROPERTY_COMP = 2;
-	static final int PROPERTY_LOGGER = 3;
-	static final int PROPERTY_BODY = 4;
-
-	TableViewer rtclistTableViewer;
-	Table rtclistTable;
-	TableViewer rtclogTableViewer;
-	Table rtclogTable;
-
-	SystemDiagram targetDiagram;
-
-	RTCStore rtcStore;
-	List<RTCLog> logList;
-
-	LogViewerFilter filter;
-
-	SimpleDateFormat df;
+	private LogViewerFilter filter;
+	private LogLabelProvider provider;
+	private List<LogParam> logList = new ArrayList<LogParam>();
+	
+	private FilteringParam filteringParam = null;
 
 	public LogView() {
-		this.df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	}
 
 	public LogView getLogView() {
@@ -94,101 +82,268 @@ public class LogView extends ViewPart {
 
 	@Override
 	public void createPartControl(Composite parent) {
-		GridLayout gl;
-		GridData gd;
-
-		gl = new GridLayout();
-		gl.numColumns = 3;
+		GridLayout gl = new GridLayout();
+		gl.marginWidth = 0;
+		gl.marginHeight = 0;
+		gl.numColumns = 2;
 		parent.setLayout(gl);
-
-		SashForm sashForm = new SashForm(parent, SWT.HORIZONTAL);
-		gd = new GridData();
-		gd.horizontalAlignment = SWT.FILL;
-		gd.verticalAlignment = SWT.FILL;
-		gd.grabExcessHorizontalSpace = true;
-		gd.grabExcessVerticalSpace = true;
-		gd.horizontalSpan = 2;
-		sashForm.setLayoutData(gd);
-
-		createRTCListPart(sashForm);
-
-		createRTCLogPart(sashForm);
-
-		sashForm.setWeights(new int[] { 20, 80 });
-
+		
+		createControlPart(parent);
+		createRTCLogPart(parent);
+		createButtonPart(parent);
 		setSiteSelection();
 	}
 
-	Composite createRTCListPart(SashForm sash) {
+	private void createButtonPart(Composite parent) {
 		GridLayout gl;
 		GridData gd;
-
-		Composite composite = new Composite(sash, SWT.FILL);
+		
+		Composite composite = new Composite(parent, SWT.FILL);
+		gd = new GridData();
+		gd.horizontalAlignment = SWT.FILL;
+		gd.horizontalSpan = 1;
+		composite.setLayoutData(gd);
+		
 		gl = new GridLayout();
 		gl.marginWidth = 0;
 		gl.marginHeight = 0;
 		gl.numColumns = 1;
 		composite.setLayout(gl);
+		
+		Button btnClear = new Button(composite, SWT.NONE);
+		gd = new GridData();
+		gd.widthHint = 80;
+		btnClear.setLayoutData(gd);
+		btnClear.setText(Messages.getString("LogView.btnClear"));
+		btnClear.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				logList.clear();
+				rtclogTableViewer.refresh();
+			}
+		});
+		
+		Label lblDummuy03 = new Label(composite, SWT.NONE);
+		gd = new GridData();
+		gd.grabExcessHorizontalSpace = true;
+		lblDummuy03.setLayoutData(gd);
+		
+		Button btnLoad = new Button(composite, SWT.NONE);
+		gd = new GridData();
+		gd.widthHint = 80;
+		btnLoad.setLayoutData(gd);
+		btnLoad.setText(Messages.getString("LogView.btnLoad"));
+		btnLoad.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				String[] ext = {"*.json", "*.csv", "*.*"};
+				FileDialog loadDialog = new FileDialog(getSite().getShell(), SWT.OPEN);
+				loadDialog.setFilterExtensions(ext);
+				String loadFile = loadDialog.open();
+				if(loadFile==null) return;
+				
+				logList.clear();
+				if(loadFile.endsWith("csv")) {
+					try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(new File(loadFile))))) {
+			            CSVParser parse = CSVFormat.EXCEL.parse(br);
+			            List<CSVRecord> recordList = parse.getRecords();
+			            for (CSVRecord record : recordList) {
+			            	LogParam info = new LogParam();
+							logList.add(info);
+			            	if(record.isSet(0)) info.setTime(record.get(0));
+			            	if(record.isSet(1)) info.setLevel(record.get(1));
+			            	if(record.isSet(2)) info.setManager(record.get(2));
+			            	if(record.isSet(3)) info.setName(record.get(3));
+			            	if(record.isSet(4)) info.setMessage(record.get(4));
+			            }
+			        } catch (UnsupportedEncodingException e1) {
+			        } catch (FileNotFoundException e2) {
+			        } catch (IOException e3) {
+			        }					
+				} else {
+					ObjectMapper mapper = new ObjectMapper();
+					try {
+						File file = new File(loadFile);
+						BufferedReader br = new BufferedReader(new FileReader(file));
+						String str;
+						while((str = br.readLine()) != null){
+							LogParam info = mapper.readValue(str, LogParam.class);
+							logList.add(info);
+						}
+					  	br.close();
+					}catch(FileNotFoundException e1){
+					}catch(IOException e2){
+					}
+				}
+				rtclogTableViewer.refresh();
+			}
+		});
+		
+		Button btnSave = new Button(composite, SWT.NONE);
+		gd = new GridData();
+		gd.widthHint = 80;
+		btnSave.setLayoutData(gd);
+		btnSave.setText(Messages.getString("LogView.btnSave"));
+		btnSave.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				String[] ext = {"*.json", "*.csv", "*.*"};
+				FileDialog saveDialog = new FileDialog(getSite().getShell(), SWT.SAVE);
+				saveDialog.setFilterExtensions(ext);
+				String saveFile = saveDialog.open();
+				if(saveFile==null) return;
+				
+				if(saveFile.endsWith("csv")) {
+					try (CSVPrinter printer = new CSVPrinter(new FileWriter(saveFile), CSVFormat.EXCEL)) {
+						for(int index=0; index<rtclogTable.getItemCount(); index++) {
+							TableItem item = rtclogTable.getItem(index);
+							LogParam param = (LogParam)item.getData();
+							printer.printRecord(param.getTime(), param.getLevel(), param.getManager(), param.getName(), param.getMessage());
+						}
+					} catch (IOException ex) {
+					    ex.printStackTrace();
+					}					
+				} else {
+					StringBuilder builder = new StringBuilder();
+					ObjectMapper mapper = new ObjectMapper();
+					for(int index=0; index<rtclogTable.getItemCount(); index++) {
+						TableItem item = rtclogTable.getItem(index);
+						LogParam param = (LogParam)item.getData();
+						 try {
+							String strLog = mapper.writeValueAsString(param);
+							builder.append(strLog).append(System.lineSeparator());
+						} catch (JsonProcessingException e1) {
+						}
+					}
+					try{
+						File file = new File(saveFile);
+						FileWriter filewriter = new FileWriter(file);
+						filewriter.write(builder.toString());
+						filewriter.close();
+					} catch (IOException ex) {
+					}
+				}
+				//
+				MessageDialog.openInformation(getSite().getShell(),
+						Messages.getString("LogView.btnSave"),
+						Messages.getString("LogView.msgSave"));
+			}
+		});
+	}
+	
+	private void createControlPart(Composite parent) {
+		GridLayout gl;
+		GridData gd;
+		
+		Composite composite = new Composite(parent, SWT.FILL);
+		gd = new GridData();
+		gd.horizontalAlignment = SWT.FILL;
+		gd.grabExcessHorizontalSpace = true;
+		gd.horizontalSpan = 2;
+		composite.setLayoutData(gd);
+		
+		gl = new GridLayout();
+		gl.marginWidth = 0;
+		gl.marginHeight = 0;
+		gl.numColumns = 7;
+		composite.setLayout(gl);
+		
+		Label portNo = new Label(composite, SWT.NONE);
+		portNo.setText(Messages.getString("LogView.PortNo"));
 
-		rtclistTableViewer = new TableViewer(composite, SWT.FULL_SELECTION
-				| SWT.SINGLE | SWT.BORDER);
-		rtclistTableViewer.setContentProvider(new ArrayContentProvider());
+		Text txtPort = new Text(composite, SWT.BORDER);
+		gd = new GridData();
+		gd.widthHint = 100;
+		txtPort.setLayoutData(gd);
+		txtPort.setText("24224");
+		
+		Button btnStart = new Button(composite, SWT.TOGGLE);
+		gd = new GridData();
+		gd.widthHint = 80;
+		btnStart.setLayoutData(gd);
+		btnStart.setText(Messages.getString("LogView.btnStart"));
+		btnStart.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				if(btnStart.getSelection()) {
+					String strPort = txtPort.getText();
+					int portNo = Integer.parseInt(strPort);
+					handler = new LoggerHandler();
+					handler.startServer(portNo, rtclogTableViewer);
+					btnStart.setText(Messages.getString("LogView.btnStop"));
+				} else {
+					if(handler!=null) {
+						try {
+							handler.stopServer();
+						} catch (Exception ex) {
+						}
+					}
+					btnStart.setText(Messages.getString("LogView.btnStart"));
+				}
+			}
+		});
+		
+		Label lblDummuy01 = new Label(composite, SWT.NONE);
+		gd = new GridData();
+		gd.widthHint = 100;
+		lblDummuy01.setLayoutData(gd);
+		
+		Button chkFilter = new Button(composite, SWT.CHECK);
+		chkFilter.setText(Messages.getString("LogView.chkFilter"));
+		chkFilter.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				btnFilter.setEnabled(chkFilter.getSelection());
+				rtclogTableViewer.resetFilters();
+				if(chkFilter.getSelection()) {
+					rtclogTableViewer.addFilter(filter);
+				}
+			}
+		});
 
-		rtclistTable = rtclistTableViewer.getTable();
-		rtclistTable.setLinesVisible(true);
-		rtclistTable.setHeaderVisible(true);
+		btnFilter = new Button(composite, SWT.NONE);
+		gd = new GridData();
+		gd.widthHint = 80;
+		btnFilter.setLayoutData(gd);
+		btnFilter.setText(Messages.getString("LogView.btnFilter"));
+		btnFilter.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				LogFilterDialog dialog = new LogFilterDialog(getSite().getShell());
+				dialog.setRootParam(filteringParam);
+				int open = dialog.open();
+				if (open != IDialogConstants.OK_ID) {
+					return;
+				}
+				filteringParam = dialog.getRootParam();
+				filter.setCondition(filteringParam);
+				rtclogTableViewer.resetFilters();
+				rtclogTableViewer.addFilter(filter);
+			}
+		});
+		btnFilter.setEnabled(false);
+		
+		Label lblDummuy02 = new Label(composite, SWT.NONE);
+		gd = new GridData();
+		gd.grabExcessHorizontalSpace = true;
+		lblDummuy02.setLayoutData(gd);
+	}
+
+	Composite createRTCLogPart(Composite parent) {
+		GridLayout gl;
+		GridData gd;
+
+		Composite composite = new Composite(parent, SWT.FILL);
 		gd = new GridData();
 		gd.verticalAlignment = SWT.FILL;
 		gd.horizontalAlignment = SWT.FILL;
 		gd.grabExcessVerticalSpace = true;
 		gd.grabExcessHorizontalSpace = true;
-		rtclistTable.setLayoutData(gd);
-
-		gl = new GridLayout(1, false);
-		gl.numColumns = 1;
-		rtclistTable.setLayout(gl);
-
-		TableViewerColumn col;
-		col = createColumn(rtclistTableViewer, "", 30);
-		col.setEditingSupport(new RTCEditingSupport(rtclistTableViewer,
-				PROPERTY_DISP));
-
-		createColumn(rtclistTableViewer, "component", 90);
-
-		rtclistTableViewer.setLabelProvider(new RTCLabelProvider());
-
-		Combo levelCombo = new Combo(composite, SWT.READ_ONLY);
-		gd = new GridData();
-		gd.horizontalAlignment = SWT.FILL;
-		gd.grabExcessHorizontalSpace = true;
-		levelCombo.setLayoutData(gd);
-
-		for (OpenRTM.LogLevel lv : LEVEL_LIST) {
-			levelCombo.add(RTCLogStore.toLevelName(lv));
-		}
-		levelCombo.select(0);
-		levelCombo.addModifyListener(new ModifyListener() {
-			@Override
-			public void modifyText(ModifyEvent e) {
-				Combo c = (Combo) e.widget;
-				if (c.getSelectionIndex() < 0) {
-					return;
-				}
-				OpenRTM.LogLevel lv = LEVEL_LIST[c.getSelectionIndex()];
-				filter.level = lv;
-			}
-		});
-
-		return composite;
-	}
-
-	Composite createRTCLogPart(SashForm sash) {
-		GridLayout gl;
-		GridData gd;
-
-		Composite composite = new Composite(sash, SWT.FILL);
+		gd.horizontalSpan = 1;
+		composite.setLayoutData(gd);
+		
 		gl = new GridLayout();
-		gl.numColumns = 2;
+		gl.numColumns = 1;
 		gl.marginWidth = 0;
 		gl.marginHeight = 0;
 		composite.setLayout(gl);
@@ -196,10 +351,10 @@ public class LogView extends ViewPart {
 		rtclogTableViewer = new TableViewer(composite, SWT.FULL_SELECTION
 				| SWT.SINGLE | SWT.BORDER);
 		rtclogTableViewer.setContentProvider(new ArrayContentProvider());
+		rtclogTableViewer.setInput(logList);
 
 		filter = new LogViewerFilter();
 		rtclogTableViewer.setFilters(new ViewerFilter[] { filter });
-		filter.rtcNames.add("ConsoleIn0");
 
 		rtclogTable = rtclogTableViewer.getTable();
 		rtclogTable.setLinesVisible(true);
@@ -209,292 +364,46 @@ public class LogView extends ViewPart {
 		gd.horizontalAlignment = SWT.FILL;
 		gd.grabExcessVerticalSpace = true;
 		gd.grabExcessHorizontalSpace = true;
-		gd.horizontalSpan = 2;
 		rtclogTable.setLayoutData(gd);
 		rtclogTable.setHeaderVisible(true);
 
-		createColumn(rtclogTableViewer, "time", 80);
-		createColumn(rtclogTableViewer, "level", 60);
-		createColumn(rtclogTableViewer, "component", 90);
-		createColumn(rtclogTableViewer, "logger", 60);
-		createColumn(rtclogTableViewer, "message", 120);
-
-		rtclogTableViewer.setLabelProvider(new LogLabelProvider());
-
+		createColumn(rtclogTableViewer, Messages.getString("LogView.columnTime"), 120, true);
+		createColumn(rtclogTableViewer, Messages.getString("LogView.columnLevel"), 100, true);
+		createColumn(rtclogTableViewer, Messages.getString("LogView.columnManager"), 120, false);
+		createColumn(rtclogTableViewer, Messages.getString("LogView.columnID"), 120, false);
+		createColumn(rtclogTableViewer, Messages.getString("LogView.columnMessage"), 250, false);
+		
+		provider = new LogLabelProvider();
+		rtclogTableViewer.setLabelProvider(provider);
+		rtclogTableViewer.setComparator(new LogSorter(rtclogTableViewer));
+		
 		return composite;
 	}
 
-	TableViewerColumn createColumn(TableViewer viewer, String title, int width) {
+	TableViewerColumn createColumn(TableViewer viewer, String title, int width, boolean canSort) {
 		TableViewerColumn col;
 		col = new TableViewerColumn(viewer, SWT.NONE);
 		col.getColumn().setText(title);
 		col.getColumn().setWidth(width);
+		if(canSort) {
+			col.getColumn().addSelectionListener(new SelectionAdapter() {
+				public void widgetSelected(SelectionEvent e) {
+					LogSorter sorter = (LogSorter) viewer.getComparator();
+					TableColumn selectedColumn = (TableColumn) e.widget;
+					sorter.setColumn(selectedColumn);
+				}
+			});
+		}
 		return col;
-	}
-
-	/** 内部モデル(RTC一覧)を構築 */
-	void buildData() {
-		if (targetDiagram == null) {
-			return;
-		}
-		rtcStore = RTCStore.get(targetDiagram);
-
-		refreshData();
-	}
-
-	/** 内部モデル(ログ一覧)を構築 [非同期] */
-	void buildLogData() {
-		if (rtcStore == null) {
-			return;
-		}
-		if (logList == null) {
-			logList = new ArrayList<RTCLog>();
-		}
-		logList.clear();
-		//
-		List<String> id_list = new ArrayList<String>();
-		for (RTCStore.RTC rtc : rtcStore.rtcs) {
-			if (rtc.comp.getLogObserver() == null) {
-				continue;
-			}
-			id_list.add(rtc.comp.getLogObserver().getServiceProfile().id);
-		}
-		List<RTCLogStore.Record> records = RTCLogStore.eINSTANCE.find(id_list,
-				10000);
-		for (RTCLogStore.Record r : records) {
-			RTCLog rlog = new RTCLog(r);
-			logList.add(rlog);
-		}
-	}
-
-	/** 内部モデル(RTC一覧)から表示 */
-	void refreshData() {
-		rtclistTableViewer.setInput(Collections.EMPTY_LIST);
-		if (rtcStore != null) {
-			rtclistTableViewer.setInput(rtcStore.rtcs);
-			if (rtclistTable.getItemCount() <= 0) {
-				return;
-			}
-		}
-	}
-
-	/** 内部モデル(ログ一覧)から表示 [非同期] */
-	void refreshLogData() {
-		if (rtcStore == null) {
-			return;
-		}
-		filter.rtcNames.clear();
-		for (RTCStore.RTC rtc : rtcStore.rtcs) {
-			if (rtc.display) {
-				filter.rtcNames.add(rtc.comp.getInstanceNameL());
-			}
-		}
-		try {
-			rtclogTableViewer.getControl().getDisplay().asyncExec(
-					new Runnable() {
-						@Override
-						public void run() {
-							if (rtclogTableViewer.getControl().isDisposed()) {
-								return;
-							}
-							if (rtclogTableViewer.getInput() == null) {
-								rtclogTableViewer.setInput(logList);
-							}
-							rtclogTableViewer.refresh();
-						}
-					});
-		} catch (Exception e) {
-		}
 	}
 
 	@Override
 	public void dispose() {
-		if (refresher != null) {
-			refresher.end();
-		}
 		super.dispose();
 	}
 
 	@Override
 	public void setFocus() {
-		// TODO Auto-generated method stub
-	}
-
-	/** RTC一覧を表すクラス */
-	static class RTCStore {
-		static Map<SystemDiagram, RTCStore> store = new HashMap<SystemDiagram, RTCStore>();
-
-		public static RTCStore get(SystemDiagram diagram) {
-			RTCStore result = store.get(diagram);
-			if (result == null) {
-				result = new RTCStore();
-				store.put(diagram, result);
-			}
-			result.reset(diagram);
-			return result;
-		}
-
-		List<RTC> rtcs = new ArrayList<RTC>();
-
-		void reset(SystemDiagram diagram) {
-			List<String> pathes = new ArrayList<String>();
-			for (RTC rtc : rtcs) {
-				if (rtc.display) {
-					pathes.add(rtc.comp.getPathId());
-				}
-			}
-			rtcs.clear();
-			for (Component comp : diagram.getRegisteredComponents()) {
-				if (!(comp instanceof CorbaComponent)) {
-					continue;
-				}
-				CorbaComponent corbaComp = (CorbaComponent) comp;
-				if (corbaComp.getLogObserver() == null) {
-					continue;
-				}
-				RTC rtc = new RTC(corbaComp);
-				if (pathes.contains(comp.getPathId())) {
-					rtc.display = true;
-				}
-				rtcs.add(rtc);
-			}
-		}
-
-		static class RTC {
-			boolean display;
-			CorbaComponent comp;
-
-			RTC(CorbaComponent comp) {
-				this.comp = comp;
-				this.display = false;
-			}
-		}
-	}
-
-	/** RTCログを表すクラス */
-	static class RTCLog {
-		RTC.Time time;
-		OpenRTM.LogLevel level;
-		String levelName;
-		String rtcName;
-		String logger;
-		String message;
-
-		RTCLog(RTCLogStore.Record r) {
-			this.time = r.getTime();
-			this.level = r.getLevel();
-			this.levelName = r.getLevelName();
-			this.rtcName = r.getRtcName();
-			this.logger = r.getLoggerName();
-			this.message = r.getMessage();
-		}
-	}
-
-	/** RTC一覧表示のLabelProvider */
-	public class RTCLabelProvider extends LabelProvider implements
-			ITableLabelProvider {
-		@Override
-		public Image getColumnImage(Object element, int columnIndex) {
-			Image result = null;
-			RTCStore.RTC entry = (RTCStore.RTC) element;
-			if (columnIndex == 0) {
-				if (entry.display) {
-					result = RTSystemEditorPlugin
-							.getCachedImage("icons/checkbox_checked.png");
-				} else {
-					result = RTSystemEditorPlugin
-							.getCachedImage("icons/checkbox_unchecked.png");
-				}
-			}
-			return result;
-		}
-
-		@Override
-		public String getColumnText(Object element, int columnIndex) {
-			RTCStore.RTC entry = (RTCStore.RTC) element;
-			if (columnIndex == 1) {
-				return entry.comp.getInstanceNameL();
-			}
-			return null;
-		}
-	}
-
-	/** RTC一覧表示のEditingSupport */
-	public class RTCEditingSupport extends EditingSupport {
-		CellEditor editor;
-		int column;
-
-		public RTCEditingSupport(ColumnViewer viewer, int column) {
-			super(viewer);
-			// Create the correct editor based on the column index
-			switch (column) {
-			case PROPERTY_DISP:
-				editor = new CheckboxCellEditor(((TableViewer) viewer)
-						.getTable());
-				break;
-			default:
-				break;
-			}
-			this.column = column;
-		}
-
-		@Override
-		protected boolean canEdit(Object element) {
-			return true;
-		}
-
-		@Override
-		protected CellEditor getCellEditor(Object element) {
-			return editor;
-		}
-
-		@Override
-		protected Object getValue(Object element) {
-			if (!(element instanceof RTCStore.RTC))
-				return null;
-			RTCStore.RTC entry = (RTCStore.RTC) element;
-			switch (this.column) {
-			case PROPERTY_DISP:
-				return entry.display;
-			default:
-				break;
-			}
-			return null;
-		}
-
-		@Override
-		protected void setValue(Object element, Object value) {
-			if (element instanceof RTCStore.RTC == false)
-				return;
-			RTCStore.RTC entry = (RTCStore.RTC) element;
-			switch (this.column) {
-			case PROPERTY_DISP:
-				entry.display = ((Boolean) value).booleanValue();
-				break;
-			default:
-				break;
-			}
-			getViewer().update(element, null);
-		}
-	}
-
-	/** ログ一覧表示のViewerFilter */
-	public static class LogViewerFilter extends ViewerFilter {
-		List<String> rtcNames = new ArrayList<String>();
-		OpenRTM.LogLevel level = OpenRTM.LogLevel.ERROR;
-
-		@Override
-		public boolean select(Viewer viewer, Object parentElement,
-				Object element) {
-			RTCLog entry = (RTCLog) element;
-			if (!rtcNames.contains(entry.rtcName)) {
-				return false;
-			}
-			if (level.value() < entry.level.value()) {
-				return false;
-			}
-			return true;
-		}
 	}
 
 	/** ログ一覧表示のLabelProvider */
@@ -507,25 +416,19 @@ public class LogView extends ViewPart {
 
 		@Override
 		public String getColumnText(Object element, int columnIndex) {
-			RTCLog entry = (RTCLog) element;
-			switch (columnIndex) {
-			case PROPERTY_TIME:
-				long milisec = (long) entry.time.sec * 1000;
-				Date date = new Date(milisec);
-				return String.format("%s.%09d", df.format(date),
-						entry.time.nsec);
-			case PROPERTY_LEVEL:
-				return entry.levelName;
-			case PROPERTY_COMP:
-				return entry.rtcName;
-			case PROPERTY_LOGGER:
-				return entry.logger;
-			case PROPERTY_BODY:
-				return entry.message;
+			LogParam entry = (LogParam) element;
+			switch(columnIndex) {
+			case 0:
+				return entry.getTime();
+			case 1:
+				return entry.getLevel().toString();
+			case 2:
+				return entry.getManager();
+			case 3:
+				return entry.getName();
 			default:
-				break;
+				return entry.getMessage();
 			}
-			return null;
 		}
 
 		@Override
@@ -538,37 +441,7 @@ public class LogView extends ViewPart {
 			return null;
 		}
 	}
-
-	static class Refresher extends Thread {
-		LogView view;
-		boolean running;
-
-		public Refresher(LogView view) {
-			this.view = view;
-		}
-
-		@Override
-		public void run() {
-			running = true;
-			while (running) {
-				try {
-					view.buildLogData();
-					view.refreshLogData();
-					//
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					running = false;
-				}
-			}
-		}
-
-		public void end() {
-			running = false;
-		}
-	}
-
-	Refresher refresher;
-
+	
 	ISelectionListener selectionListener = new ISelectionListener() {
 		@Override
 		public void selectionChanged(IWorkbenchPart part, ISelection selection) {
@@ -584,19 +457,6 @@ public class LogView extends ViewPart {
 						targetDiagram = sd;
 					}
 				}
-			}
-			buildData();
-			//
-			if (targetDiagram == null) {
-				if (refresher != null) {
-					refresher.end();
-				}
-				return;
-			}
-			if (refresher == null || !refresher.isAlive()) {
-				refresher = new Refresher(getLogView());
-				refresher.setDaemon(true);
-				refresher.start();
 			}
 		}
 	};

@@ -10,7 +10,6 @@ import java.util.concurrent.Callable;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.ui.IWorkbenchPart;
@@ -20,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import jp.go.aist.rtm.systemeditor.nl.Messages;
 import jp.go.aist.rtm.toolscommon.model.component.CorbaComponent;
 import jp.go.aist.rtm.toolscommon.model.component.CorbaExecutionContext;
+import jp.go.aist.rtm.toolscommon.model.component.ExecutionContext;
 import jp.go.aist.rtm.toolscommon.model.manager.RTCManager;
 
 /**
@@ -32,15 +32,6 @@ public class ComponentActionDelegate {
 	static final String MSG_BEGIN_TASK = Messages.getString("ComponentActionDelegate.task.begin");
 	static final String MSG_SUB_TASK1 = Messages.getString("ComponentActionDelegate.task.1");
 	static final String MSG_SUB_TASK2 = Messages.getString("ComponentActionDelegate.task.2");
-
-	static final String ERROR_TITLE = Messages.getString("Common.dialog.error_title");
-
-	static final String ERROR_DEFAULT = Messages.getString("ComponentActionDelegate.error.default");
-	static final String ERROR_INVALID_PARAM = Messages.getString("ComponentActionDelegate.error.invalid_param");
-	static final String ERROR_UNSUPPORTED = Messages.getString("ComponentActionDelegate.error.unsupported");
-	static final String ERROR_OUT_OF_RESOURCE = Messages.getString("ComponentActionDelegate.error.out_of_resource");
-	static final String ERROR_INVALID_PRECONDITION = Messages
-			.getString("ComponentActionDelegate.error.invalid_precondition");
 
 	IWorkbenchPart targetPart;
 
@@ -132,22 +123,6 @@ public class ComponentActionDelegate {
 				}
 			}
 		}
-
-		if (returnCodes.contains(CorbaComponent.RETURNCODE_ERROR)) {
-			openError(ERROR_DEFAULT);
-		} else if (returnCodes.contains(CorbaComponent.RETURNCODE_BAD_PARAMETER)) {
-			openError(ERROR_INVALID_PARAM);
-		} else if (returnCodes.contains(CorbaComponent.RETURNCODE_UNSUPPORTED)) {
-			openError(ERROR_UNSUPPORTED);
-		} else if (returnCodes.contains(CorbaComponent.RETURNCODE_OUT_OF_RESOURCES)) {
-			openError(ERROR_OUT_OF_RESOURCE);
-		} else if (returnCodes.contains(CorbaComponent.RETURNCODE_PRECONDITION_NOT_MET)) {
-			openError(ERROR_INVALID_PRECONDITION);
-		}
-	}
-
-	void openError(String message) {
-		MessageDialog.openError(targetPart.getSite().getShell(), ERROR_TITLE, message);
 	}
 
 	// 以下、コマンドファクトリ
@@ -159,7 +134,14 @@ public class ComponentActionDelegate {
 			Command cmd = Command.of( //
 					() -> {
 						return LOG_R(log, "start()", comp, () -> {
-							return comp.startR();
+							Integer returnCode = comp.startR();
+							if(returnCode==CorbaComponent.RETURNCODE_PRECONDITION_NOT_MET) {
+								int state = comp.getExecutionContextState();
+								if(state == ExecutionContext.STATE_RUNNING) {
+									returnCode = null;
+								}
+							}
+							return returnCode;
 						});
 					}, //
 					() -> {
@@ -190,7 +172,14 @@ public class ComponentActionDelegate {
 			Command cmd = Command.of( //
 					() -> {
 						return LOG_R(log, "stop()", comp, () -> {
-							return comp.stopR();
+							Integer returnCode = comp.stopR();
+							if(returnCode==CorbaComponent.RETURNCODE_PRECONDITION_NOT_MET) {
+								int state = comp.getExecutionContextState();
+								if(state == ExecutionContext.STATE_STOPPED) {
+									returnCode = null;
+								}
+							}
+							return returnCode;
 						});
 					}, //
 					() -> {
@@ -222,7 +211,14 @@ public class ComponentActionDelegate {
 			Command cmd = Command.of( //
 					() -> {
 						return LOG_R(log, "activate()", comp, () -> {
-							return comp.activateR();
+							Integer returnCode = comp.activateR();
+							if(returnCode==CorbaComponent.RETURNCODE_PRECONDITION_NOT_MET) {
+								int state = comp.getComponentState();
+								if(state == ExecutionContext.RTC_ACTIVE) {
+									returnCode = null;
+								}
+							}
+							return returnCode;
 						});
 					}, //
 					() -> {
@@ -254,7 +250,14 @@ public class ComponentActionDelegate {
 			Command cmd = Command.of( //
 					() -> {
 						return LOG_R(log, "deactivate()", comp, () -> {
-							return comp.deactivateR();
+							Integer returnCode = comp.deactivateR();
+							if(returnCode==CorbaComponent.RETURNCODE_PRECONDITION_NOT_MET) {
+								int state = comp.getComponentState();
+								if(state == ExecutionContext.RTC_INACTIVE) {
+									returnCode = null;
+								}
+							}
+							return returnCode;
 						});
 					}, //
 					() -> {

@@ -22,7 +22,8 @@ public class CORBAParseTest extends TestBase {
 		}
 			
 		try {
-			IDLParamConverter.extractTypeDef(sourceContents, dataTypes);
+			StringBuilder builder = new StringBuilder();
+			IDLParamConverter.extractTypeDef(sourceContents, dataTypes, builder);
 		} catch (Exception e) {
 			fail();
 		}
@@ -39,7 +40,8 @@ public class CORBAParseTest extends TestBase {
 			sourceContents.get(intidx).setContent(idlContent);
 		}
 			
-		IDLParamConverter.extractTypeDef(sourceContents, results);
+		StringBuilder builder = new StringBuilder();
+		IDLParamConverter.extractTypeDef(sourceContents, results, builder);
 		
 		assertEquals(7, results.size());
 		assertTrue(results.contains("RTC::MyData"));
@@ -61,7 +63,8 @@ public class CORBAParseTest extends TestBase {
 			sourceContents.get(intidx).setContent(idlContent);
 		}
 			
-		IDLParamConverter.extractTypeDef(sourceContents, results);
+		StringBuilder builder = new StringBuilder();
+		IDLParamConverter.extractTypeDef(sourceContents, results, builder);
 
 		assertEquals(2, results.size());
 		assertTrue(results.contains("RTC::MyData"));
@@ -78,7 +81,8 @@ public class CORBAParseTest extends TestBase {
 			sourceContents.get(intidx).setContent(idlContent);
 		}
 		
-		IDLParamConverter.extractTypeDef(sourceContents, results);
+		StringBuilder builder = new StringBuilder();
+		IDLParamConverter.extractTypeDef(sourceContents, results, builder);
 
 		assertEquals(2, results.size());
 		assertTrue(results.contains("Time"));
@@ -94,7 +98,8 @@ public class CORBAParseTest extends TestBase {
 			String idlContent = FileUtil.readFile(sourceContents.get(intidx).getFullPath());
 			sourceContents.get(intidx).setContent(idlContent);
 		}
-		IDLParamConverter.extractTypeDef(sourceContents, results);
+		StringBuilder builder = new StringBuilder();
+		IDLParamConverter.extractTypeDef(sourceContents, results, builder);
 
 		assertEquals(5, results.size());
 		assertTrue(results.contains("Time"));
@@ -113,7 +118,8 @@ public class CORBAParseTest extends TestBase {
 			String idlContent = FileUtil.readFile(sourceContents.get(intidx).getFullPath());
 			sourceContents.get(intidx).setContent(idlContent);
 		}
-		IDLParamConverter.extractTypeDef(sourceContents, results);
+		StringBuilder builder = new StringBuilder();
+		IDLParamConverter.extractTypeDef(sourceContents, results, builder);
 		assertEquals(0, results.size());
 	}
 	
@@ -126,7 +132,8 @@ public class CORBAParseTest extends TestBase {
 			String idlContent = FileUtil.readFile(sourceContents.get(intidx).getFullPath());
 			sourceContents.get(intidx).setContent(idlContent);
 		}
-		IDLParamConverter.extractTypeDef(sourceContents, results);
+		StringBuilder builder = new StringBuilder();
+		IDLParamConverter.extractTypeDef(sourceContents, results, builder);
 
 		assertEquals(5, results.size());
 		assertTrue(results.contains("RTC::Time"));
@@ -145,7 +152,8 @@ public class CORBAParseTest extends TestBase {
 			String idlContent = FileUtil.readFile(sourceContents.get(intidx).getFullPath());
 			sourceContents.get(intidx).setContent(idlContent);
 		}
-		IDLParamConverter.extractTypeDef(sourceContents, results);
+		StringBuilder builder = new StringBuilder();
+		IDLParamConverter.extractTypeDef(sourceContents, results, builder);
 
 		assertEquals(22, results.size());
 		assertTrue(results.contains("RTC::Time"));
@@ -181,7 +189,8 @@ public class CORBAParseTest extends TestBase {
 			String idlContent = FileUtil.readFile(sourceContents.get(intidx).getFullPath());
 			sourceContents.get(intidx).setContent(idlContent);
 		}
-		IDLParamConverter.extractTypeDef(sourceContents, results);
+		StringBuilder builder = new StringBuilder();
+		IDLParamConverter.extractTypeDef(sourceContents, results, builder);
 
 		assertEquals(22, results.size());
 		assertTrue(results.contains("RTC::Time"));
@@ -217,7 +226,8 @@ public class CORBAParseTest extends TestBase {
 			String idlContent = FileUtil.readFile(sourceContents.get(intidx).getFullPath());
 			sourceContents.get(intidx).setContent(idlContent);
 		}
-		IDLParamConverter.extractTypeDef(sourceContents, results);
+		StringBuilder builder = new StringBuilder();
+		IDLParamConverter.extractTypeDef(sourceContents, results, builder);
 
 		assertEquals(1, results.size());
 		assertTrue(results.contains("RTC::Time"));
@@ -233,7 +243,8 @@ public class CORBAParseTest extends TestBase {
 			sourceContents.get(intidx).setContent(idlContent);
 		}
 		try {
-			IDLParamConverter.extractTypeDef(sourceContents, results);
+			StringBuilder builder = new StringBuilder();
+			IDLParamConverter.extractTypeDef(sourceContents, results, builder);
 		} catch (Exception ex) {
 			System.out.println("Error");
 			fail();

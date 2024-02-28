@@ -1,4 +1,5 @@
 // -*- Java -*-
+// <rtc-template block="description">
 /*!
  * @file  fooImpl.java
  * @brief ModuleDescription
@@ -6,18 +7,21 @@
  *
  * $Id$
  */
+// </rtc-template>
 import jp.go.aist.rtm.RTC.DataFlowComponentBase;
 import jp.go.aist.rtm.RTC.Manager;
 import jp.go.aist.rtm.RTC.port.CorbaConsumer;
 import jp.go.aist.rtm.RTC.port.CorbaPort;
 import RTC.ReturnCode_t;
 import SimpleService.MyService;
+// <rtc-template block="component_description">
 /**
  * fooImpl
  * <p>
  * ModuleDescription
  *
  */
+// </rtc-template>
 public class fooImpl extends DataFlowComponentBase {
   /**
    * constructor
@@ -32,7 +36,6 @@ public class fooImpl extends DataFlowComponentBase {
     /**
      *
      * The initialize action (on CREATED-&gt;ALIVE transition)
-     * former rtc_init_entry() 
      *
      * @return RTC::ReturnCode_t
      * 
@@ -54,7 +57,6 @@ public class fooImpl extends DataFlowComponentBase {
     /**
      *
      * The finalize action (on ALIVE-&gt;END transition)
-     * former rtc_exiting_entry()
      *
      * @return RTC::ReturnCode_t
      * 
@@ -67,7 +69,6 @@ public class fooImpl extends DataFlowComponentBase {
     /**
      *
      * The startup action when ExecutionContext startup
-     * former rtc_starting_entry()
      *
      * @param ec_id target ExecutionContext Id
      *
@@ -82,7 +83,6 @@ public class fooImpl extends DataFlowComponentBase {
     /**
      *
      * The shutdown action when ExecutionContext stop
-     * former rtc_stopping_entry()
      *
      * @param ec_id target ExecutionContext Id
      *
@@ -97,7 +97,6 @@ public class fooImpl extends DataFlowComponentBase {
     /**
      *
      * The activated action (Active state entry action)
-     * former rtc_active_entry()
      *
      * @param ec_id target ExecutionContext Id
      *
@@ -112,7 +111,6 @@ public class fooImpl extends DataFlowComponentBase {
     /**
      *
      * The deactivated action (Active state exit action)
-     * former rtc_active_exit()
      *
      * @param ec_id target ExecutionContext Id
      *
@@ -127,7 +125,6 @@ public class fooImpl extends DataFlowComponentBase {
     /**
      *
      * The execution action that is invoked periodically
-     * former rtc_active_do()
      *
      * @param ec_id target ExecutionContext Id
      *
@@ -142,7 +139,6 @@ public class fooImpl extends DataFlowComponentBase {
     /**
      *
      * The aborting action when main logic error occurred.
-     * former rtc_aborting_entry()
      *
      * @param ec_id target ExecutionContext Id
      *
@@ -157,7 +153,6 @@ public class fooImpl extends DataFlowComponentBase {
     /**
      *
      * The error action in ERROR state
-     * former rtc_error_do()
      *
      * @param ec_id target ExecutionContext Id
      *
@@ -172,7 +167,6 @@ public class fooImpl extends DataFlowComponentBase {
     /**
      *
      * The reset action that is invoked resetting
-     * This is same but different the former rtc_init_entry()
      *
      * @param ec_id target ExecutionContext Id
      *
@@ -187,7 +181,6 @@ public class fooImpl extends DataFlowComponentBase {
     /**
      *
      * The state update action that is invoked after onExecute() action
-     * no corresponding operation exists in OpenRTm-aist-0.2.0
      *
      * @param ec_id target ExecutionContext Id
      *
@@ -202,7 +195,6 @@ public class fooImpl extends DataFlowComponentBase {
     /**
      *
      * The action that is invoked when execution context's rate is changed
-     * no corresponding operation exists in OpenRTm-aist-0.2.0
      *
      * @param ec_id target ExecutionContext Id
      *

@@ -16,8 +16,6 @@ public class AllTests {
 		suite.addTestSuite(ConstraintRestoreTest.class);
 		suite.addTestSuite(ConstraintParseTestYaml.class);
 		suite.addTestSuite(ConstraintRestoreTestYaml.class);
-		//
-		suite.addTestSuite(RtsProfileTest.class);
 		//$JUnit-END$
 		return suite;
 	}

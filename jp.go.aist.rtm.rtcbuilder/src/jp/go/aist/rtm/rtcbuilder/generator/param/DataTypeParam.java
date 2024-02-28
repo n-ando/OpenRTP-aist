@@ -4,14 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DataTypeParam {
-	private boolean addition;
 	private String fullPath;
+	private String dispPath;
 	private String content;
 	private List<String> definedTypes;
 	private boolean isDefault;
 	
 	public DataTypeParam() {
-		addition = false;
 		fullPath = "";
 		content = "";
 		definedTypes = new ArrayList<String>();
@@ -19,21 +18,12 @@ public class DataTypeParam {
 	}
 
 	public DataTypeParam(String idlPath) {
-		addition = false;
 		fullPath = idlPath;
 		content = "";
 		definedTypes = new ArrayList<String>();
 		isDefault = false;
 	}
 	
-	public boolean isAddition() {
-		return addition;
-	}
-
-	public void setAddition(boolean addition) {
-		this.addition = addition;
-	}
-
 	public String getContent() {
 		return content;
 	}
@@ -48,6 +38,14 @@ public class DataTypeParam {
 
 	public void setFullPath(String fullPath) {
 		this.fullPath = fullPath;
+	}
+	
+	public String getDispPath() {
+		return dispPath;
+	}
+
+	public void setDispPath(String dispPath) {
+		this.dispPath = dispPath;
 	}
 
 	public List<String> getDefinedTypes() {

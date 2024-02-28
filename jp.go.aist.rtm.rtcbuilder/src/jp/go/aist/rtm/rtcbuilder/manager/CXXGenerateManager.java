@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import jp.go.aist.rtm.rtcbuilder.IRTCBMessageConstants;
+import jp.go.aist.rtm.rtcbuilder.fsm.StateParam;
 import jp.go.aist.rtm.rtcbuilder.generator.GeneratedResult;
 import jp.go.aist.rtm.rtcbuilder.generator.param.RtcParam;
 import jp.go.aist.rtm.rtcbuilder.generator.param.idl.IdlFileParam;
@@ -69,38 +70,41 @@ public class CXXGenerateManager extends GenerateManager {
 		List<GeneratedResult> result = new ArrayList<GeneratedResult>();
 		RtcParam rtcParam = (RtcParam) contextMap.get("rtcParam");
 
-		GeneratedResult gr;
-		gr = generateCompSource(contextMap);
-		result.add(gr);
-		gr = generateRTCHeader(contextMap);
-		result.add(gr);
-		gr = generateRTCSource(contextMap);
-		result.add(gr);
-		gr = generateCITemplate(contextMap);
-		result.add(gr);
+		boolean isStaticFSM = rtcParam.isStaticFSM();
+		if(isStaticFSM) {
+			StateParam stateParam = rtcParam.getFsmParam();
+			stateParam.setEventParam(rtcParam);
+			contextMap.put("fsmParam", stateParam);
+		}
+		
+		result.add(generateCompSource(contextMap));
+		result.add(generateRTCHeader(contextMap));
+		result.add(generateRTCSource(contextMap));
+		
+		result.add(generateScript1604(contextMap));
+		result.add(generateScript1804(contextMap));
+		result.add(generateAppVeyorTemplate(contextMap));
+		
+		if(isStaticFSM) {
+			result.add(generateFSMHeader(contextMap));
+			result.add(generateFSMSource(contextMap));
+		}
 
 		for (IdlFileParam idl : rtcParam.getProviderIdlPathes()) {
 			contextMap.put("idlFileParam", idl);
-			gr = generateSVCHeader(contextMap);
-			result.add(gr);
-			gr = generateSVCSource(contextMap);
-			result.add(gr);
+			result.add(generateSVCHeader(contextMap));
+			result.add(generateSVCSource(contextMap));
 		}
 		//
 		if(rtcParam.isChoreonoid()==false) {
-			gr = generateTestCompSource(contextMap);
-			result.add(gr);
-			gr = generateTestHeader(contextMap);
-			result.add(gr);
-			gr = generateTestSource(contextMap);
-			result.add(gr);
+			result.add(generateTestCompSource(contextMap));
+			result.add(generateTestHeader(contextMap));
+			result.add(generateTestSource(contextMap));
 			for (IdlFileParam idl : rtcParam.getConsumerIdlPathes()) {
 				if(idl.isDataPort()) continue;
 				contextMap.put("idlFileParam", idl);
-				gr = generateTestSVCHeader(contextMap);
-				result.add(gr);
-				gr = generateTestSVCSource(contextMap);
-				result.add(gr);
+				result.add(generateTestSVCHeader(contextMap));
+				result.add(generateTestSVCSource(contextMap));
 			}
 		}
 
@@ -163,10 +167,47 @@ public class CXXGenerateManager extends GenerateManager {
 		return generate(infile, outfile, contextMap);
 	}
 
-	public GeneratedResult generateCITemplate(Map<String, Object> contextMap) {
+	public GeneratedResult generateScript1604(Map<String, Object> contextMap) {
+		String outfile = "scripts/ubuntu_1604/Dockerfile";
+		String infile = "cpp/scripts/Dockerfile_ubuntu_1604.vsl";
+		return generate(infile, outfile, contextMap);
+	}
+	
+	public GeneratedResult generateScript1804(Map<String, Object> contextMap) {
+		String outfile = "scripts/ubuntu_1804/Dockerfile";
+		String infile = "cpp/scripts/Dockerfile_ubuntu_1804.vsl";
+		return generate(infile, outfile, contextMap);
+	}
+	
+	public GeneratedResult generateFSMHeader(Map<String, Object> contextMap) {
 		RtcParam rtcParam = (RtcParam) contextMap.get("rtcParam");
-		String outfile = ".travis.yaml." + rtcParam.getName();
-		String infile = "cpp/travis.vsl";
+		String outfile = null;
+		outfile = "include/" + rtcParam.getName() + "/" + rtcParam.getName() + "FSM.h";
+		String infile = "fsm/CXX_FSM.h.vsl";
+		return generate(infile, outfile, contextMap);
+	}
+	
+	public GeneratedResult generateFSMSource(Map<String, Object> contextMap) {
+		RtcParam rtcParam = (RtcParam) contextMap.get("rtcParam");
+		String outfile = null;
+		outfile = "src/" + rtcParam.getName() + "FSM.cpp";
+		String infile = "fsm/CXX_FSM.cpp.vsl";
+		return generate(infile, outfile, contextMap);
+	}
+	
+	public GeneratedResult generateFSMTestHeader(Map<String, Object> contextMap) {
+		RtcParam rtcParam = (RtcParam) contextMap.get("rtcParam");
+		String outfile = null;
+		outfile = "test/include/" + rtcParam.getName() + "Test/" + rtcParam.getName() + "FSMTest.h";
+		String infile = "fsm/CXX_FSM_Test_RTC.h.vsl";
+		return generate(infile, outfile, contextMap);
+	}
+	
+	public GeneratedResult generateFSMTestSource(Map<String, Object> contextMap) {
+		RtcParam rtcParam = (RtcParam) contextMap.get("rtcParam");
+		String outfile = null;
+		outfile = "test/src/" + rtcParam.getName() + "FSMTest.cpp";
+		String infile = "fsm/CXX_FSM_Test_RTC.cpp.vsl";
 		return generate(infile, outfile, contextMap);
 	}
 	/////
@@ -211,6 +252,12 @@ public class CXXGenerateManager extends GenerateManager {
 		outfile = "test/src/" + TemplateHelper.getBasename(idlParam.getIdlFileNoExt())
 					+ TemplateHelper.getServiceImplSuffix() + ".cpp";
 		String infile = "cpp/test/CXX_Test_SVC.cpp.vsl";
+		return generate(infile, outfile, contextMap);
+	}
+	
+	public GeneratedResult generateAppVeyorTemplate(Map<String, Object> contextMap) {
+		String outfile = ".appveyor.yml";
+		String infile = "cpp/appveyor.vsl";
 		return generate(infile, outfile, contextMap);
 	}
 	/////

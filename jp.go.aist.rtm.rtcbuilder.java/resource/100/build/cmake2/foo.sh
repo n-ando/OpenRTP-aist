@@ -16,3 +16,4 @@ if test "x$RTM_JAVA_ROOT" = "x" ; then
 fi
 export CLASSPATH=`get_classpath`
 java fooComp -f rtc.conf $*
+

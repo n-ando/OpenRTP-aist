@@ -1,19 +1,20 @@
 package jp.go.aist.rtm.rtcbuilder.generator.param;
 
+import static jp.go.aist.rtm.toolscommon.profiles.util.XmlHandler.createXMLGregorianCalendar;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.GregorianCalendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import javax.xml.datatype.DatatypeFactory;
-
-import com.sun.org.apache.xerces.internal.jaxp.datatype.DatatypeFactoryImpl;
-
 import jp.go.aist.rtm.rtcbuilder.IRtcBuilderConstants;
+import jp.go.aist.rtm.rtcbuilder.fsm.EventParam;
+import jp.go.aist.rtm.rtcbuilder.fsm.StateParam;
+import jp.go.aist.rtm.rtcbuilder.fsm.TransitionParam;
 import jp.go.aist.rtm.rtcbuilder.generator.ProfileHandler;
 import jp.go.aist.rtm.rtcbuilder.generator.param.idl.IdlFileParam;
 import jp.go.aist.rtm.rtcbuilder.generator.param.idl.IdlPathParam;
@@ -39,7 +40,7 @@ public class RtcParam extends AbstractRecordedParam implements Serializable {
 	private String vender;
 	private String componentType;
 	private String activityType;
-	private String componentKind;
+	private String componentKind = "DataFlowComponent";
 	private int maxInstance;
 	private String updateDate;
 	private RecordedList<String> versionUpLog = new RecordedList<String>();
@@ -47,18 +48,16 @@ public class RtcParam extends AbstractRecordedParam implements Serializable {
 	private double executionRate;
 	private String rtcType;
 	private String currentVULog;
-	//データポート
+	//
 	private RecordedList<DataPortParam> inports = new RecordedList<DataPortParam>();
 	private RecordedList<DataPortParam> outports = new RecordedList<DataPortParam>();
-	//サービスポート
+	private RecordedList<EventPortParam> eventports = new RecordedList<EventPortParam>();
+	//
 	private RecordedList<ServicePortParam> serviceports = new RecordedList<ServicePortParam>();
-//	private List<String> idlSearchPathes = new RecordedList<String>();
-//	private String includeIDLPath = null;
 	//
 	private RecordedList<ServiceClassParam> serviceClassParams = new RecordedList<ServiceClassParam>();
 	//コンフィギュレーション
 	private RecordedList<ConfigSetParam> configParams = new RecordedList<ConfigSetParam>();
-	private RecordedList<ConfigParameterParam> configParameterParams = new RecordedList<ConfigParameterParam>();
 	//言語・環境
 	private RecordedList<String> langList = new RecordedList<String>();
 	private RecordedList<String> langArgList = new RecordedList<String>();
@@ -73,6 +72,9 @@ public class RtcParam extends AbstractRecordedParam implements Serializable {
 	private String doc_algorithm;
 	//
 	private RecordedList<ActionsParam> actions;
+	//FSM
+	private StateParam fsmParam;
+	private String fsmContents;
 	//
 	private String doc_creator;
 	private String doc_license;
@@ -114,6 +116,8 @@ public class RtcParam extends AbstractRecordedParam implements Serializable {
 	private String serviceIFSuffix;
 	private String configurationPrefix;
 	private String configurationSuffix;
+	private String eventPortPrefix;
+	private String eventPortSuffix;
 
 	//
 	private String rtm_version = IRtcBuilderConstants.DEFAULT_RTM_VERSION;
@@ -121,6 +125,7 @@ public class RtcParam extends AbstractRecordedParam implements Serializable {
 	private boolean test_version = false;
 
 	private boolean isChoreonoid = false;
+	private List<IdlPathParam> idlSearchPathList = new ArrayList<IdlPathParam>();
 
 	public RtcParam(GeneratorParam parent) {
 		this(parent, false);
@@ -130,9 +135,7 @@ public class RtcParam extends AbstractRecordedParam implements Serializable {
 		this.parent = parent;
 		//
 		if (!isTest) {
-			DatatypeFactory dateFactory = new DatatypeFactoryImpl();
-			String dateTime = dateFactory.newXMLGregorianCalendar(
-					new GregorianCalendar()).toString();
+			String dateTime = createXMLGregorianCalendar(new Date()).toString();
 			ProfileHandler handler = new ProfileHandler();
 			rtcxml = handler.createInitialRtcXml(dateTime);
 			this.creationDate = dateTime;
@@ -298,14 +301,23 @@ public class RtcParam extends AbstractRecordedParam implements Serializable {
 		checkUpdated(this.currentVULog, cvulog);
 		this.currentVULog = cvulog;
 	}
-	//データポート
+	//
 	public List<DataPortParam> getInports() {
 		return inports;
 	}
+	
 	public List<DataPortParam> getOutports() {
 		return outports;
 	}
-	//サービスポート
+	public List<EventPortParam> getEventports() {
+		return eventports;
+	}
+	
+	public EventPortParam getEventport() {
+		if(eventports == null || eventports.size()==0) return null;
+		return eventports.get(0); 
+	}
+	//
 	public List<ServicePortParam> getServicePorts() {
 		return serviceports;
 	}
@@ -314,12 +326,9 @@ public class RtcParam extends AbstractRecordedParam implements Serializable {
 		return serviceClassParams;
 	}
 
-	//コンフィギュレーション
+	//
 	public List<ConfigSetParam> getConfigParams() {
 		return configParams;
-	}
-	public List<ConfigParameterParam> getConfigParameterParams() {
-		return configParameterParams;
 	}
 	//RTC.xml
 	public String getRtcXml() {
@@ -329,7 +338,7 @@ public class RtcParam extends AbstractRecordedParam implements Serializable {
 		checkUpdated(this.rtcxml, rtcXml);
 		this.rtcxml = rtcXml;
 	}
-	//言語・環境
+	//
 	public String getLanguage() {
 		return getLangageListString(langList);
 	}
@@ -354,14 +363,12 @@ public class RtcParam extends AbstractRecordedParam implements Serializable {
 	//
 	public void setLanguage(String lang) {
 		if (lang != null) {
-			// this.langList = Arrays.asList(lang.split(","));
 			getLangList().clear();
 			getLangList().addAll(Arrays.asList(lang.split(",")));
 		}
 	}
 	public void setLanguageArg(String lang) {
 		if (lang != null) {
-			// this.langArgList = Arrays.asList(lang.split(","));
 			getLangArgList().clear();
 			getLangArgList().addAll(Arrays.asList(lang.split(",")));
 		}
@@ -383,7 +390,7 @@ public class RtcParam extends AbstractRecordedParam implements Serializable {
 		return result;
 	}
 
-	//ドキュメント-Component
+	//
 	public boolean isDocExist() {
 		if( (doc_description==null || doc_description.equals("")) &&
 			(doc_in_out==null || doc_in_out.equals("")) &&
@@ -438,6 +445,13 @@ public class RtcParam extends AbstractRecordedParam implements Serializable {
 	public boolean IsNotImplemented(int actionId) {
 		return !actions.get(actionId).getImplemented();
 	}
+	public String IsComment(int actionId) {
+		if(actions.get(actionId).getImplemented()) {
+			return "";
+		} else {
+			return "//";
+		}
+	}
 	public boolean getActionImplemented(int actionId) {
 		return actions.get(actionId).getImplemented();
 	}
@@ -472,7 +486,7 @@ public class RtcParam extends AbstractRecordedParam implements Serializable {
 		actions.get(actionId).setPreCondition(precond);
 		actions.get(actionId).setPostCondition(postcond);
 	}
-	//ドキュメント-その他
+	//
 	public String getDocCreator() {
 		if(doc_creator==null) doc_creator = "";
 		return doc_creator;
@@ -550,6 +564,29 @@ public class RtcParam extends AbstractRecordedParam implements Serializable {
 
 	public List<IdlFileParam> getConsumerIdlPathes() {
 		return consumerIdlPathes;
+	}
+	
+	public List<IdlFileParam> getConsumerIdlPathesAdded() {
+		List<IdlFileParam> result = new ArrayList<IdlFileParam>();
+		for(IdlFileParam target : consumerIdlPathes) {
+			if(target.checkDefault()) continue;
+			result.add(target);
+		}
+		return result;
+	}
+	
+	public boolean checkWithoutDefaultPathes() {
+		if(0<providerIdlPathes.size()) {
+			for(IdlFileParam e : providerIdlPathes) {
+				if(e.checkDefault()==false) return true;
+			}
+		}
+		if(0<consumerIdlPathes.size() ) {
+			for(IdlFileParam e : consumerIdlPathes) {
+				if(e.checkDefault()==false) return true;
+			}
+		}
+		return false;
 	}
 
 	public List<String> getOriginalProviderIdls() {
@@ -653,11 +690,33 @@ public class RtcParam extends AbstractRecordedParam implements Serializable {
 		this.configurationSuffix = configurationSuffix;
 	}
 
+	public String getEventPortPrefix() {
+		if(eventPortPrefix==null) eventPortPrefix = "";
+		return eventPortPrefix;
+	}
+
+	public void setEventPortPrefix(String eventPortPrefix) {
+		this.eventPortPrefix = eventPortPrefix;
+	}
+
+	public String getEventPortSuffix() {
+		if(eventPortSuffix==null) eventPortSuffix = "";
+		return eventPortSuffix;
+	}
+
+	public void setEventPortSuffix(String eventPortSuffix) {
+		this.eventPortSuffix = eventPortSuffix;
+	}
+
 	public boolean isChoreonoid() {
 		return isChoreonoid;
 	}
 	public void setChoreonoid(boolean value) {
 		isChoreonoid = value;
+	}
+	
+	public List<IdlPathParam> getIdlSearchPathList() {
+		return idlSearchPathList;
 	}
 	//
 	public void checkAndSetParameter() {
@@ -691,7 +750,7 @@ public class RtcParam extends AbstractRecordedParam implements Serializable {
 			}
 		}
 		/////
-		for( DataPortParam target : inports ) {
+		for( DataPortParam target : getInports() ) {
 			List<String> localIdlPathes = new ArrayList<String>();
 			checkAndAddIDLPath(target.getType(), localIdlPathes, consumerIdlStrings, consumerIdlParams);
 			if(0<localIdlPathes.size()) {
@@ -700,6 +759,8 @@ public class RtcParam extends AbstractRecordedParam implements Serializable {
 			}
 		}
 		for( DataPortParam target : outports ) {
+			if(checkExistIDL(providerIdlParams, consumerIdlParams, target)) continue;
+			
 			List<String> localIdlPathes = new ArrayList<String>();
 			checkAndAddIDLPath(target.getType(), localIdlPathes, consumerIdlStrings, consumerIdlParams);
 			if(0<localIdlPathes.size()) {
@@ -717,18 +778,20 @@ public class RtcParam extends AbstractRecordedParam implements Serializable {
 		}
 		/////
 		for( ServicePortInterfaceParam serviceInterface : serviceIFs ) {
-			if( serviceInterface.getIdlSearchPath()!=null && !serviceInterface.getIdlSearchPath().equals("") ){
-				for( IdlFileParam idlParam : providerIdlParams ) {
-					if( serviceInterface.getIdlFullPath().trim().equals(idlParam.getIdlPath().trim()) ) {
-						idlParam.getIdlSearchPathes().add(serviceInterface.getIdlSearchPath());
-						break;
+			for( IdlFileParam idlParam : providerIdlParams ) {
+				if( serviceInterface.getIdlFullPath().trim().equals(idlParam.getIdlPath().trim()) ) {
+					for(IdlPathParam path : this.idlSearchPathList) {
+						idlParam.getIdlSearchPathes().add(path.getPath());
 					}
+					break;
 				}
-				for( IdlFileParam idlParam : consumerIdlParams ) {
-					if( serviceInterface.getIdlFullPath().trim().equals(idlParam.getIdlPath().trim()) ) {
-						idlParam.getIdlSearchPathes().add(serviceInterface.getIdlSearchPath());
-						break;
+			}
+			for( IdlFileParam idlParam : consumerIdlParams ) {
+				if( serviceInterface.getIdlFullPath().trim().equals(idlParam.getIdlPath().trim()) ) {
+					for(IdlPathParam path : this.idlSearchPathList) {
+						idlParam.getIdlSearchPathes().add(path.getPath());
 					}
+					break;
 				}
 			}
 		}
@@ -751,13 +814,29 @@ public class RtcParam extends AbstractRecordedParam implements Serializable {
 		}
 		getLibraryPathes().clear();
 		getLibraryPathes().addAll(libraries);
-		// this.setLibraryPathes(libraries);
+	}
+
+	private boolean checkExistIDL(List<IdlFileParam> providerIdlParams, List<IdlFileParam> consumerIdlParams,
+			DataPortParam target) {
+		boolean isExist = false;
+		for(IdlFileParam param : consumerIdlParams) {
+			if(param.getIdlFile().equals(target.getIdlFile())) {
+				isExist = true;
+				break;
+			}
+		}
+		for(IdlFileParam param : providerIdlParams) {
+			if(param.getIdlPath().equals(target.getIdlFile())) {
+				isExist = true;
+				break;
+			}
+		}
+		return isExist;
 	}
 
 	private void checkAndAddIDLPath(String targetType, List<String> idlPathes,
 			List<String> consumerIdlStrings, List<IdlFileParam> consumerIdlParams) {
 		for(DataTypeParam dataTypes : this.parent.getDataTypeParams()) {
-			if( !dataTypes.isAddition() ) continue;
 			if( dataTypes.getDefinedTypes().contains(targetType) ) {
 				String targetIDL = dataTypes.getFullPath();
 				if( !idlPathes.contains(targetIDL.trim()) ) {
@@ -817,7 +896,7 @@ public class RtcParam extends AbstractRecordedParam implements Serializable {
 		this.test_version = isTest;
 	}
 	public boolean checkConfig() {
-		if( 0<configParams.size() || 0<configParameterParams.size() || 0.0<executionRate ) {
+		if( 0<configParams.size() || 0.0<executionRate ) {
 			return true;
 		}
 		return false;
@@ -851,6 +930,51 @@ public class RtcParam extends AbstractRecordedParam implements Serializable {
 		this.publicOpeSource = publicOpeSource;
 	}
 
+	public StateParam getFsmParam() {
+		return fsmParam;
+	}
+
+	public void setFsmParam(StateParam fsmParam) {
+		this.fsmParam = fsmParam;
+	}
+	
+	public void parseEvent() {
+		if(this.fsmParam == null ) return;
+		
+		List<EventParam> eventList = getEventport().getEvents();
+		
+		for(TransitionParam trans : fsmParam.getAllTransList()) {
+			boolean isExist = false;
+			for(EventParam eventp : eventList) {
+				if(eventp.getName().equals(trans.getEvent())
+						&& eventp.getCondition().equals(trans.getCondition())
+						&& eventp.getSource().equals(trans.getSource())
+						&& eventp.getTarget().equals(trans.getTarget()) ) {
+					trans.setEventParam(eventp);
+					isExist = true;
+					break;
+				}
+			}
+			if(isExist == false) {
+				EventParam eventp = new EventParam();
+				eventp.setName(trans.getEvent());
+				eventp.setCondition(trans.getCondition());
+				eventp.setSource(trans.getSource());
+				eventp.setTarget(trans.getTarget());
+				trans.setEventParam(eventp);
+				eventList.add(eventp);
+			}
+		}
+	}
+	
+	public String getFsmContents() {
+		return fsmContents;
+	}
+	public void setFsmContents(String fsmContents) {
+		checkUpdated(this.fsmContents, fsmContents);
+		this.fsmContents = fsmContents;
+	}
+
 	@Override
 	public boolean isUpdated() {
 		if (super.isUpdated()) {
@@ -862,11 +986,13 @@ public class RtcParam extends AbstractRecordedParam implements Serializable {
 		if (this.inports.isUpdated() || this.outports.isUpdated()) {
 			return true;
 		}
+		if (this.eventports.isUpdated()) {
+			return true;
+		}
 		if (this.serviceports.isUpdated()) {
 			return true;
 		}
-		if (this.configParams.isUpdated()
-				|| this.configParameterParams.isUpdated()) {
+		if (this.configParams.isUpdated()) {
 			return true;
 		}
 		if (this.actions.isUpdated()) {
@@ -887,14 +1013,63 @@ public class RtcParam extends AbstractRecordedParam implements Serializable {
 		//
 		this.inports.resetUpdated();
 		this.outports.resetUpdated();
+		this.eventports.resetUpdated();
 		//
 		this.serviceports.resetUpdated();
 		//
 		this.configParams.resetUpdated();
-		this.configParameterParams.resetUpdated();
 		//
 		this.actions.resetUpdated();
 		//
 		this.targetEnvs.resetUpdated();
+	}
+	/////
+	public void addFSMPort() {
+		if(0<eventports.size()) return;
+		eventports.add(new EventPortParam("FSMEvent", "FSMEvent", 0));
+	}
+	
+	public void deleteFSMPort() {
+		eventports.clear();
+	}
+	
+	public PropertyParam getProperty(String target) {
+		PropertyParam result = null;
+		for(PropertyParam param : properties) {
+			if( param.getName().equals(target)) {
+				result = param;
+				break;
+			}
+		}
+		return result;
+	}
+	
+	public void setProperty(String target, String value) {
+		PropertyParam prop = null;
+		for(PropertyParam param : properties) {
+			if( param.getName().equals(target)) {
+				prop = param;
+				break;
+			}
+		}
+		if(prop==null) {
+			prop = new PropertyParam();
+			prop.setName(target);
+			getProperties().add(prop);
+		}
+		prop.setValue(value);
+	}
+	
+	public boolean isStaticFSM() {
+		PropertyParam fsm = getProperty(IRtcBuilderConstants.PROP_TYPE_FSM);
+		if(fsm!=null) {
+			if(Boolean.valueOf(fsm.getValue())) {
+				PropertyParam fsmType = getProperty(IRtcBuilderConstants.PROP_TYPE_FSMTYTPE);
+				if(fsmType.getValue().equals(IRtcBuilderConstants.FSMTYTPE_STATIC)) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 }

@@ -7,4 +7,4 @@ rtcProfile:
           constraintUnitType: 
             propertyIsLessThan: 
               literal: "-10.07"
-  version: "0.2"
+  version: "0.3"

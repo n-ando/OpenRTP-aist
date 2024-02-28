@@ -49,5 +49,8 @@ public interface DataInPort extends PortBase {
 	 * @generated
 	 */
 	void setInPort_Name(String value);
+	
+	int getPort_Type();
+	void setPort_Type(int port_Type) ;
 
 } // DataInPort

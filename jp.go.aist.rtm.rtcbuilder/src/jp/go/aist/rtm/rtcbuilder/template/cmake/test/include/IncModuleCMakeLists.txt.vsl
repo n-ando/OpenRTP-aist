@@ -1,0 +1,9 @@
+set(hdrs
+    ${rtcParam.name}Test.h
+#if( ${rtcParam.checkWithoutDefaultPathes()} == true )
+#foreach($consumerIdlFile in ${rtcParam.consumerIdlPathesAdded})
+    ${tmpltHelper.getFilenameNoExt(${consumerIdlFile.idlFile})}${tmpltHelper.serviceImplSuffix}.h
+#end
+#end
+    PARENT_SCOPE
+    )

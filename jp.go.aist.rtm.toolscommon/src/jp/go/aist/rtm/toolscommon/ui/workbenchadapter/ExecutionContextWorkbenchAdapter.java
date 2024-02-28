@@ -16,7 +16,7 @@ public class ExecutionContextWorkbenchAdapter extends ModelElementWorkbenchAdapt
 
 	@Override
 	public ImageDescriptor getImageDescriptor(Object o) {
-		return ToolsCommonPlugin.getImageDescriptor("icons/ExecutionContext.gif");
+		return ToolsCommonPlugin.getImageDescriptor("icons/ExecutionContext.png");
 	}
 
 	@Override

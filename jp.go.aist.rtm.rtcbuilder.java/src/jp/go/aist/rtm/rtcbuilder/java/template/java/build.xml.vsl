@@ -11,38 +11,68 @@
 	<property name="source" value="src" />
 	<property name="dest" value="bin" />
 	<property name="doc" value="doc" />
+	<property name="testsource" value="test/src" />
 	<property environment="env" />
+#if( ${rtcParam.checkWithoutDefaultPathes()} == true )
+
+	<condition property="isWindows">
+		<os family="windows" />
+	</condition>
+	<condition property="isUnix">
+		<os family="unix" />
+	</condition>
+
+	<target name="setWindows" if="isWindows">
+		<property name="idlj.path" value="${env.JAVA_HOME}/bin/idlj" />
+		<property name="rtm.idl.path" value="${env.RTM_IDL_DIR}" />
+	</target>
+
+	<target name="setUnix" if="isUnix">
+		<property name="idlj.path" value="${java.home}/../bin/idlj" />
+		<property name="rtm.idl.path" value="${env.RTM_IDL_DIR2}" />
+	</target>
+#end
 
 	<target name="mkdir">
 		<mkdir dir="${dollarStr}{dest}" />
+#if( ${rtcParam.checkWithoutDefaultPathes()} == true )
+		<mkdir dir="src/temp" />
+#end
 	</target>
 
-#if( ${rtcParam.providerIdlPathes.size()} > 0 || ${rtcParam.consumerIdlPathes.size()} > 0 )
-	<target name="idlcompile"  depends="mkdir">
+#if( ${rtcParam.checkWithoutDefaultPathes()} == true )
+	<target name="idlcompile"  depends="mkdir, setWindows, setUnix">
+		<echo message="idlj.path : ${idlj.path}"/>
 #foreach($idlPath in ${rtcParam.providerIdlPathes})
-		<exec executable="${dollarStr}{java.home}/../bin/idlj">
-			<arg line="-td 'src' #foreach($idlSearchPath in ${idlPath.idlSearchPathes})-i '${idlSearchPath}' #end-fall 'idl/${tmpltHelper.getFileName(${idlPath.idlFile})}'"/>
+#if( ${idlPath.checkDefault()} == false )
+		<exec executable="${dollarStr}{idlj.path}">
+			<arg line="-td 'src/temp' -i '${rtm.idl.path}' #foreach($idlSearchPath in ${idlPath.idlSearchPathes})-i '${idlSearchPath}' #end-fall 'idl/${tmpltHelper.getFileName(${idlPath.idlFile})}'"/>
 		</exec>
-#foreach ($idl in ${idlPath.includeIdlParams})
-		<exec executable="${dollarStr}{java.home}/../bin/idlj">
-			<arg line="-td 'src' #foreach($idlSearchPath in ${idlPath.idlSearchPathes})-i '${idlSearchPath}' #end-fall 'idl/${tmpltHelper.getFileName(${idl.idlFile})}'"/>
+#foreach ($idl in ${idlPath.includeIdlParamsWithoutDefault})
+		<exec executable="${dollarStr}{idlj.path}">
+			<arg line="-td 'src/temp' -i '${rtm.idl.path}' #foreach($idlSearchPath in ${idlPath.idlSearchPathes})-i '${idlSearchPath}' #end-fall 'idl/${tmpltHelper.getFileName(${idl.idlFile})}'"/>
 		</exec>
+#end
 #end
 #end
 #foreach($idlPath in ${rtcParam.consumerIdlPathes})
-		<exec executable="${dollarStr}{java.home}/../bin/idlj">
-			<arg line="-td 'src' #foreach($idlSearchPath in ${idlPath.idlSearchPathes})-i '${idlSearchPath}' #end-fall 'idl/${tmpltHelper.getFileName(${idlPath.idlFile})}'"/>
+#if( ${idlPath.checkDefault()} == false )
+		<exec executable="${dollarStr}{idlj.path}">
+			<arg line="-td 'src' -i '${rtm.idl.path}' #foreach($idlSearchPath in ${idlPath.idlSearchPathes})-i '${idlSearchPath}' #end-fall 'idl/${tmpltHelper.getFileName(${idlPath.idlFile})}'"/>
 		</exec>
-#foreach ($idl in ${idlPath.includeIdlParams})
-		<exec executable="${dollarStr}{java.home}/../bin/idlj">
-			<arg line="-td 'src' #foreach($idlSearchPath in ${idlPath.idlSearchPathes})-i '${idlSearchPath}' #end-fall 'idl/${tmpltHelper.getFileName(${idl.idlFile})}'"/>
+#foreach ($idl in ${idlPath.includeIdlParamsWithoutDefault})
+		<exec executable="${dollarStr}{idlj.path}">
+			<arg line="-td 'src' -i '${rtm.idl.path}' #foreach($idlSearchPath in ${idlPath.idlSearchPathes})-i '${idlSearchPath}' #end-fall 'idl/${tmpltHelper.getFileName(${idl.idlFile})}'"/>
 		</exec>
 #end
 #end
+#end
+		<native2ascii src="src/temp" dest="src"/>
+		<delete dir="src/temp"/>
 	</target>
-#end
 
-#if( ${rtcParam.providerIdlPathes.size()} > 0 || ${rtcParam.consumerIdlPathes.size()} > 0 )
+#end
+#if( ${rtcParam.checkWithoutDefaultPathes()} == true )
 	<target name="compile" depends="idlcompile">
 #else
 	<target name="compile" depends="mkdir">
@@ -59,7 +89,15 @@
 #end
 			</classpath>
 		</javac>
+		<javac includeantruntime="false" srcdir="${testsource}" destdir="${dest}">
+			<classpath>
+				<fileset dir="${env.RTM_JAVA_ROOT}/jar">
+					<include name="*.jar"/>
+				</fileset>
+                        </classpath>
+                </javac>
 	</target>
+
 	<target name="generatedoc" depends="compile">
 		<javadoc 
                         Locale="ja_JP"

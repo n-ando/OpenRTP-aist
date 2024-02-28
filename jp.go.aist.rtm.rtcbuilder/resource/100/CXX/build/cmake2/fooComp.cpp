@@ -2,9 +2,6 @@
 /*!
  * @file fooComp.cpp
  * @brief Standalone component
- * @date $Date$
- *
- * $Id$
  */
 
 #include <rtm/Manager.h>

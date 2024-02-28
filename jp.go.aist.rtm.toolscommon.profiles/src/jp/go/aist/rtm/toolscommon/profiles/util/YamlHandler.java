@@ -5,7 +5,7 @@ import java.util.Map;
 
 import org.ho.yaml.Yaml;
 import org.openrtp.namespaces.RtcProfileHolder;
-import org.openrtp.namespaces.rtc.version02.RtcProfile;
+import org.openrtp.namespaces.rtc.version03.RtcProfile;
 
 public class YamlHandler {
 
@@ -64,11 +64,11 @@ public class YamlHandler {
 			Map profileY  = (Map)profileYOrg.get("rtcProfile");
 			if( profileY != null ) {
 				String version = (String)profileY.get("version");
-				if(version.equals("0.1")) {
-					YamlSubHandlerVer01 handler = new YamlSubHandlerVer01();
-					result = handler.mapToRtc(profileYOrg);
-				} else if(version.equals("0.2")) {
+				if(version.equals("0.2")) {
 					YamlSubHandlerVer02 handler = new YamlSubHandlerVer02();
+					result = handler.mapToRtc(profileYOrg);
+				} else if(version.equals("0.3")) {
+					YamlSubHandlerVer03 handler = new YamlSubHandlerVer03();
 					result = handler.mapToRtc(profileYOrg);
 				}
 			}

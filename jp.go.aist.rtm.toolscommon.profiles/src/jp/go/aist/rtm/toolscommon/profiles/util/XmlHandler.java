@@ -11,86 +11,71 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.math.BigInteger;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.Map;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
-import jp.go.aist.rtm.toolscommon.profiles.nl.Messages;
-
-import org.openrtp.namespaces.deploy.DeployProfile;
-import org.openrtp.namespaces.rtc.version02.ActionStatusDoc;
-import org.openrtp.namespaces.rtc.version02.Actions;
 import org.openrtp.namespaces.rtc.version02.And;
-import org.openrtp.namespaces.rtc.version02.BasicInfoExt;
-import org.openrtp.namespaces.rtc.version02.ConfigurationExt;
-import org.openrtp.namespaces.rtc.version02.ConfigurationSet;
 import org.openrtp.namespaces.rtc.version02.ConstraintHashType;
 import org.openrtp.namespaces.rtc.version02.ConstraintListType;
 import org.openrtp.namespaces.rtc.version02.ConstraintType;
 import org.openrtp.namespaces.rtc.version02.ConstraintUnitType;
-import org.openrtp.namespaces.rtc.version02.Dataport;
-import org.openrtp.namespaces.rtc.version02.DataportExt;
-import org.openrtp.namespaces.rtc.version02.DocAction;
-import org.openrtp.namespaces.rtc.version02.DocBasic;
-import org.openrtp.namespaces.rtc.version02.DocConfiguration;
-import org.openrtp.namespaces.rtc.version02.DocDataport;
-import org.openrtp.namespaces.rtc.version02.DocServiceinterface;
-import org.openrtp.namespaces.rtc.version02.DocServiceport;
-import org.openrtp.namespaces.rtc.version02.LanguageExt;
-import org.openrtp.namespaces.rtc.version02.Library;
-import org.openrtp.namespaces.rtc.version02.ObjectFactory;
 import org.openrtp.namespaces.rtc.version02.Or;
-import org.openrtp.namespaces.rtc.version02.Parameter;
-import org.openrtp.namespaces.rtc.version02.Position;
-import org.openrtp.namespaces.rtc.version02.Property;
 import org.openrtp.namespaces.rtc.version02.PropertyIsBetween;
 import org.openrtp.namespaces.rtc.version02.PropertyIsEqualTo;
 import org.openrtp.namespaces.rtc.version02.PropertyIsGreaterThan;
 import org.openrtp.namespaces.rtc.version02.PropertyIsGreaterThanOrEqualTo;
 import org.openrtp.namespaces.rtc.version02.PropertyIsLessThan;
 import org.openrtp.namespaces.rtc.version02.PropertyIsLessThanOrEqualTo;
-import org.openrtp.namespaces.rtc.version02.RtcProfile;
-import org.openrtp.namespaces.rtc.version02.ServiceinterfaceExt;
-import org.openrtp.namespaces.rtc.version02.Serviceport;
-import org.openrtp.namespaces.rtc.version02.ServiceportExt;
-import org.openrtp.namespaces.rtc.version02.TargetEnvironment;
-import org.openrtp.namespaces.rts.version02.Activation;
-import org.openrtp.namespaces.rts.version02.ComponentExt;
-import org.openrtp.namespaces.rts.version02.ConditionExt;
-import org.openrtp.namespaces.rts.version02.DataportConnectorExt;
-import org.openrtp.namespaces.rts.version02.Deactivation;
-import org.openrtp.namespaces.rts.version02.ExecutionContextExt;
-import org.openrtp.namespaces.rts.version02.Location;
-import org.openrtp.namespaces.rts.version02.Preceding;
-import org.openrtp.namespaces.rts.version02.Resetting;
+import org.openrtp.namespaces.rtc.version03.ActionStatusDoc;
+import org.openrtp.namespaces.rtc.version03.Actions;
+import org.openrtp.namespaces.rtc.version03.BasicInfoExt;
+import org.openrtp.namespaces.rtc.version03.ConfigurationExt;
+import org.openrtp.namespaces.rtc.version03.ConfigurationSet;
+import org.openrtp.namespaces.rtc.version03.Dataport;
+import org.openrtp.namespaces.rtc.version03.DataportExt;
+import org.openrtp.namespaces.rtc.version03.DocAction;
+import org.openrtp.namespaces.rtc.version03.DocBasic;
+import org.openrtp.namespaces.rtc.version03.DocConfiguration;
+import org.openrtp.namespaces.rtc.version03.DocDataport;
+import org.openrtp.namespaces.rtc.version03.DocServiceinterface;
+import org.openrtp.namespaces.rtc.version03.DocServiceport;
+import org.openrtp.namespaces.rtc.version03.LanguageExt;
+import org.openrtp.namespaces.rtc.version03.Library;
+import org.openrtp.namespaces.rtc.version03.ObjectFactory;
+import org.openrtp.namespaces.rtc.version03.Position;
+import org.openrtp.namespaces.rtc.version03.Property;
+import org.openrtp.namespaces.rtc.version03.RtcProfile;
+import org.openrtp.namespaces.rtc.version03.ServiceinterfaceExt;
+import org.openrtp.namespaces.rtc.version03.Serviceport;
+import org.openrtp.namespaces.rtc.version03.ServiceportExt;
+import org.openrtp.namespaces.rtc.version03.TargetEnvironment;
 import org.openrtp.namespaces.rts.version02.RtsProfile;
 import org.openrtp.namespaces.rts.version02.RtsProfileExt;
-import org.openrtp.namespaces.rts.version02.ServiceportConnectorExt;
-import org.openrtp.namespaces.rts.version02.Shutdown;
-import org.openrtp.namespaces.rts.version02.Startup;
-import org.openrtp.namespaces.rts.version02.TargetComponentExt;
-import org.openrtp.namespaces.rts.version02.TargetExecutioncontext;
-import org.openrtp.namespaces.rts.version02.TargetPortExt;
-import org.openrtp.namespaces.rts.version02.Waittime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
+
+import jp.go.aist.rtm.toolscommon.profiles.nl.Messages;
 
 public class XmlHandler {
 
@@ -118,7 +103,6 @@ public class XmlHandler {
 		StringReader xmlReader = new StringReader(targetXML);
 		parser.parse(new InputSource(xmlReader), xmlParser);
 		String targetClass = null;
-//		if (xmlParser.version.equals("0.1")) {
 		if (xmlParser.version.equals("0.1") || xmlParser.version.equals("1.0")) {
 			targetClass = "org.openrtp.namespaces.rts.version01";
 		} else if (xmlParser.version.equals("0.2")) {
@@ -134,12 +118,7 @@ public class XmlHandler {
 		xmlReader = new StringReader(targetXML);
 		Object profile = unmarshaller.unmarshal(xmlReader);
 		//
-//		if (xmlParser.version.equals("0.1")) {
-		if (targetClass.equals("org.openrtp.namespaces.rts.version01")) {
-			result = convertRtsProfile01to02(profile);
-		} else {
-			result = (RtsProfileExt) ((JAXBElement<?>) profile).getValue();
-		}
+		result = (RtsProfileExt) ((JAXBElement<?>) profile).getValue();
 		return result;
 	}
 
@@ -198,17 +177,16 @@ public class XmlHandler {
 	//
 	//
 	public String convertToXmlRtc(RtcProfile profile) throws Exception {
-	    String xmlString = "";
+		String xmlString = "";
 		try {
-			JAXBContext jaxbContext = JAXBContext.newInstance("org.openrtp.namespaces.rtc.version02");
+			JAXBContext jaxbContext = JAXBContext.newInstance("org.openrtp.namespaces.rtc.version03");
 			Marshaller marshaller = jaxbContext.createMarshaller();
-		    marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT , new Boolean(true));
+			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 			marshaller.setProperty("com.sun.xml.bind.namespacePrefixMapper",
-					new NamespacePrefixMapperImpl(
-							"http://www.openrtp.org/namespaces/rtc"));
-		    StringWriter xmlFileWriter = new StringWriter();
-		    marshaller.marshal(profile, xmlFileWriter);
-		    xmlString = xmlFileWriter.toString();
+					new NamespacePrefixMapperImpl("http://www.openrtp.org/namespaces/rtc"));
+			StringWriter xmlFileWriter = new StringWriter();
+			marshaller.marshal(profile, xmlFileWriter);
+			xmlString = xmlFileWriter.toString();
 		} catch (JAXBException exception) {
 			throw new Exception(Messages.getString("XmlHandler.25"), exception);
 		}
@@ -223,17 +201,13 @@ public class XmlHandler {
 	    StringReader xmlReader = new StringReader(targetXML);
 	    parser.parse(new InputSource(xmlReader), xmlParser);
 	    String targetClass = null;
-	    if( xmlParser.version.equals("0.1") ) {
-	    	targetClass = "org.openrtp.namespaces.rtc.version01";
-	    } else if( xmlParser.version.equals("0.2") ) {
+	    if( xmlParser.version.equals("0.2") ) {
 	    	targetClass = "org.openrtp.namespaces.rtc.version02";
+	    } else if( xmlParser.version.equals("0.3") ) {
+	    	targetClass = "org.openrtp.namespaces.rtc.version03";
 	    }
 	    if( targetClass==null ) {
 	    	throw new Exception(Messages.getString("XmlHandler.30"));
-	    }
-
-	    if( !xmlParser.version.equals("0.1") ) {
-	    	targetXML = replacePositionValue(targetXML);
 	    }
 
 		JAXBContext jc = JAXBContext.newInstance(targetClass);
@@ -243,73 +217,13 @@ public class XmlHandler {
 	    xmlReader = new StringReader(targetXML);
 	    Object profile = ((JAXBElement<?>)unmarshaller.unmarshal(xmlReader)).getValue();
 	    //
-	    if( xmlParser.version.equals("0.1") ) {
-	    	result = convertRtcProfile01to02(profile);
+	    if( xmlParser.version.equals("0.2") ) {
+	    	result = convertRtcProfile02to03(profile);
 	    } else {
 	    	result = (RtcProfile)profile;
 	    }
 
 	    return result;
-	}
-
-	public String convertToXmlDeploy(DeployProfile profile) throws Exception {
-	    String xmlString = "";
-		try {
-			JAXBContext jaxbContext = JAXBContext.newInstance("org.openrtp.namespaces.deploy");
-			Marshaller marshaller = jaxbContext.createMarshaller();
-		    marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT , new Boolean(true));
-		    marshaller.setProperty("com.sun.xml.bind.namespacePrefixMapper",
-					new NamespacePrefixMapperImpl(
-							"http://www.openrtp.org/namespaces/deploy"));
-		    StringWriter xmlFileWriter = new StringWriter();
-		    marshaller.marshal(profile, xmlFileWriter);
-		    xmlString = xmlFileWriter.toString();
-		} catch (JAXBException exception) {
-			throw new Exception(Messages.getString("XmlHandler.17"), exception);
-		}
-		return xmlString;
-	}
-
-	public DeployProfile restoreFromXmlDeploy(String targetXML) throws Exception {
-		DeployProfile result = null;
-		JAXBContext jc = JAXBContext.newInstance("org.openrtp.namespaces.deploy");
-		Unmarshaller unmarshaller = jc.createUnmarshaller();
-		unmarshaller.setEventHandler(new javax.xml.bind.helpers.DefaultValidationEventHandler());
-	    StringReader xmlReader = new StringReader(targetXML);
-		Object profile = unmarshaller.unmarshal(xmlReader);
-		//
-		result = (DeployProfile) ((JAXBElement<?>) profile).getValue();
-		return result;
-	}
-
-	public DeployProfile loadXmlDeploy(String targetFile) throws Exception {
-
-		StringBuffer stbRet = new StringBuffer();
-		try( InputStreamReader isr = new InputStreamReader(new FileInputStream(targetFile), "UTF-8");
-				BufferedReader br = new BufferedReader(isr) ) {
-			String str = new String();
-			while( (str = br.readLine()) != null ){
-				stbRet.append(str + "\n");
-			}
-		}
-		return restoreFromXmlDeploy(stbRet.toString());
-	}
-
-	public boolean saveXmlDeploy(DeployProfile profile, String targetFile) throws Exception {
-		String xmlString = convertToXmlDeploy(profile);
-
-		String lineSeparator = System.getProperty( "line.separator" );
-		if( lineSeparator==null || lineSeparator.equals("") ) lineSeparator = "\n";
-		String xmlSplit[] = xmlString.split(lineSeparator);
-
-		try( BufferedWriter outputFile = new BufferedWriter(
-					new OutputStreamWriter(new FileOutputStream(targetFile), "UTF-8")) ) {
-			for(int intIdx=0;intIdx<xmlSplit.length;intIdx++) {
-				outputFile.write(xmlSplit[intIdx]);
-				outputFile.newLine();
-			}
-		}
-		return true;
 	}
 
 	private class RtsXMLParser extends DefaultHandler {
@@ -346,27 +260,6 @@ public class XmlHandler {
 			super.startElement(uri, localName, qName, attributes);
 		}
 
-	}
-
-	private String replacePositionValue(String targetXML) {
-		// 旧version02から新version02の差分を吸収するための置換
-		Pattern patternLeft = Pattern.compile("rtcExt:position=\"left\"");
-		Matcher matcherLeft = patternLeft.matcher(targetXML);
-		targetXML = matcherLeft.replaceAll("rtcExt:position=\"LEFT\"");
-
-		Pattern patternRight = Pattern.compile("rtcExt:position=\"right\"");
-		Matcher matcherRight = patternRight.matcher(targetXML);
-		targetXML = matcherRight.replaceAll("rtcExt:position=\"RIGHT\"");
-
-		Pattern patternTop = Pattern.compile("rtcExt:position=\"top\"");
-		Matcher matcherTop = patternTop.matcher(targetXML);
-		targetXML = matcherTop.replaceAll("rtcExt:position=\"TOP\"");
-
-		Pattern patternBottom = Pattern.compile("rtcExt:position=\"bottom\"");
-		Matcher matcherBottom = patternBottom.matcher(targetXML);
-		targetXML = matcherBottom.replaceAll("rtcExt:position=\"BOTTOM\"");
-
-		return targetXML;
 	}
 
 	public static String restoreConstraint(ConstraintType source) throws Exception {
@@ -654,731 +547,6 @@ public class XmlHandler {
 		return result;
 	}
 
-	private RtsProfileExt convertRtsProfile01to02(Object source) {
-		RtsProfileExt result02 = null;
-		org.openrtp.namespaces.rts.version01.RtsProfile profile01 = (org.openrtp.namespaces.rts.version01.RtsProfile)source;
-		if( source==null ) return result02;
-		org.openrtp.namespaces.rts.version02.ObjectFactory factory = new org.openrtp.namespaces.rts.version02.ObjectFactory();
-		//RtsProfile
-		result02 = factory.createRtsProfileExt();
-//		result02.setId(convertId01to02(profile01.getId()));
-		result02.setId(convertRtsId01to02(profile01.getId()));
-		result02.setAbstract(profile01.getAbstract());
-		result02.setVersion("0.2");
-		result02.setCreationDate(profile01.getCreationDate());
-		result02.setUpdateDate(profile01.getUpdateDate());
-		//Ext Profile
-		if( profile01 instanceof org.openrtp.namespaces.rts.version01.RtsProfileExt) {
-			result02.getVersionUpLogs().addAll(((org.openrtp.namespaces.rts.version01.RtsProfileExt)profile01).getVersionUpLog());
-			List<org.openrtp.namespaces.rts.version01.Property> properties01 = ((org.openrtp.namespaces.rts.version01.RtsProfileExt)profile01).getProperties();
-			if( properties01!=null ) {
-				result02.getProperties().addAll(convertRtsProperty01to02(factory, properties01));
-			}
-		}
-		//
-		//Component
-		List<org.openrtp.namespaces.rts.version01.Component> comps01 = profile01.getComponent();
-		for( org.openrtp.namespaces.rts.version01.Component comp01 : comps01 ) {
-			ComponentExt comp02 = factory.createComponentExt();
-			comp02.setId(comp01.getId());
-			comp02.setPathUri(comp01.getPathUri());
-			comp02.setActiveConfigurationSet(comp01.getActiveConfigurationSet());
-			comp02.setInstanceName(comp01.getInstanceName());
-			comp02.setCompositeType(covertCompositeType01to02(comp01.getCompositeType()));
-			comp02.setIsRequired(comp01.isIsRequired());
-			result02.getComponents().add(comp02);
-			//Ext Profile
-			if( comp01 instanceof org.openrtp.namespaces.rts.version01.ComponentExt) {
-				org.openrtp.namespaces.rts.version01.ComponentExt comp01ex = (org.openrtp.namespaces.rts.version01.ComponentExt)comp01;
-				Location location02 = factory.createLocation();
-				location02.setX(comp01ex.getLocation().getX());
-				location02.setY(comp01ex.getLocation().getY());
-				location02.setHeight(comp01ex.getLocation().getHeight());
-				location02.setWidth(comp01ex.getLocation().getWidth());
-				location02.setDirection(comp01ex.getLocation().getDirection());
-				//TODO
-				comp02.setLocation(location02);
-				List<org.openrtp.namespaces.rts.version01.Property> properties01 = comp01ex.getProperties();
-				if( properties01!=null ) {
-					List<org.openrtp.namespaces.rts.version02.Property> properties02 = new ArrayList<org.openrtp.namespaces.rts.version02.Property>();
-					for( org.openrtp.namespaces.rts.version01.Property property01 : properties01 ) {
-						//
-						if( property01.getName().equals("Shutdown")) {
-							//Shutdown
-							Shutdown shut02 = factory.createShutdown();
-							shut02.getTargets().add(setCondition("Shutdown", factory, properties01, property01));
-						} else if( property01.getName().equals("Activate")) {
-							//Activate
-							Activation activ02 = factory.createActivation();
-							activ02.getTargets().add(setCondition("Activate", factory, properties01, property01));
-						} else if( property01.getName().equals("Deactivate")) {
-							//Deactivate
-							Deactivation deactiv02 = factory.createDeactivation();
-							deactiv02.getTargets().add(setCondition("Deactivate", factory, properties01, property01));
-						} else if( property01.getName().equals("Resetting")) {
-							//Resetting
-							Resetting reset02 = factory.createResetting();
-							reset02.getTargets().add(setCondition("Resetting", factory, properties01, property01));
-						} else {
-							org.openrtp.namespaces.rts.version02.Property property = factory.createProperty();
-							property.setName(property01.getName());
-							property.setValue(property01.getValue());
-							properties02.add(property);
-						}
-					}
-					comp02.getProperties().addAll(properties02);
-				}
-				//
-				//ConfigurationSet
-				List<org.openrtp.namespaces.rts.version01.ConfigurationSet> configSets01 = comp01.getConfigurationSets();
-				if( configSets01!=null) {
-					for( org.openrtp.namespaces.rts.version01.ConfigurationSet configSet01 : configSets01 ) {
-						org.openrtp.namespaces.rts.version02.ConfigurationSet configSet02 = factory.createConfigurationSet();
-						configSet02.setId(configSet01.getId());
-						comp02.getConfigurationSets().add(configSet02);
-						//ConfigurationData
-						List<org.openrtp.namespaces.rts.version01.ConfigurationData> configs01 = configSet01.getConfigurationData();
-						for( org.openrtp.namespaces.rts.version01.ConfigurationData config01 : configs01 ) {
-							org.openrtp.namespaces.rts.version02.ConfigurationData config02 = factory.createConfigurationData();
-							config02.setName(config01.getName());
-							config02.setData(config01.getData());
-							configSet02.getConfigurationData().add(config02);
-						}
-					}
-				}
-				//
-				//DataPort
-				List<org.openrtp.namespaces.rts.version01.Dataport> dataPorts01 = comp01.getDataPorts();
-				if( dataPorts01!=null) {
-					for( org.openrtp.namespaces.rts.version01.Dataport dataPort01 : dataPorts01 ) {
-						org.openrtp.namespaces.rts.version02.DataportExt dataPort02 = factory.createDataportExt();
-						dataPort02.setName(dataPort01.getName());
-						comp02.getDataPorts().add(dataPort02);
-						//DataPortConnector
-						List<org.openrtp.namespaces.rts.version01.DataportConnector> connectors01 = dataPort01.getDataPortConnectors();
-						if( connectors01!=null ) {
-							for( org.openrtp.namespaces.rts.version01.DataportConnector connector01 : connectors01 ) {
-								DataportConnectorExt connector02 = factory.createDataportConnectorExt();
-								connector02.setConnectorId(connector01.getConnectorId());
-								connector02.setName(connector01.getName());
-								connector02.setDataType(connector01.getDataType());
-								connector02.setInterfaceType(connector01.getInterfaceType());
-								connector02.setDataflowType(connector01.getDataflowType());
-								connector02.setSubscriptionType(connector01.getSubscriptionType());
-								connector02.setPushInterval(connector01.getPushInterval());
-								//
-								TargetPortExt source02 = factory.createTargetPortExt();
-								source02.setComponentId(comp01ex.getId());
-								source02.setInstanceName(comp01ex.getInstanceName());
-								source02.setPortName(dataPort01.getName());
-								connector02.setSourceDataPort(source02);
-								//
-								TargetPortExt target02 = factory.createTargetPortExt();
-								target02.setComponentId(connector01.getTargetDataPort().getComponentId());
-								target02.setInstanceName(connector01.getTargetDataPort().getInstanceName());
-								target02.setPortName(connector01.getTargetDataPort().getPortName());
-								connector02.setTargetDataPort(target02);
-								//
-								if(connector01.getTargetDataPort() instanceof org.openrtp.namespaces.rts.version01.TargetPortExt) {
-									org.openrtp.namespaces.rts.version01.TargetPortExt targetPort01Ex = (org.openrtp.namespaces.rts.version01.TargetPortExt)connector01.getTargetDataPort();
-									List<org.openrtp.namespaces.rts.version01.Property> portProperties01 = targetPort01Ex.getProperties();
-									if( portProperties01!=null ) {
-										target02.getProperties().addAll(convertRtsProperty01to02(factory, portProperties01));
-									}
-								}
-								result02.getDataPortConnectors().add(connector02);
-								//
-								if(connector01 instanceof org.openrtp.namespaces.rts.version01.DataportConnectorExt) {
-									org.openrtp.namespaces.rts.version01.DataportConnectorExt connector01Ex = (org.openrtp.namespaces.rts.version01.DataportConnectorExt)connector01;
-									List<org.openrtp.namespaces.rts.version01.Property> portProperties01 = connector01Ex.getProperties();
-									if( portProperties01!=null ) {
-										connector02.getProperties().addAll(convertRtsProperty01to02(factory, portProperties01));
-									}
-								}
-							}
-						}
-					}
-				}
-				//
-				//ServicePort
-				List<org.openrtp.namespaces.rts.version01.Serviceport> servicePorts01 = comp01.getServicePorts();
-				if( servicePorts01!=null) {
-					for( org.openrtp.namespaces.rts.version01.Serviceport servicePort01 : servicePorts01 ) {
-						org.openrtp.namespaces.rts.version02.ServiceportExt servicePort02 = factory.createServiceportExt();
-						servicePort02.setName(servicePort01.getName());
-						comp02.getServicePorts().add(servicePort02);
-						//ServicePortConnector
-						List<org.openrtp.namespaces.rts.version01.ServiceportConnector> connectors01 = servicePort01.getServicePortConnectors();
-						if( connectors01!=null ) {
-							for( org.openrtp.namespaces.rts.version01.ServiceportConnector connector01 : connectors01 ) {
-								ServiceportConnectorExt connector02 = factory.createServiceportConnectorExt();
-								connector02.setConnectorId(connector01.getConnectorId());
-								connector02.setName(connector01.getName());
-								//
-								TargetPortExt source02 = factory.createTargetPortExt();
-								source02.setComponentId(comp01ex.getId());
-								source02.setInstanceName(comp01ex.getInstanceName());
-								source02.setPortName(servicePort01.getName());
-								connector02.setSourceServicePort(source02);
-								//
-								TargetPortExt target02 = factory.createTargetPortExt();
-								target02.setComponentId(connector01.getTargetServicePort().getComponentId());
-								target02.setInstanceName(connector01.getTargetServicePort().getInstanceName());
-								target02.setPortName(connector01.getTargetServicePort().getPortName());
-								connector02.setTargetServicePort(target02);
-								result02.getServicePortConnectors().add(connector02);
-								//
-								if(connector01.getTargetServicePort() instanceof org.openrtp.namespaces.rts.version01.TargetPortExt) {
-									org.openrtp.namespaces.rts.version01.TargetPortExt targetPort01Ex = (org.openrtp.namespaces.rts.version01.TargetPortExt)connector01.getTargetServicePort();
-									List<org.openrtp.namespaces.rts.version01.Property> portProperties01 = targetPort01Ex.getProperties();
-									if( portProperties01!=null ) {
-										target02.getProperties().addAll(convertRtsProperty01to02(factory, portProperties01));
-									}
-								}
-								//
-								if(connector01 instanceof org.openrtp.namespaces.rts.version01.ServiceportConnectorExt) {
-									org.openrtp.namespaces.rts.version01.ServiceportConnectorExt connector01Ex = (org.openrtp.namespaces.rts.version01.ServiceportConnectorExt)connector01;
-									List<org.openrtp.namespaces.rts.version01.Property> portProperties01 = connector01Ex.getProperties();
-									if( portProperties01!=null ) {
-										connector02.getProperties().addAll(convertRtsProperty01to02(factory, portProperties01));
-									}
-								}
-							}
-						}
-					}
-				}
-				//
-				//ExecutionContext
-				List<org.openrtp.namespaces.rts.version01.ExecutionContext> ecList01 = comp01.getExecutionContexts();
-				if( ecList01!=null) {
-					for( org.openrtp.namespaces.rts.version01.ExecutionContext ec01 : ecList01 ) {
-						ExecutionContextExt ec02 = factory.createExecutionContextExt();
-						ec02.setKind(ec01.getKind());
-						ec02.setRate(ec01.getRate());
-						//TODO
-						comp02.getExecutionContexts().add(ec02);
-						//Participant
-						List<org.openrtp.namespaces.rts.version01.TargetComponent> particip01List = ec01.getParticipants();
-						if( particip01List!=null ) {
-							for( org.openrtp.namespaces.rts.version01.TargetComponent particip01 : particip01List ) {
-								TargetComponentExt target02 = factory.createTargetComponentExt();
-								target02.setComponentId(particip01.getComponentId());
-								target02.setInstanceName(particip01.getInstanceName());
-								ec02.getParticipants().add(target02);
-								//
-								if(particip01 instanceof org.openrtp.namespaces.rts.version01.TargetComponentExt) {
-									org.openrtp.namespaces.rts.version01.TargetComponentExt particip01Ex = (org.openrtp.namespaces.rts.version01.TargetComponentExt)particip01;
-									List<org.openrtp.namespaces.rts.version01.Property> partProperties01 = particip01Ex.getProperties();
-									if( partProperties01!=null ) {
-										target02.getProperties().addAll(convertRtsProperty01to02(factory, partProperties01));
-									}
-								}
-							}
-						}
-						//
-						if(ec01 instanceof org.openrtp.namespaces.rts.version01.ExecutionContextExt) {
-							org.openrtp.namespaces.rts.version01.ExecutionContextExt ec01Ex = (org.openrtp.namespaces.rts.version01.ExecutionContextExt)ec01;
-							List<org.openrtp.namespaces.rts.version01.Property> ecProperties01 = ec01Ex.getProperties();
-							if( ecProperties01!=null ) {
-								ec02.getProperties().addAll(convertRtsProperty01to02(factory, ecProperties01));
-							}
-						}
-					}
-				}
-				//
-				//StartUp
-				org.openrtp.namespaces.rts.version01.Startup start01 = comp01.getStartUp();
-				if( start01!=null ) {
-					Startup start02 = factory.createStartup();
-					ConditionExt cond02 = factory.createConditionExt();
-					cond02.setSequence(start01.getSequence());
-					start02.getTargets().add(cond02);
-					List<org.openrtp.namespaces.rts.version01.Condition> cond01List = start01.getCondition();
-					for(org.openrtp.namespaces.rts.version01.Condition cond01 : cond01List) {
-						if( cond01.getWaitTime()!=null ) {
-							//WaitTime
-							Waittime wait02 = factory.createWaittime();
-							wait02.setWaitTime(BigInteger.valueOf(cond01.getWaitTime().getSeconds()));
-							cond02.setWaitTime(wait02);
-						} else if( cond01.getPreceding()!=null ) {
-							//Preceding
-							Preceding pred02 = factory.createPreceding();
-							for( org.openrtp.namespaces.rts.version01.TargetComponent target01 : cond01.getPreceding().getPrecedingComponent() ) {
-								TargetExecutioncontext target02 = factory.createTargetExecutioncontext();
-								target02.setComponentId(target01.getComponentId());
-								target02.setInstanceName(target01.getInstanceName());
-								pred02.getPrecedingComponents().add(target02);
-							}
-							cond02.setPreceding(pred02);
-						}
-					}
-				}
-			}
-		}
-		return result02;
-	}
-
-	private String covertActivityType01to02(String activityType) {
-		if (activityType.equals("EVENT_DRIVEN")) return "EVENTDRIVEN";
-		return activityType;
-	}
-
-	private String covertCompositeType01to02(String compositeType) {
-		if (compositeType == null) return "None";
-		if (compositeType.equals("AllShared")) return "PeriodicStateShared";
-		if (compositeType.equals("ECShared")) return "PeriodicECShared";
-		if (compositeType.equals("NonShared")) return "Grouping";
-		return "None";
-	}
-
-	private String convertRtsId01to02(String ver01Id) {
-		String[] element = ver01Id.split(":");
-		String result = null;
-		if (element.length >= 3) {
-			String[] items = element[1].split("\\.");
-			StringBuffer vendor = new StringBuffer();
-			for (int index = 0; index < items.length - 1; index++) {
-				vendor.append(items[index]);
-			}
-			result = element[0] + ":" + vendor.toString() + ":"
-					+ items[items.length - 1] + ":" + element[2];
-		}
-		return result;
-	}
-
-	private List<org.openrtp.namespaces.rts.version02.Property> convertRtsProperty01to02(org.openrtp.namespaces.rts.version02.ObjectFactory factory, List<org.openrtp.namespaces.rts.version01.Property> properties01) {
-		List<org.openrtp.namespaces.rts.version02.Property> properties02 = new ArrayList<org.openrtp.namespaces.rts.version02.Property>();
-		for( org.openrtp.namespaces.rts.version01.Property property01 : properties01 ) {
-			org.openrtp.namespaces.rts.version02.Property property = factory.createProperty();
-			property.setName(property01.getName());
-			property.setValue(property01.getValue());
-			properties02.add(property);
-		}
-		return properties02;
-	}
-
-	private ConditionExt setCondition(String type, org.openrtp.namespaces.rts.version02.ObjectFactory factory, List<org.openrtp.namespaces.rts.version01.Property> properties01, org.openrtp.namespaces.rts.version01.Property property01) {
-		ConditionExt cond02 = factory.createConditionExt();
-		cond02.setSequence(BigInteger.valueOf(Integer.parseInt(property01.getValue())));
-		if( getPropertyValue(type + "_Waittime", properties01)!=null ) {
-			//WaitTime
-			Waittime wait02 = factory.createWaittime();
-			wait02.setWaitTime(BigInteger.valueOf(Integer.parseInt(getPropertyValue(type + "_Waittime", properties01))));
-			cond02.setWaitTime(wait02);
-		} else if( getPropertyValue(type + "_Preceding", properties01)!=null ) {
-			//Preceding
-			Preceding pred02 = factory.createPreceding();
-			TargetExecutioncontext target02 = factory.createTargetExecutioncontext();
-			target02.setComponentId(getPropertyValue(type + "_Preceding", properties01));
-			pred02.getPrecedingComponents().add(target02);
-			cond02.setPreceding(pred02);
-		}
-		return cond02;
-	}
-
-	private String getPropertyValue(String targetKey, List<org.openrtp.namespaces.rts.version01.Property> propList) {
-		for(org.openrtp.namespaces.rts.version01.Property prop : propList) {
-			if( prop.getName().equals(targetKey) )
-				return prop.getValue();
-		}
-		return null;
-
-	}
-	//
-	private RtcProfile convertRtcProfile01to02(Object source) {
-		RtcProfile result02 = null;
-		org.openrtp.namespaces.rtc.version01.RtcProfile profile01 = (org.openrtp.namespaces.rtc.version01.RtcProfile)source;
-		if( source==null ) return result02;
-		ObjectFactory factory = new ObjectFactory();
-		//BasicInfo
-		result02 = factory.createRtcProfile();
-		org.openrtp.namespaces.rtc.version01.BasicInfo basic01 = profile01.getBasicInfo();
-		result02.setVersion("0.2");
-		result02.setId(convertId01to02(profile01.getId()));
-		if( basic01!=null ) {
-			BasicInfoExt basic02 = factory.createBasicInfoExt();
-			//Basic Profile
-			basic02.setName(basic01.getName());
-			basic02.setComponentType(basic01.getComponentType());
-			basic02.setActivityType(covertActivityType01to02(basic01.getActivityType()));
-			basic02.setComponentKind(basic01.getComponentKind());
-			basic02.setCategory(basic01.getCategory());
-			basic02.setDescription(basic01.getDescription());
-			basic02.setExecutionRate(basic01.getExecutionRate());
-			basic02.setExecutionType(basic01.getExecutionType());
-			basic02.setMaxInstances(basic01.getMaxInstances());
-			basic02.setVendor(basic01.getVendor());
-			basic02.setVersion(basic01.getVersion());
-			basic02.setAbstract(basic01.getAbstract());
-			basic02.setCreationDate(basic01.getCreationDate());
-			basic02.setUpdateDate(basic01.getUpdateDate());
-			//Doc Profile
-			if( basic01 instanceof org.openrtp.namespaces.rtc.version01.BasicInfoDoc) {
-				org.openrtp.namespaces.rtc.version01.DocBasic doc01 = ((org.openrtp.namespaces.rtc.version01.BasicInfoDoc)basic01).getDoc();
-				if( doc01!=null ) {
-					DocBasic doc02 = factory.createDocBasic();
-					doc02.setDescription(doc01.getDescription());
-					doc02.setInout(doc01.getInout());
-					doc02.setAlgorithm(doc01.getAlgorithm());
-					doc02.setCreator(doc01.getCreator());
-					doc02.setLicense(doc01.getLicense());
-					doc02.setReference(doc01.getReference());
-					basic02.setDoc(doc02);
-				}
-				//Ext Profile
-				if( basic01 instanceof org.openrtp.namespaces.rtc.version01.BasicInfoExt) {
-					basic02.getVersionUpLogs().addAll(((org.openrtp.namespaces.rtc.version01.BasicInfoExt)basic01).getVersionUpLog());
-					List<org.openrtp.namespaces.rtc.version01.Property> properties01 = ((org.openrtp.namespaces.rtc.version01.BasicInfoExt)basic01).getProperties();
-					if( properties01!=null ) {
-						List<Property> properties02 = new ArrayList<Property>();
-						for( org.openrtp.namespaces.rtc.version01.Property property01 : properties01 ) {
-							if( property01.getName().equals("RTCType")) {
-								basic02.setRtcType(property01.getValue());
-							} else {
-								Property property = factory.createProperty();
-								property.setName(property01.getName());
-								property.setValue(property01.getValue());
-								properties02.add(property);
-							}
-						}
-						basic02.getProperties().addAll(properties02);
-					}
-				}
-			}
-			result02.setBasicInfo(basic02);
-		}
-		//Actions
-		org.openrtp.namespaces.rtc.version01.Actions actions01 = profile01.getActions();
-		if( actions01!=null ) {
-			Actions actions02 = factory.createActions();
-			//Initialize
-			org.openrtp.namespaces.rtc.version01.ActionStatus action01 = actions01.getOnInitialize();
-			ActionStatusDoc action02 = convertAction01to02(factory, actions02, action01);
-			actions02.setOnInitialize(action02);
-			//Finalize
-			action01 = actions01.getOnFinalize();
-			action02 = convertAction01to02(factory, actions02, action01);
-			actions02.setOnFinalize(action02);
-			//Startup
-			action01 = actions01.getOnStartup();
-			action02 = convertAction01to02(factory, actions02, action01);
-			actions02.setOnStartup(action02);
-			//Shutdown
-			action01 = actions01.getOnShutdown();
-			action02 = convertAction01to02(factory, actions02, action01);
-			actions02.setOnShutdown(action02);
-			//Activated
-			action01 = actions01.getOnActivated();
-			action02 = convertAction01to02(factory, actions02, action01);
-			actions02.setOnActivated(action02);
-			//Deactivated
-			action01 = actions01.getOnDeactivated();
-			action02 = convertAction01to02(factory, actions02, action01);
-			actions02.setOnDeactivated(action02);
-			//Aborting
-			action01 = actions01.getOnAborting();
-			action02 = convertAction01to02(factory, actions02, action01);
-			actions02.setOnAborting(action02);
-			//Error
-			action01 = actions01.getOnError();
-			action02 = convertAction01to02(factory, actions02, action01);
-			actions02.setOnError(action02);
-			//Reset
-			action01 = actions01.getOnReset();
-			action02 = convertAction01to02(factory, actions02, action01);
-			actions02.setOnReset(action02);
-			//Execute
-			action01 = actions01.getOnExecute();
-			action02 = convertAction01to02(factory, actions02, action01);
-			actions02.setOnExecute(action02);
-			//StateUpdate
-			action01 = actions01.getOnStateUpdate();
-			action02 = convertAction01to02(factory, actions02, action01);
-			actions02.setOnStateUpdate(action02);
-			//RateChanged
-			action01 = actions01.getOnRateChanged();
-			action02 = convertAction01to02(factory, actions02, action01);
-			actions02.setOnRateChanged(action02);
-			//
-			result02.setActions(actions02);
-		}
-		//Configuration
-		org.openrtp.namespaces.rtc.version01.ConfigurationSet configset01 = profile01.getConfigurationSet();
-		if( configset01!=null ) {
-			ConfigurationSet configset02 = factory.createConfigurationSet();
-			List<org.openrtp.namespaces.rtc.version01.Configuration> configList01 = configset01.getConfiguration();
-			for(org.openrtp.namespaces.rtc.version01.Configuration config01 : configList01) {
-				//Basic Profile
-				ConfigurationExt config02 = factory.createConfigurationExt();
-				config02.setName(config01.getName());
-				config02.setType(config01.getType());
-				config02.setVariableName(config01.getVarname());
-				config02.setDefaultValue(config01.getDefaultValue());
-				//Doc Profile
-				if( config01 instanceof org.openrtp.namespaces.rtc.version01.ConfigurationDoc) {
-					org.openrtp.namespaces.rtc.version01.DocConfiguration doc01 = ((org.openrtp.namespaces.rtc.version01.ConfigurationDoc)config01).getDoc();
-					if( doc01!=null ) {
-						DocConfiguration docConfig02 = factory.createDocConfiguration();
-						docConfig02.setDataname(doc01.getDataname());
-						docConfig02.setDefaultValue(doc01.getDefaultValue());
-						docConfig02.setDescription(doc01.getDescription());
-						docConfig02.setUnit(doc01.getUnit());
-						docConfig02.setRange(doc01.getRange());
-						docConfig02.setConstraint(doc01.getConstraint());
-						config02.setDoc(docConfig02);
-					}
-				}
-				//Ext Profile
-				if( config01 instanceof org.openrtp.namespaces.rtc.version01.ConfigurationExt) {
-					List<org.openrtp.namespaces.rtc.version01.Property> properties01 = ((org.openrtp.namespaces.rtc.version01.ConfigurationExt)config01).getProperties();
-					if( properties01!=null ) {
-						config02.getProperties().addAll(convertRtcProperty01to02(factory, properties01));
-					}
-				}
-				configset02.getConfiguration().add(config02);
-			}
-			result02.setConfigurationSet(configset02);
-		}
-		//DataPort
-		List<org.openrtp.namespaces.rtc.version01.Dataport> dataPorts01 = profile01.getDataPorts();
-		if( dataPorts01!=null ) {
-			List<Dataport> dataPorts02 = new ArrayList<Dataport>();
-			for( org.openrtp.namespaces.rtc.version01.Dataport dataport01 : dataPorts01 ) {
-				//Basic Profile
-				DataportExt dataPort02 = factory.createDataportExt();
-				dataPort02.setPortType(dataport01.getPortType());
-				dataPort02.setName(dataport01.getName());
-				dataPort02.setType(dataport01.getType());
-				dataPort02.setIdlFile(dataport01.getIdlFile());
-				dataPort02.setInterfaceType(dataport01.getInterfaceType());
-				dataPort02.setDataflowType(dataport01.getDataflowType());
-				dataPort02.setSubscriptionType(dataport01.getSubscriprionType());
-				//Doc Profile
-				if( dataport01 instanceof org.openrtp.namespaces.rtc.version01.DataportDoc) {
-					org.openrtp.namespaces.rtc.version01.DocDataport docDataPort01 = ((org.openrtp.namespaces.rtc.version01.DataportDoc)dataport01).getDoc();
-					if( docDataPort01!=null ) {
-						DocDataport docDataPort02 = factory.createDocDataport();
-						docDataPort02.setDescription(docDataPort01.getDescription());
-						docDataPort02.setType(docDataPort01.getType());
-						docDataPort02.setNumber(docDataPort01.getNumber());
-						docDataPort02.setSemantics(docDataPort01.getSemantics());
-						docDataPort02.setUnit(docDataPort01.getUnit());
-						docDataPort02.setOccerrence(docDataPort01.getOccerrence());
-						docDataPort02.setOperation(docDataPort01.getOperation());
-						dataPort02.setDoc(docDataPort02);
-					}
-					//Ext Profile
-					if( dataport01 instanceof org.openrtp.namespaces.rtc.version01.DataportExt) {
-						dataPort02.setVariableName(((org.openrtp.namespaces.rtc.version01.DataportExt)dataport01).getVarname());
-						dataPort02.setPosition(getPosition((org.openrtp.namespaces.rtc.version01.DataportExt)dataport01));
-						List<org.openrtp.namespaces.rtc.version01.Property> properties01 = ((org.openrtp.namespaces.rtc.version01.DataportExt)dataport01).getProperties();
-						if( properties01!=null ) {
-							dataPort02.getProperties().addAll(convertRtcProperty01to02(factory, properties01));
-						}
-					}
-				}
-				dataPorts02.add(dataPort02);
-			}
-			result02.getDataPorts().addAll(dataPorts02);
-		}
-		//ServicePort
-		List<org.openrtp.namespaces.rtc.version01.Serviceport> servicePorts01 = profile01.getServicePorts();
-		if( servicePorts01!=null ) {
-			List<Serviceport> servicePorts02 = new ArrayList<Serviceport>();
-			for( org.openrtp.namespaces.rtc.version01.Serviceport serviceport01 : servicePorts01 ) {
-				//Basic Profile
-				ServiceportExt servicePort02 = factory.createServiceportExt();
-				servicePort02.setName(serviceport01.getName());
-				//Doc Profile
-				if( serviceport01 instanceof org.openrtp.namespaces.rtc.version01.ServiceportDoc) {
-					org.openrtp.namespaces.rtc.version01.DocServiceport docServicePort01 = ((org.openrtp.namespaces.rtc.version01.ServiceportDoc)serviceport01).getDoc();
-					if( docServicePort01!=null ) {
-						DocServiceport docServicePort02 = factory.createDocServiceport();
-						docServicePort02.setDescription(docServicePort01.getDescription());
-						docServicePort02.setIfdescription(docServicePort01.getIfdescription());
-						servicePort02.setDoc(docServicePort02);
-					}
-					//Ext Profile
-					if( serviceport01 instanceof org.openrtp.namespaces.rtc.version01.ServiceportExt) {
-						servicePort02.setPosition(getPosition((org.openrtp.namespaces.rtc.version01.ServiceportExt)serviceport01));
-						List<org.openrtp.namespaces.rtc.version01.Property> properties01 = ((org.openrtp.namespaces.rtc.version01.ServiceportExt)serviceport01).getProperties();
-						if( properties01!=null ) {
-							servicePort02.getProperties().addAll(convertRtcProperty01to02(factory, properties01));
-						}
-					}
-				}
-				servicePorts02.add(servicePort02);
-				//Service Interface
-				List<org.openrtp.namespaces.rtc.version01.Serviceinterface> serviceIFs01 = serviceport01.getServiceInterface();
-				if( serviceIFs01!=null ) {
-					List<ServiceinterfaceExt> serviceIFs02 = new ArrayList<ServiceinterfaceExt>();
-					for( org.openrtp.namespaces.rtc.version01.Serviceinterface serviceIF01 : serviceIFs01 ) {
-						//Basic Profile
-						ServiceinterfaceExt serviceIF02 = factory.createServiceinterfaceExt();
-						serviceIF02.setName(serviceIF01.getName());
-						serviceIF02.setDirection(serviceIF01.getDirection());
-						serviceIF02.setInstanceName(serviceIF01.getInstanceName());
-						serviceIF02.setVariableName(serviceIF01.getVarname());
-						serviceIF02.setIdlFile(serviceIF01.getIdlFile());
-						serviceIF02.setType(serviceIF01.getType());
-						serviceIF02.setPath(serviceIF01.getPath());
-						//Doc Profile
-						if( serviceIF01 instanceof org.openrtp.namespaces.rtc.version01.ServiceinterfaceDoc) {
-							org.openrtp.namespaces.rtc.version01.DocServiceinterface docServiceIF01 = ((org.openrtp.namespaces.rtc.version01.ServiceinterfaceDoc)serviceIF01).getDoc();
-							if( docServiceIF01!=null ) {
-								DocServiceinterface docServiceIF02 = factory.createDocServiceinterface();
-								docServiceIF02.setDescription(docServiceIF01.getDescription());
-								docServiceIF02.setDocArgument(docServiceIF01.getDocArgument());
-								docServiceIF02.setDocReturn(docServiceIF01.getDocReturn());
-								docServiceIF02.setDocException(docServiceIF01.getDocException());
-								docServiceIF02.setDocPreCondition(docServiceIF01.getDocPreCondition());
-								docServiceIF02.setDocPostCondition(docServiceIF01.getDocPostCondition());
-								serviceIF02.setDoc(docServiceIF02);
-							}
-							//Ext Profile
-							if( serviceIF01 instanceof org.openrtp.namespaces.rtc.version01.ServiceinterfaceExt) {
-								List<org.openrtp.namespaces.rtc.version01.Property> properties01 = ((org.openrtp.namespaces.rtc.version01.ServiceinterfaceExt)serviceIF01).getProperties();
-								if( properties01!=null ) {
-									serviceIF02.getProperties().addAll(convertRtcProperty01to02(factory, properties01));
-								}
-							}
-						}
-						serviceIFs02.add(serviceIF02);
-					}
-					servicePort02.getServiceInterface().addAll(serviceIFs02);
-				}
-			}
-			result02.getServicePorts().addAll(servicePorts02);
-		}
-		//Parameter
-		List<org.openrtp.namespaces.rtc.version01.Parameter> parameters01 = profile01.getParameters();
-		if( parameters01!=null ) {
-			List<Parameter> parameters02 = new ArrayList<Parameter>();
-			for( org.openrtp.namespaces.rtc.version01.Parameter parameter01 : parameters01 ) {
-				//Basic Profile
-				Parameter parameter02 = factory.createParameter();
-				parameter02.setName(parameter01.getName());
-				parameter02.setDefaultValue(parameter01.getDefaultValue());
-				parameters02.add(parameter02);
-			}
-			result02.getParameters().addAll(parameters02);
-		}
-		//Language
-		org.openrtp.namespaces.rtc.version01.Language lang01 = profile01.getLanguage();
-		if( lang01!=null ) {
-			org.openrtp.namespaces.rtc.version01.Cxxlang langCxx = lang01.getCxx();
-			if( langCxx!=null) {
-				LanguageExt lang = factory.createLanguageExt();
-				lang.setKind("C++");
-				TargetEnvironment env = factory.createTargetEnvironment();
-				env.setOs(langCxx.getOs());
-				env.setCpuOther(langCxx.getArch());
-				for( String library : langCxx.getLibrary() ) {
-					Library lib = factory.createLibrary();
-					lib.setName(library);
-					env.getLibraries().add(lib);
-				}
-				lang.getTargets().add(env);
-				result02.setLanguage(lang);
-			}
-			org.openrtp.namespaces.rtc.version01.Javalang langJava = lang01.getJava();
-			if( langJava!=null) {
-				LanguageExt lang = factory.createLanguageExt();
-				lang.setKind("Java");
-				TargetEnvironment env = factory.createTargetEnvironment();
-				for( String library : langJava.getLibrary() ) {
-					Library lib = factory.createLibrary();
-					lib.setName(library);
-					env.getLibraries().add(lib);
-				}
-				lang.getTargets().add(env);
-				result02.setLanguage(lang);
-			}
-			String langPython = lang01.getPython();
-			if( langPython!=null) {
-				LanguageExt lang = factory.createLanguageExt();
-				lang.setKind("Python");
-				result02.setLanguage(lang);
-			}
-			String langCsharp = lang01.getCsharp();
-			if( langCsharp!=null) {
-				LanguageExt lang = factory.createLanguageExt();
-				lang.setKind("C#");
-				result02.setLanguage(lang);
-			}
-			String langRuby = lang01.getRuby();
-			if( langRuby!=null) {
-				LanguageExt lang = factory.createLanguageExt();
-				lang.setKind("ruby");
-				result02.setLanguage(lang);
-			}
-		}
-
-		return result02;
-	}
-
-	private Position getPosition(
-			org.openrtp.namespaces.rtc.version01.ServiceportExt serviceport01) {
-		if (serviceport01.getPosition() == null) return null;
-		if (serviceport01.getPosition().name() == null) return null;
-		return Position.fromValue(serviceport01.getPosition().name().toUpperCase());
-	}
-
-	private Position getPosition(
-			org.openrtp.namespaces.rtc.version01.DataportExt dataport01) {
-		if (dataport01.getPosition() == null) return null;
-		if (dataport01.getPosition().name() == null) return null;
-		return Position.fromValue(dataport01.getPosition().name().toUpperCase());
-	}
-
-	private List<Property> convertRtcProperty01to02(ObjectFactory factory, List<org.openrtp.namespaces.rtc.version01.Property> properties01) {
-		List<Property> properties02 = new ArrayList<Property>();
-		for( org.openrtp.namespaces.rtc.version01.Property property01 : properties01 ) {
-			Property property = factory.createProperty();
-			property.setName(property01.getName());
-			property.setValue(property01.getValue());
-			properties02.add(property);
-		}
-		return properties02;
-	}
-
-	private String convertId01to02(String ver01Id) {
-		String[] element = ver01Id.split(":");
-		String result = null;
-		if( element.length >= 2) {
-			String[] items = element[1].split("\\.");
-			StringBuffer vendor = new StringBuffer();
-			for(int index=0;index<items.length-2;index++) {
-				vendor.append(items[index]);
-			}
-			result = element[0] + ":"
-						+ vendor.toString() + ":"
-						+ items[items.length-2] + ":"
-						+ items[items.length-1] + ":"
-						+ element[2];
-		}
-		return result;
-	}
-
-	private ActionStatusDoc convertAction01to02(ObjectFactory factory, Actions actions02, org.openrtp.namespaces.rtc.version01.ActionStatus action01) {
-		ActionStatusDoc action02 = null;
-		if( action01!=null ) {
-			action02 = factory.createActionStatusDoc();
-			action02.setImplementedbln(action01.isImplemented());
-			if( action01 instanceof org.openrtp.namespaces.rtc.version01.ActionStatusDoc ) {
-				org.openrtp.namespaces.rtc.version01.DocAction docAction01 = ((org.openrtp.namespaces.rtc.version01.ActionStatusDoc)action01).getDoc();
-				if( docAction01!=null ) {
-					DocAction docAction02 = factory.createDocAction();
-					docAction02.setDescription(docAction01.getDescription());
-					docAction02.setPreCondition(docAction01.getPreCondition());
-					docAction02.setPostCondition(docAction01.getPostCondition());
-					action02.setDoc(docAction02);
-				}
-			}
-		}
-		return action02;
-	}
-
 	public boolean validateXmlRtcBySchema(String targetString) throws Exception {
 		try {
 		    SAXParserFactory spfactory = SAXParserFactory.newInstance();
@@ -1387,10 +555,10 @@ public class XmlHandler {
 		    StringReader xmlReader = new StringReader(targetString);
 		    parser.parse(new InputSource(xmlReader), xmlParser);
 		    String targetClass = null;
-		    if( xmlParser.version.equals("0.1") ) {
-		    	targetClass = "org.openrtp.namespaces.rtc.version01";
-		    } else if( xmlParser.version.equals("0.2") ) {
+		    if( xmlParser.version.equals("0.2") ) {
 		    	targetClass = "org.openrtp.namespaces.rtc.version02";
+		    } else if( xmlParser.version.equals("0.3") ) {
+		    	targetClass = "org.openrtp.namespaces.rtc.version03";
 		    }
 		    if( targetClass==null ) {
 		    	throw new Exception("XML Parse Error");
@@ -1443,5 +611,399 @@ public class XmlHandler {
 		return true;
 	}
 
+	/**
+	 * XMLGregorianCalendar を任意の日付で生成します。(Map指定)
+	 */
+	public static XMLGregorianCalendar createXMLGregorianCalendar(Map<String, Integer> dateY) {
+		return createXMLGregorianCalendar((dateY.get("year")).intValue(), (dateY.get("month")).intValue(),
+				(dateY.get("day")).intValue(), (dateY.get("hour")).intValue(), (dateY.get("minute")).intValue(),
+				(dateY.get("second")).intValue());
+	}
 
+	/**
+	 * XMLGregorianCalendar を任意の日付で生成します。(年、月、日、時、分、秒指定)
+	 */
+	public static XMLGregorianCalendar createXMLGregorianCalendar(int year, int month, int day, int hourOfDay,
+			int minute, int second) {
+		GregorianCalendar c = new GregorianCalendar();
+		c.set(year, month - 1, day, hourOfDay, minute, second);
+		c.set(GregorianCalendar.MILLISECOND, 0);
+		return createXMLGregorianCalendar(c);
+	}
+
+	/**
+	 * XMLGregorianCalendar を任意の日付で生成します。(文字列指定 yyyy-MM-ddTHH:mm:ss)
+	 */
+	public static XMLGregorianCalendar createXMLGregorianCalendar(String date) {
+		try {
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+			sdf.setLenient(false);
+			return createXMLGregorianCalendar(sdf.parse(date));
+		} catch (Exception e) {
+			throw new RuntimeException("Fail to create xml date.", e);
+		}
+	}
+
+	/**
+	 * XMLGregorianCalendar を任意の日付で生成します。(日付指定)
+	 */
+	public static XMLGregorianCalendar createXMLGregorianCalendar(Date date) {
+		GregorianCalendar c = new GregorianCalendar();
+		c.setTime(date);
+		return createXMLGregorianCalendar(c);
+	}
+
+	public static XMLGregorianCalendar createXMLGregorianCalendar(GregorianCalendar cal) {
+		try {
+			XMLGregorianCalendar xmlDate = DatatypeFactory.newInstance().newXMLGregorianCalendar(cal);
+			return xmlDate;
+		} catch (Exception e) {
+			throw new RuntimeException("Fail to create xml date.", e);
+		}
+	}
+
+	private RtcProfile convertRtcProfile02to03(Object source) {
+		RtcProfile result03 = null;
+		org.openrtp.namespaces.rtc.version02.RtcProfile profile02 = (org.openrtp.namespaces.rtc.version02.RtcProfile)source;
+		if( source==null ) return result03;
+		ObjectFactory factory = new ObjectFactory();
+		//BasicInfo
+		result03 = factory.createRtcProfile();
+		org.openrtp.namespaces.rtc.version02.BasicInfo basic02 = profile02.getBasicInfo();
+		result03.setVersion("0.3");
+		result03.setId(profile02.getId());
+		if( basic02!=null ) {
+			BasicInfoExt basic03 = factory.createBasicInfoExt();
+			//Basic Profile
+			basic03.setName(basic02.getName());
+			basic03.setComponentType(basic02.getComponentType());
+			basic03.setActivityType(basic02.getActivityType());
+			basic03.setComponentKind(basic02.getComponentKind());
+			basic03.setCategory(basic02.getCategory());
+			basic03.setDescription(basic02.getDescription());
+			basic03.setExecutionRate(basic02.getExecutionRate());
+			basic03.setExecutionType(basic02.getExecutionType());
+			basic03.setMaxInstances(basic02.getMaxInstances());
+			basic03.setVendor(basic02.getVendor());
+			basic03.setVersion(basic02.getVersion());
+			basic03.setAbstract(basic02.getAbstract());
+			basic03.setCreationDate(basic02.getCreationDate());
+			basic03.setUpdateDate(basic02.getUpdateDate());
+			basic03.setRtcType(basic02.getRtcType());
+			//Doc Profile
+			if( basic02 instanceof org.openrtp.namespaces.rtc.version02.BasicInfoDoc) {
+				org.openrtp.namespaces.rtc.version02.DocBasic doc02 = ((org.openrtp.namespaces.rtc.version02.BasicInfoDoc)basic02).getDoc();
+				if( doc02!=null ) {
+					DocBasic doc03 = factory.createDocBasic();
+					doc03.setDescription(doc02.getDescription());
+					doc03.setInout(doc02.getInout());
+					doc03.setAlgorithm(doc02.getAlgorithm());
+					doc03.setCreator(doc02.getCreator());
+					doc03.setLicense(doc02.getLicense());
+					doc03.setReference(doc02.getReference());
+					basic03.setDoc(doc03);
+				}
+				//Ext Profile
+				if( basic02 instanceof org.openrtp.namespaces.rtc.version02.BasicInfoExt) {
+					basic03.getVersionUpLogs().addAll(((org.openrtp.namespaces.rtc.version02.BasicInfoExt)basic02).getVersionUpLogs());
+					basic03.setHardwareProfile(basic02.getHardwareProfile());
+					basic03.setSaveProject(((org.openrtp.namespaces.rtc.version02.BasicInfoExt) basic02).getSaveProject());
+					List<org.openrtp.namespaces.rtc.version02.Property> properties02 = ((org.openrtp.namespaces.rtc.version02.BasicInfoExt)basic02).getProperties();
+					if( properties02!=null ) {
+						List<Property> properties03 = new ArrayList<Property>();
+						for( org.openrtp.namespaces.rtc.version02.Property property02 : properties02 ) {
+							Property property = factory.createProperty();
+							property.setName(property02.getName());
+							property.setValue(property02.getValue());
+							properties03.add(property);
+						}
+						basic03.getProperties().addAll(properties03);
+					}
+				}
+			}
+			result03.setBasicInfo(basic03);
+		}
+		//Actions
+		org.openrtp.namespaces.rtc.version02.Actions actions02 = profile02.getActions();
+		if( actions02!=null ) {
+			Actions actions03 = factory.createActions();
+			//Initialize
+			org.openrtp.namespaces.rtc.version02.ActionStatus action02 = actions02.getOnInitialize();
+			ActionStatusDoc action03 = convertAction02to03(factory, actions03, action02);
+			actions03.setOnInitialize(action03);
+			//Finalize
+			action02 = actions02.getOnFinalize();
+			action03 = convertAction02to03(factory, actions03, action02);
+			actions03.setOnFinalize(action03);
+			//Startup
+			action02 = actions02.getOnStartup();
+			action03 = convertAction02to03(factory, actions03, action02);
+			actions03.setOnStartup(action03);
+			//Shutdown
+			action02 = actions02.getOnShutdown();
+			action03 = convertAction02to03(factory, actions03, action02);
+			actions03.setOnShutdown(action03);
+			//Activated
+			action02 = actions02.getOnActivated();
+			action03 = convertAction02to03(factory, actions03, action02);
+			actions03.setOnActivated(action03);
+			//Deactivated
+			action02 = actions02.getOnDeactivated();
+			action03 = convertAction02to03(factory, actions03, action02);
+			actions03.setOnDeactivated(action03);
+			//Aborting
+			action02 = actions02.getOnAborting();
+			action03 = convertAction02to03(factory, actions03, action02);
+			actions03.setOnAborting(action03);
+			//Error
+			action02 = actions02.getOnError();
+			action03 = convertAction02to03(factory, actions03, action02);
+			actions03.setOnError(action03);
+			//Reset
+			action02 = actions02.getOnReset();
+			action03 = convertAction02to03(factory, actions03, action02);
+			actions03.setOnReset(action03);
+			//Execute
+			action02 = actions02.getOnExecute();
+			action03 = convertAction02to03(factory, actions03, action02);
+			actions03.setOnExecute(action03);
+			//StateUpdate
+			action02 = actions02.getOnStateUpdate();
+			action03 = convertAction02to03(factory, actions03, action02);
+			actions03.setOnStateUpdate(action03);
+			//RateChanged
+			action02 = actions02.getOnRateChanged();
+			action03 = convertAction02to03(factory, actions03, action02);
+			actions03.setOnRateChanged(action03);
+			//
+			result03.setActions(actions03);
+		}
+		//Configuration
+		org.openrtp.namespaces.rtc.version02.ConfigurationSet configset02 = profile02.getConfigurationSet();
+		if( configset02!=null ) {
+			ConfigurationSet configset03 = factory.createConfigurationSet();
+			List<org.openrtp.namespaces.rtc.version02.Configuration> configList02 = configset02.getConfiguration();
+			for(org.openrtp.namespaces.rtc.version02.Configuration config02 : configList02) {
+				//Basic Profile
+				ConfigurationExt config03 = factory.createConfigurationExt();
+				config03.setName(config02.getName());
+				config03.setType(config02.getType());
+				config03.setDefaultValue(config02.getDefaultValue());
+				config03.setUnit(config02.getUnit());
+				config03.setConstraint(config02.getConstraint());
+				//Doc Profile
+				if( config02 instanceof org.openrtp.namespaces.rtc.version02.ConfigurationDoc) {
+					org.openrtp.namespaces.rtc.version02.DocConfiguration doc02 = ((org.openrtp.namespaces.rtc.version02.ConfigurationDoc)config02).getDoc();
+					if( doc02!=null ) {
+						DocConfiguration docConfig03 = factory.createDocConfiguration();
+						docConfig03.setDataname(doc02.getDataname());
+						docConfig03.setDefaultValue(doc02.getDefaultValue());
+						docConfig03.setDescription(doc02.getDescription());
+						docConfig03.setUnit(doc02.getUnit());
+						docConfig03.setRange(doc02.getRange());
+						docConfig03.setConstraint(doc02.getConstraint());
+						config03.setDoc(docConfig03);
+					}
+				}
+				//Ext Profile
+				if( config02 instanceof org.openrtp.namespaces.rtc.version02.ConfigurationExt) {
+					config03.setVariableName(((org.openrtp.namespaces.rtc.version02.ConfigurationExt) config02).getVariableName());
+					config03.setComment(((org.openrtp.namespaces.rtc.version02.ConfigurationExt) config02).getComment());
+					List<org.openrtp.namespaces.rtc.version02.Property> properties02 = ((org.openrtp.namespaces.rtc.version02.ConfigurationExt)config02).getProperties();
+					if( properties02!=null ) {
+						config03.getProperties().addAll(convertRtcProperty02to03(factory, properties02));
+					}
+				}
+				configset03.getConfiguration().add(config03);
+			}
+			result03.setConfigurationSet(configset03);
+		}
+		//DataPort
+		List<org.openrtp.namespaces.rtc.version02.Dataport> dataPorts02 = profile02.getDataPorts();
+		if( dataPorts02!=null ) {
+			List<Dataport> dataPorts03 = new ArrayList<Dataport>();
+			for( org.openrtp.namespaces.rtc.version02.Dataport dataport02 : dataPorts02 ) {
+				//Basic Profile
+				DataportExt dataPort03 = factory.createDataportExt();
+				dataPort03.setPortType(dataport02.getPortType());
+				dataPort03.setName(dataport02.getName());
+				dataPort03.setType(dataport02.getType());
+				dataPort03.setIdlFile(dataport02.getIdlFile());
+				dataPort03.setInterfaceType(dataport02.getInterfaceType());
+				dataPort03.setDataflowType(dataport02.getDataflowType());
+				dataPort03.setSubscriptionType(dataport02.getSubscriptionType());
+				dataPort03.setUnit(dataport02.getUnit());
+				//Doc Profile
+				if( dataport02 instanceof org.openrtp.namespaces.rtc.version02.DataportDoc) {
+					org.openrtp.namespaces.rtc.version02.DocDataport docDataPort02 = ((org.openrtp.namespaces.rtc.version02.DataportDoc)dataport02).getDoc();
+					if( docDataPort02!=null ) {
+						DocDataport docDataPort03 = factory.createDocDataport();
+						docDataPort03.setDescription(docDataPort02.getDescription());
+						docDataPort03.setType(docDataPort02.getType());
+						docDataPort03.setNumber(docDataPort02.getNumber());
+						docDataPort03.setSemantics(docDataPort02.getSemantics());
+						docDataPort03.setUnit(docDataPort02.getUnit());
+						docDataPort03.setOccerrence(docDataPort02.getOccerrence());
+						docDataPort03.setOperation(docDataPort02.getOperation());
+						dataPort03.setDoc(docDataPort03);
+					}
+					//Ext Profile
+					if( dataport02 instanceof org.openrtp.namespaces.rtc.version02.DataportExt) {
+						dataPort03.setVariableName(((org.openrtp.namespaces.rtc.version02.DataportExt)dataport02).getVariableName());
+						dataPort03.setPosition(getPosition((org.openrtp.namespaces.rtc.version02.DataportExt)dataport02));
+						List<org.openrtp.namespaces.rtc.version02.Property> properties02 = ((org.openrtp.namespaces.rtc.version02.DataportExt)dataport02).getProperties();
+						if( properties02!=null ) {
+							dataPort03.getProperties().addAll(convertRtcProperty02to03(factory, properties02));
+						}
+					}
+				}
+				dataPorts03.add(dataPort03);
+			}
+			result03.getDataPorts().addAll(dataPorts03);
+		}
+		//ServicePort
+		List<org.openrtp.namespaces.rtc.version02.Serviceport> servicePorts02 = profile02.getServicePorts();
+		if( servicePorts02!=null ) {
+			List<Serviceport> servicePorts03 = new ArrayList<Serviceport>();
+			for( org.openrtp.namespaces.rtc.version02.Serviceport serviceport02 : servicePorts02 ) {
+				//Basic Profile
+				ServiceportExt servicePort03 = factory.createServiceportExt();
+				servicePort03.setName(serviceport02.getName());
+				//Doc Profile
+				if( serviceport02 instanceof org.openrtp.namespaces.rtc.version02.ServiceportDoc) {
+					org.openrtp.namespaces.rtc.version02.DocServiceport docServicePort02 = ((org.openrtp.namespaces.rtc.version02.ServiceportDoc)serviceport02).getDoc();
+					if( docServicePort02!=null ) {
+						DocServiceport docServicePort03 = factory.createDocServiceport();
+						docServicePort03.setDescription(docServicePort02.getDescription());
+						docServicePort03.setIfdescription(docServicePort02.getIfdescription());
+						servicePort03.setDoc(docServicePort03);
+					}
+					//Ext Profile
+					if( serviceport02 instanceof org.openrtp.namespaces.rtc.version02.ServiceportExt) {
+						servicePort03.setPosition(getPosition((org.openrtp.namespaces.rtc.version02.ServiceportExt)serviceport02));
+						List<org.openrtp.namespaces.rtc.version02.Property> properties02 = ((org.openrtp.namespaces.rtc.version02.ServiceportExt)serviceport02).getProperties();
+						if( properties02!=null ) {
+							servicePort03.getProperties().addAll(convertRtcProperty02to03(factory, properties02));
+						}
+					}
+				}
+				servicePorts03.add(servicePort03);
+				//Service Interface
+				List<org.openrtp.namespaces.rtc.version02.Serviceinterface> serviceIFs02 = serviceport02.getServiceInterface();
+				if( serviceIFs02!=null ) {
+					List<ServiceinterfaceExt> serviceIFs03 = new ArrayList<ServiceinterfaceExt>();
+					for( org.openrtp.namespaces.rtc.version02.Serviceinterface serviceIF02 : serviceIFs02 ) {
+						//Basic Profile
+						ServiceinterfaceExt serviceIF03 = factory.createServiceinterfaceExt();
+						serviceIF03.setName(serviceIF02.getName());
+						serviceIF03.setDirection(serviceIF02.getDirection());
+						serviceIF03.setInstanceName(serviceIF02.getInstanceName());
+						serviceIF03.setIdlFile(serviceIF02.getIdlFile());
+						serviceIF03.setType(serviceIF02.getType());
+						//Doc Profile
+						if( serviceIF02 instanceof org.openrtp.namespaces.rtc.version02.ServiceinterfaceDoc) {
+							org.openrtp.namespaces.rtc.version02.DocServiceinterface docServiceIF02 = ((org.openrtp.namespaces.rtc.version02.ServiceinterfaceDoc)serviceIF02).getDoc();
+							if( docServiceIF02!=null ) {
+								DocServiceinterface docServiceIF03 = factory.createDocServiceinterface();
+								docServiceIF03.setDescription(docServiceIF02.getDescription());
+								docServiceIF03.setDocArgument(docServiceIF02.getDocArgument());
+								docServiceIF03.setDocReturn(docServiceIF02.getDocReturn());
+								docServiceIF03.setDocException(docServiceIF02.getDocException());
+								docServiceIF03.setDocPreCondition(docServiceIF02.getDocPreCondition());
+								docServiceIF03.setDocPostCondition(docServiceIF02.getDocPostCondition());
+								serviceIF03.setDoc(docServiceIF03);
+							}
+							//Ext Profile
+							if( serviceIF02 instanceof org.openrtp.namespaces.rtc.version02.ServiceinterfaceExt) {
+								serviceIF03.setVariableName(((org.openrtp.namespaces.rtc.version02.ServiceinterfaceExt) serviceIF02).getVariableName());
+								List<org.openrtp.namespaces.rtc.version02.Property> properties02 = ((org.openrtp.namespaces.rtc.version02.ServiceinterfaceExt)serviceIF02).getProperties();
+								if( properties02!=null ) {
+									serviceIF03.getProperties().addAll(convertRtcProperty02to03(factory, properties02));
+								}
+							}
+						}
+						serviceIFs03.add(serviceIF03);
+					}
+					servicePort03.getServiceInterface().addAll(serviceIFs03);
+				}
+			}
+			result03.getServicePorts().addAll(servicePorts03);
+		}
+		//Language
+		org.openrtp.namespaces.rtc.version02.Language lang02 = profile02.getLanguage();
+		if( lang02!=null ) {
+			LanguageExt lang = factory.createLanguageExt();
+			lang.setKind(lang02.getKind());
+			if( lang02 instanceof org.openrtp.namespaces.rtc.version02.LanguageExt) {
+				org.openrtp.namespaces.rtc.version02.LanguageExt langExt02 = (org.openrtp.namespaces.rtc.version02.LanguageExt)lang02;
+				if( langExt02!=null ) {
+					List<org.openrtp.namespaces.rtc.version02.TargetEnvironment> envs02 = langExt02.getTargets();
+					for( org.openrtp.namespaces.rtc.version02.TargetEnvironment env02 : envs02 ) {
+						TargetEnvironment env = factory.createTargetEnvironment();
+						env.setOs(env02.getOs());
+						env.getOsVersions().addAll(new ArrayList<String>(env02.getOsVersions()));
+						env.setOther(env02.getOther());
+						env.setLangVersion(env02.getLangVersion());
+						env.getCpus().addAll(new ArrayList<String>(env02.getCpus()));
+						env.setCpuOther(env02.getCpuOther());
+						for( org.openrtp.namespaces.rtc.version02.Library library : env02.getLibraries() ) {
+							Library lib = factory.createLibrary();
+							lib.setName(library.getName());
+							lib.setVersion(library.getVersion());
+							lib.setOther(library.getOther());
+							env.getLibraries().add(lib);
+						}
+						lang.getTargets().add(env);
+					}
+				}
+			}
+			result03.setLanguage(lang);
+		}
+
+		return result03;
+	}
+	
+	private ActionStatusDoc convertAction02to03(ObjectFactory factory, Actions actions03, org.openrtp.namespaces.rtc.version02.ActionStatus action02) {
+		ActionStatusDoc action03 = null;
+		if( action02!=null ) {
+			action03 = factory.createActionStatusDoc();
+			action03.setImplemented(action02.getImplemented());
+			if( action02 instanceof org.openrtp.namespaces.rtc.version02.ActionStatusDoc ) {
+				org.openrtp.namespaces.rtc.version02.DocAction docAction02 = ((org.openrtp.namespaces.rtc.version02.ActionStatusDoc)action02).getDoc();
+				if( docAction02!=null ) {
+					DocAction docAction03 = factory.createDocAction();
+					docAction03.setDescription(docAction02.getDescription());
+					docAction03.setPreCondition(docAction02.getPreCondition());
+					docAction03.setPostCondition(docAction02.getPostCondition());
+					action03.setDoc(docAction03);
+				}
+			}
+		}
+		return action03;
+	}
+	
+	private List<Property> convertRtcProperty02to03(ObjectFactory factory, List<org.openrtp.namespaces.rtc.version02.Property> properties02) {
+		List<Property> properties03 = new ArrayList<Property>();
+		for( org.openrtp.namespaces.rtc.version02.Property property02 : properties02 ) {
+			Property property = factory.createProperty();
+			property.setName(property02.getName());
+			property.setValue(property02.getValue());
+			properties03.add(property);
+		}
+		return properties03;
+	}
+	
+	private Position getPosition(
+			org.openrtp.namespaces.rtc.version02.DataportExt dataport02) {
+		if (dataport02.getPosition() == null) return null;
+		if (dataport02.getPosition().name() == null) return null;
+		return Position.fromValue(dataport02.getPosition().name().toUpperCase());
+	}
+	
+	private Position getPosition(
+			org.openrtp.namespaces.rtc.version02.ServiceportExt serviceport02) {
+		if (serviceport02.getPosition() == null) return null;
+		if (serviceport02.getPosition().name() == null) return null;
+		return Position.fromValue(serviceport02.getPosition().name().toUpperCase());
+	}
 }

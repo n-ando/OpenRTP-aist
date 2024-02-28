@@ -1,6 +1,6 @@
 package org.openrtp.namespaces;
 
-import org.openrtp.namespaces.rtc.version02.RtcProfile;
+import org.openrtp.namespaces.rtc.version03.RtcProfile;
 
 public class RtcProfileHolder {
 	private RtcProfile profile;

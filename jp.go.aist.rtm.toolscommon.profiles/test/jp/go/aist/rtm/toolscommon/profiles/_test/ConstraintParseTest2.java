@@ -3,7 +3,7 @@ package jp.go.aist.rtm.toolscommon.profiles._test;
 import jp.go.aist.rtm.toolscommon.profiles.util.XmlHandler;
 
 import org.openrtp.namespaces.rtc.version02.ConstraintType;
-import org.openrtp.namespaces.rtc.version02.RtcProfile;
+import org.openrtp.namespaces.rtc.version03.RtcProfile;
 
 public class ConstraintParseTest2 extends TestBase {
 	

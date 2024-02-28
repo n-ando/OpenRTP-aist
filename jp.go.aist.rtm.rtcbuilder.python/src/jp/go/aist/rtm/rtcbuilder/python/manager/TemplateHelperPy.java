@@ -4,8 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jp.go.aist.rtm.rtcbuilder.IRtcBuilderConstants;
+import jp.go.aist.rtm.rtcbuilder.fsm.StateParam;
+import jp.go.aist.rtm.rtcbuilder.fsm.TransitionParam;
+import jp.go.aist.rtm.rtcbuilder.generator.param.RtcParam;
 import jp.go.aist.rtm.rtcbuilder.generator.param.idl.IdlFileParam;
 import jp.go.aist.rtm.rtcbuilder.python.IRtcBuilderConstantsPython;
+import jp.go.aist.rtm.rtcbuilder.util.RTCUtil;
 import jp.go.aist.rtm.rtcbuilder.util.StringUtil;
 
 /**
@@ -115,16 +119,6 @@ public class TemplateHelperPy {
 						check.add(targetType);
 						result.add(targetType);
 					}
-//					StringBuilder builder = new StringBuilder();
-//					for(int index=0;index<types.length-1;index++) {
-//						if(index!=0) builder.append(".");
-//						builder.append(types[index]);
-//						targetType = builder.toString();
-//						if(check.contains(targetType)==false) {
-//							check.add(targetType);
-//							result.add(targetType);
-//						}
-//					}
 				
 				} else {
 					targetType = "_GlobalIDL";
@@ -136,5 +130,29 @@ public class TemplateHelperPy {
 			}
 		}
 		return result;
+	}
+	
+	public String getHistory(StateParam param) {
+		if(param.getHistory()==2) {
+			return "@StaticFSM.deephistory";
+		} else if(param.getHistory()==1) {
+			return "@StaticFSM.history";
+		}
+		return "  ";
+	}
+	
+	public String checkTransition(StateParam state) {
+		TransitionParam targetTans = null;
+		for(TransitionParam trans : state.getTransList()) {
+			if(trans.getEvent().trim().length()==0) {
+				targetTans = trans;
+			}
+		}
+		if(targetTans!=null) {
+			StringBuilder builder = new StringBuilder();
+			builder.append("self.set_state(StaticFSM.State(").append(targetTans.getTarget()).append("))");
+			return builder.toString();
+		}
+		return "";
 	}
 }

@@ -5,30 +5,30 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
-import junit.framework.TestCase;
-
-import org.openrtp.namespaces.rtc.version02.ActionStatusDoc;
-import org.openrtp.namespaces.rtc.version02.Actions;
-import org.openrtp.namespaces.rtc.version02.BasicInfoExt;
-import org.openrtp.namespaces.rtc.version02.Configuration;
-import org.openrtp.namespaces.rtc.version02.ConfigurationDoc;
-import org.openrtp.namespaces.rtc.version02.ConfigurationExt;
-import org.openrtp.namespaces.rtc.version02.ConfigurationSet;
 import org.openrtp.namespaces.rtc.version02.ConstraintType;
-import org.openrtp.namespaces.rtc.version02.DataportExt;
-import org.openrtp.namespaces.rtc.version02.DocAction;
-import org.openrtp.namespaces.rtc.version02.DocBasic;
-import org.openrtp.namespaces.rtc.version02.DocConfiguration;
-import org.openrtp.namespaces.rtc.version02.DocDataport;
-import org.openrtp.namespaces.rtc.version02.DocServiceinterface;
-import org.openrtp.namespaces.rtc.version02.DocServiceport;
-import org.openrtp.namespaces.rtc.version02.LanguageExt;
-import org.openrtp.namespaces.rtc.version02.ObjectFactory;
-import org.openrtp.namespaces.rtc.version02.Parameter;
-import org.openrtp.namespaces.rtc.version02.Position;
-import org.openrtp.namespaces.rtc.version02.RtcProfile;
-import org.openrtp.namespaces.rtc.version02.ServiceinterfaceExt;
-import org.openrtp.namespaces.rtc.version02.ServiceportExt;
+
+import org.openrtp.namespaces.rtc.version03.ActionStatusDoc;
+import org.openrtp.namespaces.rtc.version03.Actions;
+import org.openrtp.namespaces.rtc.version03.BasicInfoExt;
+import org.openrtp.namespaces.rtc.version03.Configuration;
+import org.openrtp.namespaces.rtc.version03.ConfigurationDoc;
+import org.openrtp.namespaces.rtc.version03.ConfigurationExt;
+import org.openrtp.namespaces.rtc.version03.ConfigurationSet;
+import org.openrtp.namespaces.rtc.version03.DataportExt;
+import org.openrtp.namespaces.rtc.version03.DocAction;
+import org.openrtp.namespaces.rtc.version03.DocBasic;
+import org.openrtp.namespaces.rtc.version03.DocConfiguration;
+import org.openrtp.namespaces.rtc.version03.DocDataport;
+import org.openrtp.namespaces.rtc.version03.DocServiceinterface;
+import org.openrtp.namespaces.rtc.version03.DocServiceport;
+import org.openrtp.namespaces.rtc.version03.LanguageExt;
+import org.openrtp.namespaces.rtc.version03.ObjectFactory;
+import org.openrtp.namespaces.rtc.version03.Position;
+import org.openrtp.namespaces.rtc.version03.RtcProfile;
+import org.openrtp.namespaces.rtc.version03.ServiceinterfaceExt;
+import org.openrtp.namespaces.rtc.version03.ServiceportExt;
+
+import junit.framework.TestCase;
 
 public class TestBase extends TestCase {
 	protected String rootPath;
@@ -55,9 +55,9 @@ public class TestBase extends TestCase {
 		ObjectFactory factory = new ObjectFactory();
 
 		RtcProfile profile = factory.createRtcProfile();
-		profile.setVersion("0.2");
+		profile.setVersion("0.3");
 		ConfigurationSet configset = factory.createConfigurationSet();
-		Configuration config = factory.createConfiguration();
+		ConfigurationExt config = factory.createConfigurationExt();
 		configset.getConfiguration().add(config);
 		profile.setConfigurationSet(configset);
 
@@ -75,7 +75,7 @@ public class TestBase extends TestCase {
 
 	protected void checkDetailYaml01(RtcProfile profile){
 		assertEquals("RTC:SampleVendor.SampleCategory.SampleComponent:1.0.0",profile.getId());
-		assertEquals("0.1", profile.getVersion());
+		assertEquals("0.3", profile.getVersion());
 		//
 		checkDetailCommon(profile);
 	}
@@ -94,8 +94,8 @@ public class TestBase extends TestCase {
 		assertEquals("SampleVendor", basic.getVendor());
 		assertEquals("1.0.0", basic.getVersion());
 		assertEquals("SampleAbstract", basic.getAbstract());
-		assertEquals("2008-04-18T14:00:00", basic.getCreationDate().toString());
-		assertEquals("2008-04-17T14:00:00", basic.getUpdateDate().toString());
+		assertEquals("2008-04-18T14:00:00.000+09:00", basic.getCreationDate().toString());
+		assertEquals("2008-04-17T14:00:00.000+09:00", basic.getUpdateDate().toString());
 		//
 		DocBasic docbasic = basic.getDoc();
 		assertEquals("SampleBasicDecription", docbasic.getDescription());
@@ -286,7 +286,6 @@ public class TestBase extends TestCase {
 		assertEquals("IF1VarName", serviceIF1.getVariableName());
 		assertEquals("IF1Idlfile.idl", serviceIF1.getIdlFile());
 		assertEquals("IF1Type", serviceIF1.getType());
-		assertEquals("IF1SearchPath", serviceIF1.getPath());
 		//
 		DocServiceinterface docIf1 = serviceIF1.getDoc();
 		assertEquals("if1 Description", docIf1.getDescription());
@@ -303,7 +302,6 @@ public class TestBase extends TestCase {
 		assertEquals("IF2VarName", serviceIF2.getVariableName());
 		assertEquals("IF2Idlfile.idl", serviceIF2.getIdlFile());
 		assertEquals("IF2Type", serviceIF2.getType());
-		assertEquals("IF2SearchPath", serviceIF2.getPath());
 		//
 		ServiceportExt service2 = (ServiceportExt)profile.getServicePorts().get(1);
 		assertEquals("SrvPort2", service2.getName());
@@ -311,14 +309,6 @@ public class TestBase extends TestCase {
 		DocServiceport serviceDoc2 = service2.getDoc();
 		assertEquals("ServicePort2 description", serviceDoc2.getDescription());
 		assertEquals("ServicePort2 I/F description", serviceDoc2.getIfdescription());
-		//
-		Parameter param1 = profile.getParameters().get(0);
-		assertEquals("param1", param1.getName());
-		assertEquals("param_def1", param1.getDefaultValue());
-		//
-		Parameter param2 = profile.getParameters().get(1);
-		assertEquals("param2", param2.getName());
-		assertEquals("param_def2", param2.getDefaultValue());
 		//
 		LanguageExt lang = (LanguageExt)profile.getLanguage();
 		assertEquals("Java", lang.getKind());
@@ -328,7 +318,7 @@ public class TestBase extends TestCase {
 	protected void checkDetailVer02(RtcProfile profile){
 
 		assertEquals("RTC:SampleVender:SampleCategory:SampleComponent:1.0.0",profile.getId());
-		assertEquals("0.2", profile.getVersion());
+		assertEquals("0.3", profile.getVersion());
 		//
 		BasicInfoExt basic = (BasicInfoExt)profile.getBasicInfo();
 		assertEquals("SampleComponent", basic.getName());
@@ -345,8 +335,8 @@ public class TestBase extends TestCase {
 		assertEquals("1.0.0", basic.getVersion());
 		assertEquals("SampleAbstract", basic.getAbstract());
 		assertEquals("SampleProfile", basic.getHardwareProfile());
-		assertEquals("2008-04-18T14:00:00", basic.getCreationDate().toString());
-		assertEquals("2008-04-18T14:00:00", basic.getUpdateDate().toString());
+		assertEquals("2008-04-18T14:00:00.000+09:00", basic.getCreationDate().toString());
+		assertEquals("2008-04-18T14:00:00.000+09:00", basic.getUpdateDate().toString());
 		assertEquals("Output Project", basic.getSaveProject());
 		//
 		DocBasic docbasic = basic.getDoc();
@@ -540,7 +530,6 @@ public class TestBase extends TestCase {
 		assertEquals("Provided", serviceIF1.getDirection());
 		assertEquals("IF1Instance", serviceIF1.getInstanceName());
 		assertEquals("IF1Idlfile.idl", serviceIF1.getIdlFile());
-		assertEquals("IF1SearchPath", serviceIF1.getPath());
 		assertEquals("IF1VarName", serviceIF1.getVariableName());
 		//
 		DocServiceinterface docIf1 = serviceIF1.getDoc();
@@ -557,7 +546,6 @@ public class TestBase extends TestCase {
 		assertEquals("Required", serviceIF2.getDirection());
 		assertEquals("IF2Instance", serviceIF2.getInstanceName());
 		assertEquals("IF2Idlfile.idl", serviceIF2.getIdlFile());
-		assertEquals("IF2SearchPath", serviceIF2.getPath());
 		//
 		ServiceportExt service2 = (ServiceportExt)profile.getServicePorts().get(1);
 		assertEquals("SrvPort2", service2.getName());
@@ -565,14 +553,6 @@ public class TestBase extends TestCase {
 		DocServiceport serviceDoc2 = service2.getDoc();
 		assertEquals("ServicePort2 description", serviceDoc2.getDescription());
 		assertEquals("ServicePort2 I/F description", serviceDoc2.getIfdescription());
-		//
-		Parameter param1 = profile.getParameters().get(0);
-		assertEquals("param1", param1.getName());
-		assertEquals("param_def1", param1.getDefaultValue());
-		//
-		Parameter param2 = profile.getParameters().get(1);
-		assertEquals("param2", param2.getName());
-		assertEquals("param_def2", param2.getDefaultValue());
 		//
 		LanguageExt lang = (LanguageExt)profile.getLanguage();
 		assertEquals("Java", lang.getKind());

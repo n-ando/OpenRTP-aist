@@ -1,10 +1,12 @@
 // -*- Java -*-
+// <rtc-template block="description">
 /*!
  * @file ModuleName.java
  * @date $Date$
  *
  * $Id$
  */
+// </rtc-template>
 import jp.go.aist.rtm.RTC.Manager;
 import jp.go.aist.rtm.RTC.RTObject_impl;
 import jp.go.aist.rtm.RTC.RtcDeleteFunc;

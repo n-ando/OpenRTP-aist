@@ -1,5 +1,9 @@
 package jp.go.aist.rtm.rtcbuilder.manager;
 
+import static jp.go.aist.rtm.rtcbuilder.IRtcBuilderConstants.LANG_CPP;
+import static jp.go.aist.rtm.rtcbuilder.IRtcBuilderConstants.LANG_CPP_ARG;
+import static jp.go.aist.rtm.rtcbuilder.util.RTCUtil.form;
+
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,9 +16,6 @@ import jp.go.aist.rtm.rtcbuilder.generator.GeneratedResult;
 import jp.go.aist.rtm.rtcbuilder.generator.param.RtcParam;
 import jp.go.aist.rtm.rtcbuilder.template.TemplateHelper;
 import jp.go.aist.rtm.rtcbuilder.template.TemplateUtil;
-
-import static jp.go.aist.rtm.rtcbuilder.IRtcBuilderConstants.*;
-import static jp.go.aist.rtm.rtcbuilder.util.RTCUtil.*;
 
 public class CMakeGenerateManager extends GenerateManager {
 
@@ -74,62 +75,50 @@ public class CMakeGenerateManager extends GenerateManager {
 			Map<String, Object> contextMap) {
 		List<GeneratedResult> result = new ArrayList<GeneratedResult>();
 
-		GeneratedResult gr;
 		//Root
-		gr = generateCOPYING(contextMap);
-		result.add(gr);
-		gr = generateCOPYING_LESSER(contextMap);
-		result.add(gr);
-		gr = generateCMakeLists(contextMap);
-		result.add(gr);
+		result.add(generateCOPYING(contextMap));
+		result.add(generateCOPYING_LESSER(contextMap));
+		result.add(generateCMakeLists(contextMap));
 
 		//cmake
-		gr = generateCmakeCMakeLists(contextMap);
-		result.add(gr);
-		gr = generateCmakeCPackOption(contextMap);
-		result.add(gr);
-		gr = generateResourceLicenseRTF(contextMap);
-		result.add(gr);
-		gr = generateCmakeConfigVersion(contextMap);
-		result.add(gr);
-		gr = generateCmakeConfig(contextMap);
-		result.add(gr);
-		gr = generateCmakePcIn(contextMap);
-		result.add(gr);
-		gr = generateModulesUninstall(contextMap);
-		result.add(gr);
-		gr = generateUtilIn(contextMap);
-		result.add(gr);
+		result.add(generateCmakeCMakeLists(contextMap));
+		result.add(generateCmakeCPackOption(contextMap));
+		result.add(generateResourceLicenseRTF(contextMap));
+		result.add(generateCmakeConfigVersion(contextMap));
+		result.add(generateCmakeConfig(contextMap));
+		result.add(generateCmakePcIn(contextMap));
+		result.add(generateModulesUninstall(contextMap));
+		result.add(generateUtilIn(contextMap));
+		
+		//test cmake
+		RtcParam rtcParam = (RtcParam) contextMap.get("rtcParam");
+		if(rtcParam.isChoreonoid()==false) {
+			result.add(generateTestCMakeLists(contextMap));
+			GeneratedResult gr;
+			gr = generateTestIncludeCMakeLists(contextMap);
+			if(gr!=null) result.add(gr);
+			gr = generateTestIncModuleCMakeLists(contextMap);
+			if(gr!=null) result.add(gr);
+			gr = generateTestSrcCMakeLists(contextMap);
+			if(gr!=null) result.add(gr);
+		}
 
 		//doc
-		gr = generateDocCMakeLists(contextMap);
-		result.add(gr);
-		gr = generateDocConfPy(contextMap);
-		result.add(gr);
-		gr = generateDoxyfile(contextMap);
-		result.add(gr);
-
-		//doc/content
-		gr = generateDocIndex(contextMap);
-		result.add(gr);
-		gr = generateDocIndexJ(contextMap);
-		result.add(gr);
+		result.add(generateDocCMakeLists(contextMap));
+		result.add(generateDocConfPy(contextMap));
+		result.add(generateDoxyfile(contextMap));
 
 		//idl
-		gr = generateIdlCMakeLists(contextMap);
-		result.add(gr);
+		result.add(generateIdlCMakeLists(contextMap));
 
 		//include
-		gr = generateIncludeCMakeLists(contextMap);
-		result.add(gr);
+		result.add(generateIncludeCMakeLists(contextMap));
 
 		//include/Module
-		gr = generateIncModuleCMakeLists(contextMap);
-		result.add(gr);
+		result.add(generateIncModuleCMakeLists(contextMap));
 
 		//src
-		gr = generateSrcCMakeLists(contextMap);
-		result.add(gr);
+		result.add(generateSrcCMakeLists(contextMap));
 
 		return result;
 	}
@@ -243,19 +232,6 @@ public class CMakeGenerateManager extends GenerateManager {
 		return generate(infile, outfile, contextMap);
 	}
 
-	// 1.0系 (CMake/doc/content)
-	public GeneratedResult generateDocIndex(Map<String, Object> contextMap) {
-		String outfile = "doc/content/index.txt";
-		String infile = "cmake/doc/index.txt.vsl";
-		return generate(infile, outfile, contextMap);
-	}
-
-	public GeneratedResult generateDocIndexJ(Map<String, Object> contextMap) {
-		String outfile = "doc/content/index_j.txt";
-		String infile = "cmake/doc/index_j.txt.vsl";
-		return generate(infile, outfile, contextMap);
-	}
-
 	// 1.0系 (CMake/idl)
 	public GeneratedResult generateIdlCMakeLists(Map<String, Object> contextMap) {
 		String outfile = "idl/CMakeLists.txt";
@@ -292,7 +268,40 @@ public class CMakeGenerateManager extends GenerateManager {
 		result.setNotBom(true);
 		return result;
 	}
-
+	/////
+	public GeneratedResult generateTestCMakeLists(Map<String, Object> contextMap) {
+		String outfile = "test/CMakeLists.txt";
+		String infile = "cmake/test/CMakeLists.txt.vsl";
+		GeneratedResult result = generate(infile, outfile, contextMap);
+		result.setNotBom(true);
+		return result;
+	}
+	
+	public GeneratedResult generateTestIncludeCMakeLists(Map<String, Object> contextMap) {
+		String outfile = "test/include/CMakeLists.txt";
+		String infile = "cmake/test/include/IncludeCMakeLists.txt.vsl";
+		GeneratedResult result = generate(infile, outfile, contextMap);
+		result.setNotBom(true);
+		return result;
+	}
+	
+	public GeneratedResult generateTestIncModuleCMakeLists(Map<String, Object> contextMap) {
+		RtcParam rtcParam = (RtcParam) contextMap.get("rtcParam");
+		String outfile = "test/include/" + rtcParam.getName() + "Test/CMakeLists.txt";
+		String infile = "cmake/test/include/IncModuleCMakeLists.txt.vsl";
+		GeneratedResult result = generate(infile, outfile, contextMap);
+		result.setNotBom(true);
+		return result;
+	}
+	
+	public GeneratedResult generateTestSrcCMakeLists(Map<String, Object> contextMap) {
+		String outfile = "test/src/CMakeLists.txt";
+		String infile = "cmake/test/src/SrcCMakeLists.txt.vsl";
+		GeneratedResult result = generate(infile, outfile, contextMap);
+		result.setNotBom(true);
+		return result;
+	}
+	/////
 	public GeneratedResult generate(String infile, String outfile,
 			Map<String, Object> contextMap) {
 		try {

@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # -*- Python -*-
 """
- @file MyServiceChildWithType_idl_examplefile.py
+ @file MyServiceChildWithType_idl_example.py
  @brief Python example implementations generated from MyServiceChildWithType.idl
  @date $Date$
 """
@@ -77,7 +77,7 @@ if __name__ == "__main__":
     objref = servant._this()
     
     # Print a stringified IOR for it
-    print orb.object_to_string(objref)
+    print(orb.object_to_string(objref))
     # Activate the Root POA's manager
     poa._get_the_POAManager().activate()
     # Run the ORB, blocking this thread

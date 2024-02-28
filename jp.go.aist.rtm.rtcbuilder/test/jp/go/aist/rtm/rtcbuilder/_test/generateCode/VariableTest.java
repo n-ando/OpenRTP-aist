@@ -53,7 +53,7 @@ public class VariableTest extends TestBase {
 		List<ServicePortInterfaceParam> srvinterts = new ArrayList<ServicePortInterfaceParam>();
 		ServicePortInterfaceParam int1 = new ServicePortInterfaceParam(
 				service1, "acc", "acinst", "acvaria", rootPath
-						+ "/resource/MyService.idl", "MyService", "", 0);
+						+ "/resource/MyService.idl", "MyService", 0);
 		srvinterts.add(int1);
 		service1.getServicePortInterfaces().addAll(srvinterts);
 		List<ServicePortParam> srvports = new ArrayList<ServicePortParam>();
@@ -63,7 +63,7 @@ public class VariableTest extends TestBase {
 		List<ServicePortInterfaceParam> srvinterts2 = new ArrayList<ServicePortInterfaceParam>();
 		ServicePortInterfaceParam int2 = new ServicePortInterfaceParam(
 				service2, "rate", "rinst", "rvaria", rootPath
-						+ "/resource/DAQService.idl", "DAQService", "", 1);
+						+ "/resource/DAQService.idl", "DAQService", 1);
 		srvinterts2.add(int2);
 		service2.getServicePortInterfaces().addAll(srvinterts2);
 		srvports.add(service2);
@@ -108,7 +108,7 @@ public class VariableTest extends TestBase {
 		List<ServicePortInterfaceParam> srvinterts = new ArrayList<ServicePortInterfaceParam>();
 		ServicePortInterfaceParam int1 = new ServicePortInterfaceParam(
 				service1, "acc", "acinst", "", rootPath
-						+ "/resource/MyService.idl", "MyService", "", 0);
+						+ "/resource/MyService.idl", "MyService", 0);
 		srvinterts.add(int1);
 		service1.getServicePortInterfaces().addAll(srvinterts);
 		List<ServicePortParam> srvports = new ArrayList<ServicePortParam>();
@@ -118,7 +118,7 @@ public class VariableTest extends TestBase {
 		List<ServicePortInterfaceParam> srvinterts2 = new ArrayList<ServicePortInterfaceParam>();
 		ServicePortInterfaceParam int2 = new ServicePortInterfaceParam(
 				service2, "rate", "rinst", "", rootPath
-						+ "/resource/DAQService.idl", "DAQService", "", 1);
+						+ "/resource/DAQService.idl", "DAQService", 1);
 		srvinterts2.add(int2);
 		service2.getServicePortInterfaces().addAll(srvinterts2);
 		srvports.add(service2);

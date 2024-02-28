@@ -15,14 +15,23 @@ public class ConfigurationWidget {
 	public static final String RADIO = "radio";
 	public static final String CHECKBOX = "checkbox";
 	public static final String ORDERED_LIST = "ordered_list";
-
+	
 	private String type;
 	private ConfigurationCondition condition;
 	private String value = null;
 	private boolean valueModified = false;
-
+	private boolean isCancel = false;
+	
 	double sliderStep = 1.0;
+	String sliderStepStr = "";
 	double spinStep = 0.0;
+
+	public void setCancel(boolean isCancel) {
+		this.isCancel = isCancel;
+	}
+	public boolean isCancel() {
+		return isCancel;
+	}
 
 	/**
 	 * @param widgets	ウィジェット文字列（配列用）
@@ -136,8 +145,8 @@ public class ConfigurationWidget {
 
 	void setSliderStep(String type) {
 		try {
-			String step = type.substring(SLIDER.length() + 1);
-			sliderStep = Double.parseDouble(step);
+			this.sliderStepStr = type.substring(SLIDER.length() + 1);
+			sliderStep = Double.parseDouble(this.sliderStepStr);
 			if (sliderStep <= 0.0) {
 				sliderStep = 1.0;
 			}
@@ -155,7 +164,7 @@ public class ConfigurationWidget {
 		} catch (Throwable t) {
 		}
 	}
-
+	
 	public String getType() {
 		return this.type;
 	}
@@ -250,6 +259,10 @@ public class ConfigurationWidget {
 		return this.sliderStep;
 	}
 
+	public String getSliderStepStr() {
+		return this.sliderStepStr;
+	}
+	
 	public int getSpinIncrement() {
 		double step = 1.0;
 		if (hasCondition() && condition.getDigits() > 0) {
@@ -264,6 +277,7 @@ public class ConfigurationWidget {
 		ConfigurationWidget result = new ConfigurationWidget(this.type,
 				(this.condition != null) ? this.condition.clone() : null);
 		result.sliderStep = sliderStep;
+		result.sliderStepStr = sliderStepStr;
 		result.spinStep = spinStep;
 		return result;
 	}

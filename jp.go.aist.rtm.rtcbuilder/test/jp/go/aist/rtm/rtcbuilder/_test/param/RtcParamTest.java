@@ -1,6 +1,5 @@
 package jp.go.aist.rtm.rtcbuilder._test.param;
 
-import jp.go.aist.rtm.rtcbuilder.generator.param.ConfigParameterParam;
 import jp.go.aist.rtm.rtcbuilder.generator.param.ConfigSetParam;
 import jp.go.aist.rtm.rtcbuilder.generator.param.DataPortParam;
 import jp.go.aist.rtm.rtcbuilder.generator.param.GeneratorParam;
@@ -479,26 +478,6 @@ public class RtcParamTest extends ParamTestCase<RtcParam> {
 		assertFalse(rtcParam.isUpdated());
 		//
 		rtcParam.getConfigParams().remove(0);
-		assertTrue(rtcParam.isUpdated());
-	}
-
-	public void testIsUpdatedConfigParameter() throws Exception {
-		//
-		rtcParam.resetUpdated();
-		assertFalse(rtcParam.isUpdated());
-		//
-		ConfigParameterParam cpp = new ConfigParameterParam("name1", "value1");
-		rtcParam.getConfigParameterParams().add(cpp);
-		assertTrue(rtcParam.isUpdated());
-		rtcParam.resetUpdated();
-		assertFalse(rtcParam.isUpdated());
-		//
-		cpp.setDefaultVal("value2");
-		assertTrue(rtcParam.isUpdated());
-		rtcParam.resetUpdated();
-		assertFalse(rtcParam.isUpdated());
-		//
-		rtcParam.getConfigParameterParams().remove(0);
 		assertTrue(rtcParam.isUpdated());
 	}
 

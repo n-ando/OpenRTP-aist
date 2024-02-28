@@ -1,0 +1,93 @@
+// -*- C++ -*-
+/*!
+ * @file  ${rtcParam.name}FSM.h
+ * @date  ${dol}Date${dol}
+ * ${dol}Id${dol}
+ */
+
+${sharp}ifndef ${rtcParam.name.toUpperCase()}FSM_H
+${sharp}define ${rtcParam.name.toUpperCase()}FSM_H
+
+${sharp}include <rtm/StaticFSM.h>
+${sharp}include <rtm/idl/BasicDataTypeSkel.h>
+${sharp}include <rtm/RTC.h>
+
+class ${rtcParam.name};
+
+namespace ${rtcParam.name}Fsm {
+
+  /*!
+   * @if jp
+   * @class TOP状態
+   *
+   *
+   * @else
+   * @brief TOP state
+   *
+   * @endif
+   */
+  FSM_TOPSTATE(${fsmParam.name}) {
+    // Top state variables (visible to all substates)
+  
+    FSM_STATE(${fsmParam.name});
+
+    // Machine's event protocol
+#foreach($eachTrans in ${fsmParam.getAllTransListNoDupl()})
+#if( ${eachTrans.event.length()} > 0 )
+#if( ${eachTrans.existEventParam()} )
+    /*!
+#if(${eachTrans.eventParam.doc_description.length()}>0)     * ${tmpltHelper.convertDescDoc(${eachTrans.eventParam.doc_description})}
+#end
+#if(${eachTrans.eventParam.doc_type.length()}>0)     * - Type: ${tmpltHelper.convertTypeDoc(${eachTrans.eventParam.doc_type})}
+#end
+#if(${eachTrans.eventParam.doc_num.length()}>0)     * - Number: ${tmpltHelper.convertNumberDoc(${eachTrans.eventParam.doc_num})}
+#end
+#if(${eachTrans.eventParam.doc_semantics.length()}>0)     * - Semantics: ${tmpltHelper.convertSemanticsDoc(${eachTrans.eventParam.doc_semantics})}
+#end
+#if(${eachTrans.eventParam.doc_unit.length()}>0)     * - Unit: ${tmpltHelper.convertUnitDoc(${eachTrans.eventParam.doc_unit})}
+#end
+#if(${eachTrans.eventParam.doc_operation.length()}>0)     * - Operation Cycle: ${tmpltHelper.convertCycleDoc(${eachTrans.eventParam.doc_operation})}
+#end
+     */
+    virtual void ${eachTrans.event}(${eachTrans.eventParam.dataTypeStr}) {}
+    
+#end
+#end
+#end
+  
+   private:
+     RTC::ReturnCode_t onInit() override;
+     RTC::ReturnCode_t onEntry() override;
+     RTC::ReturnCode_t onExit() override;
+  };
+
+#foreach($eachState in ${fsmParam.getAllValidStateList()})
+  FSM_SUBSTATE(${eachState.name}, ${eachState.parentName}) {
+    FSM_STATE(${eachState.name});
+${tmpltHelper.getHistory(${eachState})}
+
+    // Event handler
+#foreach($eachTrans in ${eachState.getTransList()})
+#if( ${eachTrans.event.length()} > 0 )
+#if( ${eachTrans.existEventParam()} )
+    void ${eachTrans.event}(${eachTrans.eventParam.dataTypeStr}) override;
+#end
+#end
+#end
+
+    private:
+      // The onInit method provides a special kind of entry action.
+      // On state transition, onEntry functions are called at the target state and its superstate.
+      // But an onInit function is called only at the target state.
+      RTC::ReturnCode_t onInit() override;
+#if( ${eachState.hasEntry} )      RTC::ReturnCode_t onEntry() override;
+#end
+#if( ${eachState.hasExit} )      RTC::ReturnCode_t onExit() override;
+#end
+  };
+
+#end
+
+} //end namespace '${rtcParam.name}FSM'
+
+#endif // ${rtcParam.name.toUpperCase()}FSM_H

@@ -1,7 +1,10 @@
 @echo off
 rem ---------------------------------------------------------------------------
 rem ---------------------------------------------------------------------------
-@set JARDIR=openrtp_1.1.0
+@set /p LINE= < version
+@set VERSION=%LINE:~8%
+@set PROJECT_VERSION=%VERSION%
+@set JARDIR=openrtp_%VERSION%
 @set LIBS=-lib ..\lib -lib ..\lib\a4e-2137 -lib ..\lib\a4e-2137\libs -lib %ECLIPSE_HOME%\plugins
 
 rem ---------------------------------------------------------------------------
@@ -34,7 +37,11 @@ for /D %%p in ( %TARGETS% ) do (
     @set target=%%p
     echo %%p
     cd %%p
-    call ant buildAll %LIBS%
+    if "%%p" == "jp.go.aist.rtm.toolscommon" (
+        call ant buildAll_win %LIBS%
+    ) else (
+        call ant buildAll %LIBS%
+    )
     if ERRORLEVEL 1 goto FAIL
     copy jar\*aist*.jar ..\%JARDIR%
     cd ..

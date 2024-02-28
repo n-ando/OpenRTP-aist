@@ -3,9 +3,9 @@ package jp.go.aist.rtm.toolscommon.manager;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
-import jp.go.aist.rtm.toolscommon.ToolsCommonPlugin;
-
 import org.eclipse.jface.preference.IPreferenceStore;
+
+import jp.go.aist.rtm.toolscommon.ToolsCommonPlugin;
 
 /**
  * 設定を管理するマネージャ
@@ -15,28 +15,31 @@ import org.eclipse.jface.preference.IPreferenceStore;
 public class ToolsCommonPreferenceManager {
 	private static ToolsCommonPreferenceManager __instance = new ToolsCommonPreferenceManager();
 
+	private static final String __PREFIX = ToolsCommonPreferenceManager.class.getName();
+
 	/**
 	 * タイムアウト判定時間
 	 */
-	public static final String DEFAULT_TIMEOUT_PERIOD = ToolsCommonPreferenceManager.class.getName() + "DEFAULT_TIMEOUT_PERIOD";
+	public static final String DEFAULT_TIMEOUT_PERIOD = __PREFIX + "DEFAULT_TIMEOUT_PERIOD";
 
 	/** 状態通知オブザーバの有効/無効設定 */
-	public static final String KEY_STATUS_OBSERVER_HB_ENABLE = ToolsCommonPreferenceManager.class.getName()
-			+ ".STATUS_OBSERVER_HB_ENABLE";
+	public static final String KEY_STATUS_OBSERVER_HB_ENABLE = __PREFIX + ".STATUS_OBSERVER_HB_ENABLE";
 
 	/** 状態通知オブザーバの H.B受信間隔 [sec] */
-	public static final String KEY_STATUS_OBSERVER_HB_INTERVAL = ToolsCommonPreferenceManager.class.getName()
-			+ ".STATUS_OBSERVER_HB_INTERVAL";
+	public static final String KEY_STATUS_OBSERVER_HB_INTERVAL = __PREFIX + ".STATUS_OBSERVER_HB_INTERVAL";
 	/** 状態通知オブザーバのタイムアウト判定回数 */
-	public static final String KEY_STATUS_OBSERVER_HB_TRYCOUNT = ToolsCommonPreferenceManager.class.getName()
-			+ ".STATUS_OBSERVER_HB_TRYCOUNT";
+	public static final String KEY_STATUS_OBSERVER_HB_TRYCOUNT = __PREFIX + ".STATUS_OBSERVER_HB_TRYCOUNT";
 
 	/** ポートイベント通知 送信間隔 [sec] */
-	public static final String KEY_STATUS_OBSERVER_PORT_EVENT_SEND_MIN_INTERVAL = ToolsCommonPreferenceManager.class.getName()
+	public static final String KEY_STATUS_OBSERVER_PORT_EVENT_SEND_MIN_INTERVAL = __PREFIX
 			+ ".STATUS_OBSERVER_PORT_EVENT_SEND_MIN_INTERVAL";
 	/** ポートイベント通知 受信間隔 [sec] */
-	public static final String KEY_STATUS_OBSERVER_PORT_EVENT_RECV_MIN_INTERVAL = ToolsCommonPreferenceManager.class.getName()
+	public static final String KEY_STATUS_OBSERVER_PORT_EVENT_RECV_MIN_INTERVAL = __PREFIX
 			+ ".STATUS_OBSERVER_PORT_EVENT_RECV_MIN_INTERVAL";
+
+	// 画面なし
+	/** コンポーネント状態検出の設定 */
+	private static final String KEY_STATUS_OBSERVER_ATTACH_ENABLE = __PREFIX + ".STATUS_OBSERVER_ATTACH_ENABLE";
 
 	/**
 	 * コンストラクタ
@@ -96,10 +99,8 @@ public class ToolsCommonPreferenceManager {
 	/**
 	 * デフォルトタイムアウト判定時間を設定する
 	 * 
-	 * @param key
-	 *            キー
-	 * @param interval
-	 *            間隔
+	 * @param key      キー
+	 * @param interval 間隔
 	 */
 	public void setDefaultTimeout(String key, int defaultTimeout) {
 		int oldDefaultTimeout = getDefaultTimeout(key);
@@ -225,6 +226,24 @@ public class ToolsCommonPreferenceManager {
 	/** STATUS_OBSERVER_PORT_EVENT_RECV_MIN_INTERVAL の復元 */
 	public void resetSTATUS_OBSERVER_PORT_EVENT_RECV_MIN_INTERVAL() {
 		setSTATUS_OBSERVER_PORT_EVENT_RECV_MIN_INTERVAL(DEFAULT_STATUS_OBSERVER_PORT_EVENT_RECV_MIN_INTERVAL);
+	}
+
+	/** STATUS_OBSERVER_ATTACH_ENABLE の取得 */
+	public final Boolean isSTATUS_OBSERVER_ATTACH_ENABLE() {
+		String key = KEY_STATUS_OBSERVER_ATTACH_ENABLE;
+		store.setDefault(key, false);
+		return store.getBoolean(key);
+	}
+
+	/** STATUS_OBSERVER_ATTACH_ENABLE の設定 */
+	public void setSTATUS_OBSERVER_ATTACH_ENABLE(Boolean b) {
+		String key = KEY_STATUS_OBSERVER_ATTACH_ENABLE;
+		store.setValue(key, (b == null) ? false : b);
+	}
+
+	/** STATUS_OBSERVER_ATTACH_ENABLE の復元 */
+	public void resetSTATUS_OBSERVER_ATTACH_ENABLE() {
+		setSTATUS_OBSERVER_ATTACH_ENABLE(false);
 	}
 
 	/**

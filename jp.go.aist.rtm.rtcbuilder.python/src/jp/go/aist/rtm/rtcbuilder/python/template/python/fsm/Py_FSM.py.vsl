@@ -1,0 +1,92 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+"""
+ @file ${rtcParam.name}FSM.py
+ @brief ${rtcParam.description}
+#set( $Date$ = "dummy" )
+ @date \$Date$
+
+#if( ${rtcParam.docCreator.length()} > 0 )
+ @author ${tmpltHelperPy.convertAuthorDocPy(${rtcParam.docCreator})}
+#end
+#if( ${rtcParam.docLicense.length()} > 0 )
+
+ ${tmpltHelperPy.convertDocPy(${rtcParam.docLicense})}
+#end
+
+"""
+import sys
+
+import RTC
+import OpenRTM_aist.StaticFSM as StaticFSM
+
+@StaticFSM.FSM_TOPSTATE
+class ${fsmParam.name}(StaticFSM.Link):
+    def onInit(self):
+        self.set_state(StaticFSM.State(${tmpltHelper.getInitialState(${rtcParam})}))
+        return RTC.RTC_OK
+        
+#foreach($eachTrans in ${fsmParam.getAllTransListNoDupl()})
+#if( ${eachTrans.event.length()} > 0 )
+#if( ${eachTrans.existEventParam()} )
+    """
+#if(${eachTrans.eventParam.doc_description.length()}>0)    ${tmpltHelperPy.convertDescDocPy(${eachTrans.eventParam.doc_description})}
+#end
+#if(${eachTrans.eventParam.doc_type.length()}>0)    - Type: ${tmpltHelperPy.convertTypeDocPy(${eachTrans.eventParam.doc_type})}
+#end
+#if(${eachTrans.eventParam.doc_num.length()}>0)     - Number: ${tmpltHelperPy.convertNumberDocPy(${eachTrans.eventParam.doc_num})}
+#end
+#if(${eachTrans.eventParam.doc_semantics.length()}>0)     - Semantics: ${tmpltHelperPy.convertSemanticsDocPy(${eachTrans.eventParam.doc_semantics})}
+#end
+#if(${eachTrans.eventParam.doc_unit.length()}>0)    - Unit: ${tmpltHelperPy.convertTypeDocPy(${eachTrans.eventParam.doc_unit})}
+#end
+#if(${eachTrans.eventParam.doc_operation.length()}>0)     - Operation Cycle: ${tmpltHelperPy.convertCycleDocPy(${eachTrans.eventParam.doc_operation})}
+#end
+    """
+#if( ${eachTrans.existDataType()} )
+    def ${eachTrans.event}(self, data):
+#else
+    def ${eachTrans.event}(self):
+#end
+        pass
+
+#end
+#end
+#end
+
+#foreach($eachState in ${fsmParam.getAllValidStateList()})
+${tmpltHelperPy.getHistory(${eachState})}
+@StaticFSM.FSM_SUBSTATE(${eachState.parentName})
+class ${eachState.name}(StaticFSM.Link):
+    ${sharp} The onInit method provides a special kind of entry action.
+    ${sharp} On state transition, onEntry functions are called at the target state and its superstate.
+    ${sharp} But an onInit function is called only at the target state.
+    def onInit(self):
+        ${tmpltHelperPy.checkTransition(${eachState})}
+        return RTC.RTC_OK
+
+#if( ${eachState.hasEntry} )
+    def onEntry(self):
+        return RTC.RTC_OK
+
+#end
+#if( ${eachState.hasExit} )
+    def onExit(self):
+        return RTC.RTC_OK
+
+#end
+#foreach($eachTrans in ${eachState.getTransList()})
+#if( ${eachTrans.event.length()} > 0 )
+#if( ${eachTrans.existEventParam()} )
+#if( ${eachTrans.existDataType()} )
+    def ${eachTrans.event}(self, data):
+#else
+    def ${eachTrans.event}(self):
+#end
+        self.set_state(StaticFSM.State(${eachTrans.target}))
+#end
+#end
+#end
+#end
+

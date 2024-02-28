@@ -52,8 +52,7 @@ public class PyIDLType extends TestBase {
 		List<ServicePortInterfaceParam> srvinterts = new ArrayList<ServicePortInterfaceParam>();
 		ServicePortInterfaceParam int1 = new ServicePortInterfaceParam(
 				service1, "sIF1", "", "sIFv", rootPath
-						+ "resource/100/idltype/type1/TestIDL.idl", "ComFk",
-				"", 0);
+						+ "resource/100/idltype/type1/TestIDL.idl", "ComFk", 0);
 		srvinterts.add(int1);
 		service1.getServicePortInterfaces().addAll(srvinterts);
 		List<ServicePortParam> srvports = new ArrayList<ServicePortParam>();
@@ -84,8 +83,7 @@ public class PyIDLType extends TestBase {
 		List<ServicePortInterfaceParam> srvinterts = new ArrayList<ServicePortInterfaceParam>();
 		ServicePortInterfaceParam int1 = new ServicePortInterfaceParam(
 				service1, "myservice", "", "", rootPath
-						+ "resource/Python/type2/MyService.idl", "MyService",
-				"", 0);
+						+ "resource/Python/type2/MyService.idl", "MyService", 0);
 		srvinterts.add(int1);
 		service1.getServicePortInterfaces().addAll(srvinterts);
 		List<ServicePortParam> srvports = new ArrayList<ServicePortParam>();
@@ -118,8 +116,7 @@ public class PyIDLType extends TestBase {
 		List<ServicePortInterfaceParam> srvinterts = new ArrayList<ServicePortInterfaceParam>();
 		ServicePortInterfaceParam int1 = new ServicePortInterfaceParam(
 				service1, "myservice", "", "", rootPath
-						+ "resource/Python/type/MyService.idl", "MyService",
-				"", 0);
+						+ "resource/Python/type/MyService.idl", "MyService", 0);
 		srvinterts.add(int1);
 		service1.getServicePortInterfaces().addAll(srvinterts);
 		List<ServicePortParam> srvports = new ArrayList<ServicePortParam>();

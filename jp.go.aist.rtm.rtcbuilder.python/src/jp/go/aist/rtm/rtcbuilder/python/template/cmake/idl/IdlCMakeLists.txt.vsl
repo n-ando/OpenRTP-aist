@@ -1,0 +1,31 @@
+set(IDL_FILES "" ${tmpltHelper.getIDLFiles(${rtcParam})})
+
+if(WIN32)
+  set(SCRIPT_FILE ${dol}{PROJECT_SOURCE_DIR}/idlcompile.bat)
+  set(DELETE_FILE ${dol}{PROJECT_SOURCE_DIR}/delete.bat)
+else()
+    set(SCRIPT_FILE ${dol}{PROJECT_SOURCE_DIR}/idlcompile.sh)
+endif()
+
+if(EXISTS ${dol}{SCRIPT_FILE})
+  configure_file(${dol}{SCRIPT_FILE} ${dol}{CMAKE_BINARY_DIR}/ COPYONLY)
+  install(PROGRAMS ${dol}{SCRIPT_FILE} DESTINATION "${dol}{INSTALL_PREFIX}"
+          COMPONENT component)
+  if(UNIX)
+    add_custom_target(idlcompile ALL sh ${dol}{CMAKE_BINARY_DIR}/idlcompile.sh
+      WORKING_DIRECTORY ${dol}{CMAKE_BINARY_DIR}
+    )
+  else()
+    add_custom_target(idlcompile ALL ${dol}{CMAKE_BINARY_DIR}/idlcompile.bat
+      WORKING_DIRECTORY ${dol}{CMAKE_BINARY_DIR}
+    )
+  endif()
+endif()
+
+if(WIN32)
+  if(EXISTS ${dol}{DELETE_FILE})
+    configure_file(${dol}{DELETE_FILE} ${dol}{CMAKE_BINARY_DIR}/ COPYONLY)
+    install(PROGRAMS ${dol}{DELETE_FILE} DESTINATION "${dol}{INSTALL_PREFIX}"
+            COMPONENT component)
+  endif()
+endif()

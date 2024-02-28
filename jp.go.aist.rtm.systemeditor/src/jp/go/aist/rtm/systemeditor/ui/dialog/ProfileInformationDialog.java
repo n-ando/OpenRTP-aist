@@ -49,11 +49,9 @@ public class ProfileInformationDialog extends Dialog {
 	private Text txtVendor;
 	private Text txtSystemName;
 	private Text txtVersion;
-	private Text txtUpdateLog;
 	private Text txtPath;
 	//
 	IDUtil.RTSId inputId;
-//	private String inputUpdateLog;
 	private String inputPath;
 	//
 	private boolean isOverWrite = false;
@@ -103,17 +101,6 @@ public class ProfileInformationDialog extends Dialog {
 		//
 		txtPath = createLabelAndTextAndButton(mainComposite, "Path:", inputPath, isOverWrite); //$NON-NLS-1$
 		//
-		Label label = new Label(mainComposite, SWT.LEFT);
-		label.setText("Update Log:"); //$NON-NLS-1$
-		txtUpdateLog = new Text(mainComposite, SWT.MULTI | SWT.BORDER | SWT.LEFT);
-		txtUpdateLog.addKeyListener(listener);
-		GridData gd = new GridData();
-		gd.horizontalAlignment = SWT.FILL;
-		gd.grabExcessHorizontalSpace = true;
-		gd.horizontalSpan = 2;
-		gd.heightHint = 70;
-		txtUpdateLog.setLayoutData(gd);
-		//
 		// 必須コンポーネント選択エリアを追加  2008.12.11
 		createRequiedComponentsArea(mainComposite);
 
@@ -132,7 +119,7 @@ public class ProfileInformationDialog extends Dialog {
 			}
 			Button button = new Button(extensionButtonComposite, SWT.PUSH);
 			button.setText(eb.getLabel());
-			gd = new GridData(GridData.HORIZONTAL_ALIGN_END);
+			GridData gd = new GridData(GridData.HORIZONTAL_ALIGN_END);
 			gd.horizontalAlignment = SWT.FILL;
 			button.setLayoutData(gd);
 			button.addSelectionListener(eb.getListener());
@@ -179,7 +166,7 @@ public class ProfileInformationDialog extends Dialog {
 		checkButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				FileDialog dialog = new FileDialog(getShell());
+				FileDialog dialog = new FileDialog(getShell(), SWT.SAVE);
 				dialog.setFilterExtensions(new String[] { "*.xml" }); //$NON-NLS-1$
 				if (txtPathLocal.getText().length() > 0)
 					dialog.setFileName(txtPathLocal.getText());

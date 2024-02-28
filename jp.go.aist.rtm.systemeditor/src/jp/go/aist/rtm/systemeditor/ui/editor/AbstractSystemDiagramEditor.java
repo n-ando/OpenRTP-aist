@@ -2,10 +2,14 @@ package jp.go.aist.rtm.systemeditor.ui.editor;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URLDecoder;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -17,30 +21,6 @@ import java.util.List;
 
 import javax.xml.datatype.DatatypeConstants;
 import javax.xml.datatype.XMLGregorianCalendar;
-
-import jp.go.aist.rtm.systemeditor.RTSystemEditorPlugin;
-import jp.go.aist.rtm.systemeditor.extension.SaveProfileExtension;
-import jp.go.aist.rtm.systemeditor.factory.ProfileSaver;
-import jp.go.aist.rtm.systemeditor.nl.Messages;
-import jp.go.aist.rtm.systemeditor.ui.action.OpenCompositeComponentAction;
-import jp.go.aist.rtm.systemeditor.ui.dialog.ProfileInformationDialog;
-import jp.go.aist.rtm.systemeditor.ui.editor.action.MoveComponentAction;
-import jp.go.aist.rtm.systemeditor.ui.editor.action.OpenAction;
-import jp.go.aist.rtm.systemeditor.ui.editor.action.RestoreOption;
-import jp.go.aist.rtm.systemeditor.ui.editor.dnd.SystemDiagramDropTargetListener;
-import jp.go.aist.rtm.systemeditor.ui.editor.editpart.AutoScrollAutoexposeHelper;
-import jp.go.aist.rtm.systemeditor.ui.editor.editpart.factory.SystemDiagramEditPartFactory;
-import jp.go.aist.rtm.systemeditor.ui.util.ComponentUtil;
-import jp.go.aist.rtm.toolscommon.model.component.Component;
-import jp.go.aist.rtm.toolscommon.model.component.ComponentFactory;
-import jp.go.aist.rtm.toolscommon.model.component.CorbaComponent;
-import jp.go.aist.rtm.toolscommon.model.component.SystemDiagram;
-import jp.go.aist.rtm.toolscommon.profiles.util.XmlHandler;
-import jp.go.aist.rtm.toolscommon.synchronizationframework.SynchronizationSupport;
-import jp.go.aist.rtm.toolscommon.ui.views.propertysheetview.RtcPropertySheetPage;
-import jp.go.aist.rtm.toolscommon.util.RtsProfileHandler;
-import jp.go.aist.rtm.toolscommon.validation.ValidateException;
-import jp.go.aist.rtm.toolscommon.validation.Validator;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -100,6 +80,30 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.sun.org.apache.xerces.internal.jaxp.datatype.XMLGregorianCalendarImpl;
+
+import jp.go.aist.rtm.systemeditor.RTSystemEditorPlugin;
+import jp.go.aist.rtm.systemeditor.extension.SaveProfileExtension;
+import jp.go.aist.rtm.systemeditor.factory.ProfileSaver;
+import jp.go.aist.rtm.systemeditor.nl.Messages;
+import jp.go.aist.rtm.systemeditor.ui.action.OpenCompositeComponentAction;
+import jp.go.aist.rtm.systemeditor.ui.dialog.ProfileInformationDialog;
+import jp.go.aist.rtm.systemeditor.ui.editor.action.MoveComponentAction;
+import jp.go.aist.rtm.systemeditor.ui.editor.action.OpenAction;
+import jp.go.aist.rtm.systemeditor.ui.editor.dnd.SystemDiagramDropTargetListener;
+import jp.go.aist.rtm.systemeditor.ui.editor.editpart.AutoScrollAutoexposeHelper;
+import jp.go.aist.rtm.systemeditor.ui.editor.editpart.SystemDiagramEditPart;
+import jp.go.aist.rtm.systemeditor.ui.editor.editpart.factory.SystemDiagramEditPartFactory;
+import jp.go.aist.rtm.systemeditor.ui.util.ComponentUtil;
+import jp.go.aist.rtm.toolscommon.model.component.Component;
+import jp.go.aist.rtm.toolscommon.model.component.ComponentFactory;
+import jp.go.aist.rtm.toolscommon.model.component.CorbaComponent;
+import jp.go.aist.rtm.toolscommon.model.component.SystemDiagram;
+import jp.go.aist.rtm.toolscommon.profiles.util.XmlHandler;
+import jp.go.aist.rtm.toolscommon.synchronizationframework.SynchronizationSupport;
+import jp.go.aist.rtm.toolscommon.ui.views.propertysheetview.RtcPropertySheetPage;
+import jp.go.aist.rtm.toolscommon.util.RtsProfileHandler;
+import jp.go.aist.rtm.toolscommon.validation.ValidateException;
+import jp.go.aist.rtm.toolscommon.validation.Validator;
 
 public abstract class AbstractSystemDiagramEditor extends GraphicalEditor {
 
@@ -194,6 +198,22 @@ public abstract class AbstractSystemDiagramEditor extends GraphicalEditor {
 
 		action = new SaveAction(this) {
 			@Override
+			protected void init() {
+				setId(ActionFactory.SAVE.getId());
+				setText("Save System");
+				setToolTipText("Save System");
+			}
+
+			@Override
+			public void run() {
+				doSave(null);
+			}
+		};
+		getActionRegistry().registerAction(action);
+		getPropertyActions().add(action.getId());
+
+		action = new SaveAction(this) {
+			@Override
 			protected boolean calculateEnabled() {
 				return true;
 			}
@@ -201,8 +221,8 @@ public abstract class AbstractSystemDiagramEditor extends GraphicalEditor {
 			@Override
 			protected void init() {
 				setId(ActionFactory.SAVE_AS.getId());
-				setText("Save As...");
-				setToolTipText("Save As...");
+				setText("Save As System");
+				setToolTipText("Save As System");
 			}
 
 			@Override
@@ -572,6 +592,24 @@ public abstract class AbstractSystemDiagramEditor extends GraphicalEditor {
 			SystemDiagram diagram = systemDiagram.getRootDiagram();
 			RtsProfileExt profile = handler.save(diagram);
 			diagram.setProfile(profile);
+			
+			String targetFileName = resource.getURI().devicePath();
+			if(getEditorId()==OfflineSystemDiagramEditor.OFFLINE_SYSTEM_DIAGRAM_EDITOR_ID) {
+				File targetFile = new File(targetFileName);
+				String rtcPath = targetFile.getParent() + File.separator + "RTCs";
+				File targetRtcs = new File(rtcPath);
+				if(targetRtcs.exists()==false) {
+					targetRtcs.mkdir();
+				}
+				for(org.openrtp.namespaces.rts.version02.Component each : profile.getComponents()) {
+					URI pathUri = URI.createURI(each.getPathUri());
+					java.nio.file.Path srcFile = Paths.get(pathUri.device() + File.separator + pathUri.path());
+					java.nio.file.Path dstFile = Paths.get(rtcPath + File.separator + each.getInstanceName() + ".xml");
+					Files.copy(srcFile, dstFile, StandardCopyOption.REPLACE_EXISTING);
+					URI newURI = URI.createFileURI("RTCs" + File.separator + each.getInstanceName() + ".xml");
+					each.setPathUri(newURI.toString());
+				 }
+			}
 
 			// STEP3: 拡張ポイント (RTSプロファイル保存前)
 			progressMonitor.worked(3);
@@ -594,7 +632,6 @@ public abstract class AbstractSystemDiagramEditor extends GraphicalEditor {
 			// STEP4: RTSプロファイルオブジェクトをファイルへ保存
 			progressMonitor.worked(4);
 
-			String targetFileName = resource.getURI().devicePath();
 			XmlHandler xmlHandler = new XmlHandler();
 			xmlHandler.saveXmlRts(profile, URLDecoder.decode(targetFileName,
 					"UTF-8"));
@@ -619,7 +656,7 @@ public abstract class AbstractSystemDiagramEditor extends GraphicalEditor {
 					}
 				}
 			}
-
+			
 			progressMonitor.worked(6);
 			progressMonitor.done();
 
@@ -714,16 +751,16 @@ public abstract class AbstractSystemDiagramEditor extends GraphicalEditor {
 			throws PartInitException {
 		IEditorInput newInput;
 		try {
-			newInput = load(input, site, RestoreOption.NONE);
+			newInput = load(input, site);
 		} catch (Throwable t) {
 			// 起動時にファイルオープンエラーが発生した時はエディタの中身を空にする 2009.11.06
-			newInput = load(new NullEditorInput(), site, RestoreOption.NONE);
+			newInput = load(new NullEditorInput(), site);
 		}
 		super.init(site, newInput);
 	}
 
 	protected abstract IEditorInput load(IEditorInput input,
-			final IEditorSite site, final RestoreOption doReplace)
+			final IEditorSite site)
 			throws PartInitException;
 
 	private SimpleDateFormat formater = new SimpleDateFormat("yyyy_MM_dd_hh_mm_ss_SSS");
@@ -857,7 +894,7 @@ public abstract class AbstractSystemDiagramEditor extends GraphicalEditor {
 		return (title == null) ? diagramName : title;
 	}
 
-	public void open(RestoreOption restore) {
+	public void open() {
 		boolean save = false;
 		if (isDirty()) {
 			save = MessageDialog.openQuestion(getSite().getShell(), "", //$NON-NLS-1$
@@ -870,12 +907,12 @@ public abstract class AbstractSystemDiagramEditor extends GraphicalEditor {
 		IFile createNewFile = createNewFilebySelection(null, SWT.OPEN);
 		if (createNewFile != null) {
 			try {
-				load(new FileEditorInput(createNewFile), getEditorSite(), restore);
+				load(new FileEditorInput(createNewFile), getEditorSite());
 			} catch (PartInitException e) {
 				LOGGER.error("Fail to load file. file=" + createNewFile, e);
 				if (e.getStatus().getException() != null)
-					MessageDialog.openError(getSite().getShell(), "", e //$NON-NLS-1$
-							.getStatus().getException().getMessage());
+					MessageDialog.openError(getSite().getShell(), "",
+							e.getStatus().getException().getMessage());
 			}
 		}
 	}
@@ -964,10 +1001,19 @@ public abstract class AbstractSystemDiagramEditor extends GraphicalEditor {
 		return super.isSaveOnCloseNeeded();
 	}
 
-	public EditPart findEditPart(Object model) {
-		if (model == null)
-			return null;
+	public SystemDiagramEditPart getSystemDiagramEditPart() {
 		EditPart part = getGraphicalViewer().getContents();
+		if (part == null || !(part instanceof SystemDiagramEditPart)) {
+			return null;
+		}
+		return (SystemDiagramEditPart) part;
+	}
+
+	public EditPart findEditPart(Object model) {
+		SystemDiagramEditPart part = getSystemDiagramEditPart();
+		if (part == null) {
+			return null;
+		}
 		for (Object o : part.getChildren()) {
 			EditPart child = (EditPart) o;
 			if (model.equals(child.getModel())) {
@@ -981,19 +1027,16 @@ public abstract class AbstractSystemDiagramEditor extends GraphicalEditor {
 	 * エディタ内のコンポーネントを再描画する
 	 */
 	public void refresh() {
-		for (Object model : getSystemDiagram().getComponents()) {
-			EditPart ep = findEditPart(model);
-			if (ep != null) {
-//				debugPrint(ep, ep.getChildren().size());
-				for (Object obj :ep.getChildren()) {
-//					debugPrint((EditPart)obj, 0);
-					((EditPart)obj).refresh();
-				}
-			}
+		SystemDiagramEditPart part = getSystemDiagramEditPart();
+		if (part == null) {
+			return;
 		}
+		LOGGER.debug("refresh: part=<{}>", part);
+		part.refreshSystemDiagram();
 		AbstractSystemDiagramEditor parent = ComponentUtil.findEditor(getSystemDiagram().getParentSystemDiagram());
-		if (parent != null) parent.refresh();
-
+		if (parent != null) {
+			parent.refresh();
+		}
 	}
 
 	public void openError(String title, String message) {

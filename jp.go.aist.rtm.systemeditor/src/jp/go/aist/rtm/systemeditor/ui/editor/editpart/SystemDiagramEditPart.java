@@ -7,9 +7,12 @@ import org.eclipse.draw2d.FreeformLayer;
 import org.eclipse.draw2d.FreeformLayout;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.ui.PlatformUI;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import jp.go.aist.rtm.systemeditor.ui.editor.editpolicy.GraphicalConnectorCreateManager;
 import jp.go.aist.rtm.systemeditor.ui.editor.editpolicy.SystemXYLayoutEditPolicy;
@@ -19,6 +22,8 @@ import jp.go.aist.rtm.toolscommon.model.component.SystemDiagram;
  * システムダイアグラムのEditPartクラス
  */
 public class SystemDiagramEditPart extends AbstractEditPart {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(SystemDiagramEditPart.class);
 
 	private GraphicalConnectorCreateManager connectingPortManager;
 	private PortEditPart connectingPortEditPart;
@@ -70,9 +75,21 @@ public class SystemDiagramEditPart extends AbstractEditPart {
 	public void refreshSystemDiagram() {
 		PlatformUI.getWorkbench().getDisplay().asyncExec(new Runnable() {
 			public void run() {
-				if (isActive()) {
-					refreshChildren();
+				if (!isActive()) {
+					return;
 				}
+				LOGGER.debug("refreshSystemDiagram: START");
+				refreshChildren();
+				LOGGER.debug("refreshSystemDiagram: refreshChildren.");
+				for (Object o : getChildren()) {
+					EditPart child = (EditPart) o;
+					LOGGER.debug("refreshSystemDiagram: - child=<{}>", child);
+					for (Object o2 : child.getChildren()) {
+						LOGGER.debug("refreshSystemDiagram:   - refresh part==<{}>", o2);
+						((EditPart) o2).refresh();
+					}
+				}
+				LOGGER.debug("refreshSystemDiagram: END");
 			}
 		});
 	}

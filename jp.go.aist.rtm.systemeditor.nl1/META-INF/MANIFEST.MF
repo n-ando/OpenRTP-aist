@@ -4,8 +4,8 @@ Created-By: 20.0-b12 (Sun Microsystems Inc.)
 Bundle-ManifestVersion: 2
 Bundle-Name: Graphical Editor for RT system Nl1 Fragment
 Bundle-SymbolicName: jp.go.aist.rtm.systemeditor.nl1
-Bundle-Version: 1.2.0
-Fragment-Host: jp.go.aist.rtm.systemeditor;bundle-version="1.2.0"
+Bundle-Version: 2.0.0
+Fragment-Host: jp.go.aist.rtm.systemeditor;bundle-version="2.0.0"
 Bundle-Vendor: AIST
 Built-By: ngd
 Built-Date: 2015/06/18 20:01:58

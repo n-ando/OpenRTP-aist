@@ -175,7 +175,7 @@ public class CXXConverter {
 					result = result + "*";
 				}
 			}
-			if(typeDef.getModule()!=null && typeDef.getModule().length()>0 && typeDef.isDefault()==false) {
+			if(typeDef.getModule()!=null && typeDef.getModule().length()>0 && result.startsWith("RTC")==false) {
 				result = typeDef.getModule() + result;
 			}
 		}
@@ -402,17 +402,6 @@ public class CXXConverter {
 		return "#include <rtm/idl/" + rtcType + ".h>";
 	}
 
-	/**
-	 * データポート用のデータ型using namespace 文を返す
-	 * 
-	 * @param rtcType ポートの型
-	 * @return using文字列
-	 */
-	public String getDataportUsingNamespace(String rtcType) {
-		if(rtcType.matches("RTC.*")) return "";
-		return "using namespace " + rtcType + ";";
-	}
-	
 	/**
 	 * データポート初期化用にmodule名をカットしたデータ型クラス名を返す
 	 * 
